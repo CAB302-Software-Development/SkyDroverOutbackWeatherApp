@@ -17,7 +17,7 @@ public class ApplicationEntry extends javafx.application.Application {
         stage.setScene(scene);
         stage.show();
     }
-    // test test
+    // test test test
     @Test
     public void test() {
     }
