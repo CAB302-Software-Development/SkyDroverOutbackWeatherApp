@@ -19,11 +19,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
+    - name: Build App
       run: |
         cd OutbackWeatherTrackerApp
         mvn -B package
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
+        mvn clean install
+    - name: Test App
       run: |
         cd OutbackWeatherTrackerApp
+        mvn test
