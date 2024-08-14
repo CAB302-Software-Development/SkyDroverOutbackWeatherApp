@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>CAB302SoftwareDevelopment</groupId>
-    <artifactId>OubackWeatherTrackerApp</artifactId>
+    <artifactId>OutbackWeatherTrackerApp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>OubackWeatherTrackerApp</name>
 
