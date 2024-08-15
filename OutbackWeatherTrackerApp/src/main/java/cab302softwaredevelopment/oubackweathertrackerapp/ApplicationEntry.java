@@ -4,8 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import org.junit.Test;
-
 import java.io.IOException;
 
 public class ApplicationEntry extends javafx.application.Application {
@@ -16,10 +14,6 @@ public class ApplicationEntry extends javafx.application.Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-    }
-
-    @Test
-    public void test() {
     }
 
     public static void main(String[] args) {

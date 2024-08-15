@@ -7,17 +7,17 @@ import javafx.stage.Stage;
 
 public class TempController {
     @FXML
-    private Label welcomeText;
+    public Label welcomeText;
     @FXML
-    private Button cancelButton;
+    public Button cancelButton;
 
     @FXML
-    protected void onHelloButtonClick() {
+    public void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 
     @FXML
-    protected void onCancelButtonClick() {
+    public void onCancelButtonClick() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
