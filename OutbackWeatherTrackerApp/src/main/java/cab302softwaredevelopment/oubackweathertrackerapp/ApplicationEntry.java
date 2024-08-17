@@ -1,18 +1,18 @@
 package cab302softwaredevelopment.oubackweathertrackerapp;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class ApplicationEntry extends javafx.application.Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+    private Button button;
+
+    public void start(Stage stage) {
+        button = new Button("click me!");
+        button.setId("myButton");
+        button.setOnAction(actionEvent -> button.setText("clicked!"));
+        stage.setScene(new Scene(new StackPane(button), 100, 100));
         stage.show();
     }
 
