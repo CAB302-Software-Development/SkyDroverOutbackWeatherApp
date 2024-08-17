@@ -21,10 +21,10 @@ jobs:
         cache: maven
     - name: Build App
       run: |
-        cd OutbackWeatherTrackerApp
+        cd OutbackWeatherTrackerApplication
         mvn -B package
         mvn clean install
     - name: Test App
       run: |
-        cd OutbackWeatherTrackerApp
+        cd OutbackWeatherTrackerApplication
         mvn test
