@@ -28,7 +28,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '21'
-        distribution: 'amazon-corretto'
+        distribution: 'corretto'
 
     - name: Cache Maven packages
       uses: actions/cache@v3
