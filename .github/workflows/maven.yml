@@ -6,6 +6,16 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  actions: read
+  checks: write
+  contents: read
+  issues: read
+  packages: read
+  pull-requests: write
+  statuses: read
+  security-events: write
+
 jobs:
   build:
 
