@@ -100,10 +100,9 @@
         <version>0.0.8</version>
         <executions>
           <execution>
-            <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>cab302softwaredevelopment.outbackweathertrackerapplication/cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry</mainClass>
+              <mainClass>cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>
@@ -111,6 +110,10 @@
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>
             </configuration>
+            <goals>
+              <goal>jlink</goal>
+              <goal>run</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
