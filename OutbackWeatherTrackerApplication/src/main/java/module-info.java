@@ -7,4 +7,6 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication to javafx.fxml;
     exports cab302softwaredevelopment.outbackweathertrackerapplication;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers to javafx.fxml;
 }

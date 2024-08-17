@@ -1,4 +1,4 @@
-package cab302softwaredevelopment.outbackweathertrackerapplication;
+package cab302softwaredevelopment.outbackweathertrackerapplication.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
