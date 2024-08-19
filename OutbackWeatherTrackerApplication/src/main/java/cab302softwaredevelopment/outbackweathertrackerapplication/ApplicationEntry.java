@@ -21,5 +21,6 @@ public class ApplicationEntry extends Application {
 
   public static void main(String[] args) {
     //launch();
+    CustomLogger.logIt("s", 10);
   }
 }
