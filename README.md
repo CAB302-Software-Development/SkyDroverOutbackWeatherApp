@@ -24,3 +24,17 @@
 1. Clone the repository:
    ```bash
    git clone https://github.com/CAB302-Software-Development/CAB302_OutbackWeatherTracker.git
+
+### Building
+
+1. run build mvn command:
+   ```bash
+   mvn clean install
+
+
+### Testing
+
+1. run test mvn command:
+   ```bash
+   mvn test
+
