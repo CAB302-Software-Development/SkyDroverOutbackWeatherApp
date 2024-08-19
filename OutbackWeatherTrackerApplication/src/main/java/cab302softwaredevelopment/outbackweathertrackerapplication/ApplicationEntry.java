@@ -1,6 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.CustomLogger;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +21,6 @@ public class ApplicationEntry extends Application {
 
   public static void main(String[] args) {
     //launch();
-    CustomLogger.logIt("s", 10);
+    Logger.printLog("s", 10);
   }
 }
