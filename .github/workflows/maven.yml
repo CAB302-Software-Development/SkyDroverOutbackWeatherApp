@@ -42,4 +42,3 @@ jobs:
       run: |
         cd OutbackWeatherTrackerApplication
         mvn -B clean package
-        mvn test
