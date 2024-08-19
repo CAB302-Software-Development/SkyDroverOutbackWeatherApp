@@ -16,7 +16,7 @@
 
 ### Prerequisites
 
-- Java Development Kit (JDK) amazon corretto 21 or higher
+- Java Development Kit (JDK) amazon corretto 21
 - Maven 3.8 or higher
 
 ### Installation
