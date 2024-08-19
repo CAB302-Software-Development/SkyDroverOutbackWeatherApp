@@ -246,7 +246,7 @@ public class Sdk {
             hourly.getAsJsonArray("soil_moisture_10_to_35cm").get(i).getAsDouble(),
             hourly.getAsJsonArray("soil_moisture_35_to_100cm").get(i).getAsDouble(),
             hourly.getAsJsonArray("soil_moisture_100_to_300cm").get(i).getAsDouble(),
-            hourly.getAsJsonArray("is_day").get(i).getAsBoolean(),
+            hourly.getAsJsonArray("is_day").get(i).getAsInt()==1,
             hourly.getAsJsonArray("sunshine_duration").get(i).getAsDouble(),
             hourly.getAsJsonArray("shortwave_radiation").get(i).getAsDouble(),
             hourly.getAsJsonArray("direct_radiation").get(i).getAsDouble(),
