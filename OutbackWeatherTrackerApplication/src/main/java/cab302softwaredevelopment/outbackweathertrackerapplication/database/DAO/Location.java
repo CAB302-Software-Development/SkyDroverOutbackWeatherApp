@@ -5,16 +5,19 @@ public class Location {
   private int id;
   private double longitude;
   private double latitude;
+  private double elevation;
 
-  public Location(int id, Double longitude, Double latitude) {
+  public Location(int id, Double longitude, Double latitude, Double elevation) {
     this.id = id;
     this.longitude = longitude;
     this.latitude = latitude;
+    this.elevation = elevation;
   }
 
-  public Location(Double longitude, Double latitude) {
+  public Location(Double longitude, Double latitude,Double elevation) {
     this.longitude = longitude;
     this.latitude = latitude;
+    this.elevation = elevation;
   }
 
 
@@ -30,6 +33,10 @@ public class Location {
     return latitude;
   }
 
+  public double getElevation() {
+    return elevation;
+  }
+
 
   @Override
   public String toString() {
@@ -37,6 +44,7 @@ public class Location {
         "id=" + id +
         ", longitude=" + longitude +
         ", latitude=" + latitude +
+        ", elevation=" + elevation +
         '}';
   }
 }

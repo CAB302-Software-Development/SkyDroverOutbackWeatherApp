@@ -19,7 +19,8 @@ public class LocationDAO {
           "CREATE TABLE IF NOT EXISTS locations ("
               + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
               + "longitude DOUBLE NOT NULL, "
-              + "latitude DOUBLE NOT NULL"
+              + "latitude DOUBLE NOT NULL, "
+              + "elevation DOUBLE NOT NULL"
               + ")"
       );
     } catch (SQLException ex) {
@@ -30,10 +31,11 @@ public class LocationDAO {
   public void insert(Location location) {
     try {
       PreparedStatement insertLocation = connection.prepareStatement(
-          "INSERT INTO locations (longitude, latitude) VALUES (?, ?)"
+          "INSERT INTO locations (longitude, latitude, elevation) VALUES (?, ?, ?)"
       );
       insertLocation.setDouble(1, location.getLongitude());
       insertLocation.setDouble(2, location.getLatitude());
+      insertLocation.setDouble(3, location.getElevation());
       insertLocation.execute();
     } catch (SQLException ex) {
       System.err.println(ex);
@@ -43,11 +45,12 @@ public class LocationDAO {
   public void update(Location location) {
     try {
       PreparedStatement updateLocation = connection.prepareStatement(
-          "UPDATE locations SET longitude = ?, latitude = ? WHERE id = ?"
+          "UPDATE locations SET longitude = ?, latitude = ?, elevation = ? WHERE id = ?"
       );
       updateLocation.setDouble(1, location.getLongitude());
       updateLocation.setDouble(2, location.getLatitude());
-      updateLocation.setInt(3, location.getId());
+      updateLocation.setDouble(3, location.getElevation());
+      updateLocation.setInt(4, location.getId());
       updateLocation.execute();
     } catch (SQLException ex) {
       System.err.println(ex);
@@ -74,7 +77,8 @@ public class LocationDAO {
             new Location(
                 rs.getInt("id"),
                 rs.getDouble("longitude"),
-                rs.getDouble("latitude")
+                rs.getDouble("latitude"),
+                rs.getDouble("elevation")
             )
         );
       }
@@ -93,7 +97,8 @@ public class LocationDAO {
         return new Location(
             rs.getInt("id"),
             rs.getDouble("longitude"),
-            rs.getDouble("latitude")
+            rs.getDouble("latitude"),
+            rs.getDouble("elevation")
         );
       }
     } catch (SQLException ex) {
