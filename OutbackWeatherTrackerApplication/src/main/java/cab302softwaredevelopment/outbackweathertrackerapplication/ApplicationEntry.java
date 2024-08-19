@@ -34,9 +34,11 @@ public class ApplicationEntry extends Application {
     Connection connection = DatabaseConnection.getInstance();
     LocationDAO locationDAO = new LocationDAO();
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
+    HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
     // Create required tables
     locationDAO.createTable();
     dailyForecastDAO.createTable();
+    hourlyForecastDAO.createTable();
 
     // Insert some new records
     locationDAO.insert(new Location(153.02333324, -27.467331464, 27.0)); // brisbane
@@ -47,6 +49,7 @@ public class ApplicationEntry extends Application {
     Location location = locationDAO.getById(2);
     System.out.println(location);
     openMeteoSdk.updateDailyForecast(location);
+    openMeteoSdk.updateHourlyForecast(location);
 
     //List<Location> locations = locationDAO.getAll();
     //for (Location location : locations) {
