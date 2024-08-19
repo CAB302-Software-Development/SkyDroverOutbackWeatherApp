@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DAO.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.*;
+
 
 
 public class ApplicationEntry extends Application {
@@ -35,9 +37,16 @@ public class ApplicationEntry extends Application {
     // Create required tables
     locationDAO.createTable();
     dailyForecastDAO.createTable();
+
     // Insert some new records
-    //locationDAO.insert(new Location(-27.467331464, 153.02333324)); // brisbane
-    //.insert(new Location(-27.5703, 153.0372)); // coopers plains
+    locationDAO.insert(new Location(153.02333324, -27.467331464, 27.0)); // brisbane
+    locationDAO.insert(new Location(153.0372, -27.5703, 23.0)); // coopers plains
+
+    // update weather data
+    Sdk openMeteoSdk = new Sdk();
+    Location location = locationDAO.getById(2);
+    System.out.println(location);
+    openMeteoSdk.updateDailyForecast(location);
 
     //List<Location> locations = locationDAO.getAll();
     //for (Location location : locations) {

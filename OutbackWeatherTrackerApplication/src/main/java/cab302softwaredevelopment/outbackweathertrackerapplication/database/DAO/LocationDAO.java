@@ -20,7 +20,8 @@ public class LocationDAO {
               + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
               + "longitude DOUBLE NOT NULL, "
               + "latitude DOUBLE NOT NULL, "
-              + "elevation DOUBLE NOT NULL"
+              + "elevation DOUBLE NOT NULL, "
+              + "UNIQUE (longitude, latitude, elevation) ON CONFLICT IGNORE"
               + ")"
       );
     } catch (SQLException ex) {

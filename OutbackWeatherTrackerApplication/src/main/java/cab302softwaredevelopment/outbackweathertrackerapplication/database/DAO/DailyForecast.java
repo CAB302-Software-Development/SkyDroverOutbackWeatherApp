@@ -62,6 +62,39 @@ public class DailyForecast {
     this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
   }
 
+  public DailyForecast(int location_id, int timestamp, int weather_code,
+      double temperature_2m_max, double temperature_2m_min, double apparent_temperature_max,
+      double apparent_temperature_min, int sunrise, int sunset, double daylight_duration,
+      double sunshine_duration, double uv_index_max, double uv_index_clear_sky_max,
+      double precipitation_sum, double rain_sum, double showers_sum, double snowfall_sum,
+      double precipitation_hours, double wind_speed_10m_max, double wind_gusts_10m_max,
+      double wind_direction_10m_dominant, double shortwave_radiation_sum,
+      double et0_fao_evapotranspiration) {
+    this.location_id = location_id;
+    this.timestamp = timestamp;
+    this.weather_code = weather_code;
+    this.temperature_2m_max = temperature_2m_max;
+    this.temperature_2m_min = temperature_2m_min;
+    this.apparent_temperature_max = apparent_temperature_max;
+    this.apparent_temperature_min = apparent_temperature_min;
+    this.sunrise = sunrise;
+    this.sunset = sunset;
+    this.daylight_duration = daylight_duration;
+    this.sunshine_duration = sunshine_duration;
+    this.uv_index_max = uv_index_max;
+    this.uv_index_clear_sky_max = uv_index_clear_sky_max;
+    this.precipitation_sum = precipitation_sum;
+    this.rain_sum = rain_sum;
+    this.showers_sum = showers_sum;
+    this.snowfall_sum = snowfall_sum;
+    this.precipitation_hours = precipitation_hours;
+    this.wind_speed_10m_max = wind_speed_10m_max;
+    this.wind_gusts_10m_max = wind_gusts_10m_max;
+    this.wind_direction_10m_dominant = wind_direction_10m_dominant;
+    this.shortwave_radiation_sum = shortwave_radiation_sum;
+    this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
+  }
+
 
   public int getId() {
     return id;
