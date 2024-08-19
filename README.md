@@ -31,10 +31,8 @@
    ```bash
    mvn clean install
 
-
 ### Testing
 
 1. run test mvn command:
    ```bash
    mvn test
-
