@@ -1,16 +1,19 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import java.io.IOException;
-import java.sql.Connection;
+import java.util.List;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DAO.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.*;
-
+import org.hibernate.Session;
 
 
 public class ApplicationEntry extends Application {
@@ -31,42 +34,41 @@ public class ApplicationEntry extends Application {
 
   public static void main(String[] args) {
     Logger.printLog("Application started, " + stageTitle);
-    Connection connection = DatabaseConnection.getInstance();
+    Session session = DatabaseConnection.getSession();
     LocationDAO locationDAO = new LocationDAO();
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
     // Create required tables
-    locationDAO.createTable();
-    dailyForecastDAO.createTable();
-    hourlyForecastDAO.createTable();
+    //locationDAO.createTable();
+    //dailyForecastDAO.createTable();
+    //hourlyForecastDAO.createTable();
 
     // Insert some new records
-    locationDAO.insert(new Location(153.02333324, -27.467331464, 27.0)); // brisbane
-    locationDAO.insert(new Location(153.0372, -27.5703, 23.0)); // coopers plains
+    locationDAO.insert(new Location(153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
+    locationDAO.insert(new Location(153.0372, -27.5703, 23.0,"Coopers Plains")); // coopers plains
 
     // update weather data
     Sdk openMeteoSdk = new Sdk();
-    Location location = locationDAO.getById(2);
+    Location location = locationDAO.getById(1);
     System.out.println(location);
     openMeteoSdk.updateDailyForecast(location);
     openMeteoSdk.updateHourlyForecast(location);
 
-    //List<Location> locations = locationDAO.getAll();
-    //for (Location location : locations) {
-    //  System.out.println(location);
-    //}
+    List<Location> locations = locationDAO.getAll();
+    for (Location location2 : locations) {
+      System.out.println(location2);
+    }
 
-    // Retrieve a record by ID
-    //Location location = locationDAO.getById(2);
-    //System.out.println(location);
+    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      System.out.println(hourlyForecast);
+    }
 
-    //locationDAO.delete(1);
-    //System.out.println("After deleting record with id = 1:");
-    //for (Location location : locationDAO.getAll()) {
-    //  System.out.println(location);
-    //}
-    locationDAO.close();
-    dailyForecastDAO.close();
+    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
+    for (DailyForecast dailyForecast : dailyForecasts) {
+      System.out.println(dailyForecast);
+    }
+
 
     launch();
   }

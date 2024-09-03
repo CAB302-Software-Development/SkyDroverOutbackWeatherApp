@@ -1,21 +1,20 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import java.sql.Connection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DAO.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import java.net.URI;
 import java.net.http.*;
 
 public class Sdk {
 
-  private Connection connection;
   private HttpClient client = HttpClient.newHttpClient();
 
   public Sdk() {
-    connection = DatabaseConnection.getInstance();
   }
 
   public void updateDailyForecast(Location location) {
@@ -83,7 +82,7 @@ public class Sdk {
       int totalEntries = daily.getAsJsonArray("time").size();
       for (int i = 0; i < totalEntries; i++) {
         DailyForecast dailyForecast = new DailyForecast(
-            location.getId(),
+            location,
             daily.getAsJsonArray("time").get(i).getAsInt(),
             daily.getAsJsonArray("weather_code").get(i).getAsInt(),
             daily.getAsJsonArray("temperature_2m_max").get(i).getAsDouble(),
@@ -114,6 +113,7 @@ public class Sdk {
       System.err.println(ex);
     }
   }
+
 
   public void updateHourlyForecast(Location location) {
     double longitude = location.getLongitude();
@@ -209,7 +209,7 @@ public class Sdk {
       int totalEntries = hourly.getAsJsonArray("time").size();
       for (int i = 0; i < totalEntries; i++) {
         HourlyForecast hourlyForecast = new HourlyForecast(
-            location.getId(),
+            location,
             hourly.getAsJsonArray("time").get(i).getAsInt(),
             hourly.getAsJsonArray("temperature_2m").get(i).getAsDouble(),
             hourly.getAsJsonArray("relative_humidity_2m").get(i).getAsDouble(),
@@ -270,4 +270,5 @@ public class Sdk {
       System.err.println(ex);
     }
   }
+
 }

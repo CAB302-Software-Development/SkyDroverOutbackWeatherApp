@@ -1,34 +1,95 @@
-package cab302softwaredevelopment.outbackweathertrackerapplication.database.DAO;
+package cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "dailyForecasts")
 public class DailyForecast {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-  private int id;
-  private int location_id;
-  private int timestamp;
-  private int weather_code;
-  private double temperature_2m_max;
-  private double temperature_2m_min;
-  private double apparent_temperature_max;
-  private double apparent_temperature_min;
-  private int sunrise;
-  private int sunset;
-  private double daylight_duration;
-  private double sunshine_duration;
-  private double uv_index_max;
-  private double uv_index_clear_sky_max;
-  private double precipitation_sum;
-  private double rain_sum;
-  private double showers_sum;
-  private double snowfall_sum;
-  private double precipitation_hours;
-  private double wind_speed_10m_max;
-  private double wind_gusts_10m_max;
-  private double wind_direction_10m_dominant;
-  private double shortwave_radiation_sum;
-  private double et0_fao_evapotranspiration;
+  @ManyToOne
+  @PrimaryKeyJoinColumn
+  private Location location;
+
+  @Column(name="timestamp", nullable = false)
+  private Integer timestamp;
+
+  @Column(name="weather_code")
+  private Integer weather_code;
+
+  @Column(name="temperature_2m_max", nullable = false)
+  private Double temperature_2m_max;
+
+  @Column(name="temperature_2m_min", nullable = false)
+  private Double temperature_2m_min;
+
+  @Column(name="apparent_temperature_max", nullable = false)
+  private Double apparent_temperature_max;
+
+  @Column(name="apparent_temperature_min", nullable = false)
+  private Double apparent_temperature_min;
+
+  @Column(name="sunrise")
+  private Integer sunrise;
+
+  @Column(name="sunset")
+  private Integer sunset;
+
+  @Column(name="daylight_duration")
+  private Double daylight_duration;
+
+  @Column(name="sunshine_duration")
+  private Double sunshine_duration;
+
+  @Column(name="uv_index_max")
+  private Double uv_index_max;
+
+  @Column(name="uv_index_clear_sky_max")
+  private Double uv_index_clear_sky_max;
+
+  @Column(name="precipitation_sum")
+  private Double precipitation_sum;
+
+  @Column(name="rain_sum")
+  private Double rain_sum;
+
+  @Column(name="showers_sum")
+  private Double showers_sum;
+
+  @Column(name="snowfall_sum")
+  private Double snowfall_sum;
+
+  @Column(name="precipitation_hours")
+  private Double precipitation_hours;
+
+  @Column(name="wind_speed_10m_max")
+  private Double wind_speed_10m_max;
+
+  @Column(name="wind_gusts_10m_max")
+  private Double wind_gusts_10m_max;
+
+  @Column(name="wind_direction_10m_dominant")
+  private Double wind_direction_10m_dominant;
+
+  @Column(name="shortwave_radiation_sum")
+  private Double shortwave_radiation_sum;
+
+  @Column(name="et0_fao_evapotranspiration")
+  private Double et0_fao_evapotranspiration;
+
+  public DailyForecast() {
+  }
 
 
-  public DailyForecast(int id, int location_id, int timestamp, int weather_code,
+  public DailyForecast(int id, Location location, int timestamp, int weather_code,
       double temperature_2m_max, double temperature_2m_min, double apparent_temperature_max,
       double apparent_temperature_min, int sunrise, int sunset, double daylight_duration,
       double sunshine_duration, double uv_index_max, double uv_index_clear_sky_max,
@@ -37,7 +98,7 @@ public class DailyForecast {
       double wind_direction_10m_dominant, double shortwave_radiation_sum,
       double et0_fao_evapotranspiration) {
     this.id = id;
-    this.location_id = location_id;
+    this.location = location;
     this.timestamp = timestamp;
     this.weather_code = weather_code;
     this.temperature_2m_max = temperature_2m_max;
@@ -62,7 +123,7 @@ public class DailyForecast {
     this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
   }
 
-  public DailyForecast(int location_id, int timestamp, int weather_code,
+  public DailyForecast(Location location, int timestamp, int weather_code,
       double temperature_2m_max, double temperature_2m_min, double apparent_temperature_max,
       double apparent_temperature_min, int sunrise, int sunset, double daylight_duration,
       double sunshine_duration, double uv_index_max, double uv_index_clear_sky_max,
@@ -70,7 +131,7 @@ public class DailyForecast {
       double precipitation_hours, double wind_speed_10m_max, double wind_gusts_10m_max,
       double wind_direction_10m_dominant, double shortwave_radiation_sum,
       double et0_fao_evapotranspiration) {
-    this.location_id = location_id;
+    this.location = location;
     this.timestamp = timestamp;
     this.weather_code = weather_code;
     this.temperature_2m_max = temperature_2m_max;
@@ -100,8 +161,8 @@ public class DailyForecast {
     return id;
   }
 
-  public int getLocation_id() {
-    return location_id;
+  public Location getLocation() {
+    return location;
   }
 
   public int getTimestamp() {
@@ -197,7 +258,7 @@ public class DailyForecast {
   public String toString() {
     return "DailyForecast{" +
         "id=" + id +
-        ", location_id=" + location_id +
+        ", location=" + location +
         ", timestamp=" + timestamp +
         ", weather_code=" + weather_code +
         ", temperature_2m_max=" + temperature_2m_max +

@@ -1,26 +1,40 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class DatabaseConnection {
 
-  private static Connection instance = null;
+  private static SessionFactory sessionFactory = null;
+  private static final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().build();
 
   private DatabaseConnection() {
-    String url = "jdbc:sqlite:database.db";
-    try {
-      instance = DriverManager.getConnection(url);
-    } catch (SQLException sqlEx) {
-      System.err.println(sqlEx);
-    }
+
+      sessionFactory =
+          new MetadataSources(registry)
+              .addAnnotatedClass(Location.class)
+              .addAnnotatedClass(HourlyForecast.class)
+              .addAnnotatedClass(DailyForecast.class)
+              .buildMetadata()
+              .buildSessionFactory();
+
   }
 
-  public static Connection getInstance() {
-    if (instance == null) {
+  public static Session getSession() {
+    if (sessionFactory == null) {
       new DatabaseConnection();
     }
-    return instance;
+    // Open a new session
+    return sessionFactory.openSession();
+  }
+
+  public static void close() {
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }
   }
 }

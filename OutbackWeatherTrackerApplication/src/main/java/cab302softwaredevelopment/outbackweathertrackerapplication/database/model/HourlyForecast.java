@@ -1,63 +1,186 @@
-package cab302softwaredevelopment.outbackweathertrackerapplication.database.DAO;
+package cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "hourlyForecasts")
 public class HourlyForecast {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-  private int id;
-  private int location_id;
-  private int timestamp;
-  private double temperature_2m;
-  private double relative_humidity_2m;
-  private double dew_point_2m;
-  private double apparent_temperature;
-  private double precipitation;
-  private double rain;
-  private double showers;
-  private double snowfall;
-  private double snow_depth;
-  private int weather_code;
-  private double pressure_msl;
-  private double surface_pressure;
-  private double cloud_cover;
-  private double cloud_cover_low;
-  private double cloud_cover_mid;
-  private double cloud_cover_high;
-  private double visibility;
-  private double et0_fao_evapotranspiration;
-  private double vapour_pressure_deficit;
-  private double wind_speed_10m;
-  private double wind_speed_40m;
-  private double wind_speed_80m;
-  private double wind_speed_120m;
-  private double wind_direction_10m;
-  private double wind_direction_40m;
-  private double wind_direction_80m;
-  private double wind_direction_120m;
-  private double wind_gusts_10m;
-  private double surface_temperature;
-  private double soil_temperature_0_to_10cm;
-  private double soil_temperature_10_to_35cm;
-  private double soil_temperature_35_to_100cm;
-  private double soil_temperature_100_to_300cm;
-  private double soil_moisture_0_to_10cm;
-  private double soil_moisture_10_to_35cm;
-  private double soil_moisture_35_to_100cm;
-  private double soil_moisture_100_to_300cm;
+  @ManyToOne
+  @PrimaryKeyJoinColumn
+  private Location location;
+
+  @Column(name="timestamp")
+  private Integer timestamp;
+
+  @Column(name="temperature_2m")
+  private Double temperature_2m;
+
+  @Column(name="relative_humidity_2m")
+  private Double relative_humidity_2m;
+
+  @Column(name="dew_point_2m")
+  private Double dew_point_2m;
+
+  @Column(name="apparent_temperature")
+  private Double apparent_temperature;
+
+  @Column(name="precipitation")
+  private Double precipitation;
+
+  @Column(name="rain")
+
+  private Double rain;
+
+  @Column(name="showers")
+  private Double showers;
+
+  @Column(name="snowfall")
+  private Double snowfall;
+
+  @Column(name="snow_depth")
+  private Double snow_depth;
+
+  @Column(name="weather_code")
+  private Integer weather_code;
+
+  @Column(name="pressure_msl")
+  private Double pressure_msl;
+
+  @Column(name="surface_pressure")
+  private Double surface_pressure;
+
+  @Column(name="cloud_cover")
+  private Double cloud_cover;
+
+  @Column(name="cloud_cover_low")
+  private Double cloud_cover_low;
+
+  @Column(name="cloud_cover_mid")
+  private Double cloud_cover_mid;
+
+  @Column(name="cloud_cover_high")
+  private Double cloud_cover_high;
+
+  @Column(name="visibility")
+  private Double visibility;
+
+  @Column(name="et0_fao_evapotranspiration")
+  private Double et0_fao_evapotranspiration;
+
+  @Column(name="vapour_pressure_deficit")
+  private Double vapour_pressure_deficit;
+
+  @Column(name="wind_speed_10m")
+  private Double wind_speed_10m;
+
+  @Column(name="wind_speed_40m")
+  private Double wind_speed_40m;
+
+  @Column(name="wind_speed_80m")
+  private Double wind_speed_80m;
+
+  @Column(name="wind_speed_120m")
+  private Double wind_speed_120m;
+
+  @Column(name="wind_direction_10m")
+  private Double wind_direction_10m;
+
+  @Column(name="wind_direction_40m")
+  private Double wind_direction_40m;
+
+  @Column(name="wind_direction_80m")
+  private Double wind_direction_80m;
+
+  @Column(name="wind_direction_120m")
+  private Double wind_direction_120m;
+
+  @Column(name="wind_gusts_10m")
+  private Double wind_gusts_10m;
+
+  @Column(name="surface_temperature")
+  private Double surface_temperature;
+
+  @Column(name="soil_temperature_0_to_10cm")
+  private Double soil_temperature_0_to_10cm;
+
+  @Column(name="soil_temperature_10_to_35cm")
+  private Double soil_temperature_10_to_35cm;
+
+  @Column(name="soil_temperature_35_to_100cm")
+  private Double soil_temperature_35_to_100cm;
+
+  @Column(name="soil_temperature_100_to_300cm")
+  private Double soil_temperature_100_to_300cm;
+
+  @Column(name="soil_moisture_0_to_10cm")
+  private Double soil_moisture_0_to_10cm;
+
+  @Column(name="soil_moisture_10_to_35cm")
+  private Double soil_moisture_10_to_35cm;
+
+  @Column(name="soil_moisture_35_to_100cm")
+  private Double soil_moisture_35_to_100cm;
+
+  @Column(name="soil_moisture_100_to_300cm")
+  private Double soil_moisture_100_to_300cm;
+
+  @Column(name="is_day")
   private boolean is_day;
-  private double sunshine_duration;
-  private double shortwave_radiation;
-  private double direct_radiation;
-  private double diffuse_radiation;
-  private double direct_normal_irradiance;
-  private double global_tilted_irradiance;
-  private double terrestrial_radiation;
-  private double shortwave_radiation_instant;
-  private double direct_radiation_instant;
-  private double diffuse_radiation_instant;
-  private double direct_normal_irradiance_instant;
-  private double global_tilted_irradiance_instant;
-  private double terrestrial_radiation_instant;
 
-  public HourlyForecast(int id, int location_id, int timestamp, double temperature_2m,
+  @Column(name="sunshine_duration")
+  private Double sunshine_duration;
+
+  @Column(name="shortwave_radiation")
+  private Double shortwave_radiation;
+
+  @Column(name="direct_radiation")
+  private Double direct_radiation;
+
+  @Column(name="diffuse_radiation")
+  private Double diffuse_radiation;
+
+  @Column(name="direct_normal_irradiance")
+  private Double direct_normal_irradiance;
+
+  @Column(name="global_tilted_irradiance")
+  private Double global_tilted_irradiance;
+
+  @Column(name="terrestrial_radiation")
+  private Double terrestrial_radiation;
+
+  @Column(name="shortwave_radiation_instant")
+  private Double shortwave_radiation_instant;
+
+  @Column(name="direct_radiation_instant")
+  private Double direct_radiation_instant;
+
+  @Column(name="diffuse_radiation_instant")
+  private Double diffuse_radiation_instant;
+
+  @Column(name="direct_normal_irradiance_instant")
+  private Double direct_normal_irradiance_instant;
+
+  @Column(name="global_tilted_irradiance_instant")
+  private Double global_tilted_irradiance_instant;
+
+  @Column(name="terrestrial_radiation_instant")
+  private Double terrestrial_radiation_instant;
+
+  public HourlyForecast() {
+  }
+
+  public HourlyForecast(int id, Location location, int timestamp, double temperature_2m,
       double relative_humidity_2m, double dew_point_2m, double apparent_temperature,
       double precipitation, double rain, double showers, double snowfall, double snow_depth,
       int weather_code, double pressure_msl, double surface_pressure, double cloud_cover,
@@ -77,7 +200,7 @@ public class HourlyForecast {
       double direct_normal_irradiance_instant, double global_tilted_irradiance_instant,
       double terrestrial_radiation_instant) {
     this.id = id;
-    this.location_id = location_id;
+    this.location = location;
     this.timestamp = timestamp;
     this.temperature_2m = temperature_2m;
     this.relative_humidity_2m = relative_humidity_2m;
@@ -132,7 +255,7 @@ public class HourlyForecast {
     this.terrestrial_radiation_instant = terrestrial_radiation_instant;
   }
 
-  public HourlyForecast(int location_id, int timestamp, double temperature_2m,
+  public HourlyForecast(Location location, int timestamp, double temperature_2m,
       double relative_humidity_2m, double dew_point_2m, double apparent_temperature,
       double precipitation, double rain, double showers, double snowfall, double snow_depth,
       int weather_code, double pressure_msl, double surface_pressure, double cloud_cover,
@@ -151,7 +274,7 @@ public class HourlyForecast {
       double direct_radiation_instant, double diffuse_radiation_instant,
       double direct_normal_irradiance_instant, double global_tilted_irradiance_instant,
       double terrestrial_radiation_instant) {
-    this.location_id = location_id;
+    this.location = location;
     this.timestamp = timestamp;
     this.temperature_2m = temperature_2m;
     this.relative_humidity_2m = relative_humidity_2m;
@@ -210,8 +333,8 @@ public class HourlyForecast {
     return id;
   }
 
-  public int getLocation_id() {
-    return location_id;
+  public Location getLocation() {
+    return location;
   }
 
   public int getTimestamp() {
@@ -426,7 +549,7 @@ public class HourlyForecast {
   public String toString() {
     return "HourlyForecast{" +
         "id=" + id +
-        ", location_id=" + location_id +
+        ", location_=" +  location +
         ", timestamp=" + timestamp +
         ", temperature_2m=" + temperature_2m +
         ", relative_humidity_2m=" + relative_humidity_2m +
@@ -481,4 +604,5 @@ public class HourlyForecast {
         ", terrestrial_radiation_instant=" + terrestrial_radiation_instant +
         '}';
     }
+
 }
