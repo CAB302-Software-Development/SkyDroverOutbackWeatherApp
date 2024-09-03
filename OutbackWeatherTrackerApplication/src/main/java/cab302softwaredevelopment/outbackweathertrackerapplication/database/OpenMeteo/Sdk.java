@@ -53,6 +53,7 @@ public class Sdk {
                 + ",et0_fao_evapotranspiration"
                 + "&models=bom_access_global"
                 + "&forecast_days=" + days
+                //+ "&past_days=92"
                 + "&timeformat=unixtime"))
         .header("accept", "application/json")
         .build();
@@ -178,6 +179,7 @@ public class Sdk {
                 + ",terrestrial_radiation_instant"
                 + "&models=bom_access_global"
                 + "&forecast_days=" + days
+                //+ "&past_days=92"
                 + "&timeformat=unixtime"))
         .header("accept", "application/json")
         .build();

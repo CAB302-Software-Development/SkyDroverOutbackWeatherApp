@@ -112,32 +112,7 @@ public class DailyForecastDAO {
       ResultSet rs = getAll.executeQuery("SELECT * FROM dailyForecasts");
       while (rs.next()) {
         dailyForecasts.add(
-            new DailyForecast(
-                rs.getInt("id"),
-                rs.getInt("location_id"),
-                rs.getInt("timestamp"),
-                rs.getInt("weather_code"),
-                rs.getDouble("temperature_2m_max"),
-                rs.getDouble("temperature_2m_min"),
-                rs.getDouble("apparent_temperature_max"),
-                rs.getDouble("apparent_temperature_min"),
-                rs.getInt("sunrise"),
-                rs.getInt("sunset"),
-                rs.getDouble("daylight_duration"),
-                rs.getDouble("sunshine_duration"),
-                rs.getDouble("uv_index_max"),
-                rs.getDouble("uv_index_clear_sky_max"),
-                rs.getDouble("precipitation_sum"),
-                rs.getDouble("rain_sum"),
-                rs.getDouble("showers_sum"),
-                rs.getDouble("snowfall_sum"),
-                rs.getDouble("precipitation_hours"),
-                rs.getDouble("wind_speed_10m_max"),
-                rs.getDouble("wind_gusts_10m_max"),
-                rs.getDouble("wind_direction_10m_dominant"),
-                rs.getDouble("shortwave_radiation_sum"),
-                rs.getDouble("et0_fao_evapotranspiration")
-            )
+            mapResultSet(rs)
         );
       }
     } catch (SQLException ex) {
@@ -153,32 +128,7 @@ public class DailyForecastDAO {
       ResultSet rs = getAll.executeQuery("SELECT * FROM dailyForecasts WHERE location_id = " + location_id);
       while (rs.next()) {
         dailyForecasts.add(
-            new DailyForecast(
-                rs.getInt("id"),
-                rs.getInt("location_id"),
-                rs.getInt("timestamp"),
-                rs.getInt("weather_code"),
-                rs.getDouble("temperature_2m_max"),
-                rs.getDouble("temperature_2m_min"),
-                rs.getDouble("apparent_temperature_max"),
-                rs.getDouble("apparent_temperature_min"),
-                rs.getInt("sunrise"),
-                rs.getInt("sunset"),
-                rs.getDouble("daylight_duration"),
-                rs.getDouble("sunshine_duration"),
-                rs.getDouble("uv_index_max"),
-                rs.getDouble("uv_index_clear_sky_max"),
-                rs.getDouble("precipitation_sum"),
-                rs.getDouble("rain_sum"),
-                rs.getDouble("showers_sum"),
-                rs.getDouble("snowfall_sum"),
-                rs.getDouble("precipitation_hours"),
-                rs.getDouble("wind_speed_10m_max"),
-                rs.getDouble("wind_gusts_10m_max"),
-                rs.getDouble("wind_direction_10m_dominant"),
-                rs.getDouble("shortwave_radiation_sum"),
-                rs.getDouble("et0_fao_evapotranspiration")
-            )
+            mapResultSet(rs)
         );
       }
     } catch (SQLException ex) {
@@ -193,37 +143,41 @@ public class DailyForecastDAO {
       getDailyForecast.setInt(1, id);
       ResultSet rs = getDailyForecast.executeQuery();
       if (rs.next()) {
-        return new DailyForecast(
-            rs.getInt("id"),
-            rs.getInt("location_id"),
-            rs.getInt("timestamp"),
-            rs.getInt("weather_code"),
-            rs.getDouble("temperature_2m_max"),
-            rs.getDouble("temperature_2m_min"),
-            rs.getDouble("apparent_temperature_max"),
-            rs.getDouble("apparent_temperature_min"),
-            rs.getInt("sunrise"),
-            rs.getInt("sunset"),
-            rs.getDouble("daylight_duration"),
-            rs.getDouble("sunshine_duration"),
-            rs.getDouble("uv_index_max"),
-            rs.getDouble("uv_index_clear_sky_max"),
-            rs.getDouble("precipitation_sum"),
-            rs.getDouble("rain_sum"),
-            rs.getDouble("showers_sum"),
-            rs.getDouble("snowfall_sum"),
-            rs.getDouble("precipitation_hours"),
-            rs.getDouble("wind_speed_10m_max"),
-            rs.getDouble("wind_gusts_10m_max"),
-            rs.getDouble("wind_direction_10m_dominant"),
-            rs.getDouble("shortwave_radiation_sum"),
-            rs.getDouble("et0_fao_evapotranspiration")
-        );
+        return mapResultSet(rs);
       }
     } catch (SQLException ex) {
       System.err.println(ex);
     }
     return null;
+  }
+
+  private DailyForecast mapResultSet(ResultSet rs) throws SQLException {
+    return new DailyForecast(
+        rs.getInt("id"),
+        rs.getInt("location_id"),
+        rs.getInt("timestamp"),
+        rs.getInt("weather_code"),
+        rs.getDouble("temperature_2m_max"),
+        rs.getDouble("temperature_2m_min"),
+        rs.getDouble("apparent_temperature_max"),
+        rs.getDouble("apparent_temperature_min"),
+        rs.getInt("sunrise"),
+        rs.getInt("sunset"),
+        rs.getDouble("daylight_duration"),
+        rs.getDouble("sunshine_duration"),
+        rs.getDouble("uv_index_max"),
+        rs.getDouble("uv_index_clear_sky_max"),
+        rs.getDouble("precipitation_sum"),
+        rs.getDouble("rain_sum"),
+        rs.getDouble("showers_sum"),
+        rs.getDouble("snowfall_sum"),
+        rs.getDouble("precipitation_hours"),
+        rs.getDouble("wind_speed_10m_max"),
+        rs.getDouble("wind_gusts_10m_max"),
+        rs.getDouble("wind_direction_10m_dominant"),
+        rs.getDouble("shortwave_radiation_sum"),
+        rs.getDouble("et0_fao_evapotranspiration")
+    );
   }
 
   public void close() {
