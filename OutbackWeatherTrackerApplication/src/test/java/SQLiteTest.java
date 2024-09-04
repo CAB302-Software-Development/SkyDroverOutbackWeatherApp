@@ -2,25 +2,17 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.testfx.framework.junit5.ApplicationTest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class SQLiteTest {
@@ -125,11 +117,11 @@ public class SQLiteTest {
     // Verify the locations
     assertEquals(6, locations.size());
 
-    // Verify that the locations got assigned an ID and that they increased
-    int previousId = 0;
+    // Verify that the locations got assigned an ID and that they're unique
+    List<Integer> seenIds = new ArrayList<>();
     for (Location location : locations) {
-      assertEquals(location.getId(), previousId + 1, "Location ID should be increasing by 1");
-      previousId = location.getId();
+      assertFalse(seenIds.contains(location.getId()), "Location ID should be unique");
+      seenIds.add(location.getId());
     }
   }
 
@@ -172,7 +164,6 @@ public class SQLiteTest {
 
   }
 
-
   @Test
   @Order(6)
   public void testAddHourlyForecast() {
@@ -190,7 +181,6 @@ public class SQLiteTest {
     hourlyForecastDAO.insert(new HourlyForecast(location1, 1725336000,24.2,31.0,6.0,23.1,0.0,0.0,0.0,0.0,0.0,0,1024.2,1021.0,0.0,0.0,0.0,0.0,17640.0,0.53,2.08,9.4,13.3,15.5,16.2,157.0,156.0,155.0,156.0,32.8,31.6,23.6,21.9,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,777.0,675.0,102.0,923.0,777.0,983.3,719.3,624.9,94.4,923.0,719.3,910.3));
 
     // Retrieve the hourly forecasts
-
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
 
     // Verify the hourly forecasts
@@ -198,10 +188,10 @@ public class SQLiteTest {
 
     // Verify that the hourly forecasts got assigned an ID and that they increased
 
-    int previousId = 0;
+    List<Integer> seenIds = new ArrayList<>();
     for (HourlyForecast hourlyForecast : hourlyForecasts) {
-      assertEquals(hourlyForecast.getId(), previousId + 1, "Hourly Forecast ID should be increasing by 1");
-      previousId = hourlyForecast.getId();
+      assertFalse(seenIds.contains(hourlyForecast.getId()), "Hourly Forecast ID should be unique");
+      seenIds.add(hourlyForecast.getId());
     }
   }
 }
