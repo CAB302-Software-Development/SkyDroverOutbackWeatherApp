@@ -89,14 +89,14 @@ public class DailyForecast {
   }
 
 
-  public DailyForecast(int id, Location location, int timestamp, int weather_code,
-      double temperature_2m_max, double temperature_2m_min, double apparent_temperature_max,
-      double apparent_temperature_min, int sunrise, int sunset, double daylight_duration,
-      double sunshine_duration, double uv_index_max, double uv_index_clear_sky_max,
-      double precipitation_sum, double rain_sum, double showers_sum, double snowfall_sum,
-      double precipitation_hours, double wind_speed_10m_max, double wind_gusts_10m_max,
-      double wind_direction_10m_dominant, double shortwave_radiation_sum,
-      double et0_fao_evapotranspiration) {
+  public DailyForecast(Integer id, Location location, Integer timestamp, Integer weather_code,
+      Double temperature_2m_max, Double temperature_2m_min, Double apparent_temperature_max,
+      Double apparent_temperature_min, Integer sunrise, Integer sunset, Double daylight_duration,
+      Double sunshine_duration, Double uv_index_max, Double uv_index_clear_sky_max,
+      Double precipitation_sum, Double rain_sum, Double showers_sum, Double snowfall_sum,
+      Double precipitation_hours, Double wind_speed_10m_max, Double wind_gusts_10m_max,
+      Double wind_direction_10m_dominant, Double shortwave_radiation_sum,
+      Double et0_fao_evapotranspiration) {
     this.id = id;
     this.location = location;
     this.timestamp = timestamp;
@@ -123,14 +123,14 @@ public class DailyForecast {
     this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
   }
 
-  public DailyForecast(Location location, int timestamp, int weather_code,
-      double temperature_2m_max, double temperature_2m_min, double apparent_temperature_max,
-      double apparent_temperature_min, int sunrise, int sunset, double daylight_duration,
-      double sunshine_duration, double uv_index_max, double uv_index_clear_sky_max,
-      double precipitation_sum, double rain_sum, double showers_sum, double snowfall_sum,
-      double precipitation_hours, double wind_speed_10m_max, double wind_gusts_10m_max,
-      double wind_direction_10m_dominant, double shortwave_radiation_sum,
-      double et0_fao_evapotranspiration) {
+  public DailyForecast(Location location, Integer timestamp, Integer weather_code,
+      Double temperature_2m_max, Double temperature_2m_min, Double apparent_temperature_max,
+      Double apparent_temperature_min, Integer sunrise, Integer sunset, Double daylight_duration,
+      Double sunshine_duration, Double uv_index_max, Double uv_index_clear_sky_max,
+      Double precipitation_sum, Double rain_sum, Double showers_sum, Double snowfall_sum,
+      Double precipitation_hours, Double wind_speed_10m_max, Double wind_gusts_10m_max,
+      Double wind_direction_10m_dominant, Double shortwave_radiation_sum,
+      Double et0_fao_evapotranspiration) {
     this.location = location;
     this.timestamp = timestamp;
     this.weather_code = weather_code;
@@ -157,7 +157,7 @@ public class DailyForecast {
   }
 
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -165,91 +165,91 @@ public class DailyForecast {
     return location;
   }
 
-  public int getTimestamp() {
+  public Integer getTimestamp() {
     return timestamp;
   }
 
-  public int getWeather_code() {
+  public Integer getWeather_code() {
     return weather_code;
   }
 
-  public double getTemperature_2m_max() {
+  public Double getTemperature_2m_max() {
     return temperature_2m_max;
   }
 
-  public double getTemperature_2m_min() {
+  public Double getTemperature_2m_min() {
     return temperature_2m_min;
   }
 
-  public double getApparent_temperature_max() {
+  public Double getApparent_temperature_max() {
     return apparent_temperature_max;
   }
 
-  public double getApparent_temperature_min() {
+  public Double getApparent_temperature_min() {
     return apparent_temperature_min;
   }
 
-  public int getSunrise() {
+  public Integer getSunrise() {
     return sunrise;
   }
 
-  public int getSunset() {
+  public Integer getSunset() {
     return sunset;
   }
 
-  public double getDaylight_duration() {
+  public Double getDaylight_duration() {
     return daylight_duration;
   }
 
-  public double getSunshine_duration() {
+  public Double getSunshine_duration() {
     return sunshine_duration;
   }
 
-  public double getUv_index_max() {
+  public Double getUv_index_max() {
     return uv_index_max;
   }
 
-  public double getUv_index_clear_sky_max() {
+  public Double getUv_index_clear_sky_max() {
     return uv_index_clear_sky_max;
   }
 
-  public double getPrecipitation_sum() {
+  public Double getPrecipitation_sum() {
     return precipitation_sum;
   }
 
-  public double getRain_sum() {
+  public Double getRain_sum() {
     return rain_sum;
   }
 
-  public double getShowers_sum() {
+  public Double getShowers_sum() {
     return showers_sum;
   }
 
-  public double getSnowfall_sum() {
+  public Double getSnowfall_sum() {
     return snowfall_sum;
   }
 
-  public double getPrecipitation_hours() {
+  public Double getPrecipitation_hours() {
     return precipitation_hours;
   }
 
-  public double getWind_speed_10m_max() {
+  public Double getWind_speed_10m_max() {
     return wind_speed_10m_max;
   }
 
-  public double getWind_gusts_10m_max() {
+  public Double getWind_gusts_10m_max() {
     return wind_gusts_10m_max;
   }
 
-  public double getWind_direction_10m_dominant() {
+  public Double getWind_direction_10m_dominant() {
     return wind_direction_10m_dominant;
   }
 
-  public double getShortwave_radiation_sum() {
+  public Double getShortwave_radiation_sum() {
     return shortwave_radiation_sum;
   }
 
-  public double getEt0_fao_evapotranspiration() {
+  public Double getEt0_fao_evapotranspiration() {
     return et0_fao_evapotranspiration;
   }
 

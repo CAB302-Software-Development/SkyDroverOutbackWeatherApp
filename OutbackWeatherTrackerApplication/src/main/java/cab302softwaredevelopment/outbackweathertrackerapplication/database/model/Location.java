@@ -30,7 +30,7 @@ public class Location {
   public Location() {
   }
 
-  public Location(int id, Double longitude, Double latitude, Double elevation, String name) {
+  public Location(Integer id, Double longitude, Double latitude, Double elevation, String name) {
     this.id = id;
     this.longitude = longitude;
     this.latitude = latitude;
@@ -50,15 +50,15 @@ public class Location {
     return id;
   }
 
-  public double getLongitude() {
+  public Double getLongitude() {
     return longitude;
   }
 
-  public double getLatitude() {
+  public Double getLatitude() {
     return latitude;
   }
 
-  public double getElevation() {
+  public Double getElevation() {
     return elevation;
   }
 

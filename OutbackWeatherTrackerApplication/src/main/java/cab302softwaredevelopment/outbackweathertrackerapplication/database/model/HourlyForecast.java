@@ -180,25 +180,25 @@ public class HourlyForecast {
   public HourlyForecast() {
   }
 
-  public HourlyForecast(int id, Location location, int timestamp, double temperature_2m,
-      double relative_humidity_2m, double dew_point_2m, double apparent_temperature,
-      double precipitation, double rain, double showers, double snowfall, double snow_depth,
-      int weather_code, double pressure_msl, double surface_pressure, double cloud_cover,
-      double cloud_cover_low, double cloud_cover_mid, double cloud_cover_high, double visibility,
-      double et0_fao_evapotranspiration, double vapour_pressure_deficit, double wind_speed_10m,
-      double wind_speed_40m, double wind_speed_80m, double wind_speed_120m,
-      double wind_direction_10m, double wind_direction_40m, double wind_direction_80m,
-      double wind_direction_120m, double wind_gusts_10m, double surface_temperature,
-      double soil_temperature_0_to_10cm, double soil_temperature_10_to_35cm,
-      double soil_temperature_35_to_100cm, double soil_temperature_100_to_300cm,
-      double soil_moisture_0_to_10cm, double soil_moisture_10_to_35cm,
-      double soil_moisture_35_to_100cm, double soil_moisture_100_to_300cm, boolean is_day,
-      double sunshine_duration, double shortwave_radiation, double direct_radiation,
-      double diffuse_radiation, double direct_normal_irradiance, double global_tilted_irradiance,
-      double terrestrial_radiation, double shortwave_radiation_instant,
-      double direct_radiation_instant, double diffuse_radiation_instant,
-      double direct_normal_irradiance_instant, double global_tilted_irradiance_instant,
-      double terrestrial_radiation_instant) {
+  public HourlyForecast(Integer id, Location location, Integer timestamp, Double temperature_2m,
+      Double relative_humidity_2m, Double dew_point_2m, Double apparent_temperature,
+      Double precipitation, Double rain, Double showers, Double snowfall, Double snow_depth,
+      Integer weather_code, Double pressure_msl, Double surface_pressure, Double cloud_cover,
+      Double cloud_cover_low, Double cloud_cover_mid, Double cloud_cover_high, Double visibility,
+      Double et0_fao_evapotranspiration, Double vapour_pressure_deficit, Double wind_speed_10m,
+      Double wind_speed_40m, Double wind_speed_80m, Double wind_speed_120m,
+      Double wind_direction_10m, Double wind_direction_40m, Double wind_direction_80m,
+      Double wind_direction_120m, Double wind_gusts_10m, Double surface_temperature,
+      Double soil_temperature_0_to_10cm, Double soil_temperature_10_to_35cm,
+      Double soil_temperature_35_to_100cm, Double soil_temperature_100_to_300cm,
+      Double soil_moisture_0_to_10cm, Double soil_moisture_10_to_35cm,
+      Double soil_moisture_35_to_100cm, Double soil_moisture_100_to_300cm, boolean is_day,
+      Double sunshine_duration, Double shortwave_radiation, Double direct_radiation,
+      Double diffuse_radiation, Double direct_normal_irradiance, Double global_tilted_irradiance,
+      Double terrestrial_radiation, Double shortwave_radiation_instant,
+      Double direct_radiation_instant, Double diffuse_radiation_instant,
+      Double direct_normal_irradiance_instant, Double global_tilted_irradiance_instant,
+      Double terrestrial_radiation_instant) {
     this.id = id;
     this.location = location;
     this.timestamp = timestamp;
@@ -255,25 +255,25 @@ public class HourlyForecast {
     this.terrestrial_radiation_instant = terrestrial_radiation_instant;
   }
 
-  public HourlyForecast(Location location, int timestamp, double temperature_2m,
-      double relative_humidity_2m, double dew_point_2m, double apparent_temperature,
-      double precipitation, double rain, double showers, double snowfall, double snow_depth,
-      int weather_code, double pressure_msl, double surface_pressure, double cloud_cover,
-      double cloud_cover_low, double cloud_cover_mid, double cloud_cover_high, double visibility,
-      double et0_fao_evapotranspiration, double vapour_pressure_deficit, double wind_speed_10m,
-      double wind_speed_40m, double wind_speed_80m, double wind_speed_120m,
-      double wind_direction_10m, double wind_direction_40m, double wind_direction_80m,
-      double wind_direction_120m, double wind_gusts_10m, double surface_temperature,
-      double soil_temperature_0_to_10cm, double soil_temperature_10_to_35cm,
-      double soil_temperature_35_to_100cm, double soil_temperature_100_to_300cm,
-      double soil_moisture_0_to_10cm, double soil_moisture_10_to_35cm,
-      double soil_moisture_35_to_100cm, double soil_moisture_100_to_300cm, boolean is_day,
-      double sunshine_duration, double shortwave_radiation, double direct_radiation,
-      double diffuse_radiation, double direct_normal_irradiance, double global_tilted_irradiance,
-      double terrestrial_radiation, double shortwave_radiation_instant,
-      double direct_radiation_instant, double diffuse_radiation_instant,
-      double direct_normal_irradiance_instant, double global_tilted_irradiance_instant,
-      double terrestrial_radiation_instant) {
+  public HourlyForecast(Location location, Integer timestamp, Double temperature_2m,
+      Double relative_humidity_2m, Double dew_point_2m, Double apparent_temperature,
+      Double precipitation, Double rain, Double showers, Double snowfall, Double snow_depth,
+      Integer weather_code, Double pressure_msl, Double surface_pressure, Double cloud_cover,
+      Double cloud_cover_low, Double cloud_cover_mid, Double cloud_cover_high, Double visibility,
+      Double et0_fao_evapotranspiration, Double vapour_pressure_deficit, Double wind_speed_10m,
+      Double wind_speed_40m, Double wind_speed_80m, Double wind_speed_120m,
+      Double wind_direction_10m, Double wind_direction_40m, Double wind_direction_80m,
+      Double wind_direction_120m, Double wind_gusts_10m, Double surface_temperature,
+      Double soil_temperature_0_to_10cm, Double soil_temperature_10_to_35cm,
+      Double soil_temperature_35_to_100cm, Double soil_temperature_100_to_300cm,
+      Double soil_moisture_0_to_10cm, Double soil_moisture_10_to_35cm,
+      Double soil_moisture_35_to_100cm, Double soil_moisture_100_to_300cm, boolean is_day,
+      Double sunshine_duration, Double shortwave_radiation, Double direct_radiation,
+      Double diffuse_radiation, Double direct_normal_irradiance, Double global_tilted_irradiance,
+      Double terrestrial_radiation, Double shortwave_radiation_instant,
+      Double direct_radiation_instant, Double diffuse_radiation_instant,
+      Double direct_normal_irradiance_instant, Double global_tilted_irradiance_instant,
+      Double terrestrial_radiation_instant) {
     this.location = location;
     this.timestamp = timestamp;
     this.temperature_2m = temperature_2m;
@@ -329,7 +329,7 @@ public class HourlyForecast {
     this.terrestrial_radiation_instant = terrestrial_radiation_instant;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -337,155 +337,155 @@ public class HourlyForecast {
     return location;
   }
 
-  public int getTimestamp() {
+  public Integer getTimestamp() {
     return timestamp;
   }
 
-  public double getTemperature_2m() {
+  public Double getTemperature_2m() {
     return temperature_2m;
   }
 
-  public double getRelative_humidity_2m() {
+  public Double getRelative_humidity_2m() {
     return relative_humidity_2m;
   }
 
-  public double getDew_point_2m() {
+  public Double getDew_point_2m() {
     return dew_point_2m;
   }
 
-  public double getApparent_temperature() {
+  public Double getApparent_temperature() {
     return apparent_temperature;
   }
 
-  public double getPrecipitation() {
+  public Double getPrecipitation() {
     return precipitation;
   }
 
-  public double getRain() {
+  public Double getRain() {
     return rain;
   }
 
-  public double getShowers() {
+  public Double getShowers() {
     return showers;
   }
 
-  public double getSnowfall() {
+  public Double getSnowfall() {
     return snowfall;
   }
 
-  public double getSnow_depth() {
+  public Double getSnow_depth() {
     return snow_depth;
   }
 
-  public int getWeather_code() {
+  public Integer getWeather_code() {
     return weather_code;
   }
 
-  public double getPressure_msl() {
+  public Double getPressure_msl() {
     return pressure_msl;
   }
 
-  public double getSurface_pressure() {
+  public Double getSurface_pressure() {
     return surface_pressure;
   }
 
-  public double getCloud_cover() {
+  public Double getCloud_cover() {
     return cloud_cover;
   }
 
-  public double getCloud_cover_low() {
+  public Double getCloud_cover_low() {
     return cloud_cover_low;
   }
 
-  public double getCloud_cover_mid() {
+  public Double getCloud_cover_mid() {
     return cloud_cover_mid;
   }
 
-  public double getCloud_cover_high() {
+  public Double getCloud_cover_high() {
     return cloud_cover_high;
   }
 
-  public double getVisibility() {
+  public Double getVisibility() {
     return visibility;
   }
 
-  public double getEt0_fao_evapotranspiration() {
+  public Double getEt0_fao_evapotranspiration() {
     return et0_fao_evapotranspiration;
   }
 
-  public double getVapour_pressure_deficit() {
+  public Double getVapour_pressure_deficit() {
     return vapour_pressure_deficit;
   }
 
-  public double getWind_speed_10m() {
+  public Double getWind_speed_10m() {
     return wind_speed_10m;
   }
 
-  public double getWind_speed_40m() {
+  public Double getWind_speed_40m() {
     return wind_speed_40m;
   }
 
-  public double getWind_speed_80m() {
+  public Double getWind_speed_80m() {
     return wind_speed_80m;
   }
 
-  public double getWind_speed_120m() {
+  public Double getWind_speed_120m() {
     return wind_speed_120m;
   }
 
-  public double getWind_direction_10m() {
+  public Double getWind_direction_10m() {
     return wind_direction_10m;
   }
 
-  public double getWind_direction_40m() {
+  public Double getWind_direction_40m() {
     return wind_direction_40m;
   }
 
-  public double getWind_direction_80m() {
+  public Double getWind_direction_80m() {
     return wind_direction_80m;
   }
 
-  public double getWind_direction_120m() {
+  public Double getWind_direction_120m() {
     return wind_direction_120m;
   }
 
-  public double getWind_gusts_10m() {
+  public Double getWind_gusts_10m() {
     return wind_gusts_10m;
   }
 
-  public double getSurface_temperature() {
+  public Double getSurface_temperature() {
     return surface_temperature;
   }
 
-  public double getSoil_temperature_0_to_10cm() {
+  public Double getSoil_temperature_0_to_10cm() {
     return soil_temperature_0_to_10cm;
   }
 
-  public double getSoil_temperature_10_to_35cm() {
+  public Double getSoil_temperature_10_to_35cm() {
     return soil_temperature_10_to_35cm;
   }
 
-  public double getSoil_temperature_35_to_100cm() {
+  public Double getSoil_temperature_35_to_100cm() {
     return soil_temperature_35_to_100cm;
   }
 
-  public double getSoil_temperature_100_to_300cm() {
+  public Double getSoil_temperature_100_to_300cm() {
     return soil_temperature_100_to_300cm;
   }
 
-  public double getSoil_moisture_0_to_10cm() {
+  public Double getSoil_moisture_0_to_10cm() {
     return soil_moisture_0_to_10cm;
   }
 
-  public double getSoil_moisture_10_to_35cm() {
+  public Double getSoil_moisture_10_to_35cm() {
     return soil_moisture_10_to_35cm;
   }
 
-  public double getSoil_moisture_35_to_100cm() {
+  public Double getSoil_moisture_35_to_100cm() {
     return soil_moisture_35_to_100cm;
   }
 
-  public double getSoil_moisture_100_to_300cm() {
+  public Double getSoil_moisture_100_to_300cm() {
     return soil_moisture_100_to_300cm;
   }
 
@@ -493,55 +493,55 @@ public class HourlyForecast {
     return is_day;
   }
 
-  public double getSunshine_duration() {
+  public Double getSunshine_duration() {
     return sunshine_duration;
   }
 
-  public double getShortwave_radiation() {
+  public Double getShortwave_radiation() {
     return shortwave_radiation;
   }
 
-  public double getDirect_radiation() {
+  public Double getDirect_radiation() {
     return direct_radiation;
   }
 
-  public double getDiffuse_radiation() {
+  public Double getDiffuse_radiation() {
     return diffuse_radiation;
   }
 
-  public double getDirect_normal_irradiance() {
+  public Double getDirect_normal_irradiance() {
     return direct_normal_irradiance;
   }
 
-  public double getGlobal_tilted_irradiance() {
+  public Double getGlobal_tilted_irradiance() {
     return global_tilted_irradiance;
   }
 
-  public double getTerrestrial_radiation() {
+  public Double getTerrestrial_radiation() {
     return terrestrial_radiation;
   }
 
-  public double getShortwave_radiation_instant() {
+  public Double getShortwave_radiation_instant() {
     return shortwave_radiation_instant;
   }
 
-  public double getDirect_radiation_instant() {
+  public Double getDirect_radiation_instant() {
     return direct_radiation_instant;
   }
 
-  public double getDiffuse_radiation_instant() {
+  public Double getDiffuse_radiation_instant() {
     return diffuse_radiation_instant;
   }
 
-  public double getDirect_normal_irradiance_instant() {
+  public Double getDirect_normal_irradiance_instant() {
     return direct_normal_irradiance_instant;
   }
 
-  public double getGlobal_tilted_irradiance_instant() {
+  public Double getGlobal_tilted_irradiance_instant() {
     return global_tilted_irradiance_instant;
   }
 
-  public double getTerrestrial_radiation_instant() {
+  public Double getTerrestrial_radiation_instant() {
     return terrestrial_radiation_instant;
   }
 
@@ -603,6 +603,6 @@ public class HourlyForecast {
         ", global_tilted_irradiance_instant=" + global_tilted_irradiance_instant +
         ", terrestrial_radiation_instant=" + terrestrial_radiation_instant +
         '}';
-    }
+  }
 
 }
