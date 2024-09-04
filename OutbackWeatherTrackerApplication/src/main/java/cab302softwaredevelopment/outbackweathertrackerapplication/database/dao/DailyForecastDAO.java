@@ -69,7 +69,7 @@ public class DailyForecastDAO {
     return dailyForecasts;
   }
 
-  public List<DailyForecast> getAll(int location_id) {
+  public List<DailyForecast> getByLocationId(int location_id) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
@@ -83,7 +83,7 @@ public class DailyForecastDAO {
     return dailyForecasts;
   }
 
-  public List<DailyForecast> getAll(Location location) {
+  public List<DailyForecast> getByLocation(Location location) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 

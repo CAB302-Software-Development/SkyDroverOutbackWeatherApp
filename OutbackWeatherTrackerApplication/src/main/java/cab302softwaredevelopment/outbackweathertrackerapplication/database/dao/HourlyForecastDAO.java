@@ -69,7 +69,7 @@ public class HourlyForecastDAO {
     return hourlyForecasts;
   }
 
-  public List<HourlyForecast> getAll(int location_id) {
+  public List<HourlyForecast> getByLocationId(int location_id) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
@@ -82,7 +82,7 @@ public class HourlyForecastDAO {
     session.close();
     return hourlyForecasts;
   }
-  public List<HourlyForecast> getAll(Location location) {
+  public List<HourlyForecast> getAllByLocation(Location location) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
