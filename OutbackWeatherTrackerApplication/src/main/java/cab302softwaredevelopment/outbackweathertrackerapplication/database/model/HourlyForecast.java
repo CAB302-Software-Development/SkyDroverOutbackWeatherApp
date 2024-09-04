@@ -8,9 +8,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.*;
 
-@Entity
-@Table(name = "hourlyForecasts")
+
+
+@Entity(name = "HourlyForecast")
+@Table(name = "hourlyForecast")
 public class HourlyForecast {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +21,7 @@ public class HourlyForecast {
 
   @ManyToOne
   @PrimaryKeyJoinColumn
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Location location;
 
   @Column(name="timestamp")
