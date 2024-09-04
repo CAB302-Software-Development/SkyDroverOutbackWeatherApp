@@ -13,7 +13,11 @@ import org.hibernate.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
 
+import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
+
+@Execution(SAME_THREAD)
 public class DailyForecastTest {
   static DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
   static LocationDAO locationDAO = new LocationDAO();
@@ -44,7 +48,8 @@ public class DailyForecastTest {
     // Verify that the connection is in memory
     assertTrue(
         session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
-            .contains("jdbc:sqlite:memory"));
+            .contains("jdbc:h2:mem:db1"));
+    session.close();
 
     // Retrieve the daily forecasts
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
@@ -62,12 +67,12 @@ public class DailyForecastTest {
     locationsTemplate.add(new Location(130.9889, 	-25.2406, 		507.0,"Yulara")); // Yulara
 
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(1),1725408000, 3, 21.0, 14.2, 19.8, 14.3, 1725393469, 1725435357, 41928.18, 29210.48, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 11.5, 32.4, 132.0, 15.46, 2.85));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(2),1725494400, 3, 22.6, 15.3, 22.8, 15.7, 1725479803, 1725521784, 42021.79, 38157.5, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 28.1, 59.0, 16.95, 3.19));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(3),1725580800, 3, 24.0, 14.6, 24.3, 15.5, 1725566136, 1725608211, 42115.42, 38910.98, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 13.3, 34.6, 18.0, 17.46, 3.5));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(4),1725667200, 3, 25.2, 15.1, 26.0, 16.2, 1725652469, 1725694638, 42209.01, 39056.32, null, null, 0.0, null, 0.0, null, 0.0, 14.8, 31.0, 1.0, 20.09, 3.95));
+    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725408000, 3, 21.0, 14.2, 19.8, 14.3, 1725393469, 1725435357, 41928.18, 29210.48, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 11.5, 32.4, 132.0, 15.46, 2.85));
+    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725494400, 3, 22.6, 15.3, 22.8, 15.7, 1725479803, 1725521784, 42021.79, 38157.5, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 28.1, 59.0, 16.95, 3.19));
+    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725580800, 3, 24.0, 14.6, 24.3, 15.5, 1725566136, 1725608211, 42115.42, 38910.98, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 13.3, 34.6, 18.0, 17.46, 3.5));
+    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725667200, 3, 25.2, 15.1, 26.0, 16.2, 1725652469, 1725694638, 42209.01, 39056.32, null, null, 0.0, null, 0.0, null, 0.0, 14.8, 31.0, 1.0, 20.09, 3.95));
 
-    session.close();
+
   }
 
   @AfterEach
@@ -81,14 +86,14 @@ public class DailyForecastTest {
     // Verify that the connection is in memory
     assertTrue(
         session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
-            .contains("jdbc:sqlite:memory"));
-
+            .contains("jdbc:h2:mem:db1"));
+    session.close();
     // Retrieve the daily forecasts
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
 
     // Delete the daily forecasts
     for (DailyForecast dailyForecast : dailyForecasts) {
-      dailyForecastDAO.delete(dailyForecast);
+      dailyForecastDAO.delete(dailyForecast.getId());
     }
 
     // Verify the daily forecasts
@@ -99,13 +104,12 @@ public class DailyForecastTest {
 
     // Delete the locations
     for (Location location : locations) {
-      locationDAO.delete(location);
+      locationDAO.delete(location.getId());
     }
 
     // Verify the locations
     assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
 
-    session.close();
   }
 
   @Test

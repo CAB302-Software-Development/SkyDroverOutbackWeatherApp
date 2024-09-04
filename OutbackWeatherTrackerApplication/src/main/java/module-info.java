@@ -11,6 +11,7 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
   requires org.hibernate.orm.core;
   requires jakarta.persistence;
   requires java.naming;
+  requires org.hibernate.orm.community.dialects;
 
   opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 

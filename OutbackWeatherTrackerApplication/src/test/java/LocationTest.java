@@ -4,6 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.L
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
@@ -14,7 +16,9 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.parallel.Execution;
 
+@Execution(SAME_THREAD)
 public class LocationTest {
   static LocationDAO locationDAO = new LocationDAO();
   static Location location1 = new Location(153.02333324, -27.467331464, 27.0,"Brisbane"); // brisbane
@@ -45,7 +49,7 @@ public class LocationTest {
     // Verify that the connection is in memory
     assertTrue(
         session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
-            .contains("jdbc:sqlite:memory"));
+            .contains("jdbc:h2:mem:db1"));
 
     // Verify the locations
     assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
@@ -64,7 +68,7 @@ public class LocationTest {
     // Verify that the connection is in memory
     assertTrue(
         session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
-            .contains("jdbc:sqlite:memory"));
+            .contains("jdbc:h2:mem:db1"));
 
     // Retrieve the locations
     List<Location> locations = locationDAO.getAll();
