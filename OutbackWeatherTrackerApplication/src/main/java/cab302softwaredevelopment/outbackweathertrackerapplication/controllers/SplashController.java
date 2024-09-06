@@ -30,6 +30,7 @@ public class SplashController {
             FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), MainController.WIDTH, MainController.HEIGHT);
             stage.setScene(scene);
+            stage.centerOnScreen();
         }
     }
 }
