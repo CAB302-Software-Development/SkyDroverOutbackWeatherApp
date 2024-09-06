@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<Pane fx:id="pnlRoot" prefHeight="400.0" prefWidth="600.0"
+      style="-fx-background-color: #6a0066; -fx-background-radius: 5; -fx-background-insets: 0;"
+      xmlns="http://javafx.com/javafx/"
+      xmlns:fx="http://javafx.com/fxml/"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController">
+    <GridPane fx:id="dashboardGrid">
+      <rowConstraints>
+         <RowConstraints minHeight="10.0" prefHeight="30.0" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      </rowConstraints>
+      <columnConstraints>
+         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints></GridPane>
+</Pane>

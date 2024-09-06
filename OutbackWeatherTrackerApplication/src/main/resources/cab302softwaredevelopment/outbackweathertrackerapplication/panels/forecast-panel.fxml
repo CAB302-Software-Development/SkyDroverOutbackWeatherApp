@@ -3,7 +3,7 @@
 <?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <Panel xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
-       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.ForecastController"
+       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.ForecastController"
        style="-fx-background-color: #c59177; -fx-background-radius: 5; -fx-background-insets: 0;" fx:id="pnlRoot">
 
 </Panel>
