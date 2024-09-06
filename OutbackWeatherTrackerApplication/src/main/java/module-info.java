@@ -7,6 +7,16 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires jdk.jdi;
     requires java.sql;
     requires com.google.gson;
+  requires jdk.jdi;
+  requires java.sql;
+  requires java.net.http;
+  requires com.google.gson;
+  requires org.hibernate.orm.core;
+  requires jakarta.persistence;
+  requires java.naming;
+  requires org.hibernate.orm.community.dialects;
+
+  opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
     exports cab302softwaredevelopment.outbackweathertrackerapplication;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.models;
@@ -21,4 +31,14 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.models to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers to javafx.fxml;
+  opens cab302softwaredevelopment.outbackweathertrackerapplication.database.model to org.hibernate.orm.core;
+
+  //database testing
+  exports cab302softwaredevelopment.outbackweathertrackerapplication.database;
+  exports cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
+  exports cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
+
+
+
 }
