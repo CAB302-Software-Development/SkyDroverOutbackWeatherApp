@@ -5,6 +5,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 import org.hibernate.Session;
 
@@ -75,8 +76,11 @@ public class HourlyForecastDAO {
 
     // Criteria
     CriteriaQuery<HourlyForecast> criteria = builder.createQuery(HourlyForecast.class);
-    criteria.from(HourlyForecast.class);
-    criteria.where(builder.equal(criteria.from(HourlyForecast.class).get("location_id"), location_id));
+    Root<HourlyForecast> root = criteria.from(HourlyForecast.class);
+    criteria.select(root);
+
+    // Apply the location filter
+    criteria.where(builder.equal(root.get("location").get("id"), location_id));
 
     List<HourlyForecast> hourlyForecasts = session.createQuery(criteria).getResultList();
     session.close();
@@ -88,8 +92,11 @@ public class HourlyForecastDAO {
 
     // Criteria
     CriteriaQuery<HourlyForecast> criteria = builder.createQuery(HourlyForecast.class);
-    criteria.from(HourlyForecast.class);
-    criteria.where(builder.equal(criteria.from(HourlyForecast.class).get("location"), location));
+    Root<HourlyForecast> root = criteria.from(HourlyForecast.class);
+    criteria.select(root);
+
+    // Apply the location filter
+    criteria.where(builder.equal(root.get("location"), location));
 
     List<HourlyForecast> hourlyForecasts = session.createQuery(criteria).getResultList();
     session.close();
