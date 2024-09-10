@@ -28,6 +28,19 @@ public class DailyForecastDAO {
     }
   }
 
+  public void update(DailyForecast dailyForecast) {
+    Session session = DatabaseConnection.getSession();
+    try {
+      session.beginTransaction();
+      session.update(dailyForecast);
+      session.getTransaction().commit();
+    } catch (Exception e) {
+      session.getTransaction().rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+  }
   public void delete(int id) {
     Session session = DatabaseConnection.getSession();
     try {

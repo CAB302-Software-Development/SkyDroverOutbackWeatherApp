@@ -28,6 +28,20 @@ public class HourlyForecastDAO {
     }
   }
 
+  public void update(HourlyForecast hourlyForecast) {
+    Session session = DatabaseConnection.getSession();
+    try {
+      session.beginTransaction();
+      session.update(hourlyForecast);
+      session.getTransaction().commit();
+    } catch (Exception e) {
+      session.getTransaction().rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+  }
+
   public void delete(int id) {
     Session session = DatabaseConnection.getSession();
     try {
