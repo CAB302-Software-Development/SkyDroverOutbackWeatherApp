@@ -7,10 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import org.hibernate.annotations.*;
 
 @Entity(name = "dailyForecast")
-@Table(name = "dailyForecast")
+@Table(name = "dailyForecast", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"location_id", "timestamp"})
+})
+
 public class DailyForecast {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
