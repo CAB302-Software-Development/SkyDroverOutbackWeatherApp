@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 
 @Entity(name = "dailyForecast")
@@ -18,77 +20,101 @@ import org.hibernate.annotations.*;
 public class DailyForecast {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Getter @Setter
   private Integer id;
 
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
+  @Getter
   private Location location;
 
   @Column(name="timestamp", nullable = false)
+  @Getter
   private Integer timestamp;
 
   @Column(name="weather_code")
+  @Getter
   private Integer weather_code;
 
   @Column(name="temperature_2m_max", nullable = false)
+  @Getter
   private Double temperature_2m_max;
 
   @Column(name="temperature_2m_min", nullable = false)
+  @Getter
   private Double temperature_2m_min;
 
   @Column(name="apparent_temperature_max", nullable = false)
+  @Getter
   private Double apparent_temperature_max;
 
   @Column(name="apparent_temperature_min", nullable = false)
+  @Getter
   private Double apparent_temperature_min;
 
   @Column(name="sunrise")
+  @Getter
   private Integer sunrise;
 
   @Column(name="sunset")
+  @Getter
   private Integer sunset;
 
   @Column(name="daylight_duration")
+  @Getter
   private Double daylight_duration;
 
   @Column(name="sunshine_duration")
+  @Getter
   private Double sunshine_duration;
 
   @Column(name="uv_index_max")
+  @Getter
   private Double uv_index_max;
 
   @Column(name="uv_index_clear_sky_max")
+  @Getter
   private Double uv_index_clear_sky_max;
 
   @Column(name="precipitation_sum")
+  @Getter
   private Double precipitation_sum;
 
   @Column(name="rain_sum")
+  @Getter
   private Double rain_sum;
 
   @Column(name="showers_sum")
+  @Getter
   private Double showers_sum;
 
   @Column(name="snowfall_sum")
+  @Getter
   private Double snowfall_sum;
 
   @Column(name="precipitation_hours")
+  @Getter
   private Double precipitation_hours;
 
   @Column(name="wind_speed_10m_max")
+  @Getter
   private Double wind_speed_10m_max;
 
   @Column(name="wind_gusts_10m_max")
+  @Getter
   private Double wind_gusts_10m_max;
 
   @Column(name="wind_direction_10m_dominant")
+  @Getter
   private Double wind_direction_10m_dominant;
 
   @Column(name="shortwave_radiation_sum")
+  @Getter
   private Double shortwave_radiation_sum;
 
   @Column(name="et0_fao_evapotranspiration")
+  @Getter
   private Double et0_fao_evapotranspiration;
 
   public DailyForecast() {
@@ -160,103 +186,6 @@ public class DailyForecast {
     this.wind_direction_10m_dominant = wind_direction_10m_dominant;
     this.shortwave_radiation_sum = shortwave_radiation_sum;
     this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
-  }
-
-
-  public Integer getId() {
-    return id;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public Integer getTimestamp() {
-    return timestamp;
-  }
-
-  public Integer getWeather_code() {
-    return weather_code;
-  }
-
-  public Double getTemperature_2m_max() {
-    return temperature_2m_max;
-  }
-
-  public Double getTemperature_2m_min() {
-    return temperature_2m_min;
-  }
-
-  public Double getApparent_temperature_max() {
-    return apparent_temperature_max;
-  }
-
-  public Double getApparent_temperature_min() {
-    return apparent_temperature_min;
-  }
-
-  public Integer getSunrise() {
-    return sunrise;
-  }
-
-  public Integer getSunset() {
-    return sunset;
-  }
-
-  public Double getDaylight_duration() {
-    return daylight_duration;
-  }
-
-  public Double getSunshine_duration() {
-    return sunshine_duration;
-  }
-
-  public Double getUv_index_max() {
-    return uv_index_max;
-  }
-
-  public Double getUv_index_clear_sky_max() {
-    return uv_index_clear_sky_max;
-  }
-
-  public Double getPrecipitation_sum() {
-    return precipitation_sum;
-  }
-
-  public Double getRain_sum() {
-    return rain_sum;
-  }
-
-  public Double getShowers_sum() {
-    return showers_sum;
-  }
-
-  public Double getSnowfall_sum() {
-    return snowfall_sum;
-  }
-
-  public Double getPrecipitation_hours() {
-    return precipitation_hours;
-  }
-
-  public Double getWind_speed_10m_max() {
-    return wind_speed_10m_max;
-  }
-
-  public Double getWind_gusts_10m_max() {
-    return wind_gusts_10m_max;
-  }
-
-  public Double getWind_direction_10m_dominant() {
-    return wind_direction_10m_dominant;
-  }
-
-  public Double getShortwave_radiation_sum() {
-    return shortwave_radiation_sum;
-  }
-
-  public Double getEt0_fao_evapotranspiration() {
-    return et0_fao_evapotranspiration;
   }
 
 

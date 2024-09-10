@@ -9,6 +9,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 
 
@@ -20,168 +22,221 @@ import org.hibernate.annotations.*;
 public class HourlyForecast {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Getter @Setter
   private Integer id;
 
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
+  @Getter
   private Location location;
 
   @Column(name="timestamp")
+  @Getter
   private Integer timestamp;
 
   @Column(name="temperature_2m")
+  @Getter
   private Double temperature_2m;
 
   @Column(name="relative_humidity_2m")
+  @Getter
   private Double relative_humidity_2m;
 
   @Column(name="dew_point_2m")
+  @Getter
   private Double dew_point_2m;
 
   @Column(name="apparent_temperature")
+  @Getter
   private Double apparent_temperature;
 
   @Column(name="precipitation")
+  @Getter
   private Double precipitation;
 
   @Column(name="rain")
-
+  @Getter
   private Double rain;
 
   @Column(name="showers")
+  @Getter
   private Double showers;
 
   @Column(name="snowfall")
+  @Getter
   private Double snowfall;
 
   @Column(name="snow_depth")
+  @Getter
   private Double snow_depth;
 
   @Column(name="weather_code")
+  @Getter
   private Integer weather_code;
 
   @Column(name="pressure_msl")
+  @Getter
   private Double pressure_msl;
 
   @Column(name="surface_pressure")
+  @Getter
   private Double surface_pressure;
 
   @Column(name="cloud_cover")
+  @Getter
   private Double cloud_cover;
 
   @Column(name="cloud_cover_low")
+  @Getter
   private Double cloud_cover_low;
 
   @Column(name="cloud_cover_mid")
+  @Getter
   private Double cloud_cover_mid;
 
   @Column(name="cloud_cover_high")
+  @Getter
   private Double cloud_cover_high;
 
   @Column(name="visibility")
+  @Getter
   private Double visibility;
 
   @Column(name="et0_fao_evapotranspiration")
+  @Getter
   private Double et0_fao_evapotranspiration;
 
   @Column(name="vapour_pressure_deficit")
+  @Getter
   private Double vapour_pressure_deficit;
 
   @Column(name="wind_speed_10m")
+  @Getter
   private Double wind_speed_10m;
 
   @Column(name="wind_speed_40m")
+  @Getter
   private Double wind_speed_40m;
 
   @Column(name="wind_speed_80m")
+  @Getter
   private Double wind_speed_80m;
 
   @Column(name="wind_speed_120m")
+  @Getter
   private Double wind_speed_120m;
 
   @Column(name="wind_direction_10m")
+  @Getter
   private Double wind_direction_10m;
 
   @Column(name="wind_direction_40m")
+  @Getter
   private Double wind_direction_40m;
 
   @Column(name="wind_direction_80m")
+  @Getter
   private Double wind_direction_80m;
 
   @Column(name="wind_direction_120m")
+  @Getter
   private Double wind_direction_120m;
 
   @Column(name="wind_gusts_10m")
+  @Getter
   private Double wind_gusts_10m;
 
   @Column(name="surface_temperature")
+  @Getter
   private Double surface_temperature;
 
   @Column(name="soil_temperature_0_to_10cm")
+  @Getter
   private Double soil_temperature_0_to_10cm;
 
   @Column(name="soil_temperature_10_to_35cm")
+  @Getter
   private Double soil_temperature_10_to_35cm;
 
   @Column(name="soil_temperature_35_to_100cm")
+  @Getter
   private Double soil_temperature_35_to_100cm;
 
   @Column(name="soil_temperature_100_to_300cm")
+  @Getter
   private Double soil_temperature_100_to_300cm;
 
   @Column(name="soil_moisture_0_to_10cm")
+  @Getter
   private Double soil_moisture_0_to_10cm;
 
   @Column(name="soil_moisture_10_to_35cm")
+  @Getter
   private Double soil_moisture_10_to_35cm;
 
   @Column(name="soil_moisture_35_to_100cm")
+  @Getter
   private Double soil_moisture_35_to_100cm;
 
   @Column(name="soil_moisture_100_to_300cm")
+  @Getter
   private Double soil_moisture_100_to_300cm;
 
   @Column(name="is_day")
+  @Getter
   private boolean is_day;
 
   @Column(name="sunshine_duration")
+  @Getter
   private Double sunshine_duration;
 
   @Column(name="shortwave_radiation")
+  @Getter
   private Double shortwave_radiation;
 
   @Column(name="direct_radiation")
+  @Getter
   private Double direct_radiation;
 
   @Column(name="diffuse_radiation")
+  @Getter
   private Double diffuse_radiation;
 
   @Column(name="direct_normal_irradiance")
+  @Getter
   private Double direct_normal_irradiance;
 
   @Column(name="global_tilted_irradiance")
+  @Getter
   private Double global_tilted_irradiance;
 
   @Column(name="terrestrial_radiation")
+  @Getter
   private Double terrestrial_radiation;
 
   @Column(name="shortwave_radiation_instant")
+  @Getter
   private Double shortwave_radiation_instant;
 
   @Column(name="direct_radiation_instant")
+  @Getter
   private Double direct_radiation_instant;
 
   @Column(name="diffuse_radiation_instant")
+  @Getter
   private Double diffuse_radiation_instant;
 
   @Column(name="direct_normal_irradiance_instant")
+  @Getter
   private Double direct_normal_irradiance_instant;
 
   @Column(name="global_tilted_irradiance_instant")
+  @Getter
   private Double global_tilted_irradiance_instant;
 
   @Column(name="terrestrial_radiation_instant")
+  @Getter
   private Double terrestrial_radiation_instant;
 
   public HourlyForecast() {
@@ -336,221 +391,6 @@ public class HourlyForecast {
     this.terrestrial_radiation_instant = terrestrial_radiation_instant;
   }
 
-  public Integer getId() {
-    return id;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public Integer getTimestamp() {
-    return timestamp;
-  }
-
-  public Double getTemperature_2m() {
-    return temperature_2m;
-  }
-
-  public Double getRelative_humidity_2m() {
-    return relative_humidity_2m;
-  }
-
-  public Double getDew_point_2m() {
-    return dew_point_2m;
-  }
-
-  public Double getApparent_temperature() {
-    return apparent_temperature;
-  }
-
-  public Double getPrecipitation() {
-    return precipitation;
-  }
-
-  public Double getRain() {
-    return rain;
-  }
-
-  public Double getShowers() {
-    return showers;
-  }
-
-  public Double getSnowfall() {
-    return snowfall;
-  }
-
-  public Double getSnow_depth() {
-    return snow_depth;
-  }
-
-  public Integer getWeather_code() {
-    return weather_code;
-  }
-
-  public Double getPressure_msl() {
-    return pressure_msl;
-  }
-
-  public Double getSurface_pressure() {
-    return surface_pressure;
-  }
-
-  public Double getCloud_cover() {
-    return cloud_cover;
-  }
-
-  public Double getCloud_cover_low() {
-    return cloud_cover_low;
-  }
-
-  public Double getCloud_cover_mid() {
-    return cloud_cover_mid;
-  }
-
-  public Double getCloud_cover_high() {
-    return cloud_cover_high;
-  }
-
-  public Double getVisibility() {
-    return visibility;
-  }
-
-  public Double getEt0_fao_evapotranspiration() {
-    return et0_fao_evapotranspiration;
-  }
-
-  public Double getVapour_pressure_deficit() {
-    return vapour_pressure_deficit;
-  }
-
-  public Double getWind_speed_10m() {
-    return wind_speed_10m;
-  }
-
-  public Double getWind_speed_40m() {
-    return wind_speed_40m;
-  }
-
-  public Double getWind_speed_80m() {
-    return wind_speed_80m;
-  }
-
-  public Double getWind_speed_120m() {
-    return wind_speed_120m;
-  }
-
-  public Double getWind_direction_10m() {
-    return wind_direction_10m;
-  }
-
-  public Double getWind_direction_40m() {
-    return wind_direction_40m;
-  }
-
-  public Double getWind_direction_80m() {
-    return wind_direction_80m;
-  }
-
-  public Double getWind_direction_120m() {
-    return wind_direction_120m;
-  }
-
-  public Double getWind_gusts_10m() {
-    return wind_gusts_10m;
-  }
-
-  public Double getSurface_temperature() {
-    return surface_temperature;
-  }
-
-  public Double getSoil_temperature_0_to_10cm() {
-    return soil_temperature_0_to_10cm;
-  }
-
-  public Double getSoil_temperature_10_to_35cm() {
-    return soil_temperature_10_to_35cm;
-  }
-
-  public Double getSoil_temperature_35_to_100cm() {
-    return soil_temperature_35_to_100cm;
-  }
-
-  public Double getSoil_temperature_100_to_300cm() {
-    return soil_temperature_100_to_300cm;
-  }
-
-  public Double getSoil_moisture_0_to_10cm() {
-    return soil_moisture_0_to_10cm;
-  }
-
-  public Double getSoil_moisture_10_to_35cm() {
-    return soil_moisture_10_to_35cm;
-  }
-
-  public Double getSoil_moisture_35_to_100cm() {
-    return soil_moisture_35_to_100cm;
-  }
-
-  public Double getSoil_moisture_100_to_300cm() {
-    return soil_moisture_100_to_300cm;
-  }
-
-  public boolean getIs_day() {
-    return is_day;
-  }
-
-  public Double getSunshine_duration() {
-    return sunshine_duration;
-  }
-
-  public Double getShortwave_radiation() {
-    return shortwave_radiation;
-  }
-
-  public Double getDirect_radiation() {
-    return direct_radiation;
-  }
-
-  public Double getDiffuse_radiation() {
-    return diffuse_radiation;
-  }
-
-  public Double getDirect_normal_irradiance() {
-    return direct_normal_irradiance;
-  }
-
-  public Double getGlobal_tilted_irradiance() {
-    return global_tilted_irradiance;
-  }
-
-  public Double getTerrestrial_radiation() {
-    return terrestrial_radiation;
-  }
-
-  public Double getShortwave_radiation_instant() {
-    return shortwave_radiation_instant;
-  }
-
-  public Double getDirect_radiation_instant() {
-    return direct_radiation_instant;
-  }
-
-  public Double getDiffuse_radiation_instant() {
-    return diffuse_radiation_instant;
-  }
-
-  public Double getDirect_normal_irradiance_instant() {
-    return direct_normal_irradiance_instant;
-  }
-
-  public Double getGlobal_tilted_irradiance_instant() {
-    return global_tilted_irradiance_instant;
-  }
-
-  public Double getTerrestrial_radiation_instant() {
-    return terrestrial_radiation_instant;
-  }
 
   @Override
   public String toString() {
