@@ -166,6 +166,26 @@ public class DailyForecastTest {
     assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
   }
 
+  @Test void testDeleteForecastById(){
+    // Insert the new daily forecasts
+    addLocations();
+    addForecasts();
+
+    // Verify the daily forecasts
+    assertEquals(dailyForecastsTemplate.size(), dailyForecastDAO.getAll().size(), "There should be "+dailyForecastsTemplate.size()+" daily forecasts");
+
+    // Retrieve the daily forecasts
+    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
+
+    // Delete the daily forecasts
+    for (DailyForecast dailyForecast : dailyForecasts) {
+      dailyForecastDAO.delete(dailyForecast.getId());
+    }
+
+    // Verify the daily forecasts
+    assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
+  }
+
   @Test void testUniqueForecast(){
     // Insert the new daily forecasts
     addLocations();

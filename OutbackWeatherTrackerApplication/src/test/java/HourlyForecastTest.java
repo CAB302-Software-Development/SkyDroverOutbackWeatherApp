@@ -165,6 +165,26 @@ public class HourlyForecastTest {
     assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
   }
 
+  @Test void testDeleteForecastById(){
+    // Insert the new hourly forecasts
+    addLocations();
+    addForecasts();
+
+    // Verify the hourly forecasts
+    assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(), "There should be "+hourlyForecastsTemplate.size()+" hourly forecasts");
+
+    // Retrieve the hourly forecasts
+    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
+
+    // Delete the hourly forecasts
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      hourlyForecastDAO.delete(hourlyForecast.getId());
+    }
+
+    // Verify the hourly forecasts
+    assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
+  }
+
   @Test void testUniqueForecast(){
     // Insert the new hourly forecasts
     addLocations();
