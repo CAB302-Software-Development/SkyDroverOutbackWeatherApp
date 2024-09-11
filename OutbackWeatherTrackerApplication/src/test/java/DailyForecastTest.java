@@ -9,15 +9,18 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
 @Execution(SAME_THREAD)
+@Timeout(value = 1000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 1 second
 public class DailyForecastTest {
   static DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
   static LocationDAO locationDAO = new LocationDAO();
@@ -30,6 +33,7 @@ public class DailyForecastTest {
       dailyForecastDAO.insert(dailyForecast);
     }
   }
+
   public void addLocations() {
     // Insert the new locations
     for (Location location : locationsTemplate) {
