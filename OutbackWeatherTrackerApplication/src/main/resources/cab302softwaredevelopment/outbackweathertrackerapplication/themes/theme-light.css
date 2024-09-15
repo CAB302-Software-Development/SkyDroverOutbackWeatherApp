@@ -1,0 +1,25 @@
+.primary-color {
+    -fx-background-color: #3E6EAC;
+    -fx-text-fill: white;
+}
+
+.secondary-color {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #3E6EAC;
+}
+
+.text-primary {
+    -fx-fill: #3E6EAC;
+}
+
+.text-secondary {
+    -fx-fill: #ffffff;
+}
+
+.border-primary {
+    -fx-border-color: #3E6EAC;
+}
+
+.border-secondary {
+    -fx-border-color: #ffffff;
+}

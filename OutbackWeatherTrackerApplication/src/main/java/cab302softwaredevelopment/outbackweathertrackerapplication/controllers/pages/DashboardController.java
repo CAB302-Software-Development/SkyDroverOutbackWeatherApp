@@ -9,32 +9,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-
 import java.io.*;
-import java.util.List;
 
 public class DashboardController implements ISwapPanel {
     @FXML
     public Pane pnlRoot;
     @FXML
     public GridPane dashboardGrid;
-    private PreferencesService userPrefs;
 
     public void initialize(Pane parent) {
         pnlRoot.prefHeightProperty().bind(parent.heightProperty());
         pnlRoot.prefWidthProperty().bind(parent.widthProperty());
 
-        dashboardGrid.prefHeightProperty().bind(pnlRoot.heightProperty());
-        dashboardGrid.prefWidthProperty().bind(pnlRoot.widthProperty());
+        dashboardGrid.setGridLinesVisible(true);
 
-        userPrefs = PreferencesService.loadPreferences();
-        refreshDisplay();
+        updateAppearance();
     }
 
-    private void refreshDisplay() {
+    public void updateAppearance() {
         dashboardGrid.getChildren().clear();
         try {
-            for (WidgetInfo info : userPrefs.getCurrentLayout()) {
+            for (WidgetInfo info : PreferencesService.getCurrentLayout()) {
                 FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(info.type.getFilepath()));
                 Node widgetNode = loader.load();
                 GridPane.setColumnIndex(widgetNode, info.columnIndex);

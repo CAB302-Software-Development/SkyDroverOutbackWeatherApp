@@ -1,15 +1,17 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.LoginController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.util.List;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
@@ -25,11 +27,13 @@ public class ApplicationEntry extends Application {
   @Override
   public void start(Stage stage) throws IOException {
     if (!GraphicsEnvironment.isHeadless()) {
-      FXMLLoader fxmlLoader = new FXMLLoader(
-          ApplicationEntry.class.getResource(
-              "/cab302softwaredevelopment/outbackweathertrackerapplication/pages/Login.fxml"));
-      Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
+      PreferencesService.loadPreferences();
+      FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("main-view.fxml"));
+      Parent root = fxmlLoader.load();
+      MainController controller = fxmlLoader.getController();
+      Scene scene = new Scene(root, MainController.WIDTH, MainController.HEIGHT);
 
+      controller.setScene(scene);
       stage.setTitle(stageTitle);
       stage.setScene(scene);
       stage.show();

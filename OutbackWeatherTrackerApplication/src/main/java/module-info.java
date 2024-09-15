@@ -35,4 +35,6 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.popups;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.popups to com.google.gson, javafx.fxml;
 }

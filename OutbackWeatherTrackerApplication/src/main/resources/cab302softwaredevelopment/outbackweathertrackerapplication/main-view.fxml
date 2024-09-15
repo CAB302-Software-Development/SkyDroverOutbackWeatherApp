@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<!--
+    This serves as a central hub for the application UI. This contains
+    the navigation bar, and controls the flow of the application by
+    dynamically loading and displaying content panels.
+ -->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.Region?>
+<BorderPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.MainController">
+    <left>
+        <VBox fx:id="vbNavbar" prefHeight="200.0" prefWidth="40.0" alignment="TOP_CENTER" style="-fx-background-color: #2F5A94;" spacing="10.0">
+            <padding>
+                <Insets left="5.0" right="5.0" top="10.0" bottom="10.0"/>
+            </padding>
+            <Button fx:id="btnProfile" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="2.0" layoutY="19.0" pickOnBounds="true"
+                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
+                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
+                        <Image url="@IMAGES_FXML/account_circle.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btnDashboard" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="15.0" layoutY="61.0" pickOnBounds="true"
+                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
+                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="61.0">
+                        <Image url="@IMAGES_FXML/Dashboard.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btnMap" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="15.0" layoutY="107.0" pickOnBounds="true"
+                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
+                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
+                        <Image url="@IMAGES_FXML/Map.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btnForecast" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="161.0" pickOnBounds="true"
+                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
+                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="140.0">
+                        <Image url="@IMAGES_FXML/Group.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btnSettings" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="24.0" layoutY="113.0" pickOnBounds="true"
+                               preserveRatio="true" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="15.0"
+                               AnchorPane.rightAnchor="15.0">
+                        <Image url="@IMAGES_FXML/Settings.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Region VBox.vgrow="ALWAYS" />
+            <Button fx:id="btnDrawer" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="34.0" layoutY="123.0" pickOnBounds="true"
+                               preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="15.0"
+                               AnchorPane.rightAnchor="15.0">
+                        <Image url="@IMAGES_FXML/Drawer.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+    <center>
+        <Pane fx:id="pnlContent" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+    </center>
+
+</BorderPane>

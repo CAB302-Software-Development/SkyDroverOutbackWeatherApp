@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<Pane fx:id="pnlRoot" prefHeight="400.0" prefWidth="600.0"
-      style="-fx-background-color: #6a0066; -fx-background-radius: 5; -fx-background-insets: 0;"
-      xmlns="http://javafx.com/javafx/"
-      xmlns:fx="http://javafx.com/fxml/"
+<?import javafx.scene.layout.RowConstraints?>
+<VBox fx:id="pnlRoot" prefHeight="400.0" prefWidth="600.0"
+      styleClass="primary-color"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController">
-    <GridPane fx:id="dashboardGrid">
-      <rowConstraints>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" />
-         <RowConstraints minHeight="10.0" prefHeight="30.0" />
-      </rowConstraints>
-      <columnConstraints>
-         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-         <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
-      </columnConstraints></GridPane>
-</Pane>
+
+    <BorderPane prefHeight="60.0" maxHeight="60.0" VBox.vgrow="NEVER">
+        <left>
+            <Text styleClass="text-secondary" strokeType="OUTSIDE" strokeWidth="0.0" BorderPane.alignment="CENTER" text="WELCOME USER...">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Text>
+        </left>
+        <right>
+            <TextField promptText="Search..." styleClass="border-primary" />
+        </right>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+        </padding>
+    </BorderPane>
+
+    <GridPane fx:id="dashboardGrid" prefHeight="466.0" prefWidth="600.0" VBox.vgrow="ALWAYS"
+              hgap="10" vgap="10" alignment="CENTER" gridLinesVisible="true">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+        </padding>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+        </rowConstraints>
+        <columnConstraints>
+            <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="ALWAYS" />
+            <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="ALWAYS" />
+            <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="ALWAYS" />
+            <ColumnConstraints minWidth="10.0" prefWidth="100.0" hgrow="ALWAYS" />
+        </columnConstraints>
+    </GridPane>
+</VBox>

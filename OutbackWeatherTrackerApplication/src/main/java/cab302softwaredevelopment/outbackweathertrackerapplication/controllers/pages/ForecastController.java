@@ -13,4 +13,9 @@ public class ForecastController implements ISwapPanel {
         pnlRoot.prefWidthProperty().bind(parent.widthProperty());
         pnlRoot.prefHeightProperty().bind(parent.heightProperty());
     }
+
+    @Override
+    public void updateAppearance() {
+
+    }
 }

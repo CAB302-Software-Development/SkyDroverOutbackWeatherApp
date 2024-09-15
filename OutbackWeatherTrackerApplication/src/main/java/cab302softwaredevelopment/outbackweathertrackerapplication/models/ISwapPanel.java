@@ -4,4 +4,5 @@ import javafx.scene.layout.Pane;
 
 public interface ISwapPanel {
     void initialize(Pane parent);
+    void updateAppearance();
 }

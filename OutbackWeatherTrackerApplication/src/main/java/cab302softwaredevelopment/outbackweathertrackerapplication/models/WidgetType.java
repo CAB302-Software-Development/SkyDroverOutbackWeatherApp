@@ -6,7 +6,9 @@ public enum WidgetType {
     @SerializedName("Forecast")
     Forecast("widgets/forecast-widget.fxml"),
     @SerializedName("TodayTemp")
-    TodayTemp("widgets/todaytemp-widget.fxml");
+    TodayTemp("widgets/todaytemp-widget.fxml"),
+    @SerializedName("Placeholder")
+    Placeholder("widgets/placeholder-widget.fxml");
 
 
     private final String filepath;
