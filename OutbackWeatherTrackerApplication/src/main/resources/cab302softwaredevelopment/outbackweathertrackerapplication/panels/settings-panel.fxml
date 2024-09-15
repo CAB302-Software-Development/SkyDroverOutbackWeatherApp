@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
+<Panel xmlns="http://javafx.com/javafx"
+       xmlns:fx="http://javafx.com/fxml"
+       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController"
+       style="-fx-background-color: #2e9187; -fx-background-radius: 5; -fx-background-insets: 0;" fx:id="pnlRoot">
+
+</Panel>
