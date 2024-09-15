@@ -201,7 +201,8 @@ public class HourlyForecastTest {
     assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(), "There should be "+hourlyForecastsTemplate.size()+" hourly forecasts");
   }
 
-  @Test void testGetForecastByID() {
+  @Test
+  void testGetForecastByID() {
     // Insert the new hourly forecasts
     addLocations();
     addForecasts();

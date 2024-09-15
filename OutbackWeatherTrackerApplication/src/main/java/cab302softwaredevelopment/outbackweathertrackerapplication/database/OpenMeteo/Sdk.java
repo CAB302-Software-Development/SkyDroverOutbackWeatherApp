@@ -19,6 +19,7 @@ public class Sdk {
 
   public Sdk() {
   }
+
   public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
@@ -83,8 +84,6 @@ public class Sdk {
       }
     }
 
-
-    DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
     // time represents the number of samples
     int totalEntries = daily.getAsJsonArray("time").size();
     List<DailyForecast> dailyForecasts = new ArrayList<>();
@@ -227,8 +226,6 @@ public class Sdk {
         }
       }
     }
-
-    HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
 
     // time represents the number of samples
     int totalEntries = hourly.getAsJsonArray("time").size();
