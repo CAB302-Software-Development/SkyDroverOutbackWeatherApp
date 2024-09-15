@@ -31,7 +31,7 @@ public class LoginController {
     private Hyperlink guestLink;
 
     @FXML
-    private Label invalidLoginLabel;
+    private Label loginMessageLabel;
 
     @FXML
     private Button closeButton;
@@ -42,8 +42,8 @@ public class LoginController {
     @FXML
     public void initialize() {
         // Make sure to check if the label is not null
-        if (invalidLoginLabel != null) {
-            invalidLoginLabel.setVisible(false);
+        if (loginMessageLabel != null) {
+            loginMessageLabel.setVisible(false);
         }
     }
 
@@ -60,7 +60,7 @@ public class LoginController {
         } else if (validateLogin(email, password)) {
             // Proceed with successful login (replace with actual logic)
             System.out.println("Login successful!");
-            invalidLoginLabel.setVisible(false); // Hide the invalid login message if login is valid
+            loginMessageLabel.setVisible(false); // Hide the invalid login message if login is valid
         } else {
             showInvalidLoginMessage("Invalid login. Please try again.");
         }
@@ -107,7 +107,7 @@ public class LoginController {
 
     // Show an invalid login message
     private void showInvalidLoginMessage(String message) {
-        invalidLoginLabel.setText(message);
-        invalidLoginLabel.setVisible(true); // Show the error message
+        loginMessageLabel.setText(message);
+        loginMessageLabel.setVisible(true); // Show the error message
     }
 }
