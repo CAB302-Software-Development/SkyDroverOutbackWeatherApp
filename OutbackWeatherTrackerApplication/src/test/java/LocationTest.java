@@ -47,6 +47,16 @@ public class LocationTest extends DBTest {
     }
   }
 
+  @Test void addLocationWithoutAccount(){
+    try {
+      // Add locations without accounts
+      addLocations();
+    } catch (Exception e) {}
+
+    // Verify that the invalid locations were not added
+    assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
+  }
+
   @Test
   public void testGetLocationsByID() {
     // Insert the new locations
@@ -66,6 +76,58 @@ public class LocationTest extends DBTest {
       assertEquals(locationsTemplate.get(i).getLatitude(), locations.get(i).getLatitude());
       assertEquals(locationsTemplate.get(i).getLongitude(), locations.get(i).getLongitude());
     }
+  }
+
+  @Test
+  void testGetLocationsByAccount(){
+    // Insert the new locations
+    addAccounts();
+    addLocations();
+
+    // Use a test account
+    Account testAccount = accountsTemplate.get(1);
+
+    // Add a relevant location
+    Location relevantLocation = new Location(testAccount, 0.0, 0.0, 9999.0, "Sky Island");
+    locationDAO.insert(relevantLocation);
+
+    // Retrieve the locations
+    List<Location> locations = locationDAO.getAll();
+
+    // Verify the locations
+    assertEquals(locationsTemplate.size() + 1, locations.size(), "There should be " + (locationsTemplate.size() + 1) + " locations");
+
+    // Retrieve the test account's locations
+    List<Location> accountLocations = locationDAO.getByAccount(testAccount);
+
+    // Verify the locations
+    assertEquals(1, accountLocations.size(), "There should be 1 location");
+  }
+
+  @Test
+  void testGetLocationsByAccountId(){
+    // Insert the new locations
+    addAccounts();
+    addLocations();
+
+    // Use a test account
+    Account testAccount = accountsTemplate.get(1);
+
+    // Add a relevant location
+    Location relevantLocation = new Location(testAccount, 0.0, 0.0, 9999.0, "Sky Island");
+    locationDAO.insert(relevantLocation);
+
+    // Retrieve the locations
+    List<Location> locations = locationDAO.getAll();
+
+    // Verify the locations
+    assertEquals(locationsTemplate.size() + 1, locations.size(), "There should be " + (locationsTemplate.size() + 1) + " locations");
+
+    // Retrieve the test account's locations
+    List<Location> accountLocations = locationDAO.getByAccountId(testAccount.getId());
+
+    // Verify the locations
+    assertEquals(1, accountLocations.size(), "There should be 1 location");
   }
 
   @Test

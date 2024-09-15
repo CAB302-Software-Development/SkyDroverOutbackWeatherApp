@@ -69,16 +69,12 @@ public class DailyForecastTest extends DBTest {
   @Test
   public void testAddForecastWithoutLocation() {
     addAccounts();
-
-    Location fakeLocation = new Location(accountsTemplate.get(0),0.0, 0.0, 0.0,"Null Island");
-    DailyForecast invalidForecast = new DailyForecast(fakeLocation,1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
-
     try{
-      // Insert the new daily forecast
-      dailyForecastDAO.insert(invalidForecast);
+      // Insert the daily forecasts without adding valid locations
+      addDailyForecasts();
     } catch (Exception e) {}
 
-    // Verify that the invalid forecast was not added
+    // Verify that the invalid forecasts were not added
     assertEquals(0, dailyForecastDAO.getAll().size(), "There should be 0 daily forecasts");
   }
 
@@ -173,7 +169,7 @@ public class DailyForecastTest extends DBTest {
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
 
     // Verify the daily forecasts
-    assertEquals(dailyForecastsTemplate.size()+1, dailyForecasts.size(), "There should be "+(dailyForecastsTemplate.size()+1)+" daily forecast");
+    assertEquals(dailyForecastsTemplate.size()+1, dailyForecasts.size(), "There should be "+(dailyForecastsTemplate.size()+1)+" daily forecasts");
 
     // Retrieve test location forecasts
     List<DailyForecast> testForecasts = dailyForecastDAO.getByLocation(testLocation);

@@ -59,20 +59,13 @@ public class HourlyForecastTest extends DBTest {
   public void testAddForecastWithoutLocation() {
     addAccounts();
 
-    Location fakeLocation = new Location(accountsTemplate.get(0), 0.0, 0.0, 0.0, "Null Island");
-    HourlyForecast invalidForecast = new HourlyForecast(fakeLocation, 1725321600, 20.8, 50.0, 10.0,
-        20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
-        10.8, 15.5, 17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9,
-        0.354, 0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-        650.3, 97.1, 896.4, 747.4, 975.3);
-
     try {
-      // Insert the new hourly forecast
-      hourlyForecastDAO.insert(invalidForecast);
+      // Insert the hourly forecasts without adding valid locations
+      addHourlyForecasts();
     } catch (Exception e) {
     }
 
-    // Verify that the invalid forecast was not added
+    // Verify that the invalid forecasts were not added
     assertEquals(0, hourlyForecastDAO.getAll().size(), "There should be 0 hourly forecasts");
   }
 

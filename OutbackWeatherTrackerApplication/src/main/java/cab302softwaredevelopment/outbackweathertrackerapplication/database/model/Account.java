@@ -34,20 +34,20 @@ public class Account {
     this.id = id;
     this.email = email;
     this.preferCelsius = preferCelsius;
-    setPassword_hash(password_hash);
+    setPassword(password_hash);
   }
 
   public Account(String email, String password_hash, Boolean preferCelsius) {
     this.email = email;
     this.preferCelsius = preferCelsius;
-    setPassword_hash(password_hash);
+    setPassword(password_hash);
   }
 
-  public void setPassword_hash(String password) {
+  public void setPassword(String password) {
     this.password_hash = BCrypt.hashpw(password, BCrypt.gensalt(10));
   }
 
-  public boolean checkPassword(String password) {
+  public boolean verifyPassword(String password) {
     return BCrypt.checkpw(password, this.password_hash);
   }
 
