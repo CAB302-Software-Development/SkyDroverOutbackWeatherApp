@@ -1,5 +1,5 @@
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.SplashController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -12,7 +12,7 @@ public class ClickableButtonTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("splash-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), SplashController.WIDTH, SplashController.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
         stage.setScene(scene);
         stage.show();
     }

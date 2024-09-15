@@ -1,6 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.SplashController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.LoginController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
@@ -26,8 +26,9 @@ public class ApplicationEntry extends Application {
   public void start(Stage stage) throws IOException {
     if (!GraphicsEnvironment.isHeadless()) {
       FXMLLoader fxmlLoader = new FXMLLoader(
-          ApplicationEntry.class.getResource("splash-view.fxml"));
-      Scene scene = new Scene(fxmlLoader.load(), SplashController.WIDTH, SplashController.HEIGHT);
+          ApplicationEntry.class.getResource(
+              "/cab302softwaredevelopment/outbackweathertrackerapplication/pages/Login.fxml"));
+      Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
 
       stage.setTitle(stageTitle);
       stage.setScene(scene);

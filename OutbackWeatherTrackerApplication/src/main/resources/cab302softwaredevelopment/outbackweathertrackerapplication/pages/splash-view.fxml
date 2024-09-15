@@ -9,7 +9,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.SplashController">
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.LoginController">
    <center>
        <Pane BorderPane.alignment="CENTER">
            <Label fx:id="welcomeText" />

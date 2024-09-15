@@ -12,7 +12,7 @@ import java.net.http.*;
 
 public class Sdk {
 
-  private HttpClient client = HttpClient.newHttpClient();
+  private final HttpClient client = HttpClient.newHttpClient();
 
   public Sdk() {
   }
