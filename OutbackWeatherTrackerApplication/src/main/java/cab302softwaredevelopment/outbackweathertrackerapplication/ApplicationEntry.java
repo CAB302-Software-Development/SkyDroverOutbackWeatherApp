@@ -56,8 +56,8 @@ public class ApplicationEntry extends Application {
     Sdk openMeteoSdk = new Sdk();
     Location location = locationDAO.getById(1);
     System.out.println(location);
-    openMeteoSdk.updateDailyForecast(location);
-    openMeteoSdk.updateHourlyForecast(location);
+    openMeteoSdk.updateDailyForecast(location,10,0);
+    openMeteoSdk.updateHourlyForecast(location,10,0);
 
     List<Location> locations = locationDAO.getAll();
     for (Location location2 : locations) {

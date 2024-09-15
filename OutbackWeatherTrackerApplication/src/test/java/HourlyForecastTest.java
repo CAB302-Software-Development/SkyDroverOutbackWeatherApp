@@ -10,13 +10,16 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 
 @Execution(SAME_THREAD)
+@Timeout(value = 1000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 1 second
 public class HourlyForecastTest {
   static HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
   static LocationDAO locationDAO = new LocationDAO();
@@ -29,6 +32,7 @@ public class HourlyForecastTest {
       hourlyForecastDAO.insert(hourlyForecast);
     }
   }
+
   public void addLocations() {
     // Insert the new locations
     for (Location location : locationsTemplate) {
@@ -165,6 +169,26 @@ public class HourlyForecastTest {
     assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
   }
 
+  @Test void testDeleteForecastById(){
+    // Insert the new hourly forecasts
+    addLocations();
+    addForecasts();
+
+    // Verify the hourly forecasts
+    assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(), "There should be "+hourlyForecastsTemplate.size()+" hourly forecasts");
+
+    // Retrieve the hourly forecasts
+    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
+
+    // Delete the hourly forecasts
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      hourlyForecastDAO.delete(hourlyForecast.getId());
+    }
+
+    // Verify the hourly forecasts
+    assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
+  }
+
   @Test void testUniqueForecast(){
     // Insert the new hourly forecasts
     addLocations();
@@ -177,7 +201,8 @@ public class HourlyForecastTest {
     assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(), "There should be "+hourlyForecastsTemplate.size()+" hourly forecasts");
   }
 
-  @Test void testGetForecastByID() {
+  @Test
+  void testGetForecastByID() {
     // Insert the new hourly forecasts
     addLocations();
     addForecasts();
@@ -263,6 +288,37 @@ public class HourlyForecastTest {
     // Verify the hourly forecasts
     assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(), "There should be "+hourlyForecastsTemplate.size()+" hourly forecasts");
 
+  }
+
+  @Test void testUpdateForecast() {
+    // Retrieve the hourly forecasts
+    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
+
+    // Verify the hourly forecasts
+    assertEquals(0, hourlyForecasts.size(), "Hourly Forecasts should be empty");
+
+    // Use a test location
+    Location testLocation = locationsTemplate.get(1);
+    locationDAO.insert(testLocation);
+
+    HourlyForecast originalForecast = new HourlyForecast(testLocation, 1725321600,20.8,50.0,10.0,20.0,0.0,0.0,0.0,0.0,0.0,0,1026.5,1023.3,3.0,0.0,0.0,0.0,16040.0,0.42,1.23,10.8,15.5,17.6,19.4,152.0,152.0,153.0,153.0,28.4,25.3,21.3,22.3,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,685.0,596.0,89.0,896.4,685.0,893.9,747.4,650.3,97.1,896.4,747.4,975.3);
+    hourlyForecastDAO.insert(originalForecast);
+
+    // Retrieve the hourly forecasts
+    hourlyForecasts = hourlyForecastDAO.getAll();
+
+    // Verify that the forecast was added
+    assertEquals(1, hourlyForecasts.size(), "There should be 1 hourly forecast");
+
+    HourlyForecast updatedForecast = new HourlyForecast(testLocation, 1725321601,20.8,50.0,10.0,20.0,0.0,0.0,0.0,0.0,0.0,0,1026.5,1023.3,3.0,0.0,0.0,0.0,16040.0,0.42,1.23,10.8,15.5,17.6,19.4,152.0,152.0,153.0,153.0,28.4,25.3,21.3,22.3,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,685.0,596.0,89.0,896.4,685.0,893.9,747.4,650.3,97.1,896.4,747.4,975.3);
+    updatedForecast.setId(hourlyForecasts.get(0).getId());
+    hourlyForecastDAO.update(updatedForecast);
+
+    // Retrieve the hourly forecasts
+    hourlyForecasts = hourlyForecastDAO.getAll();
+
+    // verify that the timestamp was updated
+    assertEquals(updatedForecast.getTimestamp(), hourlyForecasts.get(0).getTimestamp());
   }
 
 
