@@ -52,9 +52,9 @@ public class ApplicationEntry extends Application {
 
     // Insert some new accounts
     // Add the accounts to the template
-    accountDAO.insert(new Account("test1@gmail.com", "password1"));
-    accountDAO.insert(new Account("test2@gmail.com", "password2"));
-    accountDAO.insert(new Account("test3@gmail.com", "password3"));
+    accountDAO.insert(new Account("test1@gmail.com", "password1",true));
+    accountDAO.insert(new Account("test2@gmail.com", "password2",true));
+    accountDAO.insert(new Account("test3@gmail.com", "password3",true));
 
     Account account = accountDAO.getById(1);
 
