@@ -1,7 +1,5 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
-
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -10,16 +8,16 @@ import java.util.List;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import org.hibernate.Session;
 
-public class LocationDAO {
+public class AccountDAO {
 
-  public LocationDAO() {
+  public AccountDAO() {
   }
 
-  public void insert(Location location) {
+  public void insert(Account account) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      session.save(location);
+      session.save(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -29,11 +27,11 @@ public class LocationDAO {
     }
   }
 
-  public void update(Location location) {
+  public void update(Account account) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      session.update(location);
+      session.update(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -47,8 +45,8 @@ public class LocationDAO {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      Location location = session.get(Location.class, id);
-      session.delete(location);
+      Account account = session.get(Account.class, id);
+      session.delete(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -58,11 +56,11 @@ public class LocationDAO {
     }
   }
 
-  public void delete(Location location) {
+  public void delete(Account account) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      session.delete(location);
+      session.delete(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -72,59 +70,42 @@ public class LocationDAO {
     }
   }
 
-  public List<Location> getAll() {
+  public List<Account> getAll() {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
     // Criteria
-    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
-    criteria.from(Location.class);
+    CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
+    criteria.from(Account.class);
 
-    List<Location> locations = session.createQuery(criteria).getResultList();
+    List<Account> accounts = session.createQuery(criteria).getResultList();
     session.close();
-    return locations;
+    return accounts;
   }
 
-  public List<Location> getByAccountId(int account_id) {
+  public Account getById(int id) {
+    Session session = DatabaseConnection.getSession();
+    Account account = session.get(Account.class, id);
+    session.close();
+    return account;
+  }
+
+  public Account getByEmail(String email) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
     // Criteria
-    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
-    Root<Location> root = criteria.from(Location.class);
+    CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
+    Root<Account> root = criteria.from(Account.class);
     criteria.select(root);
 
-    // Apply the account filter
-    criteria.where(builder.equal(root.get("account").get("id"), account_id));
+    // Apply the email filter
+    criteria.where(builder.equal(root.get("email"), email));
 
-    List<Location> locations = session.createQuery(criteria).getResultList();
-    session.close();
-    return locations;
-  }
-
-  public List<Location> getByAccount(Account account) {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
-    Root<Location> root = criteria.from(Location.class);
-    criteria.select(root);
-
-    // Apply the account filter
-    criteria.where(builder.equal(root.get("account"), account));
-
-    List<Location> locations = session.createQuery(criteria).getResultList();
+    Account account = session.createQuery(criteria).getSingleResult();
     session.close();
 
-    return locations;
-  }
-
-  public Location getById(int id) {
-    Session session = DatabaseConnection.getSession();
-    Location location = session.get(Location.class, id);
-    session.close();
-    return location;
+    return account;
   }
 
 }

@@ -16,6 +16,7 @@ public class DatabaseConnection {
 
       sessionFactory =
           new MetadataSources(registry)
+              .addAnnotatedClass(Account.class)
               .addAnnotatedClass(Location.class)
               .addAnnotatedClass(HourlyForecast.class)
               .addAnnotatedClass(DailyForecast.class)
