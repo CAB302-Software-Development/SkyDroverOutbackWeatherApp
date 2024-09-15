@@ -13,6 +13,7 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
   requires java.naming;
   requires org.hibernate.orm.community.dialects;
   requires static lombok;
+  requires spring.security.crypto;
 
   opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
