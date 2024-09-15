@@ -396,7 +396,7 @@ public class HourlyForecast {
   public String toString() {
     return "HourlyForecast{" +
         "id=" + id +
-        ", location_=" +  location +
+        ", location=" +  location +
         ", timestamp=" + timestamp +
         ", temperature_2m=" + temperature_2m +
         ", relative_humidity_2m=" + relative_humidity_2m +

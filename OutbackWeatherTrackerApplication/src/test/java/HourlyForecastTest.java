@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
@@ -21,10 +23,19 @@ import org.junit.jupiter.api.parallel.Execution;
 @Execution(SAME_THREAD)
 @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 1 second
 public class HourlyForecastTest {
+  static AccountDAO accountDAO = new AccountDAO();
   static HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
   static LocationDAO locationDAO = new LocationDAO();
   static List<Location> locationsTemplate = new ArrayList<>();
   static List<HourlyForecast> hourlyForecastsTemplate = new ArrayList<>();
+  static List<Account> accountsTemplate = new ArrayList<>();
+
+  public void addAccounts() {
+    // Insert the new accounts
+    for (Account account : accountsTemplate) {
+      accountDAO.insert(account);
+    }
+  }
 
   public void addForecasts() {
     // Insert the new hourly forecasts
@@ -59,15 +70,20 @@ public class HourlyForecastTest {
     // Verify the hourly forecasts
     assertEquals(0, hourlyForecasts.size(), "Hourly Forecasts should be empty");
 
-    // Add the test location
+    // Add the accounts to the template
+    accountsTemplate.add(new Account("test1@gmail.com", "password1"));
+    accountsTemplate.add(new Account("test2@gmail.com", "password2"));
+    accountsTemplate.add(new Account("test3@gmail.com", "password3"));
 
-    locationsTemplate.add(new Location(153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
-    locationsTemplate.add(new Location(153.06064, -27.58003, 	58.0,"Sunnybank")); // sunnybank
-    locationsTemplate.add(new Location(153.0246, 	-27.53436, 	48.0,"Moorooka")); // Moorooka
-    locationsTemplate.add(new Location(	153.10236, 		-27.50578, 	14.0,"Carindale")); // Carindale
-    locationsTemplate.add(new Location(	152.9, 	-27.5, 		114.0,"Brookfield")); // Brookfield
-    locationsTemplate.add(new Location(130.9889, 	-25.2406, 		507.0,"Yulara")); // Yulara
+    // Add the locations to the template
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.06064, -27.58003, 	58.0,"Sunnybank")); // sunnybank
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.0246, 	-27.53436, 	48.0,"Moorooka")); // Moorooka
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.10236, 		-27.50578, 	14.0,"Carindale")); // Carindale
+    locationsTemplate.add(new Location(accountsTemplate.get(0),152.9, 	-27.5, 		114.0,"Brookfield")); // Brookfield
+    locationsTemplate.add(new Location(accountsTemplate.get(0),130.9889, 	-25.2406, 		507.0,"Yulara")); // Yulara
 
+    // Add the hourly forecasts to the template
     hourlyForecastsTemplate.add(new HourlyForecast(locationsTemplate.get(0), 1725321600,20.8,50.0,10.0,20.0,0.0,0.0,0.0,0.0,0.0,0,1026.5,1023.3,3.0,0.0,0.0,0.0,16040.0,0.42,1.23,10.8,15.5,17.6,19.4,152.0,152.0,153.0,153.0,28.4,25.3,21.3,22.3,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,685.0,596.0,89.0,896.4,685.0,893.9,747.4,650.3,97.1,896.4,747.4,975.3));
     hourlyForecastsTemplate.add(new HourlyForecast(locationsTemplate.get(0), 1725325200,21.8,45.0,9.4,22.1,0.0,0.0,0.0,0.0,0.0,0,1026.6,1023.4,0.0,0.0,0.0,0.0,16580.0,0.52,1.44,8.3,11.9,13.7,14.8,159.0,160.0,159.0,159.0,25.6,28.6,20.3,21.9,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,821.0,719.0,102.0,935.8,821.0,1033.0,856.5,750.1,106.4,935.8,856.5,1077.7));
     hourlyForecastsTemplate.add(new HourlyForecast(locationsTemplate.get(0), 1725328800,22.7,42.0,9.2,23.3,0.0,0.0,0.0,0.0,0.0,0,1025.5,1022.3,0.0,0.0,0.0,0.0,17100.0,0.57,1.6,7.9,11.2,12.6,13.7,167.0,165.0,163.0,165.0,25.9,31.0,21.5,21.9,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,879.0,773.0,106.0,948.1,879.0,1096.2,882.9,776.4,106.5,948.1,882.9,1101.1));
@@ -112,12 +128,24 @@ public class HourlyForecastTest {
     // Verify the locations
     assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
 
+    // Retrieve the accounts
+    List<Account> accounts = accountDAO.getAll();
+
+    // Delete the accounts
+    for (Account account : accounts) {
+      accountDAO.delete(account.getId());
+    }
+
+    // Verify the accounts
+    assertEquals(0, accountDAO.getAll().size(), "Accounts should be empty");
+
     session.close();
   }
 
   @Test
   public void testAddForecasts() {
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -137,7 +165,9 @@ public class HourlyForecastTest {
 
   @Test
   public void testAddForecastWithoutLocation() {
-    Location fakeLocation = new Location(0.0, 0.0, 0.0,"Null Island");
+    addAccounts();
+
+    Location fakeLocation = new Location(accountsTemplate.get(0),0.0, 0.0, 0.0,"Null Island");
     HourlyForecast invalidForecast = new HourlyForecast(fakeLocation, 1725321600,20.8,50.0,10.0,20.0,0.0,0.0,0.0,0.0,0.0,0,1026.5,1023.3,3.0,0.0,0.0,0.0,16040.0,0.42,1.23,10.8,15.5,17.6,19.4,152.0,152.0,153.0,153.0,28.4,25.3,21.3,22.3,21.1,18.9,0.354,0.369,0.386,0.386,true,3600.0,685.0,596.0,89.0,896.4,685.0,893.9,747.4,650.3,97.1,896.4,747.4,975.3);
 
     try{
@@ -151,6 +181,7 @@ public class HourlyForecastTest {
 
   @Test void testDeleteForecast() {
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -171,6 +202,7 @@ public class HourlyForecastTest {
 
   @Test void testDeleteForecastById(){
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -191,6 +223,7 @@ public class HourlyForecastTest {
 
   @Test void testUniqueForecast(){
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -204,6 +237,7 @@ public class HourlyForecastTest {
   @Test
   void testGetForecastByID() {
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -219,6 +253,7 @@ public class HourlyForecastTest {
 
   @Test void testGetForecastsForLocation() {
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -244,6 +279,7 @@ public class HourlyForecastTest {
 
   @Test void testGetForecastsForLocationById() {
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -269,6 +305,7 @@ public class HourlyForecastTest {
 
   @Test void testLocationDeleteCascade() {
     // Insert the new hourly forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -291,6 +328,7 @@ public class HourlyForecastTest {
   }
 
   @Test void testUpdateForecast() {
+    addAccounts();
     // Retrieve the hourly forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
 

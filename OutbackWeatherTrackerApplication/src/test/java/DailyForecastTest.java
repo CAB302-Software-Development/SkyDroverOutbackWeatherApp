@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
@@ -22,10 +24,19 @@ import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 @Execution(SAME_THREAD)
 @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 1 second
 public class DailyForecastTest {
+  static AccountDAO accountDAO = new AccountDAO();
   static DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
   static LocationDAO locationDAO = new LocationDAO();
   static List<Location> locationsTemplate = new ArrayList<>();
   static List<DailyForecast> dailyForecastsTemplate = new ArrayList<>();
+  static List<Account> accountsTemplate = new ArrayList<>();
+
+  public void addAccounts() {
+    // Insert the new accounts
+    for (Account account : accountsTemplate) {
+      accountDAO.insert(account);
+    }
+  }
 
   public void addForecasts() {
     // Insert the new daily forecasts
@@ -71,21 +82,25 @@ public class DailyForecastTest {
     // Verify the daily forecasts
     assertEquals(0, dailyForecasts.size(), "Daily Forecasts should be empty");
 
-    // Add the test location
+    // Add the accounts to the template
+    accountsTemplate.add(new Account("test1@gmail.com", "password1"));
+    accountsTemplate.add(new Account("test2@gmail.com", "password2"));
+    accountsTemplate.add(new Account("test3@gmail.com", "password3"));
 
-    locationsTemplate.add(new Location(153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
-    locationsTemplate.add(new Location(153.06064, -27.58003, 	58.0,"Sunnybank")); // sunnybank
-    locationsTemplate.add(new Location(153.0246, 	-27.53436, 	48.0,"Moorooka")); // Moorooka
-    locationsTemplate.add(new Location(	153.10236, 		-27.50578, 	14.0,"Carindale")); // Carindale
-    locationsTemplate.add(new Location(	152.9, 	-27.5, 		114.0,"Brookfield")); // Brookfield
-    locationsTemplate.add(new Location(130.9889, 	-25.2406, 		507.0,"Yulara")); // Yulara
+    // Add the locations to the template
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.06064, -27.58003, 	58.0,"Sunnybank")); // sunnybank
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.0246, 	-27.53436, 	48.0,"Moorooka")); // Moorooka
+    locationsTemplate.add(new Location(accountsTemplate.get(0),153.10236, 		-27.50578, 	14.0,"Carindale")); // Carindale
+    locationsTemplate.add(new Location(accountsTemplate.get(0),152.9, 	-27.5, 		114.0,"Brookfield")); // Brookfield
+    locationsTemplate.add(new Location(accountsTemplate.get(0),130.9889, 	-25.2406, 		507.0,"Yulara")); // Yulara
 
+    // Add the daily forecasts to the template
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43));
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725408000, 3, 21.0, 14.2, 19.8, 14.3, 1725393469, 1725435357, 41928.18, 29210.48, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 11.5, 32.4, 132.0, 15.46, 2.85));
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725494400, 3, 22.6, 15.3, 22.8, 15.7, 1725479803, 1725521784, 42021.79, 38157.5, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 28.1, 59.0, 16.95, 3.19));
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725580800, 3, 24.0, 14.6, 24.3, 15.5, 1725566136, 1725608211, 42115.42, 38910.98, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 13.3, 34.6, 18.0, 17.46, 3.5));
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725667200, 3, 25.2, 15.1, 26.0, 16.2, 1725652469, 1725694638, 42209.01, 39056.32, null, null, 0.0, null, 0.0, null, 0.0, 14.8, 31.0, 1.0, 20.09, 3.95));
-
 
   }
 
@@ -101,7 +116,7 @@ public class DailyForecastTest {
     assertTrue(
         session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
             .contains("jdbc:h2:mem:db1"));
-    session.close();
+
     // Retrieve the daily forecasts
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
 
@@ -124,11 +139,24 @@ public class DailyForecastTest {
     // Verify the locations
     assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
 
+    // Retrieve the accounts
+    List<Account> accounts = accountDAO.getAll();
+
+    // Delete the accounts
+    for (Account account : accounts) {
+      accountDAO.delete(account.getId());
+    }
+
+    // Verify the accounts
+    assertEquals(0, accountDAO.getAll().size(), "Accounts should be empty");
+
+    session.close();
   }
 
   @Test
   public void testAddForecasts() {
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
     // Verify
@@ -148,7 +176,9 @@ public class DailyForecastTest {
 
   @Test
   public void testAddForecastWithoutLocation() {
-    Location fakeLocation = new Location(0.0, 0.0, 0.0,"Null Island");
+    addAccounts();
+
+    Location fakeLocation = new Location(accountsTemplate.get(0),0.0, 0.0, 0.0,"Null Island");
     DailyForecast invalidForecast = new DailyForecast(fakeLocation,1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
 
     try{
@@ -162,6 +192,7 @@ public class DailyForecastTest {
 
   @Test void testDeleteForecast() {
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
     // Verify
@@ -182,6 +213,7 @@ public class DailyForecastTest {
 
   @Test void testDeleteForecastById(){
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
     // Verify
@@ -202,6 +234,7 @@ public class DailyForecastTest {
 
   @Test void testUniqueForecast(){
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
     // Verify
@@ -217,6 +250,7 @@ public class DailyForecastTest {
 
   @Test void testGetForecastByID() {
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -232,6 +266,7 @@ public class DailyForecastTest {
 
   @Test void testGetForecastsForLocation() {
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -257,6 +292,7 @@ public class DailyForecastTest {
 
   @Test void testGetForecastsForLocationById() {
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -282,6 +318,7 @@ public class DailyForecastTest {
 
   @Test void testLocationDeleteCascade() {
     // Insert the new daily forecasts
+    addAccounts();
     addLocations();
     addForecasts();
 
@@ -303,6 +340,8 @@ public class DailyForecastTest {
   }
 
   @Test void testUpdateForecast() {
+    addAccounts();
+
     // Retrieve the daily forecasts
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
 
