@@ -4,16 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
-
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.hibernate.Session;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
@@ -225,6 +220,25 @@ public class AccountTest extends DBTest {
       // Retrieve the account
       Account account_result = accountDAO.getById(account.getId());
       assertTrue(account_result.verifyPassword(testPassword), "Password should be the same as the test password");
+    }
+  }
+
+  @Test
+  void testChangeCelsiusPreference() {
+    // Insert the new accounts
+    addAccounts();
+
+    for (Account account : accountsTemplate) {
+      Boolean originalPreference = account.getPreferCelsius();
+
+      // Update the preference
+      account.setPreferCelsius(!originalPreference);
+      accountDAO.update(account);
+
+      // Retrieve the account
+      Account account_result = accountDAO.getById(account.getId());
+      assertNotEquals(originalPreference, account_result.getPreferCelsius());
+      assertEquals(account_result.getPreferCelsius(), !originalPreference);
     }
   }
 }
