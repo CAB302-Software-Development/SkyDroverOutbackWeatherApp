@@ -26,44 +26,6 @@ public class LocationTest extends DBTest {
     // Verify the locations
     assertEquals(0, locations.size(), "Locations should be empty");
   }
-
-  @AfterEach
-  public void cleanup() {
-    // Create the database connection
-    Session session = DatabaseConnection.getSession();
-
-    // Verify the connection
-    assertTrue(session.isConnected());
-
-    // Verify that the connection is in memory
-    assertTrue(
-        session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
-            .contains("jdbc:h2:mem:db1"));
-
-    // Retrieve the locations
-    List<Location> locations = locationDAO.getAll();
-
-    // Delete the locations
-    for (Location location : locations) {
-      locationDAO.delete(location);
-    }
-
-    // Verify the locations
-    assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
-
-    // Retrieve the accounts
-    List<Account> accounts = accountDAO.getAll();
-
-    // Delete the accounts
-    for (Account account : accounts) {
-      accountDAO.delete(account.getId());
-    }
-
-    // Verify the accounts
-    assertEquals(0, accountDAO.getAll().size(), "Accounts should be empty");
-
-    session.close();
-  }
   
   @Test
   public void testAddLocations() {

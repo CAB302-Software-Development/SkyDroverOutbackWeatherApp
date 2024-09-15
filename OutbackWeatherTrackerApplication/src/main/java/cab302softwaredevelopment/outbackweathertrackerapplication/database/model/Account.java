@@ -30,14 +30,16 @@ public class Account {
   public Account() {
   }
 
-  public Account(Integer id, String email, String password_hash) {
+  public Account(Integer id, String email, String password_hash, Boolean preferCelsius) {
     this.id = id;
     this.email = email;
+    this.preferCelsius = preferCelsius;
     setPassword_hash(password_hash);
   }
 
-  public Account(String email, String password_hash) {
+  public Account(String email, String password_hash, Boolean preferCelsius) {
     this.email = email;
+    this.preferCelsius = preferCelsius;
     setPassword_hash(password_hash);
   }
 

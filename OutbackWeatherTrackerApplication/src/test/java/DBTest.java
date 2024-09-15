@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
 import org.hibernate.Session;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.parallel.Execution;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +45,11 @@ abstract class DBTest {
             .contains("jdbc:h2:mem:db1"));
     session.close();
 
-
     // Add the accounts to the template
     accountsTemplate.clear();
-    accountsTemplate.add(new Account("test1@gmail.com", "password1"));
-    accountsTemplate.add(new Account("test2@gmail.com", "password2"));
-    accountsTemplate.add(new Account("test3@gmail.com", "password3"));
+    accountsTemplate.add(new Account("test1@gmail.com", "password1", true));
+    accountsTemplate.add(new Account("test2@gmail.com", "password2", true));
+    accountsTemplate.add(new Account("test3@gmail.com", "password3", true));
 
     // Add the locations to the template
     locationsTemplate.clear();
@@ -106,8 +106,69 @@ abstract class DBTest {
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725494400, 3, 22.6, 15.3, 22.8, 15.7, 1725479803, 1725521784, 42021.79, 38157.5, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 28.1, 59.0, 16.95, 3.19));
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725580800, 3, 24.0, 14.6, 24.3, 15.5, 1725566136, 1725608211, 42115.42, 38910.98, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 13.3, 34.6, 18.0, 17.46, 3.5));
     dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725667200, 3, 25.2, 15.1, 26.0, 16.2, 1725652469, 1725694638, 42209.01, 39056.32, null, null, 0.0, null, 0.0, null, 0.0, 14.8, 31.0, 1.0, 20.09, 3.95));
-
   }
+
+  @AfterEach
+  public void cleanup() {
+    // Create the database connection
+    Session session = DatabaseConnection.getSession();
+
+    // Verify the connection
+    assertTrue(session.isConnected());
+
+    // Verify that the connection is in memory
+    assertTrue(
+        session.getSessionFactory().getProperties().get("hibernate.connection.url").toString()
+            .contains("jdbc:h2:mem:db1"));
+
+    // Retrieve the hourly forecasts
+    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
+
+    // Delete the hourly forecasts
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      hourlyForecastDAO.delete(hourlyForecast);
+    }
+
+    // Verify the hourly forecasts
+    assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
+
+    // Retrieve the daily forecasts
+    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
+
+    // Delete the daily forecasts
+    for (DailyForecast dailyForecast : dailyForecasts) {
+      dailyForecastDAO.delete(dailyForecast.getId());
+    }
+
+    // Verify the daily forecasts
+    assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
+
+
+    // Retrieve the locations
+    List<Location> locations = locationDAO.getAll();
+
+    // Delete the locations
+    for (Location location : locations) {
+      locationDAO.delete(location);
+    }
+
+    // Verify the locations
+    assertEquals(0, locationDAO.getAll().size(), "Locations should be empty");
+
+    // Retrieve the accounts
+    List<Account> accounts = accountDAO.getAll();
+
+    // Delete the accounts
+    for (Account account : accounts) {
+      accountDAO.delete(account.getId());
+    }
+
+    // Verify the accounts
+    assertEquals(0, accountDAO.getAll().size(), "Accounts should be empty");
+
+    session.close();
+  }
+
 
   public void addAccounts() {
     // Insert the new accounts
