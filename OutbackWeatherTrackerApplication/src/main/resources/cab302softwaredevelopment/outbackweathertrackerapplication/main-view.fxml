@@ -44,7 +44,6 @@
             </Button>
             <Button fx:id="btnMap" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
                 <graphic>
-
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="15.0" layoutY="107.0" pickOnBounds="true"
                                preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
                                AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
@@ -54,7 +53,6 @@
             </Button>
             <Button fx:id="btnForecast" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
                 <graphic>
-
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="161.0" pickOnBounds="true"
                                preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
                                AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="140.0">
@@ -62,9 +60,31 @@
                     </ImageView>
                 </graphic>
             </Button>
+
+
+            <Button fx:id="btnAlerts" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="180.0">
+                        <image>
+                            <Image url="@IMAGES_FXML/!.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btnReports" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="220.0">
+                        <image>
+                            <Image url="@IMAGES_FXML/reports.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Region VBox.vgrow="ALWAYS" />
+
             <Button fx:id="btnSettings" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
                 <graphic>
-
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="24.0" layoutY="113.0" pickOnBounds="true"
                                preserveRatio="true" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="15.0"
                                AnchorPane.rightAnchor="15.0">
@@ -72,7 +92,6 @@
                     </ImageView>
                 </graphic>
             </Button>
-            <Region VBox.vgrow="ALWAYS" />
             <Button fx:id="btnDrawer" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;">
                 <graphic>
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="34.0" layoutY="123.0" pickOnBounds="true"

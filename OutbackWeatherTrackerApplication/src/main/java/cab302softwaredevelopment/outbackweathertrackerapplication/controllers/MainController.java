@@ -25,7 +25,7 @@ public class MainController implements Initializable {
     @FXML
     public Pane pnlContent;
     @FXML
-    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnSettings, btnDrawer;
+    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnSettings, btnDrawer, btnAlerts, btnReports;
     @FXML
     public VBox vbNavbar;
     private Scene scene;
