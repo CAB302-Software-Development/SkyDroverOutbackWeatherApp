@@ -5,12 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Entity(name = "account")
-@Table(name = "account")
+@Table(name = "account", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"email"})
+})
 public class Account {
 
   @Id
