@@ -1,19 +1,19 @@
+import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.SplashController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClickableButtonTest extends ApplicationTest {
-
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/cab302softwaredevelopment/outbackweathertrackerapplication/hello-view.fxml"));
-        VBox root = loader.load();
-        stage.setScene(new Scene(root));
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("splash-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), SplashController.WIDTH, SplashController.HEIGHT);
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -23,7 +23,7 @@ public class ClickableButtonTest extends ApplicationTest {
         clickOn("Hello!");
 
         // Verify the label text has been updated
-        Label label = (Label) lookup("#welcomeText").query();
+        Label label = lookup("#welcomeText").query();
         assertEquals("Welcome to JavaFX Application!", label.getText());
     }
 }
