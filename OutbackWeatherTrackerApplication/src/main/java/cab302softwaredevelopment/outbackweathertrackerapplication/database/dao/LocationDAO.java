@@ -1,8 +1,11 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import org.hibernate.Session;
@@ -79,6 +82,41 @@ public class LocationDAO {
 
     List<Location> locations = session.createQuery(criteria).getResultList();
     session.close();
+    return locations;
+  }
+
+  public List<Location> getByAccountId(int account_id) {
+    Session session = DatabaseConnection.getSession();
+    CriteriaBuilder builder = session.getCriteriaBuilder();
+
+    // Criteria
+    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
+    Root<Location> root = criteria.from(Location.class);
+    criteria.select(root);
+
+    // Apply the account filter
+    criteria.where(builder.equal(root.get("account").get("id"), account_id));
+
+    List<Location> locations = session.createQuery(criteria).getResultList();
+    session.close();
+    return locations;
+  }
+
+  public List<Location> getByAccount(Account account) {
+    Session session = DatabaseConnection.getSession();
+    CriteriaBuilder builder = session.getCriteriaBuilder();
+
+    // Criteria
+    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
+    Root<Location> root = criteria.from(Location.class);
+    criteria.select(root);
+
+    // Apply the account filter
+    criteria.where(builder.equal(root.get("account"), account));
+
+    List<Location> locations = session.createQuery(criteria).getResultList();
+    session.close();
+
     return locations;
   }
 

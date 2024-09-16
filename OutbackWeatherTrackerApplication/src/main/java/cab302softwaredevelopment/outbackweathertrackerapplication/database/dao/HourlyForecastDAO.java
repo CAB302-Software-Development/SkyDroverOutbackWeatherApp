@@ -5,6 +5,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 import org.hibernate.Session;
 
@@ -18,6 +19,20 @@ public class HourlyForecastDAO {
     try {
       session.beginTransaction();
       session.save(hourlyForecast);
+      session.getTransaction().commit();
+    } catch (Exception e) {
+      session.getTransaction().rollback();
+      e.printStackTrace();
+    } finally {
+      session.close();
+    }
+  }
+
+  public void update(HourlyForecast hourlyForecast) {
+    Session session = DatabaseConnection.getSession();
+    try {
+      session.beginTransaction();
+      session.update(hourlyForecast);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -75,21 +90,28 @@ public class HourlyForecastDAO {
 
     // Criteria
     CriteriaQuery<HourlyForecast> criteria = builder.createQuery(HourlyForecast.class);
-    criteria.from(HourlyForecast.class);
-    criteria.where(builder.equal(criteria.from(HourlyForecast.class).get("location_id"), location_id));
+    Root<HourlyForecast> root = criteria.from(HourlyForecast.class);
+    criteria.select(root);
+
+    // Apply the location filter
+    criteria.where(builder.equal(root.get("location").get("id"), location_id));
 
     List<HourlyForecast> hourlyForecasts = session.createQuery(criteria).getResultList();
     session.close();
     return hourlyForecasts;
   }
+
   public List<HourlyForecast> getByLocation(Location location) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
     // Criteria
     CriteriaQuery<HourlyForecast> criteria = builder.createQuery(HourlyForecast.class);
-    criteria.from(HourlyForecast.class);
-    criteria.where(builder.equal(criteria.from(HourlyForecast.class).get("location"), location));
+    Root<HourlyForecast> root = criteria.from(HourlyForecast.class);
+    criteria.select(root);
+
+    // Apply the location filter
+    criteria.where(builder.equal(root.get("location"), location));
 
     List<HourlyForecast> hourlyForecasts = session.createQuery(criteria).getResultList();
     session.close();

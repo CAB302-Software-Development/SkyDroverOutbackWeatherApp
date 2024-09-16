@@ -1,6 +1,5 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
-
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -9,16 +8,16 @@ import java.util.List;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import org.hibernate.Session;
 
-public class DailyForecastDAO {
+public class AccountDAO {
 
-  public DailyForecastDAO() {
+  public AccountDAO() {
   }
 
-  public void insert(DailyForecast dailyForecast) {
+  public void insert(Account account) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      session.save(dailyForecast);
+      session.save(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -28,11 +27,11 @@ public class DailyForecastDAO {
     }
   }
 
-  public void update(DailyForecast dailyForecast) {
+  public void update(Account account) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      session.update(dailyForecast);
+      session.update(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -41,12 +40,13 @@ public class DailyForecastDAO {
       session.close();
     }
   }
+
   public void delete(int id) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      DailyForecast dailyForecast = session.get(DailyForecast.class, id);
-      session.delete(dailyForecast);
+      Account account = session.get(Account.class, id);
+      session.delete(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -56,11 +56,11 @@ public class DailyForecastDAO {
     }
   }
 
-  public void delete(DailyForecast dailyForecast) {
+  public void delete(Account account) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
-      session.delete(dailyForecast);
+      session.delete(account);
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
@@ -70,58 +70,42 @@ public class DailyForecastDAO {
     }
   }
 
-  public List<DailyForecast> getAll() {
+  public List<Account> getAll() {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
     // Criteria
-    CriteriaQuery<DailyForecast> criteria = builder.createQuery(DailyForecast.class);
-    criteria.from(DailyForecast.class);
+    CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
+    criteria.from(Account.class);
 
-    List<DailyForecast> dailyForecasts = session.createQuery(criteria).getResultList();
+    List<Account> accounts = session.createQuery(criteria).getResultList();
     session.close();
-    return dailyForecasts;
+    return accounts;
   }
 
-  public List<DailyForecast> getByLocationId(int location_id) {
+  public Account getById(int id) {
+    Session session = DatabaseConnection.getSession();
+    Account account = session.get(Account.class, id);
+    session.close();
+    return account;
+  }
+
+  public Account getByEmail(String email) {
     Session session = DatabaseConnection.getSession();
     CriteriaBuilder builder = session.getCriteriaBuilder();
 
     // Criteria
-    CriteriaQuery<DailyForecast> criteria = builder.createQuery(DailyForecast.class);
-    Root<DailyForecast> root = criteria.from(DailyForecast.class);
+    CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
+    Root<Account> root = criteria.from(Account.class);
     criteria.select(root);
 
-    // Apply the location filter
-    criteria.where(builder.equal(root.get("location").get("id"), location_id));
+    // Apply the email filter
+    criteria.where(builder.equal(root.get("email"), email));
 
-    List<DailyForecast> dailyForecasts = session.createQuery(criteria).getResultList();
+    Account account = session.createQuery(criteria).getSingleResult();
     session.close();
-    return dailyForecasts;
-  }
 
-  public List<DailyForecast> getByLocation(Location location) {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<DailyForecast> criteria = builder.createQuery(DailyForecast.class);
-    Root<DailyForecast> root = criteria.from(DailyForecast.class);
-    criteria.select(root);
-
-    // Apply the location filter
-    criteria.where(builder.equal(root.get("location"), location));
-
-    List<DailyForecast> dailyForecasts = session.createQuery(criteria).getResultList();
-    session.close();
-    return dailyForecasts;
-  }
-
-  public DailyForecast getById(int id) {
-    Session session = DatabaseConnection.getSession();
-    DailyForecast dailyForecast = session.get(DailyForecast.class, id);
-    session.close();
-    return dailyForecast;
+    return account;
   }
 
 }
