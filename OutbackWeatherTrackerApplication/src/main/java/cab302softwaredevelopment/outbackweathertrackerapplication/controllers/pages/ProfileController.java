@@ -13,19 +13,7 @@ import org.kordamp.bootstrapfx.scene.layout.Panel;
 
 import java.io.IOException;
 
-public class ProfileController implements ISwapPanel {
-    @FXML
-    Panel pnlRoot;
-
-    public void initialize(Pane parent) {
-        pnlRoot.prefWidthProperty().bind(parent.widthProperty());
-        pnlRoot.prefHeightProperty().bind(parent.heightProperty());
-    }
-
-    @Override
-    public void updateAppearance() {
-
-    }
+public class ProfileController {
 
     @FXML
     public void showLoginPopup() {

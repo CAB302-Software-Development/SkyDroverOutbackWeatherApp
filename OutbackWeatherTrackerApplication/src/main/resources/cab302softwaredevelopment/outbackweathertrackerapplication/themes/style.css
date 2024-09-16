@@ -1,0 +1,47 @@
+.background-primary {
+    -fx-background-color: primary;
+    -fx-text-fill: primary-comp;
+}
+
+.background-secondary {
+    -fx-background-color: secondary;
+    -fx-text-fill: secondary-comp;
+}
+
+.text-primary {
+    -fx-fill: primary-colour;
+}
+
+.text-secondary {
+    -fx-fill: primary-comp;
+}
+
+.border-primary {
+    -fx-border-color: primary;
+}
+
+.border-secondary {
+    -fx-border-color: primary-comp;
+}
+
+.textbox {
+    -fx-background-color: transparent;
+    -fx-border-color: primary;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.button-primary {
+    -fx-background-color: primary;
+    -fx-border-radius: 30;
+}
+
+.button-secondary {
+    -fx-background-color: complementary-colour;
+    -fx-text-fill: primary-comp;
+    -fx-border-radius: 30;
+}
+
+.navbar-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}

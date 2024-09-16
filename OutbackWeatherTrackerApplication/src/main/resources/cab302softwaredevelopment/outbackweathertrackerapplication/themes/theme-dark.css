@@ -1,25 +1,7 @@
-.primary-color {
-    -fx-background-color: #2F2F2F;
-    -fx-text-fill: white;
-}
-
-.secondary-color {
-    -fx-background-color: #444444;
-    -fx-text-fill: #2F5A94;
-}
-
-.text-primary {
-    -fx-fill: #2F5A94;
-}
-
-.text-secondary {
-    -fx-fill: #ffffff;
-}
-
-.border-primary {
-    -fx-border-color: #2F5A94;
-}
-
-.border-secondary {
-    -fx-border-color: #ffffff;
+.root {
+    primary: #31343b;
+    primary-comp: #ffffff;
+    secondary: #23272c;
+    secondary-comp: #ffffff;
+    complementary-colour: #6a707a;
 }

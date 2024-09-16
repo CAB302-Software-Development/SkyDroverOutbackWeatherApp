@@ -6,25 +6,19 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetI
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import java.io.*;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class DashboardController implements ISwapPanel {
+public class DashboardController implements Initializable {
     @FXML
     public Pane pnlRoot;
     @FXML
     public GridPane dashboardGrid;
-
-    public void initialize(Pane parent) {
-        pnlRoot.prefHeightProperty().bind(parent.heightProperty());
-        pnlRoot.prefWidthProperty().bind(parent.widthProperty());
-
-        dashboardGrid.setGridLinesVisible(true);
-
-        updateAppearance();
-    }
 
     public void updateAppearance() {
         dashboardGrid.getChildren().clear();
@@ -44,4 +38,8 @@ public class DashboardController implements ISwapPanel {
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        updateAppearance();
+    }
 }

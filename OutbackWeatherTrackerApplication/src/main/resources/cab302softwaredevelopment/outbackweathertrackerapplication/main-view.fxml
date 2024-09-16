@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
@@ -18,93 +16,41 @@
 <BorderPane prefHeight="400.0" prefWidth="600.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.MainController">
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.MainController"
+            fx:id="root">
     <left>
-        <VBox fx:id="vbNavbar" prefHeight="200.0" prefWidth="40.0" alignment="TOP_CENTER" style="-fx-background-color: #2F5A94;" spacing="10.0">
+        <VBox fx:id="vbNavbar" prefHeight="200.0" prefWidth="40.0" alignment="TOP_CENTER" styleClass="background-secondary" spacing="10.0">
             <padding>
                 <Insets left="5.0" right="5.0" top="10.0" bottom="10.0"/>
             </padding>
-            <Button fx:id="btnProfile" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="2.0" layoutY="19.0" pickOnBounds="true"
-                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
-                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
-                        <Image url="@IMAGES_FXML/account_circle.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button fx:id="btnDashboard" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="15.0" layoutY="61.0" pickOnBounds="true"
-                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
-                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="61.0">
-                        <Image url="@IMAGES_FXML/Dashboard.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button fx:id="btnMap" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="15.0" layoutY="107.0" pickOnBounds="true"
-                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
-                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
-                        <Image url="@IMAGES_FXML/Map.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button fx:id="btnForecast" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="161.0" pickOnBounds="true"
-                               preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0"
-                               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="140.0">
-                        <Image url="@IMAGES_FXML/Group.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
 
-
-            <Button fx:id="btnAlerts" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="180.0">
-                        <image>
-                            <Image url="@IMAGES_FXML/!.png" />
-                        </image>
-                    </ImageView>
-                </graphic>
+            <Button fx:id="btnProfile" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/account_circle.png"/></ImageView></graphic>
             </Button>
-            <Button fx:id="btnReports" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="220.0">
-                        <image>
-                            <Image url="@IMAGES_FXML/reports.png" />
-                        </image>
-                    </ImageView>
-                </graphic>
+            <Button fx:id="btnDashboard" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/Dashboard.png"/></ImageView></graphic>
+            </Button>
+            <Button fx:id="btnMap" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/Map.png"/></ImageView></graphic>
+            </Button>
+            <Button fx:id="btnForecast" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/Group.png"/></ImageView></graphic>
+            </Button>
+            <Button fx:id="btnAlerts" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/!.png"/></ImageView></graphic>
+            </Button>
+            <Button fx:id="btnReports" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/reports.png"/></ImageView></graphic>
             </Button>
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button fx:id="btnSettings" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;" >
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="24.0" layoutY="113.0" pickOnBounds="true"
-                               preserveRatio="true" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="15.0"
-                               AnchorPane.rightAnchor="15.0">
-                        <Image url="@IMAGES_FXML/Settings.png"/>
-                    </ImageView>
-                </graphic>
+            <Button fx:id="btnSettings" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/Settings.png"/></ImageView></graphic>
             </Button>
-            <Button fx:id="btnDrawer" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-padding: 0;">
-                <graphic>
-                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="34.0" layoutY="123.0" pickOnBounds="true"
-                               preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="15.0"
-                               AnchorPane.rightAnchor="15.0">
-                        <Image url="@IMAGES_FXML/Drawer.png"/>
-                    </ImageView>
-                </graphic>
+            <Button fx:id="btnDrawer" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
+                <graphic><ImageView><Image url="@images/Drawer.png"/></ImageView></graphic>
             </Button>
         </VBox>
     </left>
-    <center>
-        <Pane fx:id="pnlContent" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-    </center>
-
 </BorderPane>

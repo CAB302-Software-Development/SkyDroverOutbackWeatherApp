@@ -7,8 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Objects;
+import java.net.URL;
+import java.util.*;
 
 class PreferenceData {
     @SerializedName("currentTheme")
@@ -19,6 +19,7 @@ class PreferenceData {
 
 public class PreferencesService {
     private static PreferenceData data;
+    private static final String stylePath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/style.css")).toExternalForm();
 
     public static void loadPreferences() {
         Gson gson = new Gson();
@@ -33,8 +34,10 @@ public class PreferencesService {
         return data.dashboardLayouts.get(data.selectedLayout);
     }
 
-    public static String getCurrentThemeData() {
-        return Objects.requireNonNull(ApplicationEntry.class.getResource(data.currentTheme.getFilePath())).toExternalForm();
+    public static List<String> getCurrentThemeData() {
+        String iconsPath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/icons.css")).toExternalForm();
+        String themePath = Objects.requireNonNull(ApplicationEntry.class.getResource(data.currentTheme.getFilePath())).toExternalForm();
+        return Arrays.asList(stylePath, themePath, iconsPath);
     }
 
     public static Theme getCurrentTheme() {

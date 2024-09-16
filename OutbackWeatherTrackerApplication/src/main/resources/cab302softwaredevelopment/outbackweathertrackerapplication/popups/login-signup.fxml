@@ -20,7 +20,7 @@
                      BorderPane.alignment="CENTER">
             <ImageView fitHeight="217.0" fitWidth="276.0" layoutX="39.0" layoutY="78.0" pickOnBounds="true"
                        preserveRatio="true">
-               <Image url="@../icons/skydroverlogo.png"/>
+               <Image url="@../images/skydroverlogo.png"/>
             </ImageView>
          </AnchorPane>
       </left>
@@ -35,11 +35,11 @@
                        style="-fx-background-color: transparent; -fx-border-color: #3E6EAC; -fx-border-width: 0px 0px 2px 0px;"/>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="147.0" pickOnBounds="true"
                        preserveRatio="true">
-               <Image url="@../icons/account_circle_icon.png"/>
+               <Image url="@../images/account_circle_icon.png"/>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="227.0" pickOnBounds="true"
                        preserveRatio="true">
-               <Image url="@../icons/password_icon.png"/>
+               <Image url="@../images/password_icon.png"/>
             </ImageView>
             <Button fx:id="loginButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false"
                     prefHeight="29.0" prefWidth="100.0" style="-fx-background-color: #3E6EAC;" text="Login"
@@ -68,16 +68,10 @@
                   <Font name="System Bold" size="24.0"/>
                </font>
             </Text>
-            <Button layoutX="308.0" layoutY="7.0" mnemonicParsing="false" style="-fx-background-color: transparent;"
-                    text="X" textFill="#3e6eac">
-               <font>
-                  <Font name="System Bold" size="15.0"/>
-               </font>
-            </Button>
             <Label layoutX="50.0" layoutY="129.0" text="Email"/>
             <Label layoutX="40.0" layoutY="213.0" text="Password"/>
             <Label fx:id="loginMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
-                   prefWidth="183.0" text="Invalid Login. Please try again." textFill="RED">
+                   prefWidth="183.0" text="Invalid Login. Please try again." textFill="RED" visible="false">
                <font>
                   <Font name="System Bold" size="12.0"/>
                </font>
@@ -92,7 +86,7 @@
                      BorderPane.alignment="CENTER">
             <ImageView fitHeight="217.0" fitWidth="276.0" layoutX="39.0" layoutY="78.0" pickOnBounds="true"
                        preserveRatio="true">
-               <Image url="@../icons/skydroverlogo.png"/>
+               <Image url="@../images/skydroverlogo.png"/>
             </ImageView>
          </AnchorPane>
       </left>
@@ -107,11 +101,11 @@
                        style="-fx-background-color: transparent; -fx-border-color: #3E6EAC; -fx-border-width: 0px 0px 2px 0px;"/>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="147.0" pickOnBounds="true"
                        preserveRatio="true">
-               <Image url="@../icons/account_circle_icon.png"/>
+               <Image url="@../images/account_circle_icon.png"/>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="227.0" pickOnBounds="true"
                        preserveRatio="true">
-               <Image url="@../icons/password_icon.png"/>
+               <Image url="@../images/password_icon.png"/>
             </ImageView>
             <Button alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false"
                     prefHeight="29.0" prefWidth="100.0" style="-fx-background-color: #3E6EAC;" text="Sign Up"
@@ -140,12 +134,6 @@
                   <Font name="System Bold" size="24.0"/>
                </font>
             </Text>
-            <Button layoutX="308.0" layoutY="7.0" mnemonicParsing="false" style="-fx-background-color: transparent;"
-                    text="X" textFill="#3e6eac">
-               <font>
-                  <Font name="System Bold" size="15.0"/>
-               </font>
-            </Button>
             <Label layoutX="50.0" layoutY="129.0" text="Email"/>
             <Label layoutX="40.0" layoutY="213.0" text="Password"/>
             <Label alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"

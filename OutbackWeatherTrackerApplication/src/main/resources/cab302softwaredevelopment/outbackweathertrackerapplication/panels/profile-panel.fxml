@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <?import javafx.scene.control.Button?>
-<Panel xmlns="http://javafx.com/javafx"
-       xmlns:fx="http://javafx.com/fxml"
-       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.ProfileController"
-       style="-fx-background-color: #cf98ec; -fx-background-radius: 5; -fx-background-insets: 0;" fx:id="pnlRoot">
-    <Button text="Login / Sign up" onAction="#showLoginPopup"/>
-</Panel>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.ProfileController"
+      styleClass="background-primary">
+    <Button text="Login / Sign up" onAction="#showLoginPopup" styleClass="button-primary"/>
+</VBox>
