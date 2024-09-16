@@ -195,12 +195,8 @@ public class AccountTest extends DBTest {
     addAccounts();
 
     // Retrieve the account
-    try{
     Account account_result = accountDAO.getByEmail("");
     assertNull(account_result);
-    } catch (Exception e) {
-      // no account was retrieved because an exception was thrown
-    }
   }
 
   @Test
