@@ -1,16 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LoginController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import java.awt.GraphicsEnvironment;
@@ -20,20 +10,21 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.*;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.*;
 import org.hibernate.Session;
-
-import java.awt.*;
-import java.io.IOException;
-import java.util.List;
-
 
 public class ApplicationEntry extends Application {
 
   public static final String stageTitle = "Outback Weather Tracker";
-
+  /**
+   * Starts the application and sets up the main stage and scene.
+   *
+   * @param stage The primary stage for the application.
+   * @throws IOException if the FXML file cannot be loaded.
+   */
   @Override
   public void start(Stage stage) throws IOException {
     if (!GraphicsEnvironment.isHeadless()) {
@@ -49,6 +40,11 @@ public class ApplicationEntry extends Application {
     }
   }
 
+  /**
+   * Main method that launches the application.
+   *
+   * @param args Command-line arguments.
+   */
   public static void main(String[] args) {
     Logger.printLog("Application started, " + stageTitle);
     Session session = DatabaseConnection.getSession();
@@ -63,9 +59,9 @@ public class ApplicationEntry extends Application {
 
     // Insert some new accounts
     // Add the accounts to the template
-    accountDAO.insert(new Account("test1@gmail.com", "password1",true));
-    accountDAO.insert(new Account("test2@gmail.com", "password2",true));
-    accountDAO.insert(new Account("test3@gmail.com", "password3",true));
+    accountDAO.insert(new Account("test1@gmail.com", "SecurePass1!",true));
+    accountDAO.insert(new Account("test2@gmail.com", "SecurePass2!",true));
+    accountDAO.insert(new Account("test3@gmail.com", "SecurePass3!",true));
 
     Account account = accountDAO.getById(1);
 

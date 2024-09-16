@@ -6,7 +6,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.services.Prefe
 import javafx.fxml.FXML;
 
 public class SettingsController {
-
+    /**
+     * Toggle between the light and dark theme
+     */
     @FXML
     public void swapTheme() {
         switch (PreferencesService.getCurrentTheme()) {

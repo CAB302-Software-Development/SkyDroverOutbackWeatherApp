@@ -20,6 +20,9 @@ public class DashboardController implements Initializable {
     @FXML
     public GridPane dashboardGrid;
 
+    /**
+     * Clears old dashboard layout and loads the currently selected layout in the PreferencesService
+     */
     public void updateAppearance() {
         dashboardGrid.getChildren().clear();
         try {

@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import jakarta.persistence.NoResultException;
 import javafx.fxml.FXML;
@@ -80,7 +81,7 @@ public class LoginController {
      * Swaps view to display sign up screen
      */
     @FXML
-    public void switchToSignup() {
+    private void switchToSignup() {
         loginPane.setVisible(false);
         loginPane.setManaged(false);
         signupPane.setVisible(true);
@@ -92,7 +93,7 @@ public class LoginController {
      * Swaps view to display login screen
      */
     @FXML
-    public void switchToLogin() {
+    private void switchToLogin() {
         signupPane.setVisible(false);
         signupPane.setManaged(false);
         loginPane.setVisible(true);
@@ -104,7 +105,7 @@ public class LoginController {
      * Action handler for the "Login" button
       */
     @FXML
-    public void handleLogin() {
+    private void handleLogin() {
         if(!isLogin) return;
 
         String email = emailTextFieldLogin.getText();
@@ -134,6 +135,8 @@ public class LoginController {
             return;
         }
 
+        LoginState.login(account);
+
         try {
             continueToApplication();
         } catch (IOException e) {
@@ -146,7 +149,7 @@ public class LoginController {
      * Action handler for the "Sign Up" button
      */
     @FXML
-    public void handleSignUp() {
+    private void handleSignUp() {
         if(isLogin) return;
 
         String email = emailTextFieldSignup.getText();
@@ -185,6 +188,7 @@ public class LoginController {
         }
 
         Logger.printLog("Account created with email: " + email);
+        LoginState.login(account);
 
         try {
             continueToApplication();
@@ -195,7 +199,7 @@ public class LoginController {
     }
 
     @FXML
-    public void handleGuestAccess() {
+    private void handleGuestAccess() {
         try {
             continueToApplication();
         } catch (IOException e) {
@@ -204,18 +208,30 @@ public class LoginController {
         }
     }
 
-    private static boolean isInvalidEmail(String email) {
+    /**
+     * Checks if the given email is invalid based on a predefined email pattern.
+     *
+     * @param email The email string to validate.
+     * @return true if the email does not match the pattern, false otherwise.
+     */
+    private boolean isInvalidEmail(String email) {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         return !pattern.matcher(email).matches();
     }
 
-    private static boolean isInvalidPassword(String password) {
+    /**
+     * Checks if the given password is invalid based on a predefined password pattern.
+     *
+     * @param password The password string to validate.
+     * @return true if the password does not match the pattern, false otherwise.
+     */
+    private boolean isInvalidPassword(String password) {
         Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
         return !pattern.matcher(password).matches();
     }
 
     /**
-     * Show an invalid login message
+     * Shows an error message to the corresponding login or sign up screen
      * @param message Message to be displayed
      */
     private void showErrorMessage(String message) {
@@ -240,7 +256,7 @@ public class LoginController {
 
     /**
      * Closes the login / sign up window and initializes the main application view
-     * @throws IOException
+     * @throws IOException If FXML load fails
      */
     private void continueToApplication() throws IOException {
         ((Stage) loginPane.getScene().getWindow()).close();

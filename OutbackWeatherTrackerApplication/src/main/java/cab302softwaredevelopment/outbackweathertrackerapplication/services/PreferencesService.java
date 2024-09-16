@@ -40,25 +40,48 @@ public class PreferencesService {
         return Arrays.asList(stylePath, themePath, iconsPath);
     }
 
+    /**
+     * Retrieves the current theme of the application.
+     *
+     * @return The current theme.
+     */
     public static Theme getCurrentTheme() {
         return data.currentTheme;
     }
 
+    /**
+     * Sets a new theme for the application and saves the preferences to file.
+     *
+     * @param newTheme The new theme to apply.
+     */
     public static void setCurrentTheme(Theme newTheme) {
         data.currentTheme = newTheme;
         savePreferences();
     }
 
+    /**
+     * Gets a list of available layouts for the dashboard.
+     *
+     * @return An array of layout names.
+     */
     public String[] getLayouts() {
         return data.dashboardLayouts.keySet().toArray(String[]::new);
     }
 
+    /**
+     * Sets the current layout for the dashboard.
+     *
+     * @param name The name of the layout to set.
+     */
     public static void setCurrentLayout(String name) {
         if (data.dashboardLayouts.containsKey(name)) {
             data.selectedLayout = name;
         }
     }
 
+    /**
+     * Saves the user preferences to a JSON file.
+     */
     public static void savePreferences() {
         Gson gson = new Gson();
         try (Writer writer = new FileWriter("user_preferences.json")) {
