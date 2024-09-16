@@ -8,6 +8,11 @@
     -fx-text-fill: secondary-comp;
 }
 
+.background-secondary-inv {
+    -fx-background-color: secondary-comp;
+    -fx-text-fill: secondary;
+}
+
 .text-primary {
     -fx-fill: primary-colour;
 }
@@ -33,6 +38,7 @@
 .button-primary {
     -fx-background-color: primary;
     -fx-border-radius: 30;
+    -fx-text-fill: primary-comp;
 }
 
 .button-secondary {
@@ -44,4 +50,13 @@
 .navbar-button {
     -fx-background-color: transparent;
     -fx-padding: 0;
+}
+
+.hyperlink {
+    -fx-background-color: transparent;
+    -fx-text-fill: highlight-colour;
+}
+
+.header {
+    -fx-text-fill: primary-comp;
 }

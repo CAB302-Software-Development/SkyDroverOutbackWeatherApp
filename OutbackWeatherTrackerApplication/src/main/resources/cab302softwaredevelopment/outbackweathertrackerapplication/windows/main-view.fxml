@@ -16,7 +16,7 @@
 <BorderPane prefHeight="400.0" prefWidth="600.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.MainController"
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController"
             fx:id="root">
     <left>
         <VBox fx:id="vbNavbar" prefHeight="200.0" prefWidth="40.0" alignment="TOP_CENTER" styleClass="background-secondary" spacing="10.0">
@@ -25,31 +25,31 @@
             </padding>
 
             <Button fx:id="btnProfile" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/account_circle.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/account_circle.png"/></ImageView></graphic>
             </Button>
             <Button fx:id="btnDashboard" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/Dashboard.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/Dashboard.png"/></ImageView></graphic>
             </Button>
             <Button fx:id="btnMap" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/Map.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/Map.png"/></ImageView></graphic>
             </Button>
             <Button fx:id="btnForecast" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/Group.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/Group.png"/></ImageView></graphic>
             </Button>
             <Button fx:id="btnAlerts" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/!.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/!.png"/></ImageView></graphic>
             </Button>
             <Button fx:id="btnReports" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/reports.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/reports.png"/></ImageView></graphic>
             </Button>
 
             <Region VBox.vgrow="ALWAYS" />
 
             <Button fx:id="btnSettings" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/Settings.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/Settings.png"/></ImageView></graphic>
             </Button>
             <Button fx:id="btnDrawer" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@images/Drawer.png"/></ImageView></graphic>
+                <graphic><ImageView><Image url="@../images/Drawer.png"/></ImageView></graphic>
             </Button>
         </VBox>
     </left>

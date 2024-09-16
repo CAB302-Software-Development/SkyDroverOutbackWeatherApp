@@ -12,20 +12,20 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires jakarta.persistence;
     requires java.naming;
     requires org.hibernate.orm.community.dialects;
-  requires java.desktop;
+    requires java.desktop;
+    requires static lombok;
+    requires spring.security.crypto;
 
-  opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
     exports cab302softwaredevelopment.outbackweathertrackerapplication;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.models;
-    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
     exports cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets to javafx.fxml;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication to javafx.fxml;
-    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.models to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
@@ -35,6 +35,6 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
-    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.popups;
-    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.popups to com.google.gson, javafx.fxml;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows to com.google.gson, javafx.fxml;
 }

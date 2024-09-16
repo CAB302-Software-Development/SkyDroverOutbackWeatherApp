@@ -1,4 +1,4 @@
-package cab302softwaredevelopment.outbackweathertrackerapplication.controllers;
+package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
@@ -22,7 +22,7 @@ public class MainController implements Initializable {
     private static MainController controller;
 
     @FXML
-    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnSettings, btnDrawer, btnAlerts, btnReports;
+    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnAlerts, btnReports, btnSettings, btnDrawer;
     @FXML
     public VBox vbNavbar;
     private Scene scene;
@@ -46,6 +46,9 @@ public class MainController implements Initializable {
         Node swpDashboard = createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
         Node swpForecast = createSwapPanel("panels/forecast-panel.fxml", btnForecast);
         Node swpMap = createSwapPanel("panels/map-panel.fxml", btnMap);
+        Node swpAlerts = createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
+        Node swpReports = createSwapPanel("panels/reports-panel.fxml", btnReports);
+
         Node swpSettings = createSwapPanel("panels/settings-panel.fxml", btnSettings);
         root.centerProperty().set(swpDashboard);
     }

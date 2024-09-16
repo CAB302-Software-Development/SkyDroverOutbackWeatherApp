@@ -1,5 +1,4 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
-public class ProfileController {
-
+public class AlertsController {
 }
