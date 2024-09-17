@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "development" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "development" ]
 
 permissions:
   actions: read
