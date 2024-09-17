@@ -8,3 +8,23 @@ body, html {
   width: 100%;
   height: 100vh;
 }
+
+#search-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#search-bar {
+  width: 200px;
+  padding: 5px;
+}
+
+#search-button {
+  padding: 5px;
+  margin-left: 5px;
+}
