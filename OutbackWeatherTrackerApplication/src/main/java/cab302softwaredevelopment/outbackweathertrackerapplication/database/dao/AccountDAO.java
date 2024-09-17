@@ -1,6 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -102,8 +103,14 @@ public class AccountDAO {
     // Apply the email filter
     criteria.where(builder.equal(root.get("email"), email));
 
-    Account account = session.createQuery(criteria).getSingleResult();
-    session.close();
+    Account account = null;
+    try {
+      account = session.createQuery(criteria).getSingleResult();
+    } catch (NoResultException e) {
+      // No account found, account remains null
+    } finally {
+      session.close();
+    }
 
     return account;
   }
