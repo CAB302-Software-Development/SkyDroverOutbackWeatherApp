@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 class PreferenceData {
@@ -32,6 +31,10 @@ public class PreferencesService {
 
     public static WidgetInfo[] getCurrentLayout() {
         return data.dashboardLayouts.get(data.selectedLayout);
+    }
+
+    public static String getSelectedLayout() {
+        return data.selectedLayout;
     }
 
     public static List<String> getCurrentThemeData() {
@@ -64,7 +67,7 @@ public class PreferencesService {
      *
      * @return An array of layout names.
      */
-    public String[] getLayouts() {
+    public static String[] getLayouts() {
         return data.dashboardLayouts.keySet().toArray(String[]::new);
     }
 
@@ -73,7 +76,7 @@ public class PreferencesService {
      *
      * @param name The name of the layout to set.
      */
-    public static void setCurrentLayout(String name) {
+    public static void setSelectedLayout(String name) {
         if (data.dashboardLayouts.containsKey(name)) {
             data.selectedLayout = name;
         }
