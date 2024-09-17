@@ -50,7 +50,7 @@
                               layoutX="90.0" layoutY="222.0" prefHeight="28.0" prefWidth="180.0"/>
 
                <Button fx:id="loginButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false"
-                       prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Login" onAction="#handleLogin"/>
+                       prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Login" onAction="#handleButtonPress"/>
 
                <Hyperlink styleClass="hyperlink" text="Forgot?" alignment="CENTER"
                           layoutX="240.0" layoutY="202.0"
@@ -66,7 +66,7 @@
                <Hyperlink styleClass="hyperlink" text="Continue As Guest" alignment="CENTER"
                           layoutX="143.0" layoutY="355.0"
                           prefHeight="17.0" prefWidth="73.0"
-                          onAction="#handleGuestAccess">
+                          onAction="#handleButtonPress">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
                <Label fx:id="loginMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
@@ -100,7 +100,7 @@
                               layoutX="90.0" layoutY="222.0" prefHeight="28.0" prefWidth="180.0"/>
 
                <Button fx:id="signupButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false"
-                       prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Sign Up" onAction="#handleSignUp"/>
+                       prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Sign Up" onAction="#handleButtonPress"/>
 
                <Hyperlink styleClass="hyperlink" text="Already have an account? Log in" alignment="CENTER"
                           layoutX="113.0" layoutY="338.0"
@@ -111,7 +111,7 @@
                <Hyperlink styleClass="hyperlink" text="Continue As Guest" alignment="CENTER"
                           layoutX="143.0" layoutY="355.0"
                           prefHeight="17.0" prefWidth="73.0"
-                          onAction="#handleGuestAccess">
+                          onAction="#handleButtonPress">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
                <Label fx:id="signupMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
