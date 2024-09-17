@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.web.WebView?>
+
 <VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
-      styleClass="background-primary">
-    <Label alignment="TOP_LEFT" styleClass="header" text="Map Placeholder"/>
+  xmlns:fx="http://javafx.com/fxml"
+  fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
+  styleClass="background-primary">
+  <WebView fx:id="mapWebView" prefWidth="800" prefHeight="600"/>
 </VBox>
