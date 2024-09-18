@@ -14,7 +14,7 @@
             <children>
                 <ImageView fitHeight="400.0" fitWidth="401.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../IMAGES_FXML/2024091014913.jpg" />
+                  <Image url="@../images/2024091014913.jpg" />
                </image></ImageView>
             </children>
         </AnchorPane>

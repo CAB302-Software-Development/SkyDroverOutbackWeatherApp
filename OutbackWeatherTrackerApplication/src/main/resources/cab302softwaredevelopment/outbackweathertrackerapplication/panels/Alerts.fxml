@@ -30,32 +30,32 @@
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="15.0" layoutY="107.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
                <image>
-                  <Image url="@../IMAGES_FXML/Map.png" />
+                  <Image url="@../images/Map.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="140.0">
                <image>
-                  <Image url="@../IMAGES_FXML/Group.png" />
+                  <Image url="@../images/Group.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="24.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                <image>
-                  <Image url="@../IMAGES_FXML/Settings.png" />
+                  <Image url="@../images/Settings.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="34.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                <image>
-                  <Image url="@../IMAGES_FXML/Drawer.png" />
+                  <Image url="@../images/Drawer.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="180.0">
                <image>
-                  <Image url="@../IMAGES_FXML/!.png" />
+                  <Image url="@../images/!.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="13.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="220.0">
                <image>
-                  <Image url="@../IMAGES_FXML/reports.png" />
+                  <Image url="@../images/reports.png" />
                </image>
             </ImageView>
          </children>
