@@ -77,7 +77,7 @@
          </font>
       </Text>
       <TextField layoutX="409.0" layoutY="21.0" promptText="Search..." />
-      <LineChart layoutX="68.0" layoutY="202.0" prefHeight="200.0" prefWidth="501.0" style="-fx-background-color: #3E6EAC; -fx-alternative-column-fill-visible: FALSE; -fx-alternative-row-fill-visible: FALSE; -fx-legend-visible: FALSE;">
+      <LineChart layoutX="68.0" layoutY="171.0" prefHeight="200.0" prefWidth="501.0" style="-fx-background-color: #3E6EAC;" stylesheets="@../themes/chart.css">
         <xAxis>
           <CategoryAxis prefHeight="1.0" prefWidth="443.0" side="BOTTOM" style="-fx-background-color: #3E6EAC;" tickLabelFill="WHITE" />
         </xAxis>
