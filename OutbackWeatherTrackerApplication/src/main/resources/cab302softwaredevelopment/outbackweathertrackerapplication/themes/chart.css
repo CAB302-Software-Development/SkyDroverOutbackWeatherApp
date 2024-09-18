@@ -1,0 +1,10 @@
+.chart-plot-background {
+   -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines {
+   -fx-stroke: #dedddc; -fx-stroke-width: 2;
+}
+.chart-horizontal-grid-lines {
+   -fx-stroke: #dedddc; -fx-stroke-width: 2;
+}

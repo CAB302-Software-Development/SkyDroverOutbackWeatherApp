@@ -77,12 +77,12 @@
          </font>
       </Text>
       <TextField layoutX="409.0" layoutY="21.0" promptText="Search..." />
-      <LineChart layoutX="68.0" layoutY="163.0" prefHeight="239.0" prefWidth="501.0" style="-fx-background-color: transparent;">
+      <LineChart layoutX="68.0" layoutY="202.0" prefHeight="200.0" prefWidth="501.0" style="-fx-background-color: #3E6EAC; -fx-alternative-column-fill-visible: FALSE; -fx-alternative-row-fill-visible: FALSE; -fx-legend-visible: FALSE;">
         <xAxis>
-          <CategoryAxis side="BOTTOM" tickLabelFill="WHITE" />
+          <CategoryAxis prefHeight="1.0" prefWidth="443.0" side="BOTTOM" style="-fx-background-color: #3E6EAC;" tickLabelFill="WHITE" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" tickLabelFill="#fffefe" />
+          <NumberAxis side="LEFT" style="-fx-background-color: #3E6EAC;" tickLabelFill="#fffefe" />
         </yAxis>
       </LineChart>
       <GridPane layoutX="82.0" layoutY="79.0" prefHeight="66.0" prefWidth="473.0">
