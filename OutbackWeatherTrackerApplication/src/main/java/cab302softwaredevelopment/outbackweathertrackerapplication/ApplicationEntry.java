@@ -60,7 +60,7 @@ public class ApplicationEntry extends Application {
     //locationDAO.createTable();
     //dailyForecastDAO.createTable();
     //hourlyForecastDAO.createTable();
-
+/*
     // Insert some new accounts
     // Add the accounts to the template
     accountDAO.insert(new Account("test1@gmail.com", "password1",true));
@@ -95,7 +95,7 @@ public class ApplicationEntry extends Application {
     for (DailyForecast dailyForecast : dailyForecasts) {
       System.out.println(dailyForecast);
     }
-
+*/
     launch();
   }
 }
