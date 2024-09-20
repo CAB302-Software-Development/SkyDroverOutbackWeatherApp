@@ -19,4 +19,9 @@ public class LoginState {
     public static boolean isGuest() {
         return isGuest;
     }
+
+    public static Account getAccount() {
+        if (isGuest) return null;
+        else return currentAccount;
+    }
 }
