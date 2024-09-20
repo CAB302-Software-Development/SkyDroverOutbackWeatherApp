@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.CurrentTempController"
+      styleClass="widget-background" fx:id="root">
+    <Label fx:id="lblTemp"/>
+    <LineChart fx:id="lineChart" prefWidth="100" prefHeight="100">
+        <xAxis>
+            <NumberAxis side="BOTTOM" tickLabelFill="WHITE"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis side="LEFT" tickLabelFill="WHITE"/>
+        </yAxis>
+    </LineChart>
+
+</VBox>

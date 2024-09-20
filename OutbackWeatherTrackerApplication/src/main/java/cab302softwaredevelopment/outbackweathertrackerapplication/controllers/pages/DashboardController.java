@@ -1,6 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.ISwapPanel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
@@ -29,6 +30,13 @@ public class DashboardController implements Initializable {
             for (WidgetInfo info : PreferencesService.getCurrentLayout()) {
                 FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(info.type.getFilepath()));
                 Node widgetNode = loader.load();
+
+                Object controller = loader.getController();
+                if (controller instanceof IConfigurableWidget) {
+                    ((IConfigurableWidget) controller).applyConfig(info.config);
+                }
+                // TODO add exception if false ?
+
                 GridPane.setColumnIndex(widgetNode, info.columnIndex);
                 GridPane.setRowIndex(widgetNode, info.rowIndex);
                 GridPane.setColumnSpan(widgetNode, info.colSpan);
@@ -39,7 +47,6 @@ public class DashboardController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
