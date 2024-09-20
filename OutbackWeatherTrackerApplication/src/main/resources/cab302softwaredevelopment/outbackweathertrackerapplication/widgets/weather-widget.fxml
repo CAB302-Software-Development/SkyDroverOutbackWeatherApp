@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidgetController">
+
+    <!-- Weather Condition -->
+    <Text fx:id="weatherConditionText" style="-fx-fill: white;" text="WeatherCondition">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Text>
+
+    <!-- Weather Icon -->
+    <ImageView fx:id="weatherIconImageView" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" />
+
+    <!-- Date and Time -->
+    <Text fx:id="dateTimeText" style="-fx-fill: white;" text="DATE | TIME AM">
+        <font>
+            <Font size="12.0" />
+        </font>
+    </Text>
+
+    <!-- Temperature -->
+    <Text fx:id="temperatureText" style="-fx-fill: white;" text="CurrentTemp°">
+        <font>
+            <Font size="36.0" />
+        </font>
+    </Text>
+
+    <!-- Min/Max Temperature -->
+    <Text fx:id="minMaxTempText" style="-fx-fill: white;" text="H: 27° L: 18°">
+        <font>
+            <Font size="12.0" />
+        </font>
+    </Text>
+
+</VBox>
