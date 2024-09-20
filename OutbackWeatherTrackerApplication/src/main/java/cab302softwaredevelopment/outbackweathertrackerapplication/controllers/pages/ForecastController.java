@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.Instant;
@@ -26,13 +27,11 @@ import java.util.ResourceBundle;
 
 public class ForecastController implements Initializable {
     @FXML
-    public VBox vbRoot;
-    @FXML
     public ScrollPane scrForecasts;
     @FXML
     public HBox pnForecastContainer;
     @FXML
-    private VBox rootVBox;
+    private VBox vbRoot;
     @FXML
     private ComboBox<Location> locationComboBox;
     @FXML
@@ -77,6 +76,17 @@ public class ForecastController implements Initializable {
         precipitationColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getPrecipitation_sum()));
 
         loadUserLocations();
+
+        locationComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Location location) {
+                return location.getName();
+            }
+            @Override
+            public Location fromString(String string) {
+                return null;
+            }
+        });
 
         locationComboBox.setOnAction(event -> loadForecastData());
         refreshButton.setOnAction(event -> refreshForecastData());
@@ -130,7 +140,14 @@ public class ForecastController implements Initializable {
 
         new Thread(() -> {
             try {
-                sdk.updateDailyForecast(selectedLocation, 7, 0);
+                List<DailyForecast> existingForecasts = dailyForecastDAO.getByLocation(selectedLocation);
+                if (existingForecasts.size() == 0) {
+                    List<DailyForecast> newForecasts = sdk.getDailyForecast(selectedLocation, 7, 0);
+                    newForecasts.forEach(f -> dailyForecastDAO.insert(f));
+                } else {
+                    sdk.updateDailyForecast(selectedLocation, 7, 0);
+                }
+
                 Platform.runLater(() -> {
                     loadForecastData();
                     progressIndicator.setVisible(false);
@@ -156,7 +173,7 @@ public class ForecastController implements Initializable {
      */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(rootVBox.getScene().getWindow());
+        alert.initOwner(vbRoot.getScene().getWindow());
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
