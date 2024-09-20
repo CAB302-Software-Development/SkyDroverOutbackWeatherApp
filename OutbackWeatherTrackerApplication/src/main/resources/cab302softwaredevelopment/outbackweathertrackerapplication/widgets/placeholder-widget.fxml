@@ -5,7 +5,6 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.ForecastController"
-      prefHeight="400.0" prefWidth="600.0"
       style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-background-insets: 0;" alignment="CENTER">
     <Text text="Placeholder Widget" textAlignment="CENTER"/>
 </VBox>
