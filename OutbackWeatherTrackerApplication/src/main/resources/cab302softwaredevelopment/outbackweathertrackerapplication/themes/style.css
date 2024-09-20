@@ -76,3 +76,9 @@
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
+
+.widget-temp {
+    -fx-background-color: colour-1;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}
