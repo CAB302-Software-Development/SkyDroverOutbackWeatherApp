@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.CurrentTempController"
-      styleClass="widget-background" fx:id="root">
-    <Label fx:id="lblTemp"/>
-    <LineChart fx:id="lineChart" prefWidth="100" prefHeight="100">
-        <xAxis>
-            <NumberAxis side="BOTTOM" tickLabelFill="WHITE"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis side="LEFT" tickLabelFill="WHITE"/>
-        </yAxis>
-    </LineChart>
+      styleClass="widget-temp" fx:id="root" alignment="CENTER" spacing="10.0">
 
+    <Label fx:id="lblLocation" style="-fx-text-fill: white;">
+        <font><Font size="14.0" /></font>
+    </Label>
+    <Label fx:id="lblDateTime" style="-fx-text-fill: white;">
+        <font><Font size="12.0" /></font>
+    </Label>
+    <Label fx:id="lblTemp" style="-fx-text-fill: white;" text="CurrentTemp°">
+        <font><Font size="36.0" /></font>
+    </Label>
 </VBox>
