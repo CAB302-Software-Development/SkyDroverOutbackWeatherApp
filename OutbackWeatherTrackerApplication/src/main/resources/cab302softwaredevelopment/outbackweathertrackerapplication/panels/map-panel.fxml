@@ -2,9 +2,11 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
+<?import com.gluonhq.maps.MapView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
       styleClass="background-primary">
     <Label alignment="TOP_LEFT" styleClass="header" text="Map Placeholder"/>
+    <MapView/>
 </VBox>
