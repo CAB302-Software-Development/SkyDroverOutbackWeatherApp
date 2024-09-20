@@ -63,10 +63,10 @@
                           onAction="#switchToSignup">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
-               <Hyperlink styleClass="hyperlink" text="Continue As Guest" alignment="CENTER"
+               <Hyperlink fx:id="guestLinkLogin" styleClass="hyperlink" text="Continue As Guest"
+                          onAction="#handleButtonPress" alignment="CENTER"
                           layoutX="143.0" layoutY="355.0"
-                          prefHeight="17.0" prefWidth="73.0"
-                          onAction="#handleButtonPress">
+                          prefHeight="17.0" prefWidth="73.0">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
                <Label fx:id="loginMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
@@ -108,10 +108,10 @@
                           onAction="#switchToLogin">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
-               <Hyperlink styleClass="hyperlink" text="Continue As Guest" alignment="CENTER"
+               <Hyperlink fx:id="guestLinkSignup" styleClass="hyperlink" text="Continue As Guest"
+                          onAction="#handleButtonPress" alignment="CENTER"
                           layoutX="143.0" layoutY="355.0"
-                          prefHeight="17.0" prefWidth="73.0"
-                          onAction="#handleButtonPress">
+                          prefHeight="17.0" prefWidth="73.0">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
                <Label fx:id="signupMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
