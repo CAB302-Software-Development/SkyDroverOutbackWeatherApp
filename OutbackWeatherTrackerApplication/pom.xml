@@ -66,6 +66,14 @@
     </dependency>
 
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+      <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+    </dependency>
+
+    <dependency>
       <groupId>org.testfx</groupId>
       <artifactId>testfx-core</artifactId>
       <version>4.0.16-alpha</version>
