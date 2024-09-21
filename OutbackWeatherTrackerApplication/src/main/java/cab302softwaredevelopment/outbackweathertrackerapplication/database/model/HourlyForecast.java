@@ -9,6 +9,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -20,6 +22,10 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "hourlyForecast", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"location_id", "timestamp"})
 })
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+/**
+ * A model class for the HourlyForecast entity.
+ */
 public class HourlyForecast {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -241,81 +247,6 @@ public class HourlyForecast {
   private Double terrestrial_radiation_instant;
 
   public HourlyForecast() {
-  }
-
-  public HourlyForecast(Integer id, Location location, Integer timestamp, Double temperature_2m,
-      Double relative_humidity_2m, Double dew_point_2m, Double apparent_temperature,
-      Double precipitation, Double rain, Double showers, Double snowfall, Double snow_depth,
-      Integer weather_code, Double pressure_msl, Double surface_pressure, Double cloud_cover,
-      Double cloud_cover_low, Double cloud_cover_mid, Double cloud_cover_high, Double visibility,
-      Double et0_fao_evapotranspiration, Double vapour_pressure_deficit, Double wind_speed_10m,
-      Double wind_speed_40m, Double wind_speed_80m, Double wind_speed_120m,
-      Double wind_direction_10m, Double wind_direction_40m, Double wind_direction_80m,
-      Double wind_direction_120m, Double wind_gusts_10m, Double surface_temperature,
-      Double soil_temperature_0_to_10cm, Double soil_temperature_10_to_35cm,
-      Double soil_temperature_35_to_100cm, Double soil_temperature_100_to_300cm,
-      Double soil_moisture_0_to_10cm, Double soil_moisture_10_to_35cm,
-      Double soil_moisture_35_to_100cm, Double soil_moisture_100_to_300cm, boolean is_day,
-      Double sunshine_duration, Double shortwave_radiation, Double direct_radiation,
-      Double diffuse_radiation, Double direct_normal_irradiance, Double global_tilted_irradiance,
-      Double terrestrial_radiation, Double shortwave_radiation_instant,
-      Double direct_radiation_instant, Double diffuse_radiation_instant,
-      Double direct_normal_irradiance_instant, Double global_tilted_irradiance_instant,
-      Double terrestrial_radiation_instant) {
-    this.id = id;
-    this.location = location;
-    this.timestamp = timestamp;
-    this.temperature_2m = temperature_2m;
-    this.relative_humidity_2m = relative_humidity_2m;
-    this.dew_point_2m = dew_point_2m;
-    this.apparent_temperature = apparent_temperature;
-    this.precipitation = precipitation;
-    this.rain = rain;
-    this.showers = showers;
-    this.snowfall = snowfall;
-    this.snow_depth = snow_depth;
-    this.weather_code = weather_code;
-    this.pressure_msl = pressure_msl;
-    this.surface_pressure = surface_pressure;
-    this.cloud_cover = cloud_cover;
-    this.cloud_cover_low = cloud_cover_low;
-    this.cloud_cover_mid = cloud_cover_mid;
-    this.cloud_cover_high = cloud_cover_high;
-    this.visibility = visibility;
-    this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
-    this.vapour_pressure_deficit = vapour_pressure_deficit;
-    this.wind_speed_10m = wind_speed_10m;
-    this.wind_speed_40m = wind_speed_40m;
-    this.wind_speed_80m = wind_speed_80m;
-    this.wind_speed_120m = wind_speed_120m;
-    this.wind_direction_10m = wind_direction_10m;
-    this.wind_direction_40m = wind_direction_40m;
-    this.wind_direction_80m = wind_direction_80m;
-    this.wind_direction_120m = wind_direction_120m;
-    this.wind_gusts_10m = wind_gusts_10m;
-    this.surface_temperature = surface_temperature;
-    this.soil_temperature_0_to_10cm = soil_temperature_0_to_10cm;
-    this.soil_temperature_10_to_35cm = soil_temperature_10_to_35cm;
-    this.soil_temperature_35_to_100cm = soil_temperature_35_to_100cm;
-    this.soil_temperature_100_to_300cm = soil_temperature_100_to_300cm;
-    this.soil_moisture_0_to_10cm = soil_moisture_0_to_10cm;
-    this.soil_moisture_10_to_35cm = soil_moisture_10_to_35cm;
-    this.soil_moisture_35_to_100cm = soil_moisture_35_to_100cm;
-    this.soil_moisture_100_to_300cm = soil_moisture_100_to_300cm;
-    this.is_day = is_day;
-    this.sunshine_duration = sunshine_duration;
-    this.shortwave_radiation = shortwave_radiation;
-    this.direct_radiation = direct_radiation;
-    this.diffuse_radiation = diffuse_radiation;
-    this.direct_normal_irradiance = direct_normal_irradiance;
-    this.global_tilted_irradiance = global_tilted_irradiance;
-    this.terrestrial_radiation = terrestrial_radiation;
-    this.shortwave_radiation_instant = shortwave_radiation_instant;
-    this.direct_radiation_instant = direct_radiation_instant;
-    this.diffuse_radiation_instant = diffuse_radiation_instant;
-    this.direct_normal_irradiance_instant = direct_normal_irradiance_instant;
-    this.global_tilted_irradiance_instant = global_tilted_irradiance_instant;
-    this.terrestrial_radiation_instant = terrestrial_radiation_instant;
   }
 
   public HourlyForecast(Location location, Integer timestamp, Double temperature_2m,
