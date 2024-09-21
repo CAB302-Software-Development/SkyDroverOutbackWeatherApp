@@ -72,58 +72,61 @@ public abstract class ForecastDAO<T> {
   }
 }
 
-abstract class ForecastQuery<T> {
+abstract class ForecastQuery<T,K> {
   CriteriaQuery<T> criteria;
   CriteriaBuilder builder;
   Root<T> root;
+  Class<K> childClass;
 
-
-  public ForecastQuery(Class<T> modelClass) {
+  public ForecastQuery(Class<T> modelClass, Object childClass) {
     Session session = DatabaseConnection.getSession();
     builder = session.getCriteriaBuilder();
     criteria = builder.createQuery(modelClass);
     root = criteria.from(modelClass);
     criteria.select(root);
+    this.childClass = (Class<K>) childClass.getClass();
   }
 
-  public ForecastQuery<T> whereLocationId(int location_id) {
+  public abstract K self();
+
+  public K whereLocationId(int location_id) {
     criteria.where(builder.equal(root.get("location").get("id"), location_id));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> whereLocation(Location location) {
+  public K whereLocation(Location location) {
     criteria.where(builder.equal(root.get("location"), location));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> whereId(int id) {
+  public K whereId(int id) {
     criteria.where(builder.equal(root.get("id"), id));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> whereTimestamp(int timestamp) {
+  public K whereTimestamp(int timestamp) {
     criteria.where(builder.equal(root.get("timestamp"), timestamp));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> whereTimestampGE(int timestamp) {
+  public K whereTimestampGE(int timestamp) {
     criteria.where(builder.greaterThanOrEqualTo(root.get("timestamp"), timestamp));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> whereTimestampLE(int timestamp) {
+  public K whereTimestampLE(int timestamp) {
     criteria.where(builder.lessThanOrEqualTo(root.get("timestamp"), timestamp));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> addOrderAsc(String field) {
+  public K addOrderAsc(String field) {
     criteria.orderBy(builder.asc(root.get(field)));
-    return this;
+    return self();
   }
 
-  public ForecastQuery<T> addOrderDesc(String field) {
+  public K addOrderDesc(String field) {
     criteria.orderBy(builder.desc(root.get(field)));
-    return this;
+    return self();
   }
 
   public List<T> getResults() {

@@ -10,9 +10,14 @@ public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
     super(DailyForecast.class);
   }
 
-  public static class DailyForecastQuery extends ForecastQuery<DailyForecast> {
+  public static class DailyForecastQuery extends ForecastQuery<DailyForecast,DailyForecastQuery> {
     public DailyForecastQuery() {
-      super(DailyForecast.class);
+      super(DailyForecast.class, DailyForecastQuery.class);
+    }
+
+    @Override
+    public DailyForecastQuery self() {
+      return this;
     }
   }
 

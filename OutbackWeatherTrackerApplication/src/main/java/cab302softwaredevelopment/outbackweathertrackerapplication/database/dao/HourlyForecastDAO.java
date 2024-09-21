@@ -10,11 +10,18 @@ public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
     super(HourlyForecast.class);
   }
 
-  public static class HourlyForecastQuery extends ForecastQuery<HourlyForecast> {
+  public static class HourlyForecastQuery extends ForecastQuery<HourlyForecast,HourlyForecastQuery> {
+
     public HourlyForecastQuery() {
-      super(HourlyForecast.class);
+      super(HourlyForecast.class, HourlyForecastQuery.class);
+    }
+
+    @Override
+    public HourlyForecastQuery self() {
+      return this;
     }
   }
+
   @Deprecated
   public List<HourlyForecast> getAll() {
     return new HourlyForecastQuery()
