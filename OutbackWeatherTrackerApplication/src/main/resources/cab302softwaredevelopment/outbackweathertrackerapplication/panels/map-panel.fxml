@@ -7,5 +7,5 @@
   xmlns:fx="http://javafx.com/fxml"
   fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
   styleClass="background-primary">
-  <WebView fx:id="mapWebView" prefWidth="800" prefHeight="600"/>
+  <WebView fx:id="mapWebView"/>
 </VBox>

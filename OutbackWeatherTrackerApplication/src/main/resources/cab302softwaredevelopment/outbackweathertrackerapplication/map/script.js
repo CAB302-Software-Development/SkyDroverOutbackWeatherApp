@@ -1,39 +1,92 @@
-// Initialize the map and set its view to a specific location and zoom level
-var map = L.map('map').setView([-27.4698, 153.0251], 13); // Coordinates for Brisbane, adjust as needed
+// Set up the map with local tile server
+var map = new ol.Map({
+    target: 'map',
+    layers: [
+        new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                url: 'http://localhost:8080/styles/basic-preview/{z}/{x}/{y}.png'  // Your local tile server URL
+            })
+        })
+    ],
+    view: new ol.View({
+        center: ol.proj.fromLonLat([153.0251, -27.4698]), // Brisbane coordinates
+        zoom: 10
+    })
+});
 
-// Set up the OpenStreetMap tile layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+// Vector source for markers
+var vectorSource = new ol.source.Vector();
 
-// Initialize the geocoder
-var geocoder = L.Control.Geocoder.nominatim();
+// Vector layer to display markers
+var vectorLayer = new ol.layer.Vector({
+    source: vectorSource,
+    style: new ol.style.Style({
+        image: new ol.style.Icon({
+            anchor: [0.5, -0.03],
+            src: 'https://cdn-icons-png.flaticon.com/512/252/252025.png', // Example marker icon
+            scale: 0.06
+        })
+    })
+});
 
-// Function to perform search
-function searchLocation() {
-  var query = document.getElementById('search-bar').value;
-  geocoder.geocode(query, function (results) {
-    if (results && results.length > 0) {
-      var result = results[0];
-      var latlng = result.center;
-      map.setView(latlng, 13); // Adjust zoom level as needed
-      L.marker(latlng).addTo(map)
-      .bindPopup(result.name)
-      .openPopup();
-    } else {
-      alert("Location not found");
-    }
-  });
+map.addLayer(vectorLayer);
+
+// Add a marker at a specific coordinate
+function addMarker(coordinate, info) {
+    var marker = new ol.Feature({
+        geometry: new ol.geom.Point(coordinate),
+        name: info.name,
+        temperature: info.temperature,
+        feelsLike: info.feelsLike
+    });
+
+    vectorSource.addFeature(marker);
+
+    // Attach popup functionality using ol-ext
+    var popup = new ol.Overlay.Popup();
+    map.addOverlay(popup);
+
+    // Event listener for click on the marker
+    map.on('click', function(evt) {
+        map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+            popup.show(coordinate, `<div><strong>${feature.get('name')}</strong><br/>Temp: ${feature.get('temperature')}°C</div>`);
+        });
+    });
 }
 
-// Event listener for the search button
-document.getElementById('search-button').addEventListener('click',
-    searchLocation);
+// Example usage: Add a default marker
+addMarker(ol.proj.fromLonLat([153.0251, -27.4698]), {
+    name: 'Brisbane',
+    temperature: 26,
+    feelsLike: 28
+});
 
-// Optional: Allow pressing Enter to trigger search
-document.getElementById('search-bar').addEventListener('keypress',
-    function (e) {
-      if (e.key === 'Enter') {
-        searchLocation();
-      }
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Add marker button functionality
+    document.getElementById("add-marker-btn").addEventListener("click", function() {
+        const name = document.getElementById("marker-name").value;
+        const lat = parseFloat(document.getElementById("marker-lat").value);
+        const lon = parseFloat(document.getElementById("marker-lon").value);
+        const temp = parseFloat(document.getElementById("marker-temp").value);
+        const feelsLike = parseFloat(document.getElementById("marker-feelslike").value);
+
+        if (name && !isNaN(lat) && !isNaN(lon) && !isNaN(temp) && !isNaN(feelsLike)) {
+            addMarker(ol.proj.fromLonLat([lon, lat]), {
+                name: name,
+                temperature: temp,
+                feelsLike: feelsLike
+            });
+            // Clear input fields after adding the marker
+            document.getElementById("marker-name").value = "";
+            document.getElementById("marker-lat").value = "";
+            document.getElementById("marker-lon").value = "";
+            document.getElementById("marker-temp").value = "";
+            document.getElementById("marker-feelslike").value = "";
+        } else {
+            alert("Please fill in all fields correctly.");
+        }
     });
+
+    // Add your addMarker function here
+});
