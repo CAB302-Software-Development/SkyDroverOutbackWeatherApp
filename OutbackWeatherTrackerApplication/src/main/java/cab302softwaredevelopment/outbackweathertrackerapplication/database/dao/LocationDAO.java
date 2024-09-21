@@ -106,7 +106,7 @@ public class LocationDAO {
     }
 
     public LocationQuery whereNameLike(String name) {
-      criteria.where(builder.like(root.get("name"), name));
+      criteria.where(builder.like(root.get("name"), "%"+ name + "%"));
       return this;
     }
 
@@ -192,5 +192,4 @@ public class LocationDAO {
         .whereId(id)
         .getSingleResult();
   }
-
 }
