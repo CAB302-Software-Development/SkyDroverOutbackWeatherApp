@@ -72,59 +72,125 @@ public class LocationDAO {
     }
   }
 
+  public static class LocationQuery {
+    CriteriaQuery<Location> criteria;
+    CriteriaBuilder builder;
+    Root<Location> root;
+
+    public LocationQuery() {
+      Session session = DatabaseConnection.getSession();
+      builder = session.getCriteriaBuilder();
+      criteria = builder.createQuery(Location.class);
+      root = criteria.from(Location.class);
+      criteria.select(root);
+    }
+
+    public LocationQuery whereId(int id) {
+      criteria.where(builder.equal(root.get("id"), id));
+      return this;
+    }
+
+    public LocationQuery whereAccountId(int account_id) {
+      criteria.where(builder.equal(root.get("account").get("id"), account_id));
+      return this;
+    }
+
+    public LocationQuery whereAccount(Account account) {
+      criteria.where(builder.equal(root.get("account"), account));
+      return this;
+    }
+
+    public LocationQuery whereName(String name) {
+      criteria.where(builder.equal(root.get("name"), name));
+      return this;
+    }
+
+    public LocationQuery whereNameLike(String name) {
+      criteria.where(builder.like(root.get("name"), name));
+      return this;
+    }
+
+    public LocationQuery whereLongitude(Double longitude) {
+      criteria.where(builder.equal(root.get("longitude"), longitude));
+      return this;
+    }
+
+    public LocationQuery whereLongitudeGE(Double longitude) {
+      criteria.where(builder.greaterThanOrEqualTo(root.get("longitude"), longitude));
+      return this;
+    }
+
+    public LocationQuery whereLongitudeLE(Double longitude) {
+      criteria.where(builder.lessThanOrEqualTo(root.get("longitude"), longitude));
+      return this;
+    }
+
+    public LocationQuery whereLatitude(Double latitude) {
+      criteria.where(builder.equal(root.get("latitude"), latitude));
+      return this;
+    }
+
+    public LocationQuery whereLatitudeGE(Double latitude) {
+      criteria.where(builder.greaterThanOrEqualTo(root.get("latitude"), latitude));
+      return this;
+    }
+
+    public LocationQuery whereLatitudeLE(Double latitude) {
+      criteria.where(builder.lessThanOrEqualTo(root.get("latitude"), latitude));
+      return this;
+    }
+
+    public LocationQuery whereElevation(Double elevation) {
+      criteria.where(builder.equal(root.get("elevation"), elevation));
+      return this;
+    }
+
+    public LocationQuery whereElevationGE(Double elevation) {
+      criteria.where(builder.greaterThanOrEqualTo(root.get("elevation"), elevation));
+      return this;
+    }
+
+    public LocationQuery whereElevationLE(Double elevation) {
+      criteria.where(builder.lessThanOrEqualTo(root.get("elevation"), elevation));
+      return this;
+    }
+
+    public List<Location> getResults() {
+      Session session = DatabaseConnection.getSession();
+      List<Location> locations = session.createQuery(criteria).getResultList();
+      session.close();
+      return locations;
+    }
+
+    public Location getSingleResult() {
+      Session session = DatabaseConnection.getSession();
+      Location location = session.createQuery(criteria).getSingleResult();
+      session.close();
+      return location;
+    }
+  }
+
   public List<Location> getAll() {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
-    criteria.from(Location.class);
-
-    List<Location> locations = session.createQuery(criteria).getResultList();
-    session.close();
-    return locations;
+    return new LocationQuery()
+        .getResults();
   }
 
   public List<Location> getByAccountId(int account_id) {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
-    Root<Location> root = criteria.from(Location.class);
-    criteria.select(root);
-
-    // Apply the account filter
-    criteria.where(builder.equal(root.get("account").get("id"), account_id));
-
-    List<Location> locations = session.createQuery(criteria).getResultList();
-    session.close();
-    return locations;
+    return new LocationQuery()
+        .whereAccountId(account_id)
+        .getResults();
   }
 
   public List<Location> getByAccount(Account account) {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<Location> criteria = builder.createQuery(Location.class);
-    Root<Location> root = criteria.from(Location.class);
-    criteria.select(root);
-
-    // Apply the account filter
-    criteria.where(builder.equal(root.get("account"), account));
-
-    List<Location> locations = session.createQuery(criteria).getResultList();
-    session.close();
-
-    return locations;
+    return new LocationQuery()
+        .whereAccount(account)
+        .getResults();
   }
 
   public Location getById(int id) {
-    Session session = DatabaseConnection.getSession();
-    Location location = session.get(Location.class, id);
-    session.close();
-    return location;
+    return new LocationQuery()
+        .whereId(id)
+        .getSingleResult();
   }
 
 }
