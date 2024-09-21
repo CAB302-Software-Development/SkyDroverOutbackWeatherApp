@@ -11,6 +11,8 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.ForecastController"
@@ -34,6 +36,10 @@
             <TableColumn fx:id="precipitationColumn" text="Precipitation (mm)"/>
         </columns>
     </TableView>
+    <LineChart fx:id="lineChart">
+        <xAxis><NumberAxis/></xAxis>
+        <yAxis><NumberAxis/></yAxis>
+    </LineChart>
     <!--
     <Label alignment="TOP_LEFT" styleClass="header" text="Forecast Placeholder"/>
     <ScrollPane fx:id="scrForecasts"

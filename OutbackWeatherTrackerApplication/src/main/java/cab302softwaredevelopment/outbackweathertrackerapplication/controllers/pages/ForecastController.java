@@ -2,8 +2,10 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import javafx.application.Platform;
@@ -12,17 +14,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 
 public class ForecastController implements Initializable {
@@ -48,23 +54,30 @@ public class ForecastController implements Initializable {
     private TableColumn<DailyForecast, Double> precipitationColumn;
     @FXML
     private ProgressIndicator progressIndicator;
+    @FXML
+    private LineChart<Number,Number> lineChart;
     private LocationDAO locationDAO;
     private DailyForecastDAO dailyForecastDAO;
+    private HourlyForecastDAO hourlyForecastDAO;
     private Sdk sdk;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // dailyForecastDAO = new DailyForecastDAO();
-        // List<DailyForecast> allForecast = dailyForecastDAO.getByLocation(dailyForecastDAO.getAll().get(0).getLocation());
-        // List<Node> forecastNodes = allForecast.subList(0, 7).stream().map(this::createForecastDayTile).toList();
-        // pnForecastContainer.getChildren().addAll(forecastNodes);
-
+        // Init data access objects
         locationDAO = new LocationDAO();
         dailyForecastDAO = new DailyForecastDAO();
+        hourlyForecastDAO = new HourlyForecastDAO();
         sdk = new Sdk();
 
         progressIndicator.setVisible(false);
 
+        // Init linechart
+        lineChart.getXAxis().setLabel("Hour");
+        lineChart.getYAxis().setLabel("Temperature");
+        lineChart.setTitle("Hourly Temperature");
+
+
+        //Init table
         dateColumn.setCellValueFactory(cellData -> {
             int timestamp = cellData.getValue().getTimestamp();
             LocalDate date = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -88,12 +101,13 @@ public class ForecastController implements Initializable {
             }
         });
 
-        locationComboBox.setOnAction(event -> loadForecastData());
+        locationComboBox.setOnAction(event -> loadDailyForecastData());
         refreshButton.setOnAction(event -> refreshForecastData());
 
         if (!locationComboBox.getItems().isEmpty()) {
             locationComboBox.getSelectionModel().selectFirst();
-            loadForecastData();
+            loadDailyForecastData();
+            loadHourlyForecastData();
         } else {
             showAlert("No Locations Found", "Please add a location to view forecasts.");
         }
@@ -115,7 +129,7 @@ public class ForecastController implements Initializable {
     /**
      * Loads forecast data for the selected location from the database.
      */
-    private void loadForecastData() {
+    private void loadDailyForecastData() {
         Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
         if (selectedLocation == null) {
             forecastTableView.getItems().clear();
@@ -123,6 +137,36 @@ public class ForecastController implements Initializable {
         }
         List<DailyForecast> forecasts = dailyForecastDAO.getByLocationId(selectedLocation.getId());
         forecastTableView.getItems().setAll(forecasts);
+    }
+
+    /**
+     * Loads forecast data for the selected location from the database.
+     */
+    private void loadHourlyForecastData() {
+        Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
+        if (selectedLocation == null) {
+            lineChart.getData().clear();
+            return;
+        }
+
+        ZonedDateTime startOfDay = LocalDate.now().atStartOfDay(ZoneId.systemDefault());
+        long startEpoch = startOfDay.toEpochSecond();
+        long endEpoch = startOfDay.plusDays(1).toEpochSecond();
+
+        List<HourlyForecast> forecasts =
+                hourlyForecastDAO.getByLocationId(selectedLocation.getId())
+                        .stream()
+                        .filter(f -> f.getTimestamp() >= startEpoch && f.getTimestamp() < endEpoch)
+                        .sorted(Comparator.comparingInt(HourlyForecast::getTimestamp))
+                        .toList();
+
+        XYChart.Series tempSeries = new XYChart.Series();
+        for (int i = 0; i < forecasts.size(); i++) {
+            int temperature = forecasts.get(i).getTemperature_2m().intValue();
+            tempSeries.getData().add(new XYChart.Data(i, temperature));
+        }
+        lineChart.getData().clear();
+        lineChart.getData().add(tempSeries);
     }
 
     /**
@@ -140,6 +184,7 @@ public class ForecastController implements Initializable {
 
         new Thread(() -> {
             try {
+                // TODO do this smarter
                 List<DailyForecast> existingForecasts = dailyForecastDAO.getByLocation(selectedLocation);
                 if (existingForecasts.size() == 0) {
                     List<DailyForecast> newForecasts = sdk.getDailyForecast(selectedLocation, 7, 0);
@@ -148,8 +193,16 @@ public class ForecastController implements Initializable {
                     sdk.updateDailyForecast(selectedLocation, 7, 0);
                 }
 
+                List<HourlyForecast> existingHourly = hourlyForecastDAO.getByLocation(selectedLocation);
+                if (existingHourly.size() == 0) {
+                    List<HourlyForecast> newHourly = sdk.getHourlyForecast(selectedLocation, 2, 2);
+                    newHourly.forEach(f -> hourlyForecastDAO.insert(f));
+                } else {
+                    sdk.updateHourlyForecast(selectedLocation, 2, 2);
+                }
+
                 Platform.runLater(() -> {
-                    loadForecastData();
+                    loadDailyForecastData();
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
                     showAlert("Data Refreshed", "Forecast data has been updated.");
