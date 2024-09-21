@@ -6,14 +6,15 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
+/**
+ * A class for managing the connection to the database.
+ */
 public class DatabaseConnection {
 
   private static SessionFactory sessionFactory = null;
   private static final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().build();
 
   private DatabaseConnection() {
-
       sessionFactory =
           new MetadataSources(registry)
               .addAnnotatedClass(Account.class)
@@ -25,6 +26,10 @@ public class DatabaseConnection {
 
   }
 
+  /**
+   * Returns a new session for the database connection.
+   * @return A new session for the database connection.
+   */
   public static Session getSession() {
     if (sessionFactory == null) {
       new DatabaseConnection();
@@ -33,6 +38,9 @@ public class DatabaseConnection {
     return sessionFactory.openSession();
   }
 
+  /**
+   * Closes the session factory and all open sessions.
+   */
   public static void close() {
     if (sessionFactory != null) {
       sessionFactory.close();
