@@ -1,6 +1,5 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -71,48 +70,69 @@ public class AccountDAO {
     }
   }
 
+  public static class AccountQuery {
+    CriteriaQuery<Account> criteria;
+    CriteriaBuilder builder;
+    Root<Account> root;
+
+    public AccountQuery() {
+      Session session = DatabaseConnection.getSession();
+      builder = session.getCriteriaBuilder();
+      criteria = builder.createQuery(Account.class);
+      root = criteria.from(Account.class);
+      criteria.select(root);
+    }
+
+    public AccountQuery whereId(int id) {
+      criteria.where(builder.equal(root.get("id"), id));
+      return this;
+    }
+
+    public AccountQuery whereEmail(String email) {
+      criteria.where(builder.equal(root.get("email"), email));
+      return this;
+    }
+
+    public AccountQuery whereEmailLike(String email) {
+      criteria.where(builder.like(root.get("email"), "%" + email + "%"));
+      return this;
+    }
+
+    public AccountQuery wherePreferCelsius(boolean preferCelsius) {
+      criteria.where(builder.equal(root.get("preferCelsius"), preferCelsius));
+      return this;
+    }
+
+    public List<Account> getResults() {
+      Session session = DatabaseConnection.getSession();
+      List<Account> accounts = session.createQuery(criteria).getResultList();
+      session.close();
+      return accounts;
+    }
+
+    public Account getSingleResult() {
+      Session session = DatabaseConnection.getSession();
+      Account account = session.createQuery(criteria).getResultStream().findFirst().orElse(null);
+      session.close();
+      return account;
+    }
+  }
+
   public List<Account> getAll() {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
-    criteria.from(Account.class);
-
-    List<Account> accounts = session.createQuery(criteria).getResultList();
-    session.close();
-    return accounts;
+    return new AccountQuery()
+        .getResults();
   }
 
   public Account getById(int id) {
-    Session session = DatabaseConnection.getSession();
-    Account account = session.get(Account.class, id);
-    session.close();
-    return account;
+    return new AccountQuery()
+        .whereId(id)
+        .getSingleResult();
   }
 
   public Account getByEmail(String email) {
-    Session session = DatabaseConnection.getSession();
-    CriteriaBuilder builder = session.getCriteriaBuilder();
-
-    // Criteria
-    CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
-    Root<Account> root = criteria.from(Account.class);
-    criteria.select(root);
-
-    // Apply the email filter
-    criteria.where(builder.equal(root.get("email"), email));
-
-    Account account = null;
-    try {
-      account = session.createQuery(criteria).getSingleResult();
-    } catch (NoResultException e) {
-      // No account found, account remains null
-    } finally {
-      session.close();
-    }
-
-    return account;
+    return new AccountQuery()
+        .whereEmail(email)
+        .getSingleResult();
   }
 
 }
