@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * A rough Software Development Kit for the OpenMeteo API.
+ */
 public class Sdk {
 
   private HttpClient client = HttpClient.newHttpClient();
@@ -27,6 +30,14 @@ public class Sdk {
   public Sdk() {
   }
 
+  /**
+   * Retrieves the daily forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the daily forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of DailyForecast objects representing the forecast.
+   */
   public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
@@ -125,6 +136,16 @@ public class Sdk {
     return dailyForecasts;
   }
 
+  /**
+   * Retrieves the daily forecasts for a location from the
+   * OpenMeteo API and stores them in the database.
+   * This method will update any existing forecasts in the
+   * database with the same location and timestamp.
+   *
+   * @param location The location to retrieve the daily forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   */
   public void updateDailyForecast(Location location, int futureDays, int pastDays) {
     List<DailyForecast> forecasts = getDailyForecast(location, futureDays, pastDays);
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
@@ -154,6 +175,14 @@ public class Sdk {
     }
   }
 
+  /**
+   * Retrieves the hourly forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the hourly forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of HourlyForecast objects representing the forecast.
+   */
   public List<HourlyForecast> getHourlyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
@@ -309,6 +338,16 @@ public class Sdk {
     return hourlyForecasts;
   }
 
+  /**
+   * Retrieves the hourly forecasts for a location from the
+   * OpenMeteo API and stores them in the database.
+   * This method will update any existing forecasts in the
+   * database with the same location and timestamp.
+   *
+   * @param location The location to retrieve the hourly forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   */
   public void updateHourlyForecast(Location location, int futureDays, int pastDays) {
     List<HourlyForecast> forecasts = getHourlyForecast(location, futureDays, pastDays);
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();

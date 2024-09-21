@@ -18,6 +18,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity(name = "location")
 @Table(name = "location")
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
+/**
+ * A model class for the Location entity.
+ */
 public class Location {
 
   /**
