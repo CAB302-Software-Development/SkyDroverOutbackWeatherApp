@@ -1,4 +1,3 @@
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,16 +6,13 @@ import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.hibernate.Session;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 
 @Execution(SAME_THREAD)
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
-public class LocationTest extends DBTest {
+public class LocationDAOTest extends DBTest {
 
   @Test
   public void testLocationsGetAllEmpty() {

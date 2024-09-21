@@ -13,7 +13,7 @@ import org.junit.jupiter.api.parallel.Execution;
 
 @Execution(SAME_THREAD)
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
-public class HourlyForecastTest extends DBTest {
+public class HourlyForecastDAOTest extends DBTest {
 
   @Test
   public void testHourlyForecastsGetAllEmpty() {

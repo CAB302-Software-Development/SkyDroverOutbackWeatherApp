@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
@@ -14,16 +15,18 @@ import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
 @Execution(SAME_THREAD)
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
-public class DailyForecastTest extends DBTest {
+public class DailyForecastDAOTest extends DBTest {
 
   public void verifyForecasts() {
     // Verify the daily forecasts
-    assertEquals(dailyForecastsTemplate.size(), dailyForecastDAO.getAll().size(), "Daily Forecasts should be "+dailyForecastsTemplate.size());
+    assertEquals(dailyForecastsTemplate.size(), dailyForecastDAO.getAll().size(),
+        "Daily Forecasts should be " + dailyForecastsTemplate.size());
   }
 
   public void verifyLocations() {
     // Verify the locations
-    assertEquals(locationsTemplate.size(), locationDAO.getAll().size(), "Locations should be "+locationsTemplate.size());
+    assertEquals(locationsTemplate.size(), locationDAO.getAll().size(),
+        "Locations should be " + locationsTemplate.size());
   }
 
   @Test
@@ -60,16 +63,18 @@ public class DailyForecastTest extends DBTest {
   @Test
   public void testAddForecastWithoutLocation() {
     addAccounts();
-    try{
+    try {
       // Insert the daily forecasts without adding valid locations
       addDailyForecasts();
-    } catch (Exception e) {}
+    } catch (Exception e) {
+    }
 
     // Verify that the invalid forecasts were not added
     assertEquals(0, dailyForecastDAO.getAll().size(), "There should be 0 daily forecasts");
   }
 
-  @Test void testDeleteForecast() {
+  @Test
+  void testDeleteForecast() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -90,7 +95,8 @@ public class DailyForecastTest extends DBTest {
     assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
   }
 
-  @Test void testDeleteForecastById(){
+  @Test
+  void testDeleteForecastById() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -111,7 +117,8 @@ public class DailyForecastTest extends DBTest {
     assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
   }
 
-  @Test void testUniqueForecast(){
+  @Test
+  void testUniqueForecast() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -127,7 +134,8 @@ public class DailyForecastTest extends DBTest {
     verifyForecasts();
   }
 
-  @Test void testGetForecastByID() {
+  @Test
+  void testGetForecastByID() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -143,7 +151,8 @@ public class DailyForecastTest extends DBTest {
     }
   }
 
-  @Test void testGetForecastsForLocation() {
+  @Test
+  void testGetForecastsForLocation() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -153,14 +162,17 @@ public class DailyForecastTest extends DBTest {
     Location testLocation = locationsTemplate.get(1);
 
     // Add relevant forecast
-    DailyForecast relevantForecast = new DailyForecast(testLocation,1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
+    DailyForecast relevantForecast = new DailyForecast(testLocation, 1725321600, 3, 24.2, 13.9,
+        23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0,
+        18.0, 45.0, 160.0, 20.32, 4.43);
     dailyForecastDAO.insert(relevantForecast);
 
     // Retrieve the daily forecasts
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
 
     // Verify the daily forecasts
-    assertEquals(dailyForecastsTemplate.size()+1, dailyForecasts.size(), "There should be "+(dailyForecastsTemplate.size()+1)+" daily forecasts");
+    assertEquals(dailyForecastsTemplate.size() + 1, dailyForecasts.size(),
+        "There should be " + (dailyForecastsTemplate.size() + 1) + " daily forecasts");
 
     // Retrieve test location forecasts
     List<DailyForecast> testForecasts = dailyForecastDAO.getByLocation(testLocation);
@@ -169,7 +181,8 @@ public class DailyForecastTest extends DBTest {
     assertEquals(1, testForecasts.size(), "There should be 1 daily forecast");
   }
 
-  @Test void testGetForecastsForLocationById() {
+  @Test
+  void testGetForecastsForLocationById() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -179,14 +192,17 @@ public class DailyForecastTest extends DBTest {
     Location testLocation = locationsTemplate.get(1);
 
     // Add relevant forecast
-    DailyForecast relevantForecast = new DailyForecast(testLocation,1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
+    DailyForecast relevantForecast = new DailyForecast(testLocation, 1725321600, 3, 24.2, 13.9,
+        23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0,
+        18.0, 45.0, 160.0, 20.32, 4.43);
     dailyForecastDAO.insert(relevantForecast);
 
     // Retrieve the daily forecasts
     List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
 
     // Verify the daily forecasts
-    assertEquals(dailyForecastsTemplate.size()+1, dailyForecasts.size(), "There should be "+(dailyForecastsTemplate.size()+1)+" daily forecast");
+    assertEquals(dailyForecastsTemplate.size() + 1, dailyForecasts.size(),
+        "There should be " + (dailyForecastsTemplate.size() + 1) + " daily forecast");
 
     // Retrieve test location forecasts
     List<DailyForecast> testForecasts = dailyForecastDAO.getByLocationId(testLocation.getId());
@@ -195,7 +211,8 @@ public class DailyForecastTest extends DBTest {
     assertEquals(1, testForecasts.size(), "There should be 1 daily forecast");
   }
 
-  @Test void testLocationDeleteCascade() {
+  @Test
+  void testLocationDeleteCascade() {
     // Insert the new daily forecasts
     addAccounts();
     addLocations();
@@ -205,20 +222,25 @@ public class DailyForecastTest extends DBTest {
     Location testLocation = locationsTemplate.get(1);
 
     // Add relevant forecast
-    DailyForecast relevantForecast = new DailyForecast(testLocation,1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
+    DailyForecast relevantForecast = new DailyForecast(testLocation, 1725321600, 3, 24.2, 13.9,
+        23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0,
+        18.0, 45.0, 160.0, 20.32, 4.43);
     dailyForecastDAO.insert(relevantForecast);
 
     // Verify the daily forecasts
-    assertEquals(dailyForecastsTemplate.size()+1, dailyForecastDAO.getAll().size(), "There should be "+(dailyForecastsTemplate.size()+1)+" daily forecasts");
+    assertEquals(dailyForecastsTemplate.size() + 1, dailyForecastDAO.getAll().size(),
+        "There should be " + (dailyForecastsTemplate.size() + 1) + " daily forecasts");
 
     // Delete the location
     locationDAO.delete(testLocation);
 
     // Verify the daily forecasts
-    assertEquals(dailyForecastsTemplate.size(), dailyForecastDAO.getAll().size(), "There should be "+dailyForecastsTemplate.size()+" daily forecasts");
+    assertEquals(dailyForecastsTemplate.size(), dailyForecastDAO.getAll().size(),
+        "There should be " + dailyForecastsTemplate.size() + " daily forecasts");
   }
 
-  @Test void testUpdateForecast() {
+  @Test
+  void testUpdateForecast() {
     addAccounts();
 
     // Retrieve the daily forecasts
@@ -231,7 +253,9 @@ public class DailyForecastTest extends DBTest {
     Location testLocation = locationsTemplate.get(1);
     locationDAO.insert(testLocation);
 
-    DailyForecast originalForecast = new DailyForecast(testLocation,1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
+    DailyForecast originalForecast = new DailyForecast(testLocation, 1725321600, 3, 24.2, 13.9,
+        23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0,
+        18.0, 45.0, 160.0, 20.32, 4.43);
     dailyForecastDAO.insert(originalForecast);
 
     // Retrieve the daily forecasts
@@ -240,7 +264,9 @@ public class DailyForecastTest extends DBTest {
     // Verify that the forecast was added
     assertEquals(1, dailyForecasts.size(), "There should be 1 daily forecast");
 
-    DailyForecast updatedForecast = new DailyForecast(testLocation,1725321601, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43);
+    DailyForecast updatedForecast = new DailyForecast(testLocation, 1725321601, 3, 24.2, 13.9, 23.8,
+        12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0,
+        45.0, 160.0, 20.32, 4.43);
     updatedForecast.setId(dailyForecasts.get(0).getId());
     dailyForecastDAO.update(updatedForecast);
 

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.parallel.Execution;
 
 @Execution(SAME_THREAD)
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
-public class AccountTest extends DBTest {
+public class AccountDAOTest extends DBTest {
 
   @Test
   public void testAccountsGetAllEmpty() {
@@ -25,8 +25,6 @@ public class AccountTest extends DBTest {
     // Verify the accounts
     assertEquals(0, accounts.size(), "Accounts should be empty");
   }
-
-
 
   @Test
   public void testAddAccounts() {
