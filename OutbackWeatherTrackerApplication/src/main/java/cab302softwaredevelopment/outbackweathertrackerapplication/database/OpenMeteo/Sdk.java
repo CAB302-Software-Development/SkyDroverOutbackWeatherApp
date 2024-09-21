@@ -1,5 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO.DailyForecastQuery;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO.HourlyForecastQuery;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
@@ -11,6 +13,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Sdk {
@@ -119,18 +123,31 @@ public class Sdk {
   }
 
   public void updateDailyForecast(Location location, int futureDays, int pastDays) {
-    List<DailyForecast> dailyForecasts = getDailyForecast(location, futureDays, pastDays);
+    List<DailyForecast> forecasts = getDailyForecast(location, futureDays, pastDays);
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
-    List<DailyForecast> existingDailyForecasts = dailyForecastDAO.getByLocation(location);
-    // find all daily forecasts that are in the database with the same location and timestamp
-    // if they exist, update them
-    for (DailyForecast dailyForecast : dailyForecasts) {
-      for (DailyForecast existingDailyForecast : existingDailyForecasts) {
-        if (dailyForecast.getTimestamp().equals(existingDailyForecast.getTimestamp())) {
-          dailyForecast.setId(existingDailyForecast.getId());
-          dailyForecastDAO.update(dailyForecast);
-        }
-      }
+    int minimumTimestamp = Collections.max(forecasts,
+            Comparator.comparing(DailyForecast::getTimestamp))
+        .getTimestamp();
+
+    int maximumTimestamp = Collections.min(forecasts,
+            Comparator.comparing(DailyForecast::getTimestamp))
+        .getTimestamp();
+
+    List<DailyForecast> existingForecasts = new DailyForecastQuery()
+        .whereTimestampGE(minimumTimestamp)
+        .whereTimestampLE(maximumTimestamp)
+        .whereLocation(location)
+        .getResults();
+
+    // TODO: fix this garbage
+    // Delete all daily forecasts with the same location and a timestamp within range
+    for (DailyForecast forecast : existingForecasts) {
+      dailyForecastDAO.delete(forecast);
+    }
+
+    // Insert all hourly forecasts
+    for (DailyForecast forecast : forecasts) {
+      dailyForecastDAO.insert(forecast);
     }
   }
 
@@ -210,11 +227,9 @@ public class Sdk {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
-    System.out.println(response.body());
     // parse as json
     JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
-    System.out.println(response.body());
     JsonObject hourly = jsonObject.getAsJsonObject("hourly");
     // replace all NULL values from sub-arrays with -1
     for (String key : hourly.keySet()) {
@@ -292,19 +307,31 @@ public class Sdk {
   }
 
   public void updateHourlyForecast(Location location, int futureDays, int pastDays) {
-    List<HourlyForecast> hourlyForecasts = getHourlyForecast(location, futureDays, pastDays);
+    List<HourlyForecast> forecasts = getHourlyForecast(location, futureDays, pastDays);
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
-    List<HourlyForecast> existingHourlyForecasts = hourlyForecastDAO.getByLocation(location);
-    // find all daily forecasts that are in the database with the same location and timestamp
-    // if they exist, update them
-    for (HourlyForecast hourlyForecast : hourlyForecasts) {
-      for (HourlyForecast existingHourlyForecast : existingHourlyForecasts) {
-        if (hourlyForecast.getTimestamp().equals(existingHourlyForecast.getTimestamp())) {
-          hourlyForecast.setId(existingHourlyForecast.getId());
-          hourlyForecastDAO.update(hourlyForecast);
-        }
-      }
+    int minimumTimestamp = Collections.max(forecasts,
+        Comparator.comparing(HourlyForecast::getTimestamp))
+        .getTimestamp();
+
+    int maximumTimestamp = Collections.min(forecasts,
+        Comparator.comparing(HourlyForecast::getTimestamp))
+        .getTimestamp();
+
+    List<HourlyForecast> existingForecasts = new HourlyForecastQuery()
+        .whereTimestampGE(minimumTimestamp)
+        .whereTimestampLE(maximumTimestamp)
+        .whereLocation(location)
+        .getResults();
+
+    // TODO: fix this garbage
+    // Delete all hourly forecasts with the same location and a timestamp within range
+    for (HourlyForecast forecast : existingForecasts) {
+      hourlyForecastDAO.delete(forecast);
+    }
+
+    // Insert all hourly forecasts
+    for (HourlyForecast forecast : forecasts) {
+      hourlyForecastDAO.insert(forecast);
     }
   }
-
 }
