@@ -1,20 +1,11 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.hibernate.Session;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
@@ -130,7 +121,7 @@ public class DailyForecastTest extends DBTest {
     verifyForecasts();
 
     // Try to insert the same daily forecasts
-    addDailyForecasts();
+    assertThrows(Exception.class, this::addDailyForecasts);
 
     // Verify 
     verifyForecasts();
