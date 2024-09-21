@@ -170,26 +170,31 @@ public class LocationDAO {
     }
   }
 
+  @Deprecated
   public List<Location> getAll() {
     return new LocationQuery()
         .getResults();
   }
 
+  @Deprecated
   public List<Location> getByAccountId(int account_id) {
     return new LocationQuery()
         .whereAccountId(account_id)
         .getResults();
   }
 
+  @Deprecated
   public List<Location> getByAccount(Account account) {
     return new LocationQuery()
         .whereAccount(account)
         .getResults();
   }
 
+  @Deprecated
   public Location getById(int id) {
     return new LocationQuery()
         .whereId(id)
         .getSingleResult();
   }
+
 }

@@ -118,17 +118,20 @@ public class AccountDAO {
     }
   }
 
+  @Deprecated
   public List<Account> getAll() {
     return new AccountQuery()
         .getResults();
   }
 
+  @Deprecated
   public Account getById(int id) {
     return new AccountQuery()
         .whereId(id)
         .getSingleResult();
   }
 
+  @Deprecated
   public Account getByEmail(String email) {
     return new AccountQuery()
         .whereEmail(email)

@@ -15,24 +15,24 @@ public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
       super(HourlyForecast.class);
     }
   }
-
+  @Deprecated
   public List<HourlyForecast> getAll() {
     return new HourlyForecastQuery()
         .getResults();
   }
-
+  @Deprecated
   public List<HourlyForecast> getByLocationId(int location_id) {
     return new HourlyForecastQuery()
         .whereLocationId(location_id)
         .getResults();
   }
-
+  @Deprecated
   public List<HourlyForecast> getByLocation(Location location) {
     return new HourlyForecastQuery()
         .whereLocation(location)
         .getResults();
   }
-
+  @Deprecated
   public HourlyForecast getById(int id) {
     return (HourlyForecast) new HourlyForecastQuery()
         .whereId(id)

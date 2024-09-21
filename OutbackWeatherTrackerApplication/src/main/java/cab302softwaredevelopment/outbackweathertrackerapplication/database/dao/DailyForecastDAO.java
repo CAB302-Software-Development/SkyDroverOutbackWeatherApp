@@ -16,23 +16,27 @@ public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
     }
   }
 
+  @Deprecated
   public List<DailyForecast> getAll() {
     return new DailyForecastQuery()
         .getResults();
   }
 
+  @Deprecated
   public List<DailyForecast> getByLocationId(int location_id) {
     return new DailyForecastQuery()
         .whereLocationId(location_id)
         .getResults();
   }
 
+  @Deprecated
   public List<DailyForecast> getByLocation(Location location) {
     return new DailyForecastQuery()
         .whereLocation(location)
         .getResults();
   }
 
+  @Deprecated
   public DailyForecast getById(int id) {
     return (DailyForecast) new DailyForecastQuery()
         .whereId(id)
