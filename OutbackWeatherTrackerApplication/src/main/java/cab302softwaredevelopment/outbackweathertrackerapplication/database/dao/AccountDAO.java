@@ -1,11 +1,11 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
+
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import org.hibernate.Session;
 
 public class AccountDAO {
