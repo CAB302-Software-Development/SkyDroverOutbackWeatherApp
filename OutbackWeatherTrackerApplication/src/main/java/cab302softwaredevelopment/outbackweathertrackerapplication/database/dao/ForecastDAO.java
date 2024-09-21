@@ -135,7 +135,7 @@ abstract class ForecastQuery<T> {
 
   public T getSingleResult() {
     Session session = DatabaseConnection.getSession();
-    T forecast = session.createQuery(criteria).getSingleResult();
+    T forecast = session.createQuery(criteria).getResultStream().findFirst().orElse(null);
     session.close();
     return forecast;
   }

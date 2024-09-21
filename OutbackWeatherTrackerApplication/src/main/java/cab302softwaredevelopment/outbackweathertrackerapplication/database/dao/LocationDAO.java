@@ -164,7 +164,7 @@ public class LocationDAO {
 
     public Location getSingleResult() {
       Session session = DatabaseConnection.getSession();
-      Location location = session.createQuery(criteria).getSingleResult();
+      Location location = session.createQuery(criteria).getResultStream().findFirst().orElse(null);
       session.close();
       return location;
     }
