@@ -28,6 +28,11 @@
         <Button fx:id="refreshButton" text="Refresh Data"/>
         <ProgressIndicator fx:id="progressIndicator" maxHeight="20" maxWidth="20"/>
     </HBox>
+    <HBox fx:id="hbForecasts" spacing="15">
+
+    </HBox>
+
+    <!--
     <TableView fx:id="forecastTableView">
         <columns>
             <TableColumn fx:id="dateColumn" text="Date"/>
@@ -36,6 +41,7 @@
             <TableColumn fx:id="precipitationColumn" text="Precipitation (mm)"/>
         </columns>
     </TableView>
+    -->
     <LineChart fx:id="lineChart">
         <xAxis><NumberAxis/></xAxis>
         <yAxis><NumberAxis/></yAxis>

@@ -65,10 +65,6 @@
     -fx-background-color: primary-comp;
 }
 
-.forecast-day {
-    -fx-background-color: primary-comp;
-}
-
 .forecast-day Label {
     -fx-text-fill: primary;
 }
@@ -101,3 +97,29 @@
 .default-color0.chart-series-line { -fx-stroke: #ed4d51; }
 .default-color1.chart-series-line { -fx-stroke: #e5d849; }
 .default-color2.chart-series-line { -fx-stroke: #238591; }
+
+
+/* styles.css */
+.forecast-day {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.date-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.max-temp-label {
+    -fx-text-fill: #e74c3c;
+}
+
+.min-temp-label {
+    -fx-text-fill: #3498db;
+}
+
+.precipitation-label, .wind-speed-label {
+    -fx-font-size: 12px;
+}

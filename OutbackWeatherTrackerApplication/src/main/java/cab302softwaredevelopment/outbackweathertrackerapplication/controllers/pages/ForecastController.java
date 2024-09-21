@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
@@ -43,8 +44,6 @@ public class ForecastController implements Initializable {
     @FXML
     private Button refreshButton;
     @FXML
-    private TableView<DailyForecast> forecastTableView;
-    @FXML
     private TableColumn<DailyForecast, LocalDate> dateColumn;
     @FXML
     private TableColumn<DailyForecast, Double> maxTempColumn;
@@ -56,6 +55,8 @@ public class ForecastController implements Initializable {
     private ProgressIndicator progressIndicator;
     @FXML
     private LineChart<Number,Number> lineChart;
+    @FXML
+    private HBox hbForecasts;
     private LocationDAO locationDAO;
     private DailyForecastDAO dailyForecastDAO;
     private HourlyForecastDAO hourlyForecastDAO;
@@ -78,15 +79,14 @@ public class ForecastController implements Initializable {
 
 
         //Init table
-        dateColumn.setCellValueFactory(cellData -> {
-            int timestamp = cellData.getValue().getTimestamp();
-            LocalDate date = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
-            return new ReadOnlyObjectWrapper<>(date);
-        });
-
-        maxTempColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTemperature_2m_max()));
-        minTempColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTemperature_2m_min()));
-        precipitationColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getPrecipitation_sum()));
+        // dateColumn.setCellValueFactory(cellData -> {
+        //     int timestamp = cellData.getValue().getTimestamp();
+        //     LocalDate date = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
+        //     return new ReadOnlyObjectWrapper<>(date);
+        // });
+        // maxTempColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTemperature_2m_max()));
+        // minTempColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTemperature_2m_min()));
+        // precipitationColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getPrecipitation_sum()));
 
         loadUserLocations();
 
@@ -132,11 +132,11 @@ public class ForecastController implements Initializable {
     private void loadDailyForecastData() {
         Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
         if (selectedLocation == null) {
-            forecastTableView.getItems().clear();
+            hbForecasts.getChildren().clear();
             return;
         }
         List<DailyForecast> forecasts = dailyForecastDAO.getByLocationId(selectedLocation.getId());
-        forecastTableView.getItems().setAll(forecasts);
+        forecasts.forEach(f -> hbForecasts.getChildren().add(createForecastDayTile(f)));
     }
 
     /**
@@ -234,14 +234,41 @@ public class ForecastController implements Initializable {
     }
 
     private Node createForecastDayTile(DailyForecast forecast) {
-        Label lblTemp = new Label(forecast.getTemperature_2m_max().toString());
-        lblTemp.autosize();
-        VBox root = new VBox(lblTemp);
-        root.setMinSize(100,200);
-        root.prefHeight(150);
-        root.prefWidth(250);
-        root.setAlignment(Pos.CENTER);
+        VBox root = new VBox();
         root.getStyleClass().add("forecast-day");
+        root.setMinSize(100, 200);
+        root.setPrefSize(150, 250);
+        root.setAlignment(Pos.CENTER);
+        root.setSpacing(10);
+        root.setPadding(new Insets(10));
+
+        int timestamp = forecast.getTimestamp();
+        LocalDate date = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
+        Label lblDate = new Label(date.format(DateTimeFormatter.ofPattern("EEE, MMM d")));
+        lblDate.getStyleClass().add("date-label");
+
+        // Weather Icon
+        // ImageView weatherIcon = new ImageView();
+        // int weatherCode = forecast.getWeather_code();
+        // Image iconImage = getWeatherIcon(weatherCode);
+        // weatherIcon.setImage(iconImage);
+        // weatherIcon.setFitWidth(50);
+        // weatherIcon.setFitHeight(50);
+
+        Label lblMaxTemp = new Label("Max: " + forecast.getTemperature_2m_max() + "°C");
+        lblMaxTemp.getStyleClass().add("max-temp-label");
+
+        Label lblMinTemp = new Label("Min: " + forecast.getTemperature_2m_min() + "°C");
+        lblMinTemp.getStyleClass().add("min-temp-label");
+
+        Label lblPrecipitation = new Label("Precipitation: " + forecast.getPrecipitation_sum() + " mm");
+        lblPrecipitation.getStyleClass().add("precipitation-label");
+
+        Label lblWindSpeed = new Label("Wind Speed: " + forecast.getWind_speed_10m_max() + " km/h");
+        lblWindSpeed.getStyleClass().add("wind-speed-label");
+
+        root.getChildren().addAll(lblDate, lblMaxTemp, lblMinTemp, lblPrecipitation, lblWindSpeed);
+
         return root;
     }
 }
