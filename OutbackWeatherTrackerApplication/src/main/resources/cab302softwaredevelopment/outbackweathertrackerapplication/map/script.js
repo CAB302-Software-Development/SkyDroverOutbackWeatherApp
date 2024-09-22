@@ -68,8 +68,55 @@ function addMarker(coordinate, info) {
     });
 }
 
+    const testData = [
+        {
+            location: "Test Location 1",
+            latitude: -27.4698,
+            longitude: 153.0251,
+            userName: "User1",
+            actualTemp: 30,
+            feelsLikeTemp: 32
+        },
+        {
+            location: "Test Location 2",
+            latitude: -27.4750,
+            longitude: 153.0255,
+            userName: "User2",
+            actualTemp: 25,
+            feelsLikeTemp: 26
+        },
+        {
+            location: "Test Location 3",
+            latitude: -27.4700,
+            longitude: 153.0200,
+            userName: "User3",
+            actualTemp: 28,
+            feelsLikeTemp: 29
+        }
+    ];
 
-document.addEventListener("DOMContentLoaded", function() {
+    // Use the hardcoded test data instead of the received data
+    const markers = testData;
+
+    console.log("Test data being used:", markers); // Log the hardcoded data
+
+    markers.forEach(function(item) {
+        if (item.latitude && item.longitude) {
+            const lonLat = [item.longitude, item.latitude];
+            console.log("Adding marker at coordinates:", lonLat);
+            addMarker(ol.proj.fromLonLat(lonLat), {
+                location: item.location,
+                name: item.userName,
+                temperature: item.actualTemp,
+                feelsLike: item.feelsLikeTemp
+            });
+            console.log("Marker added for:", item.userName);
+        } else {
+            console.error("Invalid coordinates for marker:", item);
+        }
+    });
+
+document.addEventListener("kys", function() {
     // Fetch the data from the JSON file
     fetch('data.json')
         .then(response => response.json())
