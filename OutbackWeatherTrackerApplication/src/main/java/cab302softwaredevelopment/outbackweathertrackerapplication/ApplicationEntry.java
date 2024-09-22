@@ -70,28 +70,6 @@ public class ApplicationEntry extends Application {
     locationDAO.insert(new Location(account,153.0372, -27.5703, 23.0,"Coopers Plains")); // coopers plains
 
 
-    // update weather data
-    Sdk openMeteoSdk = new Sdk();
-    Location location = locationDAO.getById(1);
-    System.out.println(location);
-    openMeteoSdk.updateDailyForecast(location,10,0);
-    openMeteoSdk.updateHourlyForecast(location,10,0);
-
-    List<Location> locations = locationDAO.getAll();
-    for (Location location2 : locations) {
-      System.out.println(location2);
-    }
-
-    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
-    for (HourlyForecast hourlyForecast : hourlyForecasts) {
-      System.out.println(hourlyForecast);
-    }
-
-    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
-    for (DailyForecast dailyForecast : dailyForecasts) {
-      System.out.println(dailyForecast);
-    }
-
     launch();
   }
 }

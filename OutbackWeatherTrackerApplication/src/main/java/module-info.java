@@ -16,8 +16,10 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
   requires static lombok;
   requires spring.security.crypto;
   requires javafx.web;
+    requires spring.context;
+    requires jdk.jsobject;
 
-  opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
   exports cab302softwaredevelopment.outbackweathertrackerapplication;
   exports cab302softwaredevelopment.outbackweathertrackerapplication.models;

@@ -15,7 +15,8 @@ var map = new ol.Map({
 });
 
 // Vector source for markers
-var vectorSource = new ol.source.Vector();
+var vectorSource = new ol.source.Vector({
+});
 
 // Vector layer to display markers
 var vectorLayer = new ol.layer.Vector({
@@ -23,8 +24,8 @@ var vectorLayer = new ol.layer.Vector({
     style: new ol.style.Style({
         image: new ol.style.Icon({
             anchor: [0.5, -0.03],
-            src: 'https://cdn-icons-png.flaticon.com/512/252/252025.png', // Example marker icon
-            scale: 0.06
+            src: "../images/map_icons/cattle.png", // Example marker icon
+            scale: 0.1
         })
     })
 });
@@ -35,6 +36,7 @@ map.addLayer(vectorLayer);
 function addMarker(coordinate, info) {
     var marker = new ol.Feature({
         geometry: new ol.geom.Point(coordinate),
+        location: info.location,
         name: info.name,
         temperature: info.temperature,
         feelsLike: info.feelsLike
@@ -42,23 +44,70 @@ function addMarker(coordinate, info) {
 
     vectorSource.addFeature(marker);
 
-    // Attach popup functionality using ol-ext
+    // Create a popup for this marker
     var popup = new ol.Overlay.Popup();
     map.addOverlay(popup);
 
     // Event listener for click on the marker
-    map.on('click', function(evt) {
+    marker.set('popup', popup); // Store the popup in the marker feature
+
+    map.on('singleclick', function(evt) {
         map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-            popup.show(coordinate, `<div><strong>${feature.get('name')}</strong><br/>Temp: ${feature.get('temperature')}°C</div>`);
+            const geom = feature.getGeometry();
+            if (geom instanceof ol.geom.Point) {
+                const coordinate = geom.getCoordinates();
+                const name = feature.get('name');
+                const temperature = feature.get('temperature');
+                const feelsLike = feature.get('feelsLike');
+
+                // Show the popup at the feature's coordinates
+                popup.setPosition(coordinate);
+                popup.show(coordinate, `<div><strong>${name}</strong><br/>Feels like: ${temperature}°C</div>`);
+            }
         });
     });
 }
 
-// Example usage: Add a default marker
-addMarker(ol.proj.fromLonLat([153.0251, -27.4698]), {
-    name: 'Brisbane',
-    temperature: 26,
-    feelsLike: 28
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Fetch the data from the JSON file
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Raw data:", data); // Log the raw data string
+
+            // Parse the string into JSON (if necessary)
+            let parsedData;
+            try {
+                parsedData = JSON.parse(data); // Attempt to parse if it's a string
+            } catch (e) {
+                console.error("Failed to parse JSON:", e);
+                return;
+            }
+
+            console.log("Parsed data:", parsedData); // Log the parsed data
+
+            if (!Array.isArray(parsedData)) {
+                console.error("Data is not an array", parsedData);
+                return; // Exit if markers is not an array
+            }
+
+            // Proceed with processing the parsed data as an array
+            parsedData.forEach(function(item) {
+                if (item.latitude && item.longitude) {
+                    addMarker(ol.proj.fromLonLat([item.longitude, item.latitude]), {
+                        location: item.location,
+                        name: item.userName,
+                        temperature: item.actualTemp,
+                        feelsLike: item.feelsLikeTemp
+                    });
+                    console.log("Marker added for:", item.userName);
+                } else {
+                    console.error("Invalid coordinates for marker:", item);
+                }
+            });
+        })
+        .catch(error => console.error("Error fetching data:", error));
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -88,5 +137,4 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Add your addMarker function here
 });
