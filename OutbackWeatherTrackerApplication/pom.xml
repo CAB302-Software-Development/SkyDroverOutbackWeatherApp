@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>CAB302SoftwareDevelopment</groupId>
@@ -11,7 +11,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<junit.version>5.10.0</junit.version>  </properties>
+    <junit.version>5.10.0</junit.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -95,7 +96,17 @@
       <!-- https://mvnrepository.com/artifact/org.testfx/testfx-junit5/4.0.16-alpha -->
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
     <dependency>
+<<<<<<< HEAD
+=======
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-web</artifactId>
+      <version>24-ea+5</version>
+    </dependency>
+
+    <dependency>
+>>>>>>> features/InteractiveMap
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
@@ -136,7 +147,7 @@
       <artifactId>h2</artifactId>
       <version>2.3.232</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -180,7 +191,9 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry</mainClass>
+              <mainClass>
+                cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry
+              </mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

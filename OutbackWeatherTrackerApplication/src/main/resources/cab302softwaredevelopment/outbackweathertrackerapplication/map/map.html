@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenLayers with ol-ext - Modern UI</title>
+
+  <!-- OpenLayers CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/openlayers@4.6.5/dist/ol.min.css" rel="stylesheet">
+  <!-- ol-ext CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/ol-ext@4.0.23/dist/ol-ext.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="map" class="map"></div>
+
+<!-- Button to Open Modal -->
+<div class="button-container">
+  <button id="open-modal-btn" class="btn btn-primary" data-toggle="modal" data-target="#marker-modal">
+    Add Marker
+  </button>
+</div>
+
+<!-- Modal for Adding Marker -->
+<div class="modal" id="marker-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Create a New Marker</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="marker-name">Name:</label>
+            <input type="text" class="form-control" id="marker-name" placeholder="Enter name" />
+          </div>
+          <div class="form-group">
+            <label for="marker-lat">Latitude:</label>
+            <input type="number" class="form-control" id="marker-lat" placeholder="Enter latitude" />
+          </div>
+          <div class="form-group">
+            <label for="marker-lon">Longitude:</label>
+            <input type="number" class="form-control" id="marker-lon" placeholder="Enter longitude" />
+          </div>
+          <div class="form-group">
+            <label for="marker-temp">Temperature (°C):</label>
+            <input type="number" class="form-control" id="marker-temp" placeholder="Enter temperature" />
+          </div>
+          <div class="form-group">
+            <label for="marker-feelslike">Feels Like (°C):</label>
+            <input type="number" class="form-control" id="marker-feelslike" placeholder="Enter feels like temperature" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="add-marker-btn" class="btn btn-success">Add Marker</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OpenLayers and ol-ext JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/openlayers@4.6.5/dist/ol.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ol-ext@4.0.23/dist/ol-ext.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
