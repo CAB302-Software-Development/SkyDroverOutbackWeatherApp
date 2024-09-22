@@ -18,6 +18,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 
 
+@Getter
 @Entity(name = "HourlyForecast")
 @Table(name = "hourlyForecast", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"location_id", "timestamp"})
@@ -32,7 +33,7 @@ public class HourlyForecast {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter @Setter
+  @Setter
   private Integer id;
 
   /**
@@ -41,35 +42,30 @@ public class HourlyForecast {
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
-  @Getter
   private Location location;
 
   /**
    * The timestamp of the hourly forecast.
    */
   @Column(name="timestamp")
-  @Getter
   private Integer timestamp;
 
   /**
    * The temperature at 2m above ground level.
    */
   @Column(name="temperature_2m")
-  @Getter
   private Double temperature_2m;
 
   /**
    * The relative humidity at 2m above ground level.
    */
   @Column(name="relative_humidity_2m")
-  @Getter
   private Double relative_humidity_2m;
 
   /**
    * 	Dew point temperature at 2 meters above ground
    */
   @Column(name="dew_point_2m")
-  @Getter
   private Double dew_point_2m;
 
   /**
@@ -77,28 +73,24 @@ public class HourlyForecast {
    * 	relative humidity and solar radiation
    */
   @Column(name="apparent_temperature")
-  @Getter
   private Double apparent_temperature;
 
   /**
    * 	Total precipitation (rain, showers, snow) sum of the preceding hour
    */
   @Column(name="precipitation")
-  @Getter
   private Double precipitation;
 
   /**
    * 	Rain from large scale weather systems of the preceding hour in millimeter
    */
   @Column(name="rain")
-  @Getter
   private Double rain;
 
   /**
    * Showers from convective precipitation in millimeters from the preceding hour
    */
   @Column(name="showers")
-  @Getter
   private Double showers;
 
   /**
@@ -106,21 +98,18 @@ public class HourlyForecast {
    * divide by 7. E.g. 7 cm snow = 10 mm precipitation water equivalent
    */
   @Column(name="snowfall")
-  @Getter
   private Double snowfall;
 
   /**
    * Snow depth on the ground
    */
   @Column(name="snow_depth")
-  @Getter
   private Double snow_depth;
 
   /**
    * Weather condition as a numeric code. Follow WMO weather interpretation codes.
    */
   @Column(name="weather_code")
-  @Getter
   private Integer weather_code;
 
   /**
@@ -128,7 +117,6 @@ public class HourlyForecast {
    * 	Typically pressure on mean sea level is used in meteorology.
    */
   @Column(name="pressure_msl")
-  @Getter
   private Double pressure_msl;
 
   /**
@@ -136,42 +124,36 @@ public class HourlyForecast {
    * 	Surface pressure gets lower with increasing elevation.
    */
   @Column(name="surface_pressure")
-  @Getter
   private Double surface_pressure;
 
   /**
    * 	Total cloud cover as an area fraction in the range [0, 100]
    */
   @Column(name="cloud_cover")
-  @Getter
   private Double cloud_cover;
 
   /**
    * 	Low level clouds and fog up to 3 km altitude in the range [0, 100]
    */
   @Column(name="cloud_cover_low")
-  @Getter
   private Double cloud_cover_low;
 
   /**
    * 	Mid level clouds from 3 to 8 km altitude in the range [0, 100]
    */
   @Column(name="cloud_cover_mid")
-  @Getter
   private Double cloud_cover_mid;
 
   /**
    * 	High level clouds from 8 km altitude in the range [0, 100]
    */
   @Column(name="cloud_cover_high")
-  @Getter
   private Double cloud_cover_high;
 
   /**
    * 	Viewing distance in meters. Influenced by low clouds, humidity and aerosols.
    */
   @Column(name="visibility")
-  @Getter
   private Double visibility;
 
   /**
@@ -181,7 +163,6 @@ public class HourlyForecast {
    * 	ET₀ is commonly used to estimate the required irrigation for plants.
    */
   @Column(name="et0_fao_evapotranspiration")
-  @Getter
   private Double et0_fao_evapotranspiration;
 
   /**
@@ -189,140 +170,120 @@ public class HourlyForecast {
    * water transpiration of plants increases. For low VPD (<0.4), transpiration decreases
    */
   @Column(name="vapour_pressure_deficit")
-  @Getter
   private Double vapour_pressure_deficit;
 
   /**
    *   Wind speed at 10 meters above ground level in m/s
    */
   @Column(name="wind_speed_10m")
-  @Getter
   private Double wind_speed_10m;
 
   /**
    * 	Wind speed at 40 meters above ground level in m/s
    */
   @Column(name="wind_speed_40m")
-  @Getter
   private Double wind_speed_40m;
 
   /**
    * 	Wind speed at 80 meters above ground level in m/s
    */
   @Column(name="wind_speed_80m")
-  @Getter
   private Double wind_speed_80m;
 
   /**
    *  Wind speed at 120 meters above ground level in m/s
    */
   @Column(name="wind_speed_120m")
-  @Getter
   private Double wind_speed_120m;
 
   /**
    * 	Wind direction at 10 meters above ground level in degrees
    */
   @Column(name="wind_direction_10m")
-  @Getter
   private Double wind_direction_10m;
 
   /**
    * 	Wind direction at 40 meters above ground level in degrees
    */
   @Column(name="wind_direction_40m")
-  @Getter
   private Double wind_direction_40m;
 
   /**
    * 	Wind direction at 80 meters above ground level in degrees
    */
   @Column(name="wind_direction_80m")
-  @Getter
   private Double wind_direction_80m;
 
   /**
    * 	Wind direction at 120 meters above ground level in degrees
    */
   @Column(name="wind_direction_120m")
-  @Getter
   private Double wind_direction_120m;
 
   /**
    * 	Gusts at 10 meters above ground as a maximum of the preceding hour in m/s
    */
   @Column(name="wind_gusts_10m")
-  @Getter
   private Double wind_gusts_10m;
 
   /**
    * 	Surface temperature in degrees Celsius
    */
   @Column(name="surface_temperature")
-  @Getter
   private Double surface_temperature;
 
   /**
    * 	Average soil temperature at 0 to 10 cm depth in degrees Celsius
    */
   @Column(name="soil_temperature_0_to_10cm")
-  @Getter
   private Double soil_temperature_0_to_10cm;
 
   /**
    * 	Average soil temperature at 10 to 35 cm depth in degrees Celsius
    */
   @Column(name="soil_temperature_10_to_35cm")
-  @Getter
   private Double soil_temperature_10_to_35cm;
 
   /**
    * 	Average soil temperature at 35 to 100 cm depth in degrees Celsius
    */
   @Column(name="soil_temperature_35_to_100cm")
-  @Getter
   private Double soil_temperature_35_to_100cm;
 
   /**
    * 	Average soil temperature at 100 to 300 cm depth in degrees Celsius
    */
   @Column(name="soil_temperature_100_to_300cm")
-  @Getter
   private Double soil_temperature_100_to_300cm;
 
   /**
    * 	Average soil water content as volumetric mixing ratio at 0 to 10 cm depth in m³/m³
    */
   @Column(name="soil_moisture_0_to_10cm")
-  @Getter
   private Double soil_moisture_0_to_10cm;
 
   /**
    * 	Average soil water content as volumetric mixing ratio at 10 to 35 cm depth in m³/m³
    */
   @Column(name="soil_moisture_10_to_35cm")
-  @Getter
   private Double soil_moisture_10_to_35cm;
 
   /**
    * 	Average soil water content as volumetric mixing ratio at 35 to 100 cm depth in m³/m³
    */
   @Column(name="soil_moisture_35_to_100cm")
-  @Getter
   private Double soil_moisture_35_to_100cm;
 
   /**
    * 	Average soil water content as volumetric mixing ratio at 100 to 300 cm depth in m³/m³
    */
   @Column(name="soil_moisture_100_to_300cm")
-  @Getter
   private Double soil_moisture_100_to_300cm;
 
   /**
    * 	Whether it is day or night
    */
   @Column(name="is_day")
-  @Getter
   private boolean is_day;
 
   /**
@@ -330,42 +291,36 @@ public class HourlyForecast {
    * irradiance exceeding 120 W/m², following the WMO definition.
    */
   @Column(name="sunshine_duration")
-  @Getter
   private Double sunshine_duration;
 
   /**
    *  Shortwave solar radiation as average of the preceding hour. This is equal to the total global horizontal irradiation
    */
   @Column(name="shortwave_radiation")
-  @Getter
   private Double shortwave_radiation;
 
   /**
    * 	Direct solar radiation as average of the preceding hour on the horizontal plane
    */
   @Column(name="direct_radiation")
-  @Getter
   private Double direct_radiation;
 
   /**
    * 	Diffuse solar radiation as average of the preceding hour.
    */
   @Column(name="diffuse_radiation")
-  @Getter
   private Double diffuse_radiation;
 
   /**
    *	Direct solar radiation as average of the preceding hour on the normal plane
    */
   @Column(name="direct_normal_irradiance")
-  @Getter
   private Double direct_normal_irradiance;
 
   /**
    * 	Global solar radiation on a tilted plane as average of the preceding hour
    */
   @Column(name="global_tilted_irradiance")
-  @Getter
   private Double global_tilted_irradiance;
 
   /**
@@ -373,42 +328,36 @@ public class HourlyForecast {
    * 	The calculation is assuming a fixed albedo of 20% and in isotropic sky
    */
   @Column(name="terrestrial_radiation")
-  @Getter
   private Double terrestrial_radiation;
 
   /**
    * 	Shortwave solar radiation as an instantaneous value
    */
   @Column(name="shortwave_radiation_instant")
-  @Getter
   private Double shortwave_radiation_instant;
 
   /**
    * 	Direct solar radiation as an instantaneous value on the horizontal plane
    */
   @Column(name="direct_radiation_instant")
-  @Getter
   private Double direct_radiation_instant;
 
   /**
    * 	Diffuse solar radiation as an instantaneous value
    */
   @Column(name="diffuse_radiation_instant")
-  @Getter
   private Double diffuse_radiation_instant;
 
   /**
    * 	Direct solar radiation as an instantaneous value on the normal plane
    */
   @Column(name="direct_normal_irradiance_instant")
-  @Getter
   private Double direct_normal_irradiance_instant;
 
   /**
    * 	Global solar radiation on a tilted plane as an instantaneous value
    */
   @Column(name="global_tilted_irradiance_instant")
-  @Getter
   private Double global_tilted_irradiance_instant;
 
   /**
@@ -416,7 +365,6 @@ public class HourlyForecast {
    * 	The calculation is assuming a fixed albedo of 20% and in isotropic sky
    */
   @Column(name="terrestrial_radiation_instant")
-  @Getter
   private Double terrestrial_radiation_instant;
 
   public HourlyForecast() {

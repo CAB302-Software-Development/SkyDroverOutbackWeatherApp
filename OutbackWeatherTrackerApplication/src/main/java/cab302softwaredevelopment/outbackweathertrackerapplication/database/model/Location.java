@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+@Getter
 @Entity(name = "location")
 @Table(name = "location")
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -28,7 +29,7 @@ public class Location {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter @Setter
+  @Setter
   private Integer id;
 
   /**
@@ -37,35 +38,30 @@ public class Location {
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
-  @Getter
   private Account account;
 
   /**
    * The longitude of the location.
    */
   @Column(name="longitude", nullable = false)
-  @Getter
   private Double longitude;
 
   /**
    * The latitude of the location.
    */
   @Column(name="latitude", nullable = false)
-  @Getter
   private Double latitude;
 
   /**
    * The elevation of the location.
    */
   @Column(name="elevation", nullable = false)
-  @Getter
   private Double elevation;
 
   /**
    * The name of the location.
    */
   @Column(name="name", nullable = false)
-  @Getter
   private String name;
 
   public Location() {

@@ -109,7 +109,8 @@ public class ForecastController implements Initializable {
             loadDailyForecastData();
             loadHourlyForecastData();
         } else {
-            showAlert("No Locations Found", "Please add a location to view forecasts.");
+            //TODO show alert
+            //showAlert("No Locations Found", "Please add a location to view forecasts.");
         }
     }
 

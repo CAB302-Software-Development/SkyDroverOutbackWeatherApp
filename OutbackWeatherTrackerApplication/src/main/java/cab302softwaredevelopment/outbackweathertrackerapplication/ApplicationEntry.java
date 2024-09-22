@@ -72,9 +72,9 @@ public class ApplicationEntry extends Application {
    * @param args Command-line arguments.
    */
   public static void main(String[] args) {
+    Session session = DatabaseConnection.getSession();
     addTestData();
     Logger.printLog("Application started, " + stageTitle);
-    Session session = DatabaseConnection.getSession();
     launch();
   }
 

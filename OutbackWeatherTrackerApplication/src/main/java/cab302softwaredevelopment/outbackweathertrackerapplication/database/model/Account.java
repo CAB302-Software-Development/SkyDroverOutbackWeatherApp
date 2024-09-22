@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+@Getter
 @Entity(name = "account")
 @Table(name = "account", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
@@ -25,25 +26,23 @@ public class Account {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter
   private Integer id;
 
   /**
    * The email of the account.
    */
-  @Getter @Setter
+  @Setter
   private String email;
 
   /**
    * The hashed password of the account.
    */
-  @Getter
   private String password_hash;
 
   /**
    * Whether the account prefers Celsius or Fahrenheit.
    */
-  @Getter @Setter
+  @Setter
   private Boolean preferCelsius;
 
   public Account() {
