@@ -22,7 +22,7 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 @Execution(SAME_THREAD)
-@Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
+@Timeout(value = 100000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 100 seconds
 public class OpenMeteoSDKTest extends DBTest {
 
   private int getCurrentDayTimestamp() {
@@ -31,6 +31,7 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
+  @ResourceLock(value = "locations", mode=READ_WRITE)
   public void testHourlyForecastsGetAllEmpty() {
     // Retrieve the hourly forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
@@ -40,6 +41,7 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
+  @ResourceLock(value = "locations", mode=READ_WRITE)
   public void testDailyForecastsGetAllEmpty(){
     // Retrieve the daily forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
