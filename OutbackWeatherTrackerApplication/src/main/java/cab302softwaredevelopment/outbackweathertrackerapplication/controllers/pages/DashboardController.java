@@ -1,42 +1,42 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.ISwapPanel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-
 import java.io.*;
-import java.util.List;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class DashboardController implements ISwapPanel {
+public class DashboardController implements Initializable {
     @FXML
     public Pane pnlRoot;
     @FXML
     public GridPane dashboardGrid;
-    private PreferencesService userPrefs;
 
-    public void initialize(Pane parent) {
-        pnlRoot.prefHeightProperty().bind(parent.heightProperty());
-        pnlRoot.prefWidthProperty().bind(parent.widthProperty());
-
-        dashboardGrid.prefHeightProperty().bind(pnlRoot.heightProperty());
-        dashboardGrid.prefWidthProperty().bind(pnlRoot.widthProperty());
-
-        userPrefs = PreferencesService.loadPreferences();
-        refreshDisplay();
-    }
-
-    private void refreshDisplay() {
+    /**
+     * Clears old dashboard layout and loads the currently selected layout in the PreferencesService
+     */
+    public void updateAppearance() {
         dashboardGrid.getChildren().clear();
         try {
-            for (WidgetInfo info : userPrefs.getCurrentLayout()) {
+            for (WidgetInfo info : PreferencesService.getCurrentLayout()) {
                 FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(info.type.getFilepath()));
                 Node widgetNode = loader.load();
+
+                Object controller = loader.getController();
+                if (controller instanceof IConfigurableWidget) {
+                    ((IConfigurableWidget) controller).applyConfig(info.config);
+                }
+                // TODO add exception if false ?
+
                 GridPane.setColumnIndex(widgetNode, info.columnIndex);
                 GridPane.setRowIndex(widgetNode, info.rowIndex);
                 GridPane.setColumnSpan(widgetNode, info.colSpan);
@@ -48,5 +48,8 @@ public class DashboardController implements ISwapPanel {
         }
     }
 
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        updateAppearance();
+    }
 }

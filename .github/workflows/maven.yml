@@ -40,5 +40,4 @@ jobs:
 
     - name: Build and Test
       run: |
-        cd OutbackWeatherTrackerApplication
-        mvn -B clean package
+      

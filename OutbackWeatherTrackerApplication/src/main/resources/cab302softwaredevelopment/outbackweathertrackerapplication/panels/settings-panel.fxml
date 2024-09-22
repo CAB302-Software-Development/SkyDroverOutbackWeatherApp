@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
-<Panel xmlns="http://javafx.com/javafx"
-       xmlns:fx="http://javafx.com/fxml"
-       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController"
-       style="-fx-background-color: #2e9187; -fx-background-radius: 5; -fx-background-insets: 0;" fx:id="pnlRoot">
-
-</Panel>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController"
+      styleClass="background-primary">
+    <Label alignment="TOP_LEFT" styleClass="header" text="Settings"/>
+    <Button alignment="CENTER" onAction="#swapTheme" text="Swap Theme" styleClass="button-secondary"/>
+    <ComboBox fx:id="cboThemes" onAction="#comboAction"/>
+</VBox>

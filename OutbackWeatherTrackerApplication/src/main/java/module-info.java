@@ -15,19 +15,19 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires java.desktop;
     requires static lombok;
     requires spring.security.crypto;
+    requires com.gluonhq.maps;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
     exports cab302softwaredevelopment.outbackweathertrackerapplication;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.models;
-    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
     exports cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets to javafx.fxml;
 
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets to javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication to javafx.fxml;
-    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.models to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
@@ -38,4 +38,6 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows to com.google.gson, javafx.fxml;
 }
