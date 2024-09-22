@@ -1,3 +1,5 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.SplashController;
 import javafx.fxml.FXMLLoader;
@@ -6,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClickableButtonTest extends ApplicationTest {
     @Override

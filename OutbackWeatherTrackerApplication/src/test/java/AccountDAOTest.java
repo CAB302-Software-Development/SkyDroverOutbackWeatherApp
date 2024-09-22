@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
+
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.parallel.Execution;
 
 @Execution(SAME_THREAD)
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
-public class AccountTest extends DBTest {
+public class AccountDAOTest extends DBTest {
 
   @Test
   public void testAccountsGetAllEmpty() {
@@ -25,8 +26,6 @@ public class AccountTest extends DBTest {
     // Verify the accounts
     assertEquals(0, accounts.size(), "Accounts should be empty");
   }
-
-
 
   @Test
   public void testAddAccounts() {

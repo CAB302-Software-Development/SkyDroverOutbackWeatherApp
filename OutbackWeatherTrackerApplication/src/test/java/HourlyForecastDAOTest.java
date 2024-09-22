@@ -1,28 +1,20 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.hibernate.Session;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
 
 @Execution(SAME_THREAD)
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
-public class HourlyForecastTest extends DBTest {
+public class HourlyForecastDAOTest extends DBTest {
 
   @Test
   public void testHourlyForecastsGetAllEmpty() {
@@ -123,7 +115,8 @@ public class HourlyForecastTest extends DBTest {
     addHourlyForecasts();
 
     // Try to insert the same hourly forecasts
-    addHourlyForecasts();
+    // assert that an exception is thrown
+    assertThrows(Exception.class, this::addHourlyForecasts);
 
     // Verify the hourly forecasts
     assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(),

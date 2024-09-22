@@ -1,25 +1,43 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO.DailyForecastQuery;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO.HourlyForecastQuery;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+/**
+ * A rough Software Development Kit for the OpenMeteo API.
+ */
 public class Sdk {
 
-  private HttpClient client = HttpClient.newHttpClient();
-
+  final String apiHost = "http://api.open-meteo.com/";
+  //final String apiHost = "http://127.0.0.1:8080/";
   public Sdk() {
   }
 
+  /**
+   * Retrieves the daily forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the daily forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of DailyForecast objects representing the forecast.
+   */
   public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
@@ -27,7 +45,8 @@ public class Sdk {
 
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(
-            "https://api.open-meteo.com/v1/forecast?"
+            apiHost
+                + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
                 + "&elevation=" + elevation
@@ -59,6 +78,7 @@ public class Sdk {
         .header("accept", "application/json")
         .build();
 
+    HttpClient client = HttpClient.newHttpClient();
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -118,22 +138,53 @@ public class Sdk {
     return dailyForecasts;
   }
 
+  /**
+   * Retrieves the daily forecasts for a location from the
+   * OpenMeteo API and stores them in the database.
+   * This method will update any existing forecasts in the
+   * database with the same location and timestamp.
+   *
+   * @param location The location to retrieve the daily forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   */
   public void updateDailyForecast(Location location, int futureDays, int pastDays) {
-    List<DailyForecast> dailyForecasts = getDailyForecast(location, futureDays, pastDays);
+    List<DailyForecast> forecasts = getDailyForecast(location, futureDays, pastDays);
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
-    List<DailyForecast> existingDailyForecasts = dailyForecastDAO.getByLocation(location);
-    // find all daily forecasts that are in the database with the same location and timestamp
-    // if they exist, update them
-    for (DailyForecast dailyForecast : dailyForecasts) {
-      for (DailyForecast existingDailyForecast : existingDailyForecasts) {
-        if (dailyForecast.getTimestamp().equals(existingDailyForecast.getTimestamp())) {
-          dailyForecast.setId(existingDailyForecast.getId());
-          dailyForecastDAO.update(dailyForecast);
-        }
-      }
+    int minimumTimestamp = Collections.max(forecasts,
+            Comparator.comparing(DailyForecast::getTimestamp))
+        .getTimestamp();
+
+    int maximumTimestamp = Collections.min(forecasts,
+            Comparator.comparing(DailyForecast::getTimestamp))
+        .getTimestamp();
+
+    List<DailyForecast> existingForecasts = new DailyForecastQuery()
+        .whereTimestampGE(minimumTimestamp)
+        .whereTimestampLE(maximumTimestamp)
+        .whereLocation(location)
+        .getResults();
+
+    // TODO: fix this garbage
+    // Delete all daily forecasts with the same location and a timestamp within range
+    for (DailyForecast forecast : existingForecasts) {
+      dailyForecastDAO.delete(forecast);
+    }
+
+    // Insert all hourly forecasts
+    for (DailyForecast forecast : forecasts) {
+      dailyForecastDAO.insert(forecast);
     }
   }
 
+  /**
+   * Retrieves the hourly forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the hourly forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of HourlyForecast objects representing the forecast.
+   */
   public List<HourlyForecast> getHourlyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
@@ -141,7 +192,8 @@ public class Sdk {
 
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(
-            "https://api.open-meteo.com/v1/forecast?"
+             apiHost
+                + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
                 + "&elevation=" + elevation
@@ -202,6 +254,7 @@ public class Sdk {
         .header("accept", "application/json")
         .build();
 
+    HttpClient client = HttpClient.newHttpClient();
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -210,11 +263,9 @@ public class Sdk {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
-    System.out.println(response.body());
     // parse as json
     JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
-    System.out.println(response.body());
     JsonObject hourly = jsonObject.getAsJsonObject("hourly");
     // replace all NULL values from sub-arrays with -1
     for (String key : hourly.keySet()) {
@@ -291,20 +342,42 @@ public class Sdk {
     return hourlyForecasts;
   }
 
+  /**
+   * Retrieves the hourly forecasts for a location from the
+   * OpenMeteo API and stores them in the database.
+   * This method will update any existing forecasts in the
+   * database with the same location and timestamp.
+   *
+   * @param location The location to retrieve the hourly forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   */
   public void updateHourlyForecast(Location location, int futureDays, int pastDays) {
-    List<HourlyForecast> hourlyForecasts = getHourlyForecast(location, futureDays, pastDays);
+    List<HourlyForecast> forecasts = getHourlyForecast(location, futureDays, pastDays);
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
-    List<HourlyForecast> existingHourlyForecasts = hourlyForecastDAO.getByLocation(location);
-    // find all daily forecasts that are in the database with the same location and timestamp
-    // if they exist, update them
-    for (HourlyForecast hourlyForecast : hourlyForecasts) {
-      for (HourlyForecast existingHourlyForecast : existingHourlyForecasts) {
-        if (hourlyForecast.getTimestamp().equals(existingHourlyForecast.getTimestamp())) {
-          hourlyForecast.setId(existingHourlyForecast.getId());
-          hourlyForecastDAO.update(hourlyForecast);
-        }
-      }
+    int minimumTimestamp = Collections.max(forecasts,
+        Comparator.comparing(HourlyForecast::getTimestamp))
+        .getTimestamp();
+
+    int maximumTimestamp = Collections.min(forecasts,
+        Comparator.comparing(HourlyForecast::getTimestamp))
+        .getTimestamp();
+
+    List<HourlyForecast> existingForecasts = new HourlyForecastQuery()
+        .whereTimestampGE(minimumTimestamp)
+        .whereTimestampLE(maximumTimestamp)
+        .whereLocation(location)
+        .getResults();
+
+    // TODO: fix this garbage
+    // Delete all hourly forecasts with the same location and a timestamp within range
+    for (HourlyForecast forecast : existingForecasts) {
+      hourlyForecastDAO.delete(forecast);
+    }
+
+    // Insert all hourly forecasts
+    for (HourlyForecast forecast : forecasts) {
+      hourlyForecastDAO.insert(forecast);
     }
   }
-
 }
