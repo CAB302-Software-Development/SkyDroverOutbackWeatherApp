@@ -98,15 +98,12 @@
 
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
     <dependency>
-<<<<<<< HEAD
-=======
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
       <version>24-ea+5</version>
     </dependency>
 
     <dependency>
->>>>>>> features/InteractiveMap
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
