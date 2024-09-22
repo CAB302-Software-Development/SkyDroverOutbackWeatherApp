@@ -23,7 +23,6 @@ public class DatabaseConnection {
               .addAnnotatedClass(DailyForecast.class)
               .buildMetadata()
               .buildSessionFactory();
-
   }
 
   /**

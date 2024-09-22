@@ -10,6 +10,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.D
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -67,7 +68,7 @@ public class OpenMeteoSDKTest extends DBTest {
       // Use the sdk to get hourly forecasts for the locations
       Sdk sdk = new Sdk();
 
-      locationsTemplate.stream().parallel().forEach(location -> {
+      locationsTemplate.forEach(location -> {
         List<HourlyForecast> forecasts = sdk.getHourlyForecast(location,futureDays,pastDays);
         assertEquals((futureDays + pastDays) * 24, forecasts.size());
       });
@@ -88,7 +89,7 @@ public class OpenMeteoSDKTest extends DBTest {
       // Use the sdk to get daily forecasts for the locations
       Sdk sdk = new Sdk();
 
-        locationsTemplate.stream().parallel().forEach(location -> {
+        locationsTemplate.forEach(location -> {
           List<DailyForecast> forecasts = sdk.getDailyForecast(location,futureDays,pastDays);
           assertEquals((futureDays + pastDays), forecasts.size());
         });
@@ -107,7 +108,9 @@ public class OpenMeteoSDKTest extends DBTest {
 
     // Use the sdk to update the hourly forecasts
     Sdk sdk = new Sdk();
-    locationsTemplate.stream().parallel().forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
+    for (Location location : locationsTemplate) {
+      sdk.updateHourlyForecast(location, 10, 0);
+    }
 
     // Verify the hourly forecasts
     assertEquals(locationsTemplate.size() * 10 * 24, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be full");
@@ -125,7 +128,9 @@ public class OpenMeteoSDKTest extends DBTest {
 
     // Use the sdk to update the daily forecasts
     Sdk sdk = new Sdk();
-    locationsTemplate.stream().parallel().forEach(location -> sdk.updateDailyForecast(location, 10, 0));
+    for (Location location : locationsTemplate) {
+      sdk.updateDailyForecast(location, 10, 0);
+    }
 
     // Verify the daily forecasts
     assertEquals(locationsTemplate.size() * 10, dailyForecastDAO.getAll().size(), "Daily Forecasts should be full");
@@ -143,13 +148,13 @@ public class OpenMeteoSDKTest extends DBTest {
 
     // Use the sdk to update the hourly forecasts
     Sdk sdk = new Sdk();
-    locationsTemplate.stream().parallel().forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
+    locationsTemplate.forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
 
     // Verify the hourly forecasts
     assertEquals(locationsTemplate.size() * 10 * 24, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be full");
 
     // Update all the forecasts to have a have a temperature of the sun (15000000.0)
-    new HourlyForecastDAO.HourlyForecastQuery().getResults().stream().parallel().forEach(forecast -> {
+    new HourlyForecastDAO.HourlyForecastQuery().getResults().forEach(forecast -> {
       HourlyForecast updatedForecast = new HourlyForecast(forecast.getId(),forecast.getLocation(),
           forecast.getTimestamp(), 15000000.0, 50.0, 10.0,
           20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
@@ -160,7 +165,7 @@ public class OpenMeteoSDKTest extends DBTest {
     });
 
     // Verify that all the forecasts have been updated
-    new HourlyForecastDAO.HourlyForecastQuery().getResults().stream().parallel().forEach(forecast -> {
+    new HourlyForecastDAO.HourlyForecastQuery().getResults().forEach(forecast -> {
       assertEquals(15000000.0, forecast.getTemperature_2m());
     });
 
@@ -171,7 +176,7 @@ public class OpenMeteoSDKTest extends DBTest {
     assertEquals(locationsTemplate.size() * 10 * 24, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be full");
 
     // Verify that all the forecasts have been updated
-    new HourlyForecastDAO.HourlyForecastQuery().getResults().stream().parallel().forEach(forecast -> {
+    new HourlyForecastDAO.HourlyForecastQuery().getResults().forEach(forecast -> {
       assertNotEquals(15000000.0, forecast.getTemperature_2m());
     });
   }
@@ -188,13 +193,15 @@ public class OpenMeteoSDKTest extends DBTest {
 
     // Use the sdk to update the daily forecasts
     Sdk sdk = new Sdk();
-    locationsTemplate.stream().parallel().forEach(location -> sdk.updateDailyForecast(location, 10, 0));
+    for (Location location1 : locationsTemplate) {
+      sdk.updateDailyForecast(location1, 10, 0);
+    }
 
     // Verify the daily forecasts
     assertEquals(locationsTemplate.size() * 10, dailyForecastDAO.getAll().size(), "Daily Forecasts should be full");
 
     // Update all the forecasts to have a have a temperature of the sun (15000000.0)
-    new DailyForecastDAO.DailyForecastQuery().getResults().stream().parallel().forEach(forecast -> {
+    new DailyForecastDAO.DailyForecastQuery().getResults().forEach(forecast -> {
       DailyForecast updatedForecast = new DailyForecast(forecast.getId(),forecast.getLocation(), forecast.getTimestamp(), 3, 15000000.0, 13.9, 23.8,
           12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0,
           45.0, 160.0, 20.32, 4.43);
@@ -202,7 +209,7 @@ public class OpenMeteoSDKTest extends DBTest {
     });
 
     // Verify that all the forecasts have been updated
-    new DailyForecastDAO.DailyForecastQuery().getResults().stream().parallel().forEach(forecast -> {
+    new DailyForecastDAO.DailyForecastQuery().getResults().forEach(forecast -> {
       assertEquals(15000000.0, forecast.getTemperature_2m_max());
     });
 
@@ -213,7 +220,7 @@ public class OpenMeteoSDKTest extends DBTest {
     assertEquals(locationsTemplate.size() * 10, dailyForecastDAO.getAll().size(), "Daily Forecasts should be full");
 
     // Verify that all the forecasts have been updated
-    new DailyForecastDAO.DailyForecastQuery().getResults().stream().parallel().forEach(forecast -> {
+    new DailyForecastDAO.DailyForecastQuery().getResults().forEach(forecast -> {
       assertNotEquals(15000000.0, forecast.getTemperature_2m_max());
     });
   }

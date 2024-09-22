@@ -25,8 +25,8 @@ import java.util.List;
  */
 public class Sdk {
 
-  private HttpClient client = HttpClient.newHttpClient();
-
+  final String apiHost = "http://api.open-meteo.com/";
+  //final String apiHost = "http://127.0.0.1:8080/";
   public Sdk() {
   }
 
@@ -45,7 +45,8 @@ public class Sdk {
 
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(
-            "https://api.open-meteo.com/v1/forecast?"
+            apiHost
+                + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
                 + "&elevation=" + elevation
@@ -77,6 +78,7 @@ public class Sdk {
         .header("accept", "application/json")
         .build();
 
+    HttpClient client = HttpClient.newHttpClient();
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -190,7 +192,8 @@ public class Sdk {
 
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(
-            "https://api.open-meteo.com/v1/forecast?"
+             apiHost
+                + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
                 + "&elevation=" + elevation
@@ -251,6 +254,7 @@ public class Sdk {
         .header("accept", "application/json")
         .build();
 
+    HttpClient client = HttpClient.newHttpClient();
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());

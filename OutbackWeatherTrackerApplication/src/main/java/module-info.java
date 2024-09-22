@@ -37,4 +37,5 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.dao;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo;
 }
