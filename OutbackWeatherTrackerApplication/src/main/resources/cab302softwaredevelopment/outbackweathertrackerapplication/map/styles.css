@@ -1,0 +1,22 @@
+/* Remove margin, padding and set height for full page */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100vh; /* Full viewport height */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* Ensure the button is properly positioned */
+.button-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
