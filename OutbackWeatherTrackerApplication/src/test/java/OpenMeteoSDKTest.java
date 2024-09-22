@@ -31,7 +31,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
-  @ResourceLock(value = "locations", mode=READ_WRITE)
   public void testHourlyForecastsGetAllEmpty() {
     // Retrieve the hourly forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
@@ -41,7 +40,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
-  @ResourceLock(value = "locations", mode=READ_WRITE)
   public void testDailyForecastsGetAllEmpty(){
     // Retrieve the daily forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
@@ -51,8 +49,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Nested
-  @Execution(CONCURRENT)
-  @ResourceLock(value = "locations", mode=READ)
   public class GetForecastTests{
     @ParameterizedTest
     @CsvSource({
@@ -99,7 +95,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
-  @ResourceLock(value = "locations", mode=READ_WRITE)
   void testAddHourlyForecasts() {
     // Insert the locations
     addAccounts();
@@ -119,7 +114,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
-  @ResourceLock(value = "locations", mode=READ_WRITE)
   void testAddDailyForecasts() {
     // Insert the locations
     addAccounts();
@@ -139,7 +133,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
-  @ResourceLock(value = "locations", mode=READ_WRITE)
   void testUpdateHourlyForecasts() {
     // Insert the locations
     addAccounts();
@@ -150,13 +143,13 @@ public class OpenMeteoSDKTest extends DBTest {
 
     // Use the sdk to update the hourly forecasts
     Sdk sdk = new Sdk();
-    locationsTemplate.forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
+    locationsTemplate.parallelStream().forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
 
     // Verify the hourly forecasts
     assertEquals(locationsTemplate.size() * 10 * 24, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be full");
 
     // Update all the forecasts to have a have a temperature of the sun (15000000.0)
-    new HourlyForecastDAO.HourlyForecastQuery().getResults().forEach(forecast -> {
+    new HourlyForecastDAO.HourlyForecastQuery().getResults().parallelStream().forEach(forecast -> {
       HourlyForecast updatedForecast = new HourlyForecast(forecast.getId(),forecast.getLocation(),
           forecast.getTimestamp(), 15000000.0, 50.0, 10.0,
           20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
@@ -184,7 +177,6 @@ public class OpenMeteoSDKTest extends DBTest {
   }
 
   @Test
-  @ResourceLock(value = "locations", mode=READ_WRITE)
   void testUpdateDailyForecasts() {
     // Insert the locations
     addAccounts();
