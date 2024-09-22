@@ -72,52 +72,27 @@ public class ApplicationEntry extends Application {
    * @param args Command-line arguments.
    */
   public static void main(String[] args) {
+    addTestData();
     Logger.printLog("Application started, " + stageTitle);
     Session session = DatabaseConnection.getSession();
     launch();
   }
 
-  public static void addTestData() {
+  private static void addTestData() {
     Logger.printLog("Application started, " + stageTitle);
     Session session = DatabaseConnection.getSession();
     AccountDAO accountDAO = new AccountDAO();
     LocationDAO locationDAO = new LocationDAO();
-    DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
-    HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
 
     // Insert some new accounts
     // Add the accounts to the template
-    accountDAO.insert(new Account("test1@gmail.com", "SecurePass1!",true));
-    accountDAO.insert(new Account("test2@gmail.com", "SecurePass2!",true));
-    accountDAO.insert(new Account("test3@gmail.com", "SecurePass3!",true));
+    accountDAO.insert(new Account("guest@guest.com", "SecurePass1!",true));
 
-    Account account = accountDAO.getById(1);
+    Account account = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
 
     // Insert some new records
     locationDAO.insert(new Location(account,153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
     locationDAO.insert(new Location(account,153.0372, -27.5703, 23.0,"Coopers Plains")); // coopers plains
-
-
-    // update weather data
-    Sdk openMeteoSdk = new Sdk();
-    Location location = locationDAO.getById(1);
-    System.out.println(location);
-    openMeteoSdk.updateDailyForecast(location,10,0);
-    openMeteoSdk.updateHourlyForecast(location,10,0);
-
-    List<Location> locations = locationDAO.getAll();
-    for (Location location2 : locations) {
-      System.out.println(location2);
-    }
-
-    List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
-    for (HourlyForecast hourlyForecast : hourlyForecasts) {
-      System.out.println(hourlyForecast);
-    }
-
-    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
-    for (DailyForecast dailyForecast : dailyForecasts) {
-      System.out.println(dailyForecast);
-    }
   }
+
 }

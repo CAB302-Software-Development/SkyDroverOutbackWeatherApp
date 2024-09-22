@@ -1,7 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.LoginController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
