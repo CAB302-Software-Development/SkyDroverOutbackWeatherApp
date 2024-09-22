@@ -60,3 +60,25 @@
 .header {
     -fx-text-fill: primary-comp;
 }
+
+.widget-background {
+    -fx-background-color: primary-comp;
+}
+
+.forecast-day {
+    -fx-background-color: primary-comp;
+}
+
+.forecast-day Label {
+    -fx-text-fill: primary;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.widget-temp {
+    -fx-background-color: colour-1;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}

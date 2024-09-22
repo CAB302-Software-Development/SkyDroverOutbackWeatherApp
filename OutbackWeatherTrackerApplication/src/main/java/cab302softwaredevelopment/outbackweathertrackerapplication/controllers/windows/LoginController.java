@@ -115,6 +115,7 @@ public class LoginController {
                 continueToApplication();
             }
         } else if (e.getSource() == guestLinkLogin || e.getSource() == guestLinkSignup) {
+            LoginState.logout();
             continueToApplication();
         }
     }
@@ -225,18 +226,7 @@ public class LoginController {
     private void continueToApplication() {
         try {
             ((Stage) loginPane.getScene().getWindow()).close();
-
-            FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/main-view.fxml"));
-            Parent root = loader.load();
-            MainController controller = loader.getController();
-
-            Scene scene = new Scene(root, MainController.WIDTH, MainController.HEIGHT);
-            controller.setScene(scene);
-
-            Stage mainStage = new Stage();
-            mainStage.setTitle(ApplicationEntry.stageTitle);
-            mainStage.setScene(scene);
-            mainStage.show();
+            ApplicationEntry.openMainWindow();
         } catch (IOException e) {
             showErrorMessage("Error starting application");
             e.printStackTrace();
