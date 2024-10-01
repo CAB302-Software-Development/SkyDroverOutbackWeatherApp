@@ -11,28 +11,28 @@
         "rowSpan": 1,
         "widgetId": "test1",
         "config": {
-          "locationId": -1109481345
+          "locationId": 1737684711
         }
       },
       {
-      "widgetType":"CurrentTemp",
-      "rowIndex":0,
-      "columnIndex":1,
-      "colSpan":1,
-      "rowSpan":1,
-      "widgetId": "test2",
-      "config": {
-        "locationId": 183858541
+        "widgetType":"CurrentTemp",
+        "rowIndex":0,
+        "columnIndex":1,
+        "colSpan":1,
+        "rowSpan":1,
+        "widgetId": "test2",
+        "config": {
+          "locationId": -1263942699
+        }
+      },
+      {
+        "widgetType":"Placeholder",
+        "rowIndex":0,
+        "columnIndex":2,
+        "colSpan":1,
+        "rowSpan":1
       }
-    },
-    {
-      "widgetType":"Placeholder",
-      "rowIndex":0,
-      "columnIndex":2,
-      "colSpan":1,
-      "rowSpan":1
-    }
-  ]
+    ]
   },
   "selectedLayout":"default"
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import java.util.UUID;
 import org.hibernate.Session;
 
 /**
@@ -74,7 +75,7 @@ public class AccountDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(int id) {
+  public void delete(UUID id) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
@@ -131,7 +132,7 @@ public class AccountDAO {
    * @return The Account object with the specified ID or null if no Account is found
    */
   @Deprecated
-  public Account getById(int id) {
+  public Account getById(UUID id) {
     return new AccountQuery()
         .whereId(id)
         .getSingleResult();
@@ -172,7 +173,7 @@ public class AccountDAO {
      * @param id The ID to filter by
      * @return This AccountQuery object
      */
-    public AccountQuery whereId(int id) {
+    public AccountQuery whereId(UUID id) {
       criteria.where(builder.equal(root.get("id"), id));
       return this;
     }

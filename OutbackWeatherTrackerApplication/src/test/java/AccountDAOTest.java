@@ -9,6 +9,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -40,7 +41,7 @@ public class AccountDAOTest extends DBTest {
         "There should be " + accountsTemplate.size() + " accounts");
 
     // Verify that the forecasts got assigned an ID and that they're unique
-    List<Integer> seenIds = new ArrayList<>();
+    List<UUID> seenIds = new ArrayList<>();
     for (Account account : accounts) {
       assertFalse(seenIds.contains(account.getId()), "Account ID should be unique");
       seenIds.add(account.getId());

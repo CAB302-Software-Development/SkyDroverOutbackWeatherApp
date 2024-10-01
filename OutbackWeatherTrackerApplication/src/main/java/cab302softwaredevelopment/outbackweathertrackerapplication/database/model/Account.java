@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -25,8 +26,8 @@ public class Account {
    * The ID of the account.
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   /**
    * The email of the account.
@@ -56,7 +57,7 @@ public class Account {
    * @param password The password of the account. (will be hashed)
    * @param preferCelsius Whether the account prefers Celsius or Fahrenheit.
    */
-  public Account(Integer id, String email, String password, Boolean preferCelsius) {
+  public Account(UUID id, String email, String password, Boolean preferCelsius) {
     this.id = id;
     this.email = email;
     this.preferCelsius = preferCelsius;
