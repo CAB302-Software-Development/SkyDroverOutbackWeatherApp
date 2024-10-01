@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.ForecastController"
+      styleClass="background-primary" fx:id="vbRoot" spacing="10">
+    <padding>
+        <Insets topRightBottomLeft="10">
+        </Insets>
+    </padding>
+
+    <HBox spacing="10">
+        <Label text="Select Location:"/>
+        <ComboBox fx:id="locationComboBox" promptText="Choose a location"/>
+        <Button fx:id="refreshButton" text="Refresh Data"/>
+        <ProgressIndicator fx:id="progressIndicator" maxHeight="20" maxWidth="20"/>
+    </HBox>
+    <HBox fx:id="hbForecasts" spacing="15">
+
+    </HBox>
+
+    <!--
+    <TableView fx:id="forecastTableView">
+        <columns>
+            <TableColumn fx:id="dateColumn" text="Date"/>
+            <TableColumn fx:id="maxTempColumn" text="Max Temp (°C)"/>
+            <TableColumn fx:id="minTempColumn" text="Min Temp (°C)"/>
+            <TableColumn fx:id="precipitationColumn" text="Precipitation (mm)"/>
+        </columns>
+    </TableView>
+    -->
+    <LineChart fx:id="lineChart">
+        <xAxis><NumberAxis/></xAxis>
+        <yAxis><NumberAxis/></yAxis>
+    </LineChart>
+    <!--
+    <Label alignment="TOP_LEFT" styleClass="header" text="Forecast Placeholder"/>
+    <ScrollPane fx:id="scrForecasts"
+                pannable="true" fitToHeight="true" vbarPolicy="NEVER"
+                style="-fx-background-color: transparent">
+        <HBox fx:id="pnForecastContainer" spacing="20" style="-fx-background-color: transparent"/>
+    </ScrollPane>
+    -->
+</VBox>

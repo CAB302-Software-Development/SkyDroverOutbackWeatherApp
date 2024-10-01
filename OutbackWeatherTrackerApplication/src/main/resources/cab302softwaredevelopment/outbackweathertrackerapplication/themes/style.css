@@ -1,0 +1,125 @@
+.background-primary {
+    -fx-background-color: primary;
+    -fx-text-fill: primary-comp;
+}
+
+.background-secondary {
+    -fx-background-color: secondary;
+    -fx-text-fill: secondary-comp;
+}
+
+.background-secondary-inv {
+    -fx-background-color: secondary-comp;
+    -fx-text-fill: secondary;
+}
+
+.text-primary {
+    -fx-fill: primary-colour;
+}
+
+.text-secondary {
+    -fx-fill: primary-comp;
+}
+
+.border-primary {
+    -fx-border-color: primary;
+}
+
+.border-secondary {
+    -fx-border-color: primary-comp;
+}
+
+.textbox {
+    -fx-background-color: transparent;
+    -fx-border-color: primary;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.button-primary {
+    -fx-background-color: primary;
+    -fx-border-radius: 30;
+    -fx-text-fill: primary-comp;
+}
+
+.button-secondary {
+    -fx-background-color: complementary-colour;
+    -fx-text-fill: primary-comp;
+    -fx-border-radius: 30;
+}
+
+.navbar-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.hyperlink {
+    -fx-background-color: transparent;
+    -fx-text-fill: highlight-colour;
+}
+
+.header {
+    -fx-text-fill: primary-comp;
+}
+
+.widget-background {
+    -fx-background-color: primary-comp;
+}
+
+.forecast-day Label {
+    -fx-text-fill: primary;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.widget-temp {
+    -fx-background-color: colour-1;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}
+
+.chart {
+    -fx-background-color: primary;
+    -fx-font-size: 20;
+    -fx-text-fill: primary-comp;
+    -fx-legend-visible: false;
+}
+
+.axis-label {
+    -fx-text-fill: primary-comp;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #ed4d51; }
+.default-color1.chart-series-line { -fx-stroke: #e5d849; }
+.default-color2.chart-series-line { -fx-stroke: #238591; }
+
+
+/* styles.css */
+.forecast-day {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.date-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.max-temp-label {
+    -fx-text-fill: #e74c3c;
+}
+
+.min-temp-label {
+    -fx-text-fill: #3498db;
+}
+
+.precipitation-label, .wind-speed-label {
+    -fx-font-size: 12px;
+}
