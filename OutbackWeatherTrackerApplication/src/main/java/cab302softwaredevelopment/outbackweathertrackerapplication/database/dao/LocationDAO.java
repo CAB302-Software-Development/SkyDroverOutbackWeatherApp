@@ -74,7 +74,7 @@ public class LocationDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(int id) {
+  public void delete(long id) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
@@ -135,7 +135,7 @@ public class LocationDAO {
      * @param id The ID to filter by
      * @return This LocationQuery object
      */
-    public LocationQuery whereId(int id) {
+    public LocationQuery whereId(long id) {
       criteria.where(builder.equal(root.get("id"), id));
       return this;
     }
@@ -352,7 +352,7 @@ public class LocationDAO {
    * @return The Location object with the specified ID or null if no Location is found.
    */
   @Deprecated
-  public Location getById(int id) {
+  public Location getById(long id) {
     return new LocationQuery()
         .whereId(id)
         .getSingleResult();

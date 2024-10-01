@@ -46,7 +46,7 @@ public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
    * @return A list of all DailyForecast objects in the database that are associated with the specified location.
    */
   @Deprecated
-  public List<DailyForecast> getByLocationId(int location_id) {
+  public List<DailyForecast> getByLocationId(long location_id) {
     return new DailyForecastQuery()
         .whereLocationId(location_id)
         .getResults();

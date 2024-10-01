@@ -38,7 +38,7 @@ public class LocationDAOTest extends DBTest {
     assertEquals(6, locations.size());
 
     // Verify that the locations got assigned an ID and that they're unique
-    List<Integer> seenIds = new ArrayList<>();
+    List<Long> seenIds = new ArrayList<>();
     for (Location location : locations) {
       assertFalse(seenIds.contains(location.getId()), "Location ID should be unique");
       seenIds.add(location.getId());

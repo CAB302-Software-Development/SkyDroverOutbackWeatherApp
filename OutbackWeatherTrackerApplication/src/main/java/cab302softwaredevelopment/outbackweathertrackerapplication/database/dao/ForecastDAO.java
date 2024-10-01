@@ -162,7 +162,7 @@ abstract class ForecastQuery<T,K> {
    * @param location_id The associated location ID to filter by
    * @return This ForecastQuery object
    */
-  public K whereLocationId(int location_id) {
+  public K whereLocationId(long location_id) {
     criteria.where(builder.equal(root.get("location").get("id"), location_id));
     return self();
   }
