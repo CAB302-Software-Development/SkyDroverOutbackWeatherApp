@@ -46,10 +46,10 @@ public class CurrentTempController extends BaseWidgetController implements Initi
 
     @ConfigMethod
     public void applyConfig(double locationId) {
-        loadTemperatureData((int)locationId, "Celsius");
+        loadTemperatureData((long)locationId, "Celsius");
     }
 
-    private void loadTemperatureData(int locationId, String unit) {
+    private void loadTemperatureData(long locationId, String unit) {
         if (locationId == -1) {
             lblTemp.setText("No location set.");
             return;

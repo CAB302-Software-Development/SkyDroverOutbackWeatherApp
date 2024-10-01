@@ -107,7 +107,7 @@ public class Location {
    * @return The hash value as an integer.
    */
   private long generateId() {
-    return Objects.hash(account, longitude, latitude);
+    return Objects.hash(account.getId(), longitude, latitude);
   }
 
   @Override
