@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
@@ -166,7 +167,10 @@ public class AccountDAOTest extends DBTest {
   @Test
   void testVerifyPassword() {
     // Create a new account
-    Account account = new Account("email@gmail.com", "password", true);
+    Account account = Account.builder()
+        .email("email@gmail.com")
+        .password("password")
+        .build();
     accountDAO.insert(account);
 
     // Verify the password
@@ -237,4 +241,25 @@ public class AccountDAOTest extends DBTest {
       assertEquals(account_result.getPreferCelsius(), !originalPreference);
     }
   }
+
+  @Test
+  void testAddAccountWithDefaultLayouts() {
+    // Create a new account
+    Account account = Account.builder()
+        .email("testemail12345@test.com")
+        .password("password")
+        .build();
+
+    // Insert the account
+    accountDAO.insert(account);
+
+    // Retrieve the account
+    Account account_result = accountDAO.getByEmail("testemail12345@test.com");
+
+    // Verify the account
+    assertEquals(account.getEmail(), account_result.getEmail());
+    assertEquals(account.getPreferCelsius(), account_result.getPreferCelsius());
+    assertNotNull(account_result.getDashboardLayouts());
+  }
+
 }
