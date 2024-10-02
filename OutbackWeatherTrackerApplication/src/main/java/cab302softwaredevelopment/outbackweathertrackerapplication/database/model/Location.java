@@ -27,7 +27,6 @@ class LocationId implements Serializable {
   private Account account;
   private Double longitude;
   private Double latitude;
-
 }
 
 @Getter
@@ -45,7 +44,6 @@ public class Location {
    */
   @Column(name="id", nullable = false)
   private Long id;
-
 
   /**
    * The account that this location is associated with.

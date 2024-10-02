@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -16,7 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 @Table(name = "account", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
-
+@Builder
+@Getter
 /**
  * A model class for the Account entity.
  */
@@ -33,6 +36,7 @@ public class Account {
    * The email of the account.
    */
   @Setter
+  @Column(nullable = false)
   private String email;
 
   /**

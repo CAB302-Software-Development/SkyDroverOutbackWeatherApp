@@ -166,7 +166,10 @@ public class LoginController {
             return false;
         }
 
-        Account account = new Account(email, password, true);
+        Account account = Account.builder()
+                .email(email)
+                .password(password)
+                .build();
 
         accountDAO.insert(account);
 

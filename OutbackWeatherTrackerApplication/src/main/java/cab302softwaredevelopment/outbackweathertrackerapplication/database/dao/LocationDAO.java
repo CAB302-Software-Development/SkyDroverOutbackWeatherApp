@@ -75,7 +75,7 @@ public class LocationDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(long id) {
+  public void delete(Long id) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();

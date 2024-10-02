@@ -78,6 +78,9 @@ public class ApplicationEntry extends Application {
     launch();
   }
 
+  /**
+   * Adds some test data to the database. This is only used for testing purposes.
+   */
   private static void addTestData() {
     Logger.printLog("Application started, " + stageTitle);
     Session session = DatabaseConnection.getSession();
@@ -86,7 +89,12 @@ public class ApplicationEntry extends Application {
 
     // Insert some new accounts
     // Add the accounts to the template
-    accountDAO.insert(new Account("guest@guest.com", "SecurePass1!",true));
+    //Account newAccount = new Account("guest@guest.com", "SecurePass1!",true);
+    Account newAccount = Account.builder()
+        .email("guest@guest.com")
+        .password("SecurePass1!")
+        .build();
+    accountDAO.insert(newAccount);
 
     Account account = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
 
