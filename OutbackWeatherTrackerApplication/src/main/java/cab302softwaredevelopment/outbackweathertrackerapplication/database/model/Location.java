@@ -27,6 +27,7 @@ class LocationId implements Serializable {
   private Account account;
   private Double longitude;
   private Double latitude;
+  private Double elevation;
 }
 
 @Getter
@@ -71,6 +72,7 @@ public class Location {
   /**
    * The elevation of the location.
    */
+  @Id
   @Column(name="elevation", nullable = false)
   private Double elevation;
 
