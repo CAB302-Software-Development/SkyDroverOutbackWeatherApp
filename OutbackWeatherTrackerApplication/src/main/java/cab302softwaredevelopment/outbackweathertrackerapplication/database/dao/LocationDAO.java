@@ -76,17 +76,9 @@ public class LocationDAO {
    *           back and the exception stack trace is printed.
    */
   public void delete(Long id) {
-    Session session = DatabaseConnection.getSession();
-    try {
-      session.beginTransaction();
-      Location location = session.get(Location.class, id);
-      session.delete(location);
-      session.getTransaction().commit();
-    } catch (Exception e) {
-      session.getTransaction().rollback();
-      e.printStackTrace();
-    } finally {
-      session.close();
+    Location location = new LocationQuery().whereId(id).getSingleResult();
+    if (location != null) {
+      delete(location);
     }
   }
 
