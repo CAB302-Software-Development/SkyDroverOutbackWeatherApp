@@ -8,7 +8,9 @@ public enum WidgetType {
     @SerializedName("Placeholder")
     Placeholder("widgets/placeholder-widget.fxml"),
     @SerializedName("CurrentTemp")
-    CurrentTemp("widgets/currenttemp-widget.fxml");
+    CurrentTemp("widgets/currenttemp-widget.fxml"),
+    @SerializedName("Precipitation")
+    Precipitation("widgets/precipitation-design-1.fxml");
 
 
     private final String filepath;
