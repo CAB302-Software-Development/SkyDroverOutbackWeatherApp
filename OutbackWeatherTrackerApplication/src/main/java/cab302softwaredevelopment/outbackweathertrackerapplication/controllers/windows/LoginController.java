@@ -21,6 +21,7 @@ public class LoginController {
 
     public static final int HEIGHT = 400;
     public static final int WIDTH = 700;
+    public static final String TITLE = "Login";
 
     // Email regex pattern
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)$";
