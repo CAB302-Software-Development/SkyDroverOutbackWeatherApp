@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 600;
+    public static final String TITLE = "Outback Weather Tracker Application";
 
     private static MainController controller;
 

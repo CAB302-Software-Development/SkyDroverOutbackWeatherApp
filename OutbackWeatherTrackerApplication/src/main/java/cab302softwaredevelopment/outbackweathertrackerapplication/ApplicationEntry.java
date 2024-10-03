@@ -17,8 +17,6 @@ import java.io.IOException;
 public class ApplicationEntry extends Application {
   private static Stage rootStage;
 
-  public static final String stageTitle = "Outback Weather Tracker";
-
   /**
    * Starts the application and sets up the main stage and scene.
    *
@@ -47,7 +45,7 @@ public class ApplicationEntry extends Application {
     Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
 
     rootStage = new Stage();
-    rootStage.setTitle("Login");
+    rootStage.setTitle(LoginController.TITLE);
     rootStage.setScene(scene);
     rootStage.show();
   }
@@ -59,7 +57,7 @@ public class ApplicationEntry extends Application {
     controller.setScene(scene);
 
     rootStage = new Stage();
-    rootStage.setTitle(stageTitle);
+    rootStage.setTitle(MainController.TITLE);
     rootStage.setScene(scene);
     rootStage.show();
   }
@@ -72,7 +70,7 @@ public class ApplicationEntry extends Application {
   public static void main(String[] args) {
     Session session = DatabaseConnection.getSession();
     addTestData();
-    Logger.printLog("Application started, " + stageTitle);
+    Logger.printLog("Application started");
     launch();
   }
 
@@ -80,7 +78,7 @@ public class ApplicationEntry extends Application {
    * Adds some test data to the database. This is only used for testing purposes.
    */
   private static void addTestData() {
-    Logger.printLog("Application started, " + stageTitle);
+    Logger.printLog("Application started");
     Session session = DatabaseConnection.getSession();
     AccountDAO accountDAO = new AccountDAO();
     LocationDAO locationDAO = new LocationDAO();
