@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 
 public class WeatherWidgetController {
 
-  @FXML
+    @FXML
   private Text weatherConditionText;
 
   @FXML

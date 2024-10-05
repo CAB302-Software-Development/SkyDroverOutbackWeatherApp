@@ -2,7 +2,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
-
+import javafx.scene.control.Label;
 import java.awt.*;
 
 public class WindWidgetController extends BaseWidgetController {
