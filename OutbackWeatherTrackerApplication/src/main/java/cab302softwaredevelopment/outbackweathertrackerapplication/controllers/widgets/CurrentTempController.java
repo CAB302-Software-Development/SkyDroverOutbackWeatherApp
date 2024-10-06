@@ -19,7 +19,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.Instant;
-public class CurrentTempController extends BaseWidgetController implements Initializable {
+public class CurrentTempController extends BaseWidgetController {
     @FXML
     public ImageView weatherIconImageView;
     @FXML
@@ -33,20 +33,10 @@ public class CurrentTempController extends BaseWidgetController implements Initi
     @FXML
     private Button removeButton;
 
-    LocationDAO locationDAO;
-    HourlyForecastDAO hourlyForecastDAO;
-    Sdk sdk;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        locationDAO = new LocationDAO();
-        hourlyForecastDAO = new HourlyForecastDAO();
-        sdk = new Sdk();
-    }
 
     @ConfigMethod
     public void applyConfig(double locationId) {
-        loadTemperatureData((long)locationId, "Celsius");
+        loadTemperatureData((long) locationId, "Celsius");
     }
 
     private void loadTemperatureData(long locationId, String unit) {
@@ -55,7 +45,9 @@ public class CurrentTempController extends BaseWidgetController implements Initi
             return;
         }
 
-        Location location = locationDAO.getById(locationId);
+        Location location = new LocationDAO.LocationQuery()
+                .whereId(locationId)
+                .getSingleResult();
         if (location == null) {
             lblTemp.setText("Invalid location.");
             return;
@@ -63,19 +55,15 @@ public class CurrentTempController extends BaseWidgetController implements Initi
 
         lblLocation.setText(location.getName());
 
-        List<HourlyForecast> forecasts = hourlyForecastDAO.getByLocation(location);
-        if (forecasts.size() == 0) {
-            forecasts = sdk.getHourlyForecast(location, 2, 2);
-            forecasts.forEach(f -> hourlyForecastDAO.insert(f));
-        }
-
         long now = Instant.now().getEpochSecond();
-        HourlyForecast forecast = forecasts.stream()
-                .filter(f -> f.getTimestamp() >= now)
-                .min(Comparator.comparingInt(HourlyForecast::getTimestamp))
-                .orElse(null);
+        HourlyForecast forecast = new HourlyForecastDAO.HourlyForecastQuery()
+                .whereLocation(location)
+                .whereTimestampGE((int) now)
+                .addOrderAsc("timestamp")
+                .getSingleResult();
 
         assert forecast != null;
+
         double temperature = forecast.getTemperature_2m();
         if (unit.equals("Fahrenheit")) {
             temperature = temperature * 9 / 5 + 32;
