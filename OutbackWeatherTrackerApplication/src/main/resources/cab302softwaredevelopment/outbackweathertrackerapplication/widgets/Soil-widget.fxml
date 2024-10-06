@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.SoilWidgetController">
+   <children>
+      <VBox prefHeight="238.0" prefWidth="239.0" spacing="5.0" style="-fx-background-color: linear-gradient(to bottom, #d2913c, #74552d); -fx-background-radius: 15; -fx-padding: 20;">
+         <children>
+            <HBox alignment="CENTER_RIGHT">
+               <children>
+                  <Text fx:id="Location" fill="#655c5c" strokeType="OUTSIDE" strokeWidth="0.0" text="Location">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <VBox>
+               <children>
+                  <Label text="Soil Temp:" textFill="WHITE" />
+                  <Text fx:id="Temperature" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Text>
+                  <HBox spacing="15.0">
+                     <children>
+                        <Label text="Soil Moisture: " textFill="WHITE" />
+                        <Text fx:id="Moisture" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##" />
+                     </children>
+                  </HBox>
+                  <HBox spacing="15.0">
+                     <children>
+                        <Label prefHeight="58.0" prefWidth="111.0" text="Reference Evapotranspiration (ET₀): " textFill="WHITE" wrapText="true" />
+                        <Text fx:id="ET" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##">
+                           <HBox.margin>
+                              <Insets top="40.0" />
+                           </HBox.margin>
+                        </Text>
+                        <ImageView fitHeight="62.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Group-7.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
