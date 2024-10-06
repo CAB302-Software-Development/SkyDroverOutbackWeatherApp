@@ -91,6 +91,7 @@ public class ApplicationEntry extends Application {
     Account newAccount = Account.builder()
         .email("guest@guest.com")
         .password("SecurePass1!")
+        .isGuest(true)
         .build();
     accountDAO.insert(newAccount);
 
