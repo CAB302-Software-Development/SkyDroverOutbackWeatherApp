@@ -6,8 +6,6 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import lombok.Getter;
 
-import java.util.UUID;
-
 public class LoginState {
     @Getter
     private static Account currentAccount;

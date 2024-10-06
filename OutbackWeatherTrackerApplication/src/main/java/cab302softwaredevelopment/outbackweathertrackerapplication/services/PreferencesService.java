@@ -4,10 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEnt
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.*;
 import java.util.*;
 
 class PreferenceData {
