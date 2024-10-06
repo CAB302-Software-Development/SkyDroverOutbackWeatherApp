@@ -47,7 +47,7 @@ public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
    * @return A list of all HourlyForecast objects in the database that are associated with the specified location.
    */
   @Deprecated
-  public List<HourlyForecast> getByLocationId(int location_id) {
+  public List<HourlyForecast> getByLocationId(long location_id) {
     return new HourlyForecastQuery()
         .whereLocationId(location_id)
         .getResults();

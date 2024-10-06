@@ -2,7 +2,6 @@ package cab302softwaredevelopment.outbackweathertrackerapplication;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
@@ -12,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.Session;
-import java.util.List;
 import java.awt.*;
 import java.io.IOException;
 
@@ -78,6 +76,9 @@ public class ApplicationEntry extends Application {
     launch();
   }
 
+  /**
+   * Adds some test data to the database. This is only used for testing purposes.
+   */
   private static void addTestData() {
     Logger.printLog("Application started, " + stageTitle);
     Session session = DatabaseConnection.getSession();
@@ -86,7 +87,12 @@ public class ApplicationEntry extends Application {
 
     // Insert some new accounts
     // Add the accounts to the template
-    accountDAO.insert(new Account("guest@guest.com", "SecurePass1!",true));
+    //Account newAccount = new Account("guest@guest.com", "SecurePass1!",true);
+    Account newAccount = Account.builder()
+        .email("guest@guest.com")
+        .password("SecurePass1!")
+        .build();
+    accountDAO.insert(newAccount);
 
     Account account = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
 

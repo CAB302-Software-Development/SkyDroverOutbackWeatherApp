@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
+import java.util.UUID;
 import org.hibernate.Session;
 /**
  * A Data Access Object for the Location entity.
@@ -74,18 +75,10 @@ public class LocationDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(int id) {
-    Session session = DatabaseConnection.getSession();
-    try {
-      session.beginTransaction();
-      Location location = session.get(Location.class, id);
-      session.delete(location);
-      session.getTransaction().commit();
-    } catch (Exception e) {
-      session.getTransaction().rollback();
-      e.printStackTrace();
-    } finally {
-      session.close();
+  public void delete(Long id) {
+    Location location = new LocationQuery().whereId(id).getSingleResult();
+    if (location != null) {
+      delete(location);
     }
   }
 
@@ -135,7 +128,7 @@ public class LocationDAO {
      * @param id The ID to filter by
      * @return This LocationQuery object
      */
-    public LocationQuery whereId(int id) {
+    public LocationQuery whereId(long id) {
       criteria.where(builder.equal(root.get("id"), id));
       return this;
     }
@@ -146,7 +139,7 @@ public class LocationDAO {
      * @param account_id The associated account ID to filter by
      * @return This LocationQuery object
      */
-    public LocationQuery whereAccountId(int account_id) {
+    public LocationQuery whereAccountId(UUID account_id) {
       criteria.where(builder.equal(root.get("account").get("id"), account_id));
       return this;
     }
@@ -326,7 +319,7 @@ public class LocationDAO {
    * @return A list of all Location objects in the database that are associated with the specified location.
    */
   @Deprecated
-  public List<Location> getByAccountId(int account_id) {
+  public List<Location> getByAccountId(UUID account_id) {
     return new LocationQuery()
         .whereAccountId(account_id)
         .getResults();
@@ -352,7 +345,7 @@ public class LocationDAO {
    * @return The Location object with the specified ID or null if no Location is found.
    */
   @Deprecated
-  public Location getById(int id) {
+  public Location getById(long id) {
     return new LocationQuery()
         .whereId(id)
         .getSingleResult();
