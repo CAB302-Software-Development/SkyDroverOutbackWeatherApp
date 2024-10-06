@@ -4,8 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEnt
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,7 +17,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -42,7 +44,15 @@ public class MainController implements Initializable {
 
     public static void refreshDisplay() {
         controller.scene.getStylesheets().clear();
-        controller.scene.getStylesheets().addAll(PreferencesService.getCurrentThemeData());
+        controller.scene.getStylesheets().addAll(getCurrentThemeData());
+    }
+
+    public static List<String> getCurrentThemeData() {
+        Theme currentTheme = LoginState.getCurrentAccount().getCurrentTheme();
+        String iconsPath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/icons.css")).toExternalForm();
+        String themePath = Objects.requireNonNull(ApplicationEntry.class.getResource(currentTheme.getFilePath())).toExternalForm();
+        String stylePath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/style.css")).toExternalForm();
+        return Arrays.asList(stylePath, themePath, iconsPath);
     }
 
     @Override

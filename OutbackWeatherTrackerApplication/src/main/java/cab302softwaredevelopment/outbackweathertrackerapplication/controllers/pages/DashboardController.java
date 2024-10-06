@@ -2,11 +2,10 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.DashboardEditorController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -146,8 +145,13 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setLayout(Arrays.stream(PreferencesService.getCurrentLayout()).toList());
+        setLayout(Arrays.stream(getCurrentLayout()).toList());
         loadWidgetsToGrid();
+    }
+
+    public static WidgetInfo[] getCurrentLayout() {
+        HashMap<String, WidgetInfo[]> dashboardLayouts = LoginState.getCurrentAccount().getDashboardLayouts();
+        return dashboardLayouts.get(LoginState.getCurrentAccount().getSelectedLayout());
     }
 
     @FXML
@@ -181,8 +185,6 @@ public class DashboardController implements Initializable {
     }
 
     private void saveLayout() {
-        PreferencesService.addLayout("TEMP", currentLayout);
-        PreferencesService.savePreferences();
     }
 
 }

@@ -4,7 +4,6 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.wi
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +25,6 @@ public class ApplicationEntry extends Application {
   @Override
   public void start(Stage stage) {
     if (!GraphicsEnvironment.isHeadless()) {
-      PreferencesService.loadPreferences();
       rootStage = stage;
 
       // TODO Check if valid credentials already exist, skip login window if so
