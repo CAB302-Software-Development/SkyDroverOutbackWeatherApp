@@ -2,15 +2,10 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -18,8 +13,6 @@ import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class LoginController {
