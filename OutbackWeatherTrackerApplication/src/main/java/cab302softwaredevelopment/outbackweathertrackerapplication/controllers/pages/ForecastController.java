@@ -7,6 +7,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.L
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Platform;
@@ -21,32 +22,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import lombok.Getter;
 
 import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
-
-class DateData {
-    @Getter
-    private long startEpoch;
-    @Getter
-    private long endEpoch;
-
-    public DateData(LocalDate date, int daysSpan) {
-        ZonedDateTime startOfDay = date.atStartOfDay(ZoneId.systemDefault());
-        startEpoch = startOfDay.toEpochSecond();
-        endEpoch = startOfDay.plusDays(daysSpan).toEpochSecond();
-    }
-
-    public DateData(LocalDate date) {
-        ZonedDateTime startOfDay = date.atStartOfDay(ZoneId.systemDefault());
-        startEpoch = startOfDay.toEpochSecond();
-        endEpoch = startOfDay.plusDays(1).toEpochSecond();
-    }
-}
 
 public class ForecastController implements Initializable {
     @FXML
