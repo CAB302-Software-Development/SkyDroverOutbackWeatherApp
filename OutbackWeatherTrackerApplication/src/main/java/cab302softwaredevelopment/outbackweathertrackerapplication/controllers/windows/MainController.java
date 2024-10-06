@@ -1,6 +1,10 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +17,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -41,6 +46,15 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Sdk sdk = new Sdk();
+        List<Location> locations = (new LocationDAO.LocationQuery())
+                .whereAccount(LoginState.getCurrentAccount())
+                .getResults();
+        for (Location location : locations) {
+            sdk.updateDailyForecast(location, 7, 2);
+            sdk.updateHourlyForecast(location, 7, 2);
+        }
+
         controller = this;
         Node swpProfile = createSwapPanel("panels/profile-panel.fxml", btnProfile);
         Node swpDashboard = createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
