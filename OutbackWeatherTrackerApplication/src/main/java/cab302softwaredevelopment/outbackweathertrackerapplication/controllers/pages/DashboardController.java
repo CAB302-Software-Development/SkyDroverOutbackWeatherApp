@@ -2,7 +2,6 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.ISwapPanel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import javafx.fxml.FXML;
