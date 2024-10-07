@@ -1,3 +1,5 @@
+package UITests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
