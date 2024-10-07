@@ -2,6 +2,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class WidgetInfo {
@@ -23,5 +24,10 @@ public class WidgetInfo {
         this.colSpan = colSpan;
         this.rowSpan = rowSpan;
         this.config = config;
+    }
+
+    public WidgetInfo deepCopy() {
+        Map<String, Object> newConfig = new HashMap<>(config);
+        return new WidgetInfo(type, rowIndex, columnIndex, colSpan, rowSpan, newConfig);
     }
 }
