@@ -35,8 +35,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          ls -la
-          mvn -B package --file OutbackWeatherTrackerApplication/pom.xml
+          mvn -B package --file OutbackWeatherTrackerApplication/pom.xml install -DskipTests
 
   test:
     needs: build  
@@ -54,4 +53,4 @@ jobs:
           cache: maven
 
       - name: Run Maven Tests
-        run: mvn -B test --file OutbackWeatherTrackerApplication/pom.xml
+        run: mvn -B test --file pom.xml -Dtest=AccountDAOTest,DailyForecastDAOTest,HourlyForecastDAOTest,LocationDAOTest

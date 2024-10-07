@@ -1,3 +1,5 @@
+package ControllerTests;
+
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController;
 import org.junit.jupiter.api.BeforeEach;
 

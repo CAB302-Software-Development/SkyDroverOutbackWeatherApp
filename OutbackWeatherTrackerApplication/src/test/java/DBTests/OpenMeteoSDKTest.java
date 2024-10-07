@@ -1,9 +1,8 @@
+package DBTests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
-import static org.junit.jupiter.api.parallel.ResourceAccessMode.READ;
-import static org.junit.jupiter.api.parallel.ResourceAccessMode.READ_WRITE;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 @Execution(SAME_THREAD)
