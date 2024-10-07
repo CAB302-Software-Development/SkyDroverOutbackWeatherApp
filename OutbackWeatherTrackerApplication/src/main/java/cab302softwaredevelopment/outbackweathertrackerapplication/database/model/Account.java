@@ -106,6 +106,7 @@ public class Account {
   @Convert(converter = LayoutsConverter.class)
   @Column(length=LONG32)
   @Default
+  @Setter
   private HashMap<String, WidgetInfo[]> dashboardLayouts = new LayoutsConverter().convertToEntityAttribute("{'default':[]}");
 
   public Account() {
