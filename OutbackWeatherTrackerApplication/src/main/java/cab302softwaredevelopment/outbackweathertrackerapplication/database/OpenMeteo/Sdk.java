@@ -11,11 +11,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,8 +27,10 @@ import java.util.List;
  */
 public class Sdk {
 
-  final String apiHost = "http://api.open-meteo.com/";
+  //final String apiHost = "http://api.open-meteo.com/";
   //final String apiHost = "http://127.0.0.1:8080/";
+  static List<String> apiHosts = new ArrayList<String>(Arrays.asList("http://cyphix.ddns.net:8000/", "http://api.open-meteo.com/"));
+  static String apiHost = apiHosts.getFirst();
   public Sdk() {
   }
 
@@ -82,6 +86,14 @@ public class Sdk {
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    } catch (ConnectException e) {
+      // Unable to connect to the server
+      // Get the next host to try
+      String newApiHost = apiHosts.getFirst();
+      apiHosts.removeFirst();
+      apiHosts.add(newApiHost);
+      apiHost = newApiHost;
+      return getDailyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -258,6 +270,14 @@ public class Sdk {
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    } catch (ConnectException e) {
+      // Unable to connect to the server
+      // Get the next host to try
+      String newApiHost = apiHosts.getFirst();
+      apiHosts.removeFirst();
+      apiHosts.add(newApiHost);
+      apiHost = newApiHost;
+      return getHourlyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
