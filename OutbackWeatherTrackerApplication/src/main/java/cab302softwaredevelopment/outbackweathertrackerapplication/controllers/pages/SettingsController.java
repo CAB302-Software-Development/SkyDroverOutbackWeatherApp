@@ -2,6 +2,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
@@ -61,9 +62,9 @@ public class SettingsController implements Initializable {
      * @param newTheme The new theme to apply.
      */
     public static void setCurrentTheme(Theme newTheme) {
-        Account currentAccount = LoginState.getCurrentAccount();
-        currentAccount.setCurrentTheme(newTheme);
-        LoginState.updateAccount(currentAccount);
+        AccountUpdateModel updateModel = new AccountUpdateModel();
+        updateModel.setCurrentTheme(newTheme);
+        LoginState.updateAccount(updateModel);
     }
 
     /**
@@ -83,9 +84,9 @@ public class SettingsController implements Initializable {
      */
     public static void setSelectedLayout(String name) {
         if (Arrays.asList(getLayouts()).contains(name)) {
-            Account currentAccount = LoginState.getCurrentAccount();
-            currentAccount.setSelectedLayout(name);
-            LoginState.updateAccount(currentAccount);
+            AccountUpdateModel updateModel = new AccountUpdateModel();
+            updateModel.setSelectedLayout(name);
+            LoginState.updateAccount(updateModel);
         }
     }
 }

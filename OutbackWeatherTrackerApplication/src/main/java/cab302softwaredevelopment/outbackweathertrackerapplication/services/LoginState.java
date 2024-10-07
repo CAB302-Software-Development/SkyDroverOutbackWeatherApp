@@ -4,6 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.A
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import lombok.Getter;
 
 public class LoginState {
@@ -40,14 +42,54 @@ public class LoginState {
         currentAccount = guestAccount;
     }
 
-    public static void updateAccount(Account newAccount) {
-        currentAccount.setEmail(newAccount.getEmail());
-        currentAccount.setPassword(newAccount.getPassword());
-        currentAccount.setCurrentTheme(newAccount.getCurrentTheme());
-        currentAccount.setIsGuest(newAccount.getIsGuest());
-        currentAccount.setPreferCelsius(newAccount.getPreferCelsius());
+    public static void updateAccount(AccountUpdateModel newAccount) {
+        Account.AccountBuilder accountBuilder = Account.builder();
+        accountBuilder.id(currentAccount.getId());
+        accountBuilder.isGuest(currentAccount.getIsGuest());
+
+        if (newAccount.getEmail() != null) {
+            accountBuilder.email(newAccount.getEmail());
+        } else {
+            accountBuilder.email(currentAccount.getEmail());
+        }
+
+        if (newAccount.getPassword() != null) {
+            accountBuilder.password(newAccount.getPassword());
+        } else {
+            accountBuilder.password(currentAccount.getPassword());
+        }
+
+        if (newAccount.getCurrentTheme() != null) {
+            accountBuilder.currentTheme(newAccount.getCurrentTheme());
+        } else {
+            accountBuilder.currentTheme(currentAccount.getCurrentTheme());
+        }
+
+        if (newAccount.getPreferCelsius() != null) {
+            accountBuilder.preferCelsius(newAccount.getPreferCelsius());
+        } else {
+            accountBuilder.preferCelsius(currentAccount.getPreferCelsius());
+        }
+
+        if (newAccount.getDashboardLayouts() != null) {
+            accountBuilder.dashboardLayouts(newAccount.getDashboardLayouts());
+        } else {
+            accountBuilder.dashboardLayouts(currentAccount.getDashboardLayouts());
+        }
+
+        if (newAccount.getSelectedLayout() != null) {
+            accountBuilder.selectedLayout(newAccount.getSelectedLayout());
+        } else {
+            accountBuilder.selectedLayout(currentAccount.getSelectedLayout());
+        }
+
+        Account updatedAccount = accountBuilder.build();
 
         AccountDAO accountDAO = new AccountDAO();
-        accountDAO.update(currentAccount);
+        accountDAO.update(updatedAccount);
+        currentAccount = new AccountDAO.AccountQuery()
+                .whereId(currentAccount.getId())
+                .getSingleResult();
+
     }
 }
