@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainController implements Initializable {
     public static final int WIDTH = 1080;
@@ -36,6 +39,8 @@ public class MainController implements Initializable {
     private Scene scene;
     @FXML
     BorderPane root;
+
+    private ScheduledExecutorService scheduler;
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -57,15 +62,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Sdk sdk = new Sdk();
-        List<Location> locations = (new LocationDAO.LocationQuery())
-                .whereAccount(LoginState.getCurrentAccount())
-                .getResults();
-        for (Location location : locations) {
-            sdk.updateDailyForecast(location, 7, 2);
-            sdk.updateHourlyForecast(location, 7, 2);
-        }
-
         controller = this;
         Node swpProfile = createSwapPanel("panels/profile-panel.fxml", btnProfile);
         Node swpDashboard = createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
@@ -76,6 +72,26 @@ public class MainController implements Initializable {
 
         Node swpSettings = createSwapPanel("panels/settings-panel.fxml", btnSettings);
         root.centerProperty().set(swpDashboard);
+
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(this::updateLocalDB, 0, 10, TimeUnit.MINUTES);
+    }
+
+    private void updateLocalDB() {
+        try {
+            Sdk sdk = new Sdk();
+            List<Location> locations = (new LocationDAO.LocationQuery())
+                    .whereAccount(LoginState.getCurrentAccount())
+                    .getResults();
+            for (Location location : locations) {
+                sdk.updateDailyForecast(location, 7, 2);
+                sdk.updateHourlyForecast(location, 7, 2);
+            }
+            if (LoginState.isOffline()) LoginState.setOffline(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (!LoginState.isOffline()) LoginState.setOffline(true);
+        }
     }
 
     private Node createSwapPanel(String fxmlPath, Button button) {
@@ -88,5 +104,11 @@ public class MainController implements Initializable {
         }
         button.setOnAction(actionEvent -> root.centerProperty().set(panelNode));
         return panelNode;
+    }
+
+    public void shutdownScheduler() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
     }
 }

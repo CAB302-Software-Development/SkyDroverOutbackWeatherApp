@@ -8,10 +8,13 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.Account
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import lombok.Getter;
+import lombok.Setter;
 
 public class LoginState {
     @Getter
     private static Account currentAccount;
+    @Getter
+    private static boolean isOffline;
 
     public static void login(Account account) {
         currentAccount = account;
@@ -97,5 +100,10 @@ public class LoginState {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void setOffline(boolean value) {
+        // TODO display toast and other indicators of offline status
+        isOffline = value;
     }
 }
