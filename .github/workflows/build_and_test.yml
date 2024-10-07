@@ -10,8 +10,7 @@ on:
     branches: 
       - "development"     # Trigger on PRs to development branch
       - "main"            # Trigger on PRs to main branch
-  schedule:
-    - cron: "0 3 * * 1"   # Trigger every Monday at 3:00 AM UTC
+      - "feature/*"       # Trigger on PRs to any feature branch
   workflow_dispatch:        # Allows manual trigger via GitHub UI
 
 env:
@@ -26,14 +25,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Cache Maven Wrapper
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/wrapper
-          key: ${{ runner.os }}-maven-wrapper-${{ hashFiles('**/.mvn/wrapper/**') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-wrapper-
 
       - name: Set up JDK 21 Amazon Corretto
         uses: actions/setup-java@v4
