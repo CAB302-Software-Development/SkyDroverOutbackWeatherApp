@@ -212,6 +212,10 @@
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>
+            <options>
+              <option>--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</option>
+              <option>--add-modules=javafx.controls,javafx.fxml,javafx.graphics</option>
+            </options>
             </configuration>
             <goals>
               <goal>jlink</goal>
