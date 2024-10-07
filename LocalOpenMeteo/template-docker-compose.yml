@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  open-meteo-api:
+    image: ghcr.io/open-meteo/open-meteo
+    container_name: open-meteo-api
+    ports:
+      - "8080:8080"
+    command: serve -b ${API_BIND}
+    volumes:
+      - data:/app/data
+    restart: always
+    env_file:
+      - path: ./.env
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+volumes:
+  data:
