@@ -125,6 +125,13 @@ for model,variables in models.items():
 
 print(config)
 
+#merge the envs
+if os.path.exists('.env'):
+    with open('.env','r') as f:
+        for line in f:
+            key,value = line.strip().split('=')
+            envs[key] = value
+
 #dump the envs
 with open('.env','w') as f:
     for k,v in envs.items():
