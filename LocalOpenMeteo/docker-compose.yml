@@ -1,0 +1,49 @@
+services:
+  open-meteo-api:
+    command: serve -b ${API_BIND}
+    container_name: open-meteo-api
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    env_file:
+    - path: ./.env
+    image: ghcr.io/open-meteo/open-meteo
+    ports:
+    - 8080:8080
+    restart: always
+    volumes:
+    - data:/app/data
+  open-meteo-sync-bom_access_global:
+    command: sync ${OPEN_METEO_BOM_ACCESS_GLOBAL_MODELS} ${OPEN_METEO_BOM_ACCESS_GLOBAL_VARIABLES}
+      --past-days ${OPEN_METEO_BOM_ACCESS_GLOBAL_MAX_AGE_DAYS:-$OPEN_METEO_DEFAULT_MAX_AGE_DAYS}
+      --repeat-interval ${OPEN_METEO_BOM_ACCESS_GLOBAL_REPEAT_INTERVAL:-$OPEN_METEO_DEFAULT_REPEAT_INTERVAL}
+      --concurrent ${OPEN_METEO_BOM_ACCESS_GLOBAL_CONCURRENT:-$OPEN_METEO_DEFAULT_CONCURRENT}
+    container_name: open-meteo-sync-bom_access_global
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    env_file: .env
+    image: ghcr.io/open-meteo/open-meteo
+    restart: always
+    volumes:
+    - data:/app/data
+  open-meteo-sync-bom_access_global_ensemble:
+    command: sync ${OPEN_METEO_BOM_ACCESS_GLOBAL_ENSEMBLE_MODELS} ${OPEN_METEO_BOM_ACCESS_GLOBAL_ENSEMBLE_VARIABLES}
+      --past-days ${OPEN_METEO_BOM_ACCESS_GLOBAL_ENSEMBLE_MAX_AGE_DAYS:-$OPEN_METEO_DEFAULT_MAX_AGE_DAYS}
+      --repeat-interval ${OPEN_METEO_BOM_ACCESS_GLOBAL_ENSEMBLE_REPEAT_INTERVAL:-$OPEN_METEO_DEFAULT_REPEAT_INTERVAL}
+      --concurrent ${OPEN_METEO_BOM_ACCESS_GLOBAL_ENSEMBLE_CONCURRENT:-$OPEN_METEO_DEFAULT_CONCURRENT}
+    container_name: open-meteo-sync-bom_access_global_ensemble
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    env_file: .env
+    image: ghcr.io/open-meteo/open-meteo
+    restart: always
+    volumes:
+    - data:/app/data
+version: '3.8'
+volumes:
+  data: null

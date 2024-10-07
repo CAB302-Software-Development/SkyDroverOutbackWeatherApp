@@ -1,5 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.database.model;
 
+import static org.hibernate.Length.LONG32;
+
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import com.google.gson.Gson;
@@ -102,6 +104,7 @@ public class Account {
    * The users layouts.
    */
   @Convert(converter = LayoutsConverter.class)
+  @Column(length=LONG32)
   @Default
   private HashMap<String, WidgetInfo[]> dashboardLayouts = new LayoutsConverter().convertToEntityAttribute("{'default':[]}");
 
