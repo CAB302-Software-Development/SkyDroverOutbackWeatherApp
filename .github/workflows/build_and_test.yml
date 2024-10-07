@@ -21,11 +21,20 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
+      - name: Cache Maven Wrapper
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/wrapper
+          key: ${{ runner.os }}-maven-wrapper-${{ hashFiles('**/.mvn/wrapper/**') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-wrapper-
+
       - name: Set up JDK 21 Amazon Corretto
         uses: actions/setup-java@v4
         with:
@@ -40,6 +49,7 @@ jobs:
   test:
     needs: build  
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout code
