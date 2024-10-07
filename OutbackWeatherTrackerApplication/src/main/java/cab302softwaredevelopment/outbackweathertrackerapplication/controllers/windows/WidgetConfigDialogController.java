@@ -1,12 +1,19 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.IntField;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import lombok.Getter;
 
 import java.net.URL;
@@ -29,23 +36,37 @@ public class WidgetConfigDialogController implements Initializable {
     @FXML
     private ButtonType deleteButtonType;
 
+    @FXML
+    IntField ifColIndex, ifRowIndex, ifColSpan, ifRowSpan;
+
     @Getter
     private WidgetInfo widgetInfo;
 
-    private Map<String, Control> configControls = new HashMap<>();
+    private WidgetConfig widgetConfig;
 
-    public void setWidgetInfo(WidgetInfo widgetInfo) {
+    private DashboardController parent;
+    List<Location> locations;
+
+    public void setWidgetInfo(WidgetInfo widgetInfo, DashboardController parent) {
         this.widgetInfo = widgetInfo;
+        widgetConfig = new WidgetConfig(this.widgetInfo.config);
+        this.widgetInfo.config = null;
+        this.parent = parent;
         initializeDialog();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize widget type combo box
-        widgetTypeComboBox.setItems(FXCollections.observableArrayList(WidgetType.values()));
-        widgetTypeComboBox.setOnAction(event -> updateConfigFields());
+        locations = new LocationDAO.LocationQuery()
+                .whereAccount(LoginState.getCurrentAccount())
+                .getResults();
 
-        // Handle Save and Delete button actions
+        widgetTypeComboBox.setItems(FXCollections.observableArrayList(WidgetType.values()));
+        widgetTypeComboBox.setOnAction(event -> {
+            widgetConfig.clearConfig();
+            updateConfigFields();
+        });
+
         Button saveButton = (Button) dialogPane.lookupButton(saveButtonType);
         saveButton.setOnAction(event -> onSave());
 
@@ -55,90 +76,95 @@ public class WidgetConfigDialogController implements Initializable {
 
     private void initializeDialog() {
         widgetTypeComboBox.getSelectionModel().select(widgetInfo.type);
-        widgetTypeComboBox.setDisable(true);
         updateConfigFields();
     }
 
     private void updateConfigFields() {
         configFieldsVBox.getChildren().clear();
-        configControls.clear();
 
         WidgetType selectedType = widgetTypeComboBox.getValue();
         if (selectedType == null) {
             return;
         }
 
-        // Dynamically create configuration fields based on widget type
-        // For example, if it's CURRENT_TEMPERATURE, add fields for locationId and unit
-        if (selectedType == WidgetType.CurrentTemp) {
-            addConfigField("locationId", "Location ID", "Integer");
-            addConfigField("unit", "Unit (Celsius/Fahrenheit)", "String");
-        }
-        // Add other widget types and their configuration fields here
+        ifColIndex = new IntField(0, 3, widgetInfo.columnIndex);
+        ifRowIndex = new IntField(0, 2, widgetInfo.rowIndex);
+        ifColSpan = new IntField(0, 4, widgetInfo.colSpan);
+        ifRowSpan = new IntField(0, 3, widgetInfo.rowSpan);
+        configFieldsVBox.getChildren().addAll(
+                new Label("Column"), ifColIndex,
+                new Label("Row"), ifRowIndex,
+                new Label("Width"), ifColSpan,
+                new Label("Height"), ifRowSpan);
 
-        // Pre-fill fields if editing an existing widget
-        if (widgetInfo != null && widgetInfo.config != null) {
-            for (String key : widgetInfo.config.keySet()) {
-                Control control = configControls.get(key);
-                if (control instanceof TextField) {
-                    ((TextField) control).setText(widgetInfo.config.get(key).toString());
-                }
+        switch (selectedType) {
+            case CurrentTemp -> {
+                ComboBox<Location> locationComboBox = createLocationComboBox();
+                configFieldsVBox.getChildren().addAll( new Label("Select location: "), locationComboBox);
             }
+            case Precipitation -> {
+
+            }
+            case Forecast -> {
+
+            }
+
+
         }
     }
 
-    private void addConfigField(String key, String labelText, String dataType) {
-        Label label = new Label(labelText);
-        TextField textField = new TextField();
-        configControls.put(key, textField);
-        configFieldsVBox.getChildren().addAll(label, textField);
+    private ComboBox<Location> createLocationComboBox() {
+        ComboBox<Location> locationComboBox = new ComboBox<>();
+        locationComboBox.setItems(FXCollections.observableArrayList(locations));
+        locationComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Location location) {
+                if (location == null) return "No Location Selected";
+                return location.getName();
+            }
+
+            @Override
+            public Location fromString(String string) {
+                return null;
+            }
+        });
+        long locationId = widgetConfig.getLocationId();
+        if(locationId >= 0) {
+            locations.stream()
+                    .filter(location -> location.getId() == locationId)
+                    .findFirst()
+                    .ifPresent(location -> locationComboBox.getSelectionModel().select(location));
+        }
+        locationComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            widgetConfig.setLocationId(newValue.getId());
+        });
+
+        return locationComboBox;
     }
 
     private void onSave() {
-        // Validate and collect configuration values
-        Map<String, Object> newConfig = new HashMap<>();
-        for (String key : configControls.keySet()) {
-            Control control = configControls.get(key);
-            if (control instanceof TextField) {
-                String text = ((TextField) control).getText();
-                // Perform validation and type conversion
-                Object value = convertValue(text, key);
-                if (value == null) {
-                    showError("Invalid value for " + key);
-                    return;
-                }
-                newConfig.put(key, value);
-            }
-        }
-        // Update widgetInfo with new configuration
         if (widgetInfo == null) {
             widgetInfo = new WidgetInfo();
+            widgetInfo.type = widgetTypeComboBox.getValue();
         }
-        widgetInfo.type = widgetTypeComboBox.getValue();
-        widgetInfo.config = newConfig;
-        // Close the dialog
+
+        widgetInfo.columnIndex = ifColIndex.getValue();
+        widgetInfo.rowIndex = ifRowIndex.getValue();
+        widgetInfo.colSpan = ifColSpan.getValue();
+        widgetInfo.rowSpan = ifRowSpan.getValue();
+        widgetInfo.config = widgetConfig.getConfig();
+
+        if(parent.checkOccupied(widgetInfo)) {
+            showError("Current configuration overlaps existing widgets.");
+            return;
+        }
+
         dialogPane.getScene().getWindow().hide();
     }
 
     private void onDelete() {
-        // Set widgetInfo to null to indicate deletion
         widgetInfo = null;
         dialogPane.getScene().getWindow().hide();
-    }
-
-    private Object convertValue(String text, String key) {
-        // Implement type conversion based on key or expected data type
-        try {
-            if (key.equals("locationId")) {
-                return Integer.parseInt(text);
-            } else if (key.equals("unit")) {
-                return text;
-            }
-            // Add conversion for other keys
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return text;
     }
 
     private void showError(String message) {

@@ -3,15 +3,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
-<DialogPane xmlns:fx="http://javafx.com/fxml" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController">
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController"
+            fx:id="dialogPane" >
     <content>
         <VBox spacing="10">
-            <!-- Widget Type Selection -->
             <HBox spacing="10">
                 <Label text="Widget Type:"/>
                 <ComboBox fx:id="widgetTypeComboBox"/>
             </HBox>
-            <!-- Widget Configuration Fields (dynamic) -->
             <VBox fx:id="configFieldsVBox" spacing="10"/>
         </VBox>
     </content>
