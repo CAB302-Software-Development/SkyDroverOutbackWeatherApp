@@ -35,7 +35,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -59,7 +59,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -84,7 +84,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -108,7 +108,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }

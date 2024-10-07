@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
@@ -97,7 +98,7 @@ public class AccountDAOTest extends DBTest {
     addAccounts();
 
     // Try to insert the same accounts again
-    addAccounts();
+    assertThrows(Exception.class, this::addAccounts);
 
     // Verify the accounts
     assertEquals(accountsTemplate.size(), accountDAO.getAll().size(),
