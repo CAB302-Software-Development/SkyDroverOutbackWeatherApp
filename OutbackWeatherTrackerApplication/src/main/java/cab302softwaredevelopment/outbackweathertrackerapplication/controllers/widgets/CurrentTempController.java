@@ -4,6 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.H
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
@@ -14,7 +16,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.Instant;
-public class CurrentTempController extends BaseWidgetController {
+import java.util.Map;
+
+public class CurrentTempController implements IConfigurableWidget {
     @FXML
     public ImageView weatherIconImageView;
     @FXML
@@ -28,23 +32,21 @@ public class CurrentTempController extends BaseWidgetController {
     @FXML
     private Button removeButton;
 
+    Location location = null;
 
-    @ConfigMethod
-    public void applyConfig(double locationId) {
-        loadTemperatureData((long) locationId, "Celsius");
-    }
+    public void applyConfig(WidgetConfig config) {
+        long locationId = config.getLocationId();
 
-    private void loadTemperatureData(long locationId, String unit) {
-        if (locationId == -1) {
-            lblTemp.setText("No location set.");
-            return;
-        }
-
-        Location location = new LocationDAO.LocationQuery()
+        location = new LocationDAO.LocationQuery()
                 .whereId(locationId)
                 .getSingleResult();
+
+        loadTemperatureData(LoginState.getCurrentAccount().getPreferCelsius());
+    }
+
+    private void loadTemperatureData(boolean preferCelsius) {
         if (location == null) {
-            lblTemp.setText("Invalid location.");
+            lblTemp.setText("No location set.");
             return;
         }
 
@@ -59,16 +61,15 @@ public class CurrentTempController extends BaseWidgetController {
 
         assert forecast != null;
 
-        double temperature = forecast.getTemperature_2m();
-        if (unit.equals("Fahrenheit")) {
-            temperature = temperature * 9 / 5 + 32;
-        }
+        double temperature = (preferCelsius) ?
+                forecast.getTemperature_2m() :
+                ((forecast.getTemperature_2m() * 9) / 5) + 32;
 
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(forecast.getTimestamp()), ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = dateTime.format(formatter);
         lblDateTime.setText(formattedDate);
-        lblTemp.setText(String.format("%.1f° %s", temperature, unit));
+        lblTemp.setText(String.format("%.1f° %s", temperature, preferCelsius ? "Celsius" : "Fahrenheit"));
     }
 
     private void showAlert(String title, String content) {
