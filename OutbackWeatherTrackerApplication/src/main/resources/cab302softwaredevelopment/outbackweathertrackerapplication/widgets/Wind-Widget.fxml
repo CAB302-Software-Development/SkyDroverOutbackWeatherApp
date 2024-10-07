@@ -13,7 +13,7 @@
     <children>
         <HBox>
             <children>
-                <Text fx:id="Location" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" />
+                <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" />
             </children>
         </HBox>
       <HBox>
@@ -59,7 +59,7 @@
                <children>
                   <HBox>
                      <children>
-                        <Text fx:id="Windspeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
+                        <Text fx:id="txtWindspeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -74,7 +74,7 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <Text fx:id="GustSpeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
+                        <Text fx:id="txtGustSpeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
                            <font>
                               <Font size="18.0" />
                            </font>
