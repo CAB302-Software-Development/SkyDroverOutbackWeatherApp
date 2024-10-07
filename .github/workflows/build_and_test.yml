@@ -52,5 +52,5 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
 
-      - name: Run Maven Tests
-        run: mvn -B test --file pom.xml -Dtest=AccountDAOTest,DailyForecastDAOTest,HourlyForecastDAOTest,LocationDAOTest
+      - name: Run Maven Tests for DBTests
+        run: mvn -B test --file OutbackWeatherTrackerApplication/pom.xml -Dtest="DBTests.**.*Test"
