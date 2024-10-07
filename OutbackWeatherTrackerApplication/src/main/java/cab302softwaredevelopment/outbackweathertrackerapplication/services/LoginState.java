@@ -6,6 +6,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import lombok.Getter;
 
 public class LoginState {
@@ -42,7 +43,7 @@ public class LoginState {
         currentAccount = guestAccount;
     }
 
-    public static void updateAccount(AccountUpdateModel newAccount) {
+    public static boolean updateAccount(AccountUpdateModel newAccount) {
         Account.AccountBuilder accountBuilder = Account.builder();
         accountBuilder.id(currentAccount.getId());
         accountBuilder.isGuest(currentAccount.getIsGuest());
@@ -85,11 +86,16 @@ public class LoginState {
 
         Account updatedAccount = accountBuilder.build();
 
-        AccountDAO accountDAO = new AccountDAO();
-        accountDAO.update(updatedAccount);
-        currentAccount = new AccountDAO.AccountQuery()
-                .whereId(currentAccount.getId())
-                .getSingleResult();
-
+        try {
+            AccountDAO accountDAO = new AccountDAO();
+            accountDAO.update(updatedAccount);
+            currentAccount = new AccountDAO.AccountQuery()
+                    .whereId(currentAccount.getId())
+                    .getSingleResult();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

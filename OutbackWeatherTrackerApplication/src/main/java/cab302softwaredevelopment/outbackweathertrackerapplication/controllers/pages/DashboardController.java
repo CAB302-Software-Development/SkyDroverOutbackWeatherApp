@@ -310,7 +310,7 @@ public class DashboardController implements Initializable {
 
         AccountUpdateModel updateModel = new AccountUpdateModel();
         updateModel.setDashboardLayouts(existingLayouts);
-        LoginState.updateAccount(updateModel);
+        unsavedChanges = !LoginState.updateAccount(updateModel);
     }
 
     private void exportLayouts() {
