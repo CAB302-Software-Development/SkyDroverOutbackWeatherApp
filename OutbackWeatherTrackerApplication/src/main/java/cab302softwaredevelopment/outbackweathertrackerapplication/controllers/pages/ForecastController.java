@@ -97,8 +97,8 @@ public class ForecastController implements Initializable {
         DateData temp = new DateData(LocalDate.now(), 7);
         List<DailyForecast> forecasts = (new DailyForecastDAO.DailyForecastQuery())
                 .whereLocationId(selectedLocation.getId())
-                .whereTimestampGE((int) temp.getStartEpoch())
-                .whereTimestampLE((int) temp.getEndEpoch())
+                .whereTimestampGE((int) temp.getDayStartEpoch())
+                .whereTimestampLE((int) temp.getDayEndEpoch())
                 .getResults();
 
         hbForecasts.getChildren().clear();
@@ -115,8 +115,8 @@ public class ForecastController implements Initializable {
         DateData temp = new DateData(LocalDate.now());
         List<HourlyForecast> forecasts = (new HourlyForecastDAO.HourlyForecastQuery())
                 .whereLocation(selectedLocation)
-                .whereTimestampGE((int) temp.getStartEpoch())
-                .whereTimestampLE((int) temp.getEndEpoch())
+                .whereTimestampGE((int) temp.getDayStartEpoch())
+                .whereTimestampLE((int) temp.getDayEndEpoch())
                 .getResults();
 
         XYChart.Series tempSeries = new XYChart.Series();
