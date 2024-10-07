@@ -33,7 +33,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file src/pom.xml
+        run: mvn -B package --file OutbackWeatherTrackerApplication/pom.xml
 
   test:
     needs: build  
@@ -51,4 +51,4 @@ jobs:
           cache: maven
 
       - name: Run Maven Tests
-        run: mvn -B test --file src/pom.xml
+        run: mvn -B test --file OutbackWeatherTrackerApplication/pom.xml
