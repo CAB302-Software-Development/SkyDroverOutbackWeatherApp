@@ -16,20 +16,20 @@
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <Text fx:id="Location" style="-fx-fill: white;" text="Location">
+                  <Text fx:id="txtLocation" style="-fx-fill: white;" text="Location">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Text>
-                  <Text fx:id="Time" style="-fx-fill: white;" text="Current Time: " />
-                  <Text fx:id="Date" style="-fx-fill: white;" text="Current Date: " />
+                  <Text fx:id="txtTime" style="-fx-fill: white;" text="Current Time: " />
+                  <Text fx:id="txtDate" style="-fx-fill: white;" text="Current Date: " />
                </children>
             </VBox>
             <HBox spacing="70.0">
                <children>
                   <VBox alignment="CENTER">
                      <children>
-                        <ImageView fx:id="sunrise" fitHeight="80.0" fitWidth="98.0" preserveRatio="true">
+                        <ImageView fx:id="imgSunrise" fitHeight="80.0" fitWidth="98.0" preserveRatio="true">
                            <image>
                               <Image url="@../images/🦆icon_sunrise_.png" />
                            </image>
@@ -40,7 +40,7 @@
                   </VBox>
                   <VBox alignment="CENTER">
                      <children>
-                        <ImageView fx:id="sunset" fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
+                        <ImageView fx:id="imgSunset" fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
                            <image>
                               <Image url="@../images/🦆icon_sunset_.png" />
                            </image>
@@ -75,8 +75,8 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Text fx:id="CloudCoverage" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="78%" />
-                        <Text fx:id="UVIndex" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="4" />
+                        <Text fx:id="txtCloudCoverage" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="78%" />
+                        <Text fx:id="txtUVIndex" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="4" />
                      </children>
                   </VBox>
                </children>

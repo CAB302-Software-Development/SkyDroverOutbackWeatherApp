@@ -67,7 +67,7 @@ public class ApplicationEntry extends Application {
    */
   public static void main(String[] args) {
     Session session = DatabaseConnection.getSession();
-    addTestData();
+    // addTestData();
     Logger.printLog("Application started");
     launch();
   }

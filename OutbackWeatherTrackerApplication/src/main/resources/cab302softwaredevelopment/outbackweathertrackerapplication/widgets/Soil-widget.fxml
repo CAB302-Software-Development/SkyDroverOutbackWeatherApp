@@ -16,7 +16,7 @@
          <children>
             <HBox alignment="CENTER_RIGHT">
                <children>
-                  <Text fx:id="Location" fill="#655c5c" strokeType="OUTSIDE" strokeWidth="0.0" text="Location">
+                  <Text fx:id="txtLocation" fill="#655c5c" strokeType="OUTSIDE" strokeWidth="0.0" text="Location">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -26,7 +26,7 @@
             <VBox>
                <children>
                   <Label text="Soil Temp:" textFill="WHITE" />
-                  <Text fx:id="Temperature" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##">
+                  <Text fx:id="txtTemperature" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -34,13 +34,13 @@
                   <HBox spacing="15.0">
                      <children>
                         <Label text="Soil Moisture: " textFill="WHITE" />
-                        <Text fx:id="Moisture" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##" />
+                        <Text fx:id="txtMoisture" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##" />
                      </children>
                   </HBox>
                   <HBox spacing="15.0">
                      <children>
                         <Label prefHeight="58.0" prefWidth="111.0" text="Reference Evapotranspiration (ET₀): " textFill="WHITE" wrapText="true" />
-                        <Text fx:id="ET" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##">
+                        <Text fx:id="txtET" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="##">
                            <HBox.margin>
                               <Insets top="40.0" />
                            </HBox.margin>

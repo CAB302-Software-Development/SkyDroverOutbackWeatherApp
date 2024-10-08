@@ -19,7 +19,7 @@
                   <Insets />
                </VBox.margin>
                <children>
-                  <Label fx:id="Location" text="Location" textFill="WHITE">
+                  <Label fx:id="lblLocation" text="Location" textFill="WHITE">
                      <font>
                         <Font name="Arial Black" size="18.0" />
                      </font>
@@ -30,12 +30,12 @@
                <children>
                   <VBox>
                      <children>
-                        <Label fx:id="CurrTempLabel" text="Current Temp" textFill="#cdc6c6">
+                        <Label fx:id="lblCurrTempLabel" text="Current Temp" textFill="#cdc6c6">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Text fx:id="CurrTemp" style="-fx-fill: white;" text="10°C">
+                        <Text fx:id="txtCurrTemp" style="-fx-fill: white;" text="10°C">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -44,12 +44,12 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Label fx:id="SoilTempLabel" text="Soil Temp" textFill="#cdc6c6">
+                        <Label fx:id="lblSoilTempLabel" text="Soil Temp" textFill="#cdc6c6">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Text fx:id="SoilTemp" style="-fx-fill: white;" text="100°C">
+                        <Text fx:id="txtSoilTemp" style="-fx-fill: white;" text="100°C">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -65,12 +65,12 @@
                <children>
                   <VBox>
                      <children>
-                        <Label fx:id="FeelsTempLabel" text="Feels Like" textFill="#cdc6c6">
+                        <Label fx:id="lblFeelsTempLabel" text="Feels Like" textFill="#cdc6c6">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Text fx:id="FeelsTemp" style="-fx-fill: white;" text="-10°C">
+                        <Text fx:id="txtFeelsTemp" style="-fx-fill: white;" text="-10°C">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -79,12 +79,12 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Label fx:id="SurfTempLabel" text="Surface Temp" textFill="#cdc6c6">
+                        <Label fx:id="lblSurfTempLabel" text="Surface Temp" textFill="#cdc6c6">
                            <font>
                               <Font size="11.0" />
                            </font>
                         </Label>
-                        <Text fx:id="SurfTemp" style="-fx-fill: white;" text="-10°C">
+                        <Text fx:id="txtSurfTemp" style="-fx-fill: white;" text="-10°C">
                            <font>
                               <Font size="18.0" />
                            </font>

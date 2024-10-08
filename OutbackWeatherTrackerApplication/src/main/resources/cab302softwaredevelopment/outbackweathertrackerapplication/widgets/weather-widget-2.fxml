@@ -12,19 +12,19 @@
    <children>
       <HBox>
          <children>
-            <Text fx:id="Location" style="-fx-fill: white;" text="Location">
+            <Text fx:id="txtLocation" style="-fx-fill: white;" text="Location">
                <font>
                   <Font size="30.0" />
                </font>
             </Text>
          </children>
       </HBox>
-      <Text fx:id="minMaxTempText" style="-fx-fill: white;" text="H: 27° L: 18°">
+      <Text fx:id="txtMinMaxTemp" style="-fx-fill: white;" text="H: 27° L: 18°">
          <font>
             <Font size="12.0" />
          </font>
       </Text>
-      <LineChart fx:id="Graph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false" style="-fx-background-color: transparent;" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+      <LineChart fx:id="lgGraph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false" style="-fx-background-color: transparent;" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
         <xAxis>
           <CategoryAxis side="BOTTOM" tickLabelsVisible="false" />
         </xAxis>

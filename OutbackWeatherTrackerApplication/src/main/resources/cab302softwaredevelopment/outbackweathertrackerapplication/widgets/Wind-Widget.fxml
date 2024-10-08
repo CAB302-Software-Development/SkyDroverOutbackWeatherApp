@@ -22,7 +22,7 @@
                <children>
                     <HBox prefHeight="9.0" prefWidth="103.0">
                         <children>
-                        <Label fx:id="Wind" text="Wind" textFill="WHITE">
+                        <Label fx:id="lblWind" text="Wind" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -34,7 +34,7 @@
                     </HBox>
                     <HBox>
                         <children>
-                        <Label fx:id="Gust" text="Gust" textFill="WHITE">
+                        <Label fx:id="lblGust" text="Gust" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -46,7 +46,7 @@
                     </HBox>
                   <HBox>
                      <children>
-                        <Label fx:id="Direction" text="Direction" textFill="WHITE">
+                        <Label fx:id="lblDirection" text="Direction" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -86,7 +86,7 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <Text fx:id="NSEW" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="NESW">
+                        <Text fx:id="txtNSEW" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="NESW">
                            <font>
                               <Font size="18.0" />
                            </font>
