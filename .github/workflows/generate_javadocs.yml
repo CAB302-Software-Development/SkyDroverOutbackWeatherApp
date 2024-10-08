@@ -36,5 +36,5 @@ jobs:
       - name: Build with Maven
         run: |
           ls -la
-          mvn javadoc:javadoc -DexcludePackageNames=".*Test" --file OutbackWeatherTrackerApplication/pom.xml
+          mvn javadoc:javadoc -DexcludePackageNames=".*Test" --file OutbackWeatherTrackerApplication/pom.xml -e
           ls -la
