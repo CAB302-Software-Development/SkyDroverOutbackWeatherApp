@@ -29,9 +29,16 @@ public class Sdk {
 
   //final String apiHost = "http://api.open-meteo.com/";
   //final String apiHost = "http://127.0.0.1:8080/";
-  static List<String> apiHosts = new ArrayList<String>(Arrays.asList("http://cyphix.ddns.net:8000/", "http://api.open-meteo.com/"));
+  static List<String> apiHosts = new ArrayList<String>(Arrays.asList("http://api.open-meteo.com/","http://cyphix.ddns.net:8000/"));
   static String apiHost = apiHosts.getFirst();
   public Sdk() {
+  }
+
+  private static void rotateApiHost() {
+    String oldApiHost = apiHosts.getFirst();
+    apiHosts.removeFirst();
+    apiHosts.add(oldApiHost);
+    apiHost = apiHosts.getFirst();
   }
 
   /**
@@ -88,16 +95,18 @@ public class Sdk {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (ConnectException e) {
       // Unable to connect to the server
-      // Get the next host to try
-      String newApiHost = apiHosts.getFirst();
-      apiHosts.removeFirst();
-      apiHosts.add(newApiHost);
-      apiHost = newApiHost;
+      rotateApiHost();
       return getDailyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
+    }
+
+    if (response.statusCode() != 200) {
+      // Server returned an error
+      rotateApiHost();
+      return getDailyForecast(location, futureDays, pastDays);
     }
 
     // parse as json
@@ -273,16 +282,20 @@ public class Sdk {
     } catch (ConnectException e) {
       // Unable to connect to the server
       // Get the next host to try
-      String newApiHost = apiHosts.getFirst();
-      apiHosts.removeFirst();
-      apiHosts.add(newApiHost);
-      apiHost = newApiHost;
+      rotateApiHost();
       return getHourlyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+
+    if (response.statusCode() != 200) {
+      // Server returned an error
+      rotateApiHost();
+      return getHourlyForecast(location, futureDays, pastDays);
+    }
+
     // parse as json
     JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
