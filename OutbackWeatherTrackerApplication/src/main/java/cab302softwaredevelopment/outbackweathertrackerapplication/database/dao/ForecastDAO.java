@@ -4,7 +4,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.Datab
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 
@@ -130,6 +132,7 @@ public abstract class ForecastDAO<T> {
 abstract class ForecastQuery<T,K> {
   CriteriaQuery<T> criteria;
   CriteriaBuilder builder;
+  List<Predicate> predicates;
   Root<T> root;
   Class<K> childClass;
 
@@ -143,6 +146,7 @@ abstract class ForecastQuery<T,K> {
     Session session = DatabaseConnection.getSession();
     builder = session.getCriteriaBuilder();
     criteria = builder.createQuery(modelClass);
+    predicates = new ArrayList<>();
     root = criteria.from(modelClass);
     criteria.select(root);
     this.childClass = (Class<K>) childClass.getClass();
@@ -163,7 +167,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereLocationId(long location_id) {
-    criteria.where(builder.equal(root.get("location").get("id"), location_id));
+    predicates.add(builder.equal(root.get("location").get("id"), location_id));
     return self();
   }
 
@@ -174,7 +178,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereLocation(Location location) {
-    criteria.where(builder.equal(root.get("location"), location));
+    predicates.add(builder.equal(root.get("location"), location));
     return self();
   }
 
@@ -185,7 +189,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereId(int id) {
-    criteria.where(builder.equal(root.get("id"), id));
+    predicates.add(builder.equal(root.get("id"), id));
     return self();
   }
 
@@ -196,7 +200,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereTimestamp(int timestamp) {
-    criteria.where(builder.equal(root.get("timestamp"), timestamp));
+    predicates.add(builder.equal(root.get("timestamp"), timestamp));
     return self();
   }
 
@@ -207,7 +211,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereTimestampGE(int timestamp) {
-    criteria.where(builder.greaterThanOrEqualTo(root.get("timestamp"), timestamp));
+    predicates.add(builder.greaterThanOrEqualTo(root.get("timestamp"), timestamp));
     return self();
   }
 
@@ -218,7 +222,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereTimestampLE(int timestamp) {
-    criteria.where(builder.lessThanOrEqualTo(root.get("timestamp"), timestamp));
+    predicates.add(builder.lessThanOrEqualTo(root.get("timestamp"), timestamp));
     return self();
   }
 
@@ -253,7 +257,9 @@ abstract class ForecastQuery<T,K> {
    */
   public List<T> getResults() {
     Session session = DatabaseConnection.getSession();
-    List<T> forecasts = session.createQuery(criteria).getResultList();
+    Predicate[] predicateArray = new Predicate[predicates.size()];
+    predicates.toArray(predicateArray);
+    List<T> forecasts = session.createQuery(criteria.where(predicateArray)).getResultList();
     session.close();
     return forecasts;
   }
@@ -265,7 +271,9 @@ abstract class ForecastQuery<T,K> {
    */
   public T getSingleResult() {
     Session session = DatabaseConnection.getSession();
-    T forecast = session.createQuery(criteria).getResultStream().findFirst().orElse(null);
+    Predicate[] predicateArray = new Predicate[predicates.size()];
+    predicates.toArray(predicateArray);
+    T forecast = session.createQuery(criteria.where(predicateArray)).getResultStream().findFirst().orElse(null);
     session.close();
     return forecast;
   }

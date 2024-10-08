@@ -151,11 +151,11 @@ public class Sdk {
   public void updateDailyForecast(Location location, int futureDays, int pastDays) {
     List<DailyForecast> forecasts = getDailyForecast(location, futureDays, pastDays);
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
-    int minimumTimestamp = Collections.max(forecasts,
+    int minimumTimestamp = Collections.min(forecasts,
             Comparator.comparing(DailyForecast::getTimestamp))
         .getTimestamp();
 
-    int maximumTimestamp = Collections.min(forecasts,
+    int maximumTimestamp = Collections.max(forecasts,
             Comparator.comparing(DailyForecast::getTimestamp))
         .getTimestamp();
 
@@ -355,11 +355,11 @@ public class Sdk {
   public void updateHourlyForecast(Location location, int futureDays, int pastDays) {
     List<HourlyForecast> forecasts = getHourlyForecast(location, futureDays, pastDays);
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
-    int minimumTimestamp = Collections.max(forecasts,
+    int minimumTimestamp = Collections.min(forecasts,
         Comparator.comparing(HourlyForecast::getTimestamp))
         .getTimestamp();
 
-    int maximumTimestamp = Collections.min(forecasts,
+    int maximumTimestamp = Collections.max(forecasts,
         Comparator.comparing(HourlyForecast::getTimestamp))
         .getTimestamp();
 
