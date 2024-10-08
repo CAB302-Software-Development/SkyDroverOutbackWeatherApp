@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
@@ -207,6 +208,67 @@ public class DailyForecastDAOTest extends DBTest {
 
     // Retrieve test location forecasts
     List<DailyForecast> testForecasts = dailyForecastDAO.getByLocationId(testLocation.getId());
+
+    // Verify the daily forecasts
+    assertEquals(1, testForecasts.size(), "There should be 1 daily forecast");
+  }
+
+  @Test
+  void testGetForecastsForLocationByIdQuery(){
+    // Insert the new daily forecasts
+    addAccounts();
+    addLocations();
+    addDailyForecasts();
+
+    // Use a test location
+    Location testLocation = locationsTemplate.get(1);
+
+    // Add relevant forecast
+    DailyForecast relevantForecast = new DailyForecast(testLocation, 1725321600, 3, 24.2, 13.9,
+        23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0,
+        18.0, 45.0, 160.0, 20.32, 4.43);
+    dailyForecastDAO.insert(relevantForecast);
+
+    // Retrieve the daily forecasts
+    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
+
+    // Verify the daily forecasts
+    assertEquals(dailyForecastsTemplate.size() + 1, dailyForecasts.size(),
+        "There should be " + (dailyForecastsTemplate.size() + 1) + " daily forecast");
+
+    // Retrieve test location forecasts
+    List<DailyForecast> testForecasts = new DailyForecastDAO.DailyForecastQuery().whereLocationId(testLocation.getId()).getResults();
+
+
+    // Verify the daily forecasts
+    assertEquals(1, testForecasts.size(), "There should be 1 daily forecast");
+  }
+
+  @Test
+  void testGetForecastsForLocationByIdAndTimestampQuery(){
+    // Insert the new daily forecasts
+    addAccounts();
+    addLocations();
+    addDailyForecasts();
+
+    // Use a test location
+    Location testLocation = locationsTemplate.get(1);
+
+    // Add relevant forecast
+    DailyForecast relevantForecast = new DailyForecast(testLocation, 1725321600, 3, 24.2, 13.9,
+        23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0,
+        18.0, 45.0, 160.0, 20.32, 4.43);
+    dailyForecastDAO.insert(relevantForecast);
+
+    // Retrieve the daily forecasts
+    List<DailyForecast> dailyForecasts = dailyForecastDAO.getAll();
+
+    // Verify the daily forecasts
+    assertEquals(dailyForecastsTemplate.size() + 1, dailyForecasts.size(),
+        "There should be " + (dailyForecastsTemplate.size() + 1) + " daily forecast");
+
+    // Retrieve test location forecasts
+    List<DailyForecast> testForecasts = new DailyForecastDAO.DailyForecastQuery().whereLocationId(testLocation.getId()).whereTimestampGE(0).getResults();
 
     // Verify the daily forecasts
     assertEquals(1, testForecasts.size(), "There should be 1 daily forecast");

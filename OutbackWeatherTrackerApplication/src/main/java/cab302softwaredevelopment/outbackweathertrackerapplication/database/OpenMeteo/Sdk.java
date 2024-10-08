@@ -11,11 +11,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,9 +27,18 @@ import java.util.List;
  */
 public class Sdk {
 
-  final String apiHost = "http://api.open-meteo.com/";
+  //final String apiHost = "http://api.open-meteo.com/";
   //final String apiHost = "http://127.0.0.1:8080/";
+  static List<String> apiHosts = new ArrayList<String>(Arrays.asList("http://api.open-meteo.com/","http://cyphix.ddns.net:8000/"));
+  static String apiHost = apiHosts.getFirst();
   public Sdk() {
+  }
+
+  private static void rotateApiHost() {
+    String oldApiHost = apiHosts.getFirst();
+    apiHosts.removeFirst();
+    apiHosts.add(oldApiHost);
+    apiHost = apiHosts.getFirst();
   }
 
   /**
@@ -82,10 +93,20 @@ public class Sdk {
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    } catch (ConnectException e) {
+      // Unable to connect to the server
+      rotateApiHost();
+      return getDailyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
+    }
+
+    if (response.statusCode() != 200) {
+      // Server returned an error
+      rotateApiHost();
+      return getDailyForecast(location, futureDays, pastDays);
     }
 
     // parse as json
@@ -151,11 +172,11 @@ public class Sdk {
   public void updateDailyForecast(Location location, int futureDays, int pastDays) {
     List<DailyForecast> forecasts = getDailyForecast(location, futureDays, pastDays);
     DailyForecastDAO dailyForecastDAO = new DailyForecastDAO();
-    int minimumTimestamp = Collections.max(forecasts,
+    int minimumTimestamp = Collections.min(forecasts,
             Comparator.comparing(DailyForecast::getTimestamp))
         .getTimestamp();
 
-    int maximumTimestamp = Collections.min(forecasts,
+    int maximumTimestamp = Collections.max(forecasts,
             Comparator.comparing(DailyForecast::getTimestamp))
         .getTimestamp();
 
@@ -258,11 +279,23 @@ public class Sdk {
     HttpResponse<String> response = null;
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    } catch (ConnectException e) {
+      // Unable to connect to the server
+      // Get the next host to try
+      rotateApiHost();
+      return getHourlyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+
+    if (response.statusCode() != 200) {
+      // Server returned an error
+      rotateApiHost();
+      return getHourlyForecast(location, futureDays, pastDays);
+    }
+
     // parse as json
     JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
@@ -355,11 +388,11 @@ public class Sdk {
   public void updateHourlyForecast(Location location, int futureDays, int pastDays) {
     List<HourlyForecast> forecasts = getHourlyForecast(location, futureDays, pastDays);
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
-    int minimumTimestamp = Collections.max(forecasts,
+    int minimumTimestamp = Collections.min(forecasts,
         Comparator.comparing(HourlyForecast::getTimestamp))
         .getTimestamp();
 
-    int maximumTimestamp = Collections.min(forecasts,
+    int maximumTimestamp = Collections.max(forecasts,
         Comparator.comparing(HourlyForecast::getTimestamp))
         .getTimestamp();
 
