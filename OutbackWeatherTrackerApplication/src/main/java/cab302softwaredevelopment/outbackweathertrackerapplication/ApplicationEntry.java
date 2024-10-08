@@ -4,7 +4,6 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.wi
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +16,6 @@ import java.io.IOException;
 public class ApplicationEntry extends Application {
   private static Stage rootStage;
 
-  public static final String stageTitle = "Outback Weather Tracker";
-
   /**
    * Starts the application and sets up the main stage and scene.
    *
@@ -28,7 +25,6 @@ public class ApplicationEntry extends Application {
   @Override
   public void start(Stage stage) {
     if (!GraphicsEnvironment.isHeadless()) {
-      PreferencesService.loadPreferences();
       rootStage = stage;
 
       // TODO Check if valid credentials already exist, skip login window if so
@@ -47,7 +43,7 @@ public class ApplicationEntry extends Application {
     Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
 
     rootStage = new Stage();
-    rootStage.setTitle("Login");
+    rootStage.setTitle(LoginController.TITLE);
     rootStage.setScene(scene);
     rootStage.show();
   }
@@ -59,7 +55,7 @@ public class ApplicationEntry extends Application {
     controller.setScene(scene);
 
     rootStage = new Stage();
-    rootStage.setTitle(stageTitle);
+    rootStage.setTitle(MainController.TITLE);
     rootStage.setScene(scene);
     rootStage.show();
   }
@@ -72,7 +68,7 @@ public class ApplicationEntry extends Application {
   public static void main(String[] args) {
     Session session = DatabaseConnection.getSession();
     addTestData();
-    Logger.printLog("Application started, " + stageTitle);
+    Logger.printLog("Application started");
     launch();
   }
 
@@ -80,7 +76,7 @@ public class ApplicationEntry extends Application {
    * Adds some test data to the database. This is only used for testing purposes.
    */
   private static void addTestData() {
-    Logger.printLog("Application started, " + stageTitle);
+    Logger.printLog("Application started");
     Session session = DatabaseConnection.getSession();
     AccountDAO accountDAO = new AccountDAO();
     LocationDAO locationDAO = new LocationDAO();
@@ -91,6 +87,7 @@ public class ApplicationEntry extends Application {
     Account newAccount = Account.builder()
         .email("guest@guest.com")
         .password("SecurePass1!")
+        .isGuest(true)
         .build();
     accountDAO.insert(newAccount);
 

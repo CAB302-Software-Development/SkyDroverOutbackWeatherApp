@@ -10,26 +10,35 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
 <VBox fx:id="pnlRoot" prefHeight="400.0" prefWidth="600.0"
       styleClass="background-primary"
       xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController">
 
-    <BorderPane prefHeight="60.0" maxHeight="60.0" VBox.vgrow="NEVER">
+    <BorderPane fx:id="bpHeader" prefHeight="60.0" maxHeight="60.0">
         <left>
-            <Text styleClass="text-secondary" strokeType="OUTSIDE" strokeWidth="0.0" BorderPane.alignment="CENTER" text="WELCOME USER...">
-                <font>
-                    <Font size="18.0" />
-                </font>
+            <Text fx:id="txtWelcome" styleClass="text-secondary" strokeType="OUTSIDE" strokeWidth="0.0" BorderPane.alignment="CENTER">
+                <font><Font size="18.0" /></font>
             </Text>
         </left>
         <right>
-            <TextField promptText="Search..." styleClass="border-primary" />
+            <Button fx:id="btnEditDashboard" text="Edit dashboard" onAction="#handleButtonClick"/>
         </right>
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-        </padding>
+        <padding><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></padding>
     </BorderPane>
+
+    <HBox fx:id="hbEditModeToolbar" visible="false" managed="false" spacing="10"
+          alignment="CENTER_RIGHT" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+        <Button fx:id="btnSave" text="Save" onAction="#handleButtonClick"/>
+        <Button fx:id="btnCancel" text="Cancel" onAction="#handleButtonClick"/>
+        <Button fx:id="btnNewLayout" text="New layout" onAction="#handleButtonClick"/>
+        <Button fx:id="btnDeleteLayout" text="Delete layout" onAction="#handleButtonClick"/>
+        <ComboBox fx:id="cboSelectedLayout" />
+        <padding><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></padding>
+    </HBox>
 
     <GridPane fx:id="dashboardGrid" prefHeight="466.0" prefWidth="600.0" VBox.vgrow="ALWAYS"
               hgap="10" vgap="10" alignment="CENTER">
@@ -49,3 +58,27 @@
         </columnConstraints>
     </GridPane>
 </VBox>
+
+<!--
+    <BorderPane>
+        <center>
+            <HBox fx:id="hbHeader">
+                <Text fx:id="txtWelcome" styleClass="text-secondary" strokeType="OUTSIDE" strokeWidth="0.0" BorderPane.alignment="CENTER">
+                    <font><Font size="18.0" /></font>
+                </Text>
+                <Button fx:id="btnEditDashboard" text="Edit dashboard" onAction="#handleButtonClick"/>
+            </HBox>
+
+            <HBox fx:id="hbEditModeToolbar" visible="false" managed="false">
+                <Button fx:id="btnSave" text="Save" onAction="#handleButtonClick"/>
+                <Button fx:id="btnCancel" text="Cancel" onAction="#handleButtonClick"/>
+                <Button fx:id="btnNewLayout" text="New layout" onAction="#handleButtonClick"/>
+                <Button fx:id="btnDeleteLayout" text="Delete layout" onAction="#handleButtonClick"/>
+
+            </HBox>
+        </center>
+        <right>
+            <ComboBox fx:id="cboSelectedLayout"/>
+        </right>
+    </BorderPane>
+-->
