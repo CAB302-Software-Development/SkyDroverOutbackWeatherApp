@@ -3,66 +3,69 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget3Controller">
+<VBox alignment="CENTER" prefHeight="230.0" prefWidth="270.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget3Controller">
    <children>
-      <VBox alignment="CENTER" prefHeight="244.0" prefWidth="273.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;">
+      <Text fx:id="Location" style="-fx-fill: white;" text="Location">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="weatherIconImageView" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" />
+      <Text fx:id="temperatureText" style="-fx-fill: white;" text="CurrentTemp°">
+         <font>
+            <Font size="36.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </Text>
+      <Text fx:id="Precipitation" style="-fx-fill: white;" text="Precipitation">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </Text>
+      <HBox alignment="CENTER" prefHeight="19.0" prefWidth="279.0" spacing="40.0">
          <children>
-            <Text fx:id="Location" style="-fx-fill: white;" text="Location">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
-            <ImageView fx:id="weatherIconImageView" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" />
-            <Text fx:id="temperatureText" style="-fx-fill: white;" text="CurrentTemp°">
-               <font>
-                  <Font size="36.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </Text>
-            <Text fx:id="Precipitation" style="-fx-fill: white;" text="Precipitation">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </Text>
-            <HBox prefHeight="19.0" prefWidth="279.0" spacing="40.0">
+            <VBox>
                <children>
-                  <Label text="Wind" textFill="WHITE" wrapText="true">
+                  <Label alignment="CENTER" text="Wind" textFill="WHITE" wrapText="true">
                      <font>
                         <Font name="Comic Sans MS" size="13.0" />
                      </font>
                   </Label>
+                  <Text fx:id="Wind" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+               </children>
+            </VBox>
+            <VBox>
+               <children>
                   <Label text="Humidity" textFill="WHITE" wrapText="true">
                      <font>
                         <Font name="Comic Sans MS" size="13.0" />
                      </font>
                   </Label>
+                  <Text fx:id="Humidity" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+               </children>
+            </VBox>
+            <VBox>
+               <children>
                   <Label text="Feels Like" textFill="WHITE" wrapText="true">
                      <font>
                         <Font name="Comic Sans MS" size="13.0" />
                      </font>
                   </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="27.0" prefWidth="214.0" spacing="60.0">
-               <children>
-                  <Text fx:id="Wind" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                  <Text fx:id="Humidity" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                   <Text fx:id="FeelsLike" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                </children>
-            </HBox>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
    </children>
-</AnchorPane>
+</VBox>

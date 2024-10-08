@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -8,22 +9,29 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="224.0" prefWidth="257.0" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget2Controller">
+<VBox alignment="CENTER" prefHeight="224.0" prefWidth="257.0" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget2Controller">
    <children>
-      <HBox>
+      <VBox>
          <children>
-            <Text fx:id="Location" style="-fx-fill: white;" text="Location">
+            <HBox>
+               <children>
+                  <Text fx:id="Location" style="-fx-fill: white;" text="Location">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <Text fx:id="minMaxTempText" style="-fx-fill: white;" text="H: 27° L: 18°">
                <font>
-                  <Font size="30.0" />
+                  <Font size="12.0" />
                </font>
             </Text>
          </children>
-      </HBox>
-      <Text fx:id="minMaxTempText" style="-fx-fill: white;" text="H: 27° L: 18°">
-         <font>
-            <Font size="12.0" />
-         </font>
-      </Text>
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </VBox>
       <LineChart fx:id="Graph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false" style="-fx-background-color: transparent;" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
         <xAxis>
           <CategoryAxis side="BOTTOM" tickLabelsVisible="false" />
