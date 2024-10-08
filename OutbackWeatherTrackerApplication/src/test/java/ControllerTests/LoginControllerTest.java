@@ -1,3 +1,5 @@
+package ControllerTests;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LoginController;
