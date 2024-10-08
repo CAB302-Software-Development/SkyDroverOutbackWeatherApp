@@ -26,8 +26,8 @@ import org.junit.jupiter.api.parallel.Execution;
 @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
 abstract class DBTest {
   static List<Location> locationsTemplate = new ArrayList<>();
-  static List<HourlyForecast> hourlyForecastsTemplate = new ArrayList<>();
-  static List<DailyForecast> dailyForecastsTemplate = new ArrayList<>();
+  static List<HourlyForecast.HourlyForecastBuilder> hourlyForecastsTemplates = new ArrayList<>();
+  static List<DailyForecast.DailyForecastBuilder> dailyForecastsTemplates = new ArrayList<>();
   static List<Account> accountsTemplate = new ArrayList<>();
   static AccountDAO accountDAO = new AccountDAO();
   static HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
@@ -70,49 +70,26 @@ abstract class DBTest {
         new Location(accountsTemplate.get(0), 130.9889, -25.2406, 507.0, "Yulara")); // Yulara
 
     // Add the hourly forecasts to the template
-    hourlyForecastsTemplate.clear();
-    hourlyForecastsTemplate.add(
-        new HourlyForecast(locationsTemplate.get(0), 1725321600, 20.8, 50.0, 10.0, 20.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23, 10.8, 15.5,
-            17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9, 0.354,
-            0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-            650.3, 97.1, 896.4, 747.4, 975.3));
-    hourlyForecastsTemplate.add(
-        new HourlyForecast(locationsTemplate.get(0), 1725325200, 21.8, 45.0, 9.4, 22.1, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0, 1026.6, 1023.4, 0.0, 0.0, 0.0, 0.0, 16580.0, 0.52, 1.44, 8.3, 11.9,
-            13.7, 14.8, 159.0, 160.0, 159.0, 159.0, 25.6, 28.6, 20.3, 21.9, 21.1, 18.9, 0.354,
-            0.369, 0.386, 0.386, true, 3600.0, 821.0, 719.0, 102.0, 935.8, 821.0, 1033.0, 856.5,
-            750.1, 106.4, 935.8, 856.5, 1077.7));
-    hourlyForecastsTemplate.add(
-        new HourlyForecast(locationsTemplate.get(0), 1725328800, 22.7, 42.0, 9.2, 23.3, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0, 1025.5, 1022.3, 0.0, 0.0, 0.0, 0.0, 17100.0, 0.57, 1.6, 7.9, 11.2,
-            12.6, 13.7, 167.0, 165.0, 163.0, 165.0, 25.9, 31.0, 21.5, 21.9, 21.1, 18.9, 0.354,
-            0.369, 0.386, 0.386, true, 3600.0, 879.0, 773.0, 106.0, 948.1, 879.0, 1096.2, 882.9,
-            776.4, 106.5, 948.1, 882.9, 1101.1));
-    hourlyForecastsTemplate.add(
-        new HourlyForecast(locationsTemplate.get(0), 1725332400, 23.6, 37.0, 8.0, 23.8, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0, 1024.7, 1021.5, 0.0, 0.0, 0.0, 0.0, 17440.0, 0.57, 1.83, 7.9, 11.2,
-            13.0, 14.4, 164.0, 164.0, 164.0, 164.0, 28.1, 32.1, 22.6, 21.9, 21.1, 18.9, 0.354,
-            0.369, 0.386, 0.386, true, 3600.0, 864.0, 757.0, 107.0, 943.0, 864.0, 1079.3, 835.7,
-            732.2, 103.5, 943.0, 835.7, 1044.0));
-    hourlyForecastsTemplate.add(
-        new HourlyForecast(locationsTemplate.get(0), 1725336000, 24.2, 31.0, 6.0, 23.1, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0, 1024.2, 1021.0, 0.0, 0.0, 0.0, 0.0, 17640.0, 0.53, 2.08, 9.4, 13.3,
-            15.5, 16.2, 157.0, 156.0, 155.0, 156.0, 32.8, 31.6, 23.6, 21.9, 21.1, 18.9, 0.354,
-            0.369, 0.386, 0.386, true, 3600.0, 777.0, 675.0, 102.0, 923.0, 777.0, 983.3, 719.3,
-            624.9, 94.4, 923.0, 719.3, 910.3));
+    hourlyForecastsTemplates.clear();
+    hourlyForecastsTemplates.add(HourlyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725321600).temperature_2m(20.8).relative_humidity_2m(50.0).dew_point_2m(10.0).apparent_temperature(20.0).precipitation(0.0).rain(0.0).showers(0.0).snowfall(0.0).snow_depth(0.0).weather_code(0).pressure_msl(1026.5).surface_pressure(1023.3).cloud_cover(3.0).cloud_cover_low(0.0).cloud_cover_mid(0.0).cloud_cover_high(0.0).visibility(16040.0).et0_fao_evapotranspiration(0.42).vapour_pressure_deficit(1.23).wind_speed_10m(10.8).wind_speed_40m(15.5).wind_speed_80m(17.6).wind_speed_120m(19.4).wind_direction_10m(152.0).wind_direction_40m(152.0).wind_direction_80m(153.0).wind_direction_120m(153.0).wind_gusts_10m(28.4).surface_temperature(25.3).soil_temperature_0_to_10cm(21.3).soil_temperature_10_to_35cm(22.3).soil_temperature_35_to_100cm(21.1).soil_temperature_100_to_300cm(18.9).soil_moisture_0_to_10cm(0.354).soil_moisture_10_to_35cm(0.369).soil_moisture_35_to_100cm(0.386).soil_moisture_100_to_300cm(0.386).is_day(true).sunshine_duration(3600.0).shortwave_radiation(685.0).direct_radiation(596.0).diffuse_radiation(89.0).direct_normal_irradiance(896.4).global_tilted_irradiance(685.0).terrestrial_radiation(893.9).shortwave_radiation_instant(747.4).direct_radiation_instant(650.3).diffuse_radiation_instant(97.1).direct_normal_irradiance_instant(896.4).global_tilted_irradiance_instant(747.4).terrestrial_radiation_instant(975.3));
+    hourlyForecastsTemplates.add(HourlyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725325200).temperature_2m(20.8).relative_humidity_2m(50.0).dew_point_2m(10.0).apparent_temperature(20.0).precipitation(0.0).rain(0.0).showers(0.0).snowfall(0.0).snow_depth(0.0).weather_code(0).pressure_msl(1026.5).surface_pressure(1023.3).cloud_cover(3.0).cloud_cover_low(0.0).cloud_cover_mid(0.0).cloud_cover_high(0.0).visibility(16040.0).et0_fao_evapotranspiration(0.42).vapour_pressure_deficit(1.23).wind_speed_10m(10.8).wind_speed_40m(15.5).wind_speed_80m(17.6).wind_speed_120m(19.4).wind_direction_10m(152.0).wind_direction_40m(152.0).wind_direction_80m(153.0).wind_direction_120m(153.0).wind_gusts_10m(28.4).surface_temperature(25.3).soil_temperature_0_to_10cm(21.3).soil_temperature_10_to_35cm(22.3).soil_temperature_35_to_100cm(21.1).soil_temperature_100_to_300cm(18.9).soil_moisture_0_to_10cm(0.354).soil_moisture_10_to_35cm(0.369).soil_moisture_35_to_100cm(0.386).soil_moisture_100_to_300cm(0.386).is_day(true).sunshine_duration(3600.0).shortwave_radiation(685.0).direct_radiation(596.0).diffuse_radiation(89.0).direct_normal_irradiance(896.4).global_tilted_irradiance(685.0).terrestrial_radiation(893.9).shortwave_radiation_instant(747.4).direct_radiation_instant(650.3).diffuse_radiation_instant(97.1).direct_normal_irradiance_instant(896.4).global_tilted_irradiance_instant(747.4).terrestrial_radiation_instant(975.3));
+    hourlyForecastsTemplates.add(HourlyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725328800).temperature_2m(20.8).relative_humidity_2m(50.0).dew_point_2m(10.0).apparent_temperature(20.0).precipitation(0.0).rain(0.0).showers(0.0).snowfall(0.0).snow_depth(0.0).weather_code(0).pressure_msl(1026.5).surface_pressure(1023.3).cloud_cover(3.0).cloud_cover_low(0.0).cloud_cover_mid(0.0).cloud_cover_high(0.0).visibility(16040.0).et0_fao_evapotranspiration(0.42).vapour_pressure_deficit(1.23).wind_speed_10m(10.8).wind_speed_40m(15.5).wind_speed_80m(17.6).wind_speed_120m(19.4).wind_direction_10m(152.0).wind_direction_40m(152.0).wind_direction_80m(153.0).wind_direction_120m(153.0).wind_gusts_10m(28.4).surface_temperature(25.3).soil_temperature_0_to_10cm(21.3).soil_temperature_10_to_35cm(22.3).soil_temperature_35_to_100cm(21.1).soil_temperature_100_to_300cm(18.9).soil_moisture_0_to_10cm(0.354).soil_moisture_10_to_35cm(0.369).soil_moisture_35_to_100cm(0.386).soil_moisture_100_to_300cm(0.386).is_day(true).sunshine_duration(3600.0).shortwave_radiation(685.0).direct_radiation(596.0).diffuse_radiation(89.0).direct_normal_irradiance(896.4).global_tilted_irradiance(685.0).terrestrial_radiation(893.9).shortwave_radiation_instant(747.4).direct_radiation_instant(650.3).diffuse_radiation_instant(97.1).direct_normal_irradiance_instant(896.4).global_tilted_irradiance_instant(747.4).terrestrial_radiation_instant(975.3));
+    hourlyForecastsTemplates.add(HourlyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725332400).temperature_2m(20.8).relative_humidity_2m(50.0).dew_point_2m(10.0).apparent_temperature(20.0).precipitation(0.0).rain(0.0).showers(0.0).snowfall(0.0).snow_depth(0.0).weather_code(0).pressure_msl(1026.5).surface_pressure(1023.3).cloud_cover(3.0).cloud_cover_low(0.0).cloud_cover_mid(0.0).cloud_cover_high(0.0).visibility(16040.0).et0_fao_evapotranspiration(0.42).vapour_pressure_deficit(1.23).wind_speed_10m(10.8).wind_speed_40m(15.5).wind_speed_80m(17.6).wind_speed_120m(19.4).wind_direction_10m(152.0).wind_direction_40m(152.0).wind_direction_80m(153.0).wind_direction_120m(153.0).wind_gusts_10m(28.4).surface_temperature(25.3).soil_temperature_0_to_10cm(21.3).soil_temperature_10_to_35cm(22.3).soil_temperature_35_to_100cm(21.1).soil_temperature_100_to_300cm(18.9).soil_moisture_0_to_10cm(0.354).soil_moisture_10_to_35cm(0.369).soil_moisture_35_to_100cm(0.386).soil_moisture_100_to_300cm(0.386).is_day(true).sunshine_duration(3600.0).shortwave_radiation(685.0).direct_radiation(596.0).diffuse_radiation(89.0).direct_normal_irradiance(896.4).global_tilted_irradiance(685.0).terrestrial_radiation(893.9).shortwave_radiation_instant(747.4).direct_radiation_instant(650.3).diffuse_radiation_instant(97.1).direct_normal_irradiance_instant(896.4).global_tilted_irradiance_instant(747.4).terrestrial_radiation_instant(975.3));
+    hourlyForecastsTemplates.add(HourlyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725336000).temperature_2m(20.8).relative_humidity_2m(50.0).dew_point_2m(10.0).apparent_temperature(20.0).precipitation(0.0).rain(0.0).showers(0.0).snowfall(0.0).snow_depth(0.0).weather_code(0).pressure_msl(1026.5).surface_pressure(1023.3).cloud_cover(3.0).cloud_cover_low(0.0).cloud_cover_mid(0.0).cloud_cover_high(0.0).visibility(16040.0).et0_fao_evapotranspiration(0.42).vapour_pressure_deficit(1.23).wind_speed_10m(10.8).wind_speed_40m(15.5).wind_speed_80m(17.6).wind_speed_120m(19.4).wind_direction_10m(152.0).wind_direction_40m(152.0).wind_direction_80m(153.0).wind_direction_120m(153.0).wind_gusts_10m(28.4).surface_temperature(25.3).soil_temperature_0_to_10cm(21.3).soil_temperature_10_to_35cm(22.3).soil_temperature_35_to_100cm(21.1).soil_temperature_100_to_300cm(18.9).soil_moisture_0_to_10cm(0.354).soil_moisture_10_to_35cm(0.369).soil_moisture_35_to_100cm(0.386).soil_moisture_100_to_300cm(0.386).is_day(true).sunshine_duration(3600.0).shortwave_radiation(685.0).direct_radiation(596.0).diffuse_radiation(89.0).direct_normal_irradiance(896.4).global_tilted_irradiance(685.0).terrestrial_radiation(893.9).shortwave_radiation_instant(747.4).direct_radiation_instant(650.3).diffuse_radiation_instant(97.1).direct_normal_irradiance_instant(896.4).global_tilted_irradiance_instant(747.4).terrestrial_radiation_instant(975.3));
+
 
     // Add the daily forecasts to the template
-    dailyForecastsTemplate.clear();
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725321600, 3, 24.2, 13.9, 23.8, 12.4, 1725307136, 1725348930, 41834.64, 31318.34, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 18.0, 45.0, 160.0, 20.32, 4.43));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725408000, 3, 21.0, 14.2, 19.8, 14.3, 1725393469, 1725435357, 41928.18, 29210.48, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 11.5, 32.4, 132.0, 15.46, 2.85));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725494400, 3, 22.6, 15.3, 22.8, 15.7, 1725479803, 1725521784, 42021.79, 38157.5, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 12.2, 28.1, 59.0, 16.95, 3.19));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725580800, 3, 24.0, 14.6, 24.3, 15.5, 1725566136, 1725608211, 42115.42, 38910.98, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, 13.3, 34.6, 18.0, 17.46, 3.5));
-    dailyForecastsTemplate.add(new DailyForecast(locationsTemplate.get(0),1725667200, 3, 25.2, 15.1, 26.0, 16.2, 1725652469, 1725694638, 42209.01, 39056.32, null, null, 0.0, null, 0.0, null, 0.0, 14.8, 31.0, 1.0, 20.09, 3.95));
+    dailyForecastsTemplates.clear();
+    dailyForecastsTemplates.add(DailyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725321600).weather_code(3).temperature_2m_max(24.2).temperature_2m_min(13.9).apparent_temperature_max(23.8).apparent_temperature_min(12.4).sunrise(1725307136).sunset(1725348930).daylight_duration(41834.64).sunshine_duration(31318.34).precipitation_sum(0.0).rain_sum(0.0).snowfall_sum(0.0).precipitation_hours(0.0).wind_speed_10m_max(18.0).wind_gusts_10m_max(45.0).wind_direction_10m_dominant(160.0).shortwave_radiation_sum(20.32).et0_fao_evapotranspiration(4.43));
+    dailyForecastsTemplates.add(DailyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725408000).weather_code(3).temperature_2m_max(24.2).temperature_2m_min(13.9).apparent_temperature_max(23.8).apparent_temperature_min(12.4).sunrise(1725307136).sunset(1725348930).daylight_duration(41834.64).sunshine_duration(31318.34).precipitation_sum(0.0).rain_sum(0.0).snowfall_sum(0.0).precipitation_hours(0.0).wind_speed_10m_max(18.0).wind_gusts_10m_max(45.0).wind_direction_10m_dominant(160.0).shortwave_radiation_sum(20.32).et0_fao_evapotranspiration(4.43));
+    dailyForecastsTemplates.add(DailyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725494400).weather_code(3).temperature_2m_max(24.2).temperature_2m_min(13.9).apparent_temperature_max(23.8).apparent_temperature_min(12.4).sunrise(1725307136).sunset(1725348930).daylight_duration(41834.64).sunshine_duration(31318.34).precipitation_sum(0.0).rain_sum(0.0).snowfall_sum(0.0).precipitation_hours(0.0).wind_speed_10m_max(18.0).wind_gusts_10m_max(45.0).wind_direction_10m_dominant(160.0).shortwave_radiation_sum(20.32).et0_fao_evapotranspiration(4.43));
+    dailyForecastsTemplates.add(DailyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725580800).weather_code(3).temperature_2m_max(24.2).temperature_2m_min(13.9).apparent_temperature_max(23.8).apparent_temperature_min(12.4).sunrise(1725307136).sunset(1725348930).daylight_duration(41834.64).sunshine_duration(31318.34).precipitation_sum(0.0).rain_sum(0.0).snowfall_sum(0.0).precipitation_hours(0.0).wind_speed_10m_max(18.0).wind_gusts_10m_max(45.0).wind_direction_10m_dominant(160.0).shortwave_radiation_sum(20.32).et0_fao_evapotranspiration(4.43));
+    dailyForecastsTemplates.add(DailyForecast.builder().location(locationsTemplate.get(0)).timestamp(1725667200).weather_code(3).temperature_2m_max(24.2).temperature_2m_min(13.9).apparent_temperature_max(23.8).apparent_temperature_min(12.4).sunrise(1725307136).sunset(1725348930).daylight_duration(41834.64).sunshine_duration(31318.34).precipitation_sum(0.0).rain_sum(0.0).snowfall_sum(0.0).precipitation_hours(0.0).wind_speed_10m_max(18.0).wind_gusts_10m_max(45.0).wind_direction_10m_dominant(160.0).shortwave_radiation_sum(20.32).et0_fao_evapotranspiration(4.43));
   }
 
   @AfterEach
   public void cleanup() {
+    addTemplates();
     // Create the database connection
     Session session = DatabaseConnection.getSession();
 
@@ -182,14 +159,16 @@ abstract class DBTest {
 
   public void addHourlyForecasts() {
     // Insert the new hourly forecasts
-    for (HourlyForecast hourlyForecast : hourlyForecastsTemplate) {
+    for (HourlyForecast.HourlyForecastBuilder hourlyForecastBuilder : hourlyForecastsTemplates) {
+      HourlyForecast hourlyForecast = hourlyForecastBuilder.build();
       hourlyForecastDAO.insert(hourlyForecast);
     }
   }
 
   public void addDailyForecasts() {
     // Insert the new daily forecasts
-    for (DailyForecast dailyForecast : dailyForecastsTemplate) {
+    for (DailyForecast.DailyForecastBuilder dailyForecastBuilder : dailyForecastsTemplates) {
+      DailyForecast dailyForecast = dailyForecastBuilder.build();
       dailyForecastDAO.insert(dailyForecast);
     }
   }
