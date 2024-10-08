@@ -1,0 +1,40 @@
+name: Build and Test Action
+
+on:
+  push:
+    branches:
+      - "development"     # Trigger on push to development branch
+      - "main"            # Trigger on push to main branch
+      - "feature/*"       # Trigger on push to any feature branch
+  pull_request:
+    branches:
+      - "development"     # Trigger on PRs to development branch
+      - "main"            # Trigger on PRs to main branch
+      - "feature/*"       # Trigger on PRs to any feature branch
+  workflow_dispatch:        # Allows manual trigger via GitHub UI
+
+env:
+  JAVA_DISTRIBUTION: "corretto"
+  JAVA_VERSION: '21'
+
+jobs:
+  generate_javadocs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 Amazon Corretto
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
+
+      - name: Build with Maven
+        run: |
+          ls -la
+          mvn javadoc:javadoc --file OutbackWeatherTrackerApplication/pom.xml
+          ls -la
