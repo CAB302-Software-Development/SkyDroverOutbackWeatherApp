@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - development
-      - test-cases-hunter
+      - feature/*
 jobs:
   build:
     runs-on: ubuntu-latest
