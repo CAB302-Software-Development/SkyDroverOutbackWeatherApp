@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -9,162 +11,110 @@
 
 <!-- comment -->
 
-
-<VBox alignment="CENTER_LEFT" prefHeight="295.0" prefWidth="397.0" spacing="30.0" style="-fx-background-color: #3E6EAC;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER_LEFT" prefHeight="499.0" prefWidth="833.0" spacing="20.0" style="-fx-background-color: #3E6EAC;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.AlertsController">
    <children>
-        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Alerts ">
+        <Text fx:id="AlertPageTitle" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Alerts ">
             <font>
                 <Font size="36.0" />
             </font>
         </Text>
-        <ScrollPane fitToWidth="true" prefHeight="409.0" prefWidth="623.0" style="-fx-border-color: transparent; -fx-background-color: transparent;">
+      <HBox fx:id="AlertFilters" alignment="CENTER" spacing="50.0">
+         <children>
+            <Button mnemonicParsing="false" style="-fx-background-radius: 13px; -fx-background-color: red;" text="Filter" textFill="WHITE">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />
+               </padding>
+            </Button>
+         </children>
+      </HBox>
+        <ScrollPane fx:id="alertScrollPane" fitToHeight="true" fitToWidth="true" style="-fx-border-color: transparent; -fx-background-color: transparent;">
             <content>
                   <VBox alignment="CENTER" prefWidth="372.0" spacing="10.0" style="-fx-background-color: #3E6EAC;">
                       <children>
                           <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
                               <children>
-                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                                      <font>
-                                          <Font size="24.0" />
-                                      </font>
-                                      <HBox.margin>
-                                          <Insets />
-                                      </HBox.margin>
-                                  </Text>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <VBox prefHeight="150.0" prefWidth="104.0">
+                           <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert title">
+                                            <font>
+                                                <Font size="24.0" />
+                                            </font>
+                                        </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets right="70.0" />
+                           </padding>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value" textAlignment="RIGHT">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value" textAlignment="RIGHT">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value" textAlignment="RIGHT">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </VBox>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <VBox alignment="TOP_CENTER">
+                           <children>
+                              <Button mnemonicParsing="false" text="notification" />
+                           </children>
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER">
+                           <children>
+                              <Button mnemonicParsing="false" text="close" />
+                           </children>
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin>
+                        </VBox>
                               </children>
                           </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert message" textAlignment="CENTER" wrappingWidth="347.21630859375">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                  </HBox>
                       </children>
             </VBox>
             </content>
