@@ -53,7 +53,7 @@ public class CurrentTempController extends BaseWidgetController {
                 .getSingleResult();
 
         if (forecast == null) {
-            lblTemp.setText("No forecast set.");
+            lblTemp.setText("No forecast found.");
             return;
         }
 
