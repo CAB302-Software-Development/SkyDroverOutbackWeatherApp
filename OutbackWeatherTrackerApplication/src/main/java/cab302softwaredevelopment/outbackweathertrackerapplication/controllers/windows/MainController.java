@@ -5,6 +5,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenM
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,21 +79,9 @@ public class MainController implements Initializable {
     }
 
     private void updateLocalDB() {
-        try {
-            Sdk sdk = new Sdk();
-            List<Location> locations = (new LocationDAO.LocationQuery())
-                    .whereAccount(LoginState.getCurrentAccount())
-                    .getResults();
-            for (Location location : locations) {
-                sdk.updateDailyForecast(location, 7, 2);
-                sdk.updateHourlyForecast(location, 7, 2);
-            }
-            if (LoginState.isOffline()) LoginState.setOffline(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (!LoginState.isOffline()) LoginState.setOffline(true);
-        }
+        ForecastService.updateForecastsForCurrentUser(7, 2);
     }
+
 
     private Node createSwapPanel(String fxmlPath, Button button) {
         FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(fxmlPath));

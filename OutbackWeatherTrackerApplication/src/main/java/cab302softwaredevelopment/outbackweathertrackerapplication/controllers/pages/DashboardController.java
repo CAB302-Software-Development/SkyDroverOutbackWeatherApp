@@ -2,12 +2,14 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WidgetFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
@@ -110,6 +112,54 @@ public class DashboardController implements Initializable {
         dashboardGrid.getChildren().clear();
         try {
             for (WidgetInfo info : currentLayout) {
+                Node widgetNode = WidgetFactory.createWidget(info);
+
+                if (widgetNode != null) {
+                    StackPane widgetContainer = new StackPane(widgetNode);
+
+                    if (isEditing) {
+                        Button editButton = new Button();
+                        editButton.getStyleClass().add("edit-button");
+                        editButton.setOnAction(e -> editWidget(currentLayout.indexOf(info)));
+
+                        Button deleteButton = new Button();
+                        deleteButton.getStyleClass().add("delete-button");
+                        deleteButton.setOnAction(e -> dashboardGrid.getChildren().remove(widgetContainer));
+
+                        AnchorPane overlayPane = new AnchorPane(editButton, deleteButton);
+                        AnchorPane.setTopAnchor(editButton, 5.0);
+                        AnchorPane.setRightAnchor(editButton, 5.0);
+                        AnchorPane.setTopAnchor(deleteButton, 5.0);
+                        AnchorPane.setRightAnchor(deleteButton, 35.0);
+                        overlayPane.setPickOnBounds(false);
+
+                        widgetContainer.getChildren().add(overlayPane);
+                    }
+
+                    GridPane.setColumnIndex(widgetContainer, info.columnIndex);
+                    GridPane.setRowIndex(widgetContainer, info.rowIndex);
+                    GridPane.setColumnSpan(widgetContainer, info.colSpan);
+                    GridPane.setRowSpan(widgetContainer, info.rowSpan);
+
+                    dashboardGrid.getChildren().add(widgetContainer);
+
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading widgets to grid", e);
+        }
+
+        if (isEditing) {
+            resetOccupied();
+        }
+    }
+
+    /**
+
+    public void loadWidgetsToGrid() {
+        dashboardGrid.getChildren().clear();
+        try {
+            for (WidgetInfo info : currentLayout) {
                 FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(info.type.getFilepath()));
                 Node widgetNode = loader.load();
 
@@ -154,6 +204,7 @@ public class DashboardController implements Initializable {
             resetOccupied();
         }
     }
+     */
 
 
     private void resetOccupied() {
@@ -310,7 +361,7 @@ public class DashboardController implements Initializable {
 
         AccountUpdateModel updateModel = new AccountUpdateModel();
         updateModel.setDashboardLayouts(existingLayouts);
-        unsavedChanges = !LoginState.updateAccount(updateModel);
+        unsavedChanges = !UserService.updateAccount(updateModel);
     }
 
     private void exportLayouts() {

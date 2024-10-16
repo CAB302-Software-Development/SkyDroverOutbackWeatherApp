@@ -6,6 +6,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.Account
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -64,7 +65,7 @@ public class SettingsController implements Initializable {
     public static void setCurrentTheme(Theme newTheme) {
         AccountUpdateModel updateModel = new AccountUpdateModel();
         updateModel.setCurrentTheme(newTheme);
-        LoginState.updateAccount(updateModel);
+        UserService.updateAccount(updateModel);
     }
 
     /**
@@ -86,7 +87,7 @@ public class SettingsController implements Initializable {
         if (Arrays.asList(getLayouts()).contains(name)) {
             AccountUpdateModel updateModel = new AccountUpdateModel();
             updateModel.setSelectedLayout(name);
-            LoginState.updateAccount(updateModel);
+            UserService.updateAccount(updateModel);
         }
     }
 }

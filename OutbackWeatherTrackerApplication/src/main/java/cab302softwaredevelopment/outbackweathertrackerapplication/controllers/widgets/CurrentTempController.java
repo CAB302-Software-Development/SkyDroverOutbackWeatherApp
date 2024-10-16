@@ -4,6 +4,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.H
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import javafx.fxml.FXML;
@@ -20,17 +21,9 @@ import java.util.Map;
 
 public class CurrentTempController extends BaseWidgetController {
     @FXML
-    public ImageView weatherIconImageView;
-    @FXML
     public Label lblDateTime, lblTemp, lblLocation;
     @FXML
     public VBox root;
-    @FXML
-    LineChart<Number,Number> lineChart;
-    @FXML
-    private Button configButton;
-    @FXML
-    private Button removeButton;
 
     @Override
     public void updateWidget() {
@@ -42,18 +35,11 @@ public class CurrentTempController extends BaseWidgetController {
             lblTemp.setText("No location set.");
             return;
         }
-
         lblLocation.setText(location.getName());
-
-        long now = Instant.now().getEpochSecond();
-        HourlyForecast forecast = new HourlyForecastDAO.HourlyForecastQuery()
-                .whereLocation(location)
-                .whereTimestampGE((int) now)
-                .addOrderAsc("timestamp")
-                .getSingleResult();
+        HourlyForecast forecast = ForecastService.getLatestHourlyForecast(location);
 
         if (forecast == null) {
-            lblTemp.setText("No forecast set.");
+            lblTemp.setText("No forecast found.");
             return;
         }
 
@@ -66,13 +52,5 @@ public class CurrentTempController extends BaseWidgetController {
         String formattedDate = dateTime.format(formatter);
         lblDateTime.setText(formattedDate);
         lblTemp.setText(String.format("%.1f° %s", temperature, preferCelsius ? "Celsius" : "Fahrenheit"));
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.initOwner(configButton.getScene().getWindow());
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }
