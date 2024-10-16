@@ -6,6 +6,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -42,10 +43,10 @@ public class ApplicationEntry extends Application {
     FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("windows/login-signup.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
 
-    rootStage = new Stage();
-    rootStage.setTitle(LoginController.TITLE);
-    rootStage.setScene(scene);
-    rootStage.show();
+    Stage newStage = new Stage();
+    newStage.setTitle(LoginController.TITLE);
+    newStage.setScene(scene);
+    setMainStage(newStage);
   }
 
   public static void openMainWindow() throws IOException {
@@ -54,9 +55,18 @@ public class ApplicationEntry extends Application {
     MainController controller = loader.getController();
     controller.setScene(scene);
 
-    rootStage = new Stage();
-    rootStage.setTitle(MainController.TITLE);
-    rootStage.setScene(scene);
+    Stage newStage = new Stage();
+    newStage.setTitle(MainController.TITLE);
+    newStage.setScene(scene);
+    setMainStage(newStage);
+  }
+
+  private static void setMainStage(Stage stage) {
+    rootStage = stage;
+    rootStage.setOnCloseRequest(event -> {
+      MainController.shutdownScheduler();
+      Platform.exit();
+    });
     rootStage.show();
   }
 

@@ -7,6 +7,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +43,7 @@ public class MainController implements Initializable {
     @FXML
     BorderPane root;
 
-    private ScheduledExecutorService scheduler;
+    private static ScheduledExecutorService scheduler;
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -78,6 +80,7 @@ public class MainController implements Initializable {
         scheduler.scheduleAtFixedRate(this::updateLocalDB, 0, 10, TimeUnit.MINUTES);
     }
 
+
     private void updateLocalDB() {
         ForecastService.updateForecastsForCurrentUser(7, 2);
     }
@@ -95,7 +98,7 @@ public class MainController implements Initializable {
         return panelNode;
     }
 
-    public void shutdownScheduler() {
+    public static void shutdownScheduler() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
