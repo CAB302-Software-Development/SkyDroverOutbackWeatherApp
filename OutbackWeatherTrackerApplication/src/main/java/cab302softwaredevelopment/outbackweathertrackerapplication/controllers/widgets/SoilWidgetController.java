@@ -2,7 +2,6 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 

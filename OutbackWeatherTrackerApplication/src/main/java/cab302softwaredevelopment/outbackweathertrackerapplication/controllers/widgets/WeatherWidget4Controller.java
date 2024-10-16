@@ -17,7 +17,6 @@ public class WeatherWidget4Controller extends BaseWidgetController {
 
     public void updateWidget() {
         HourlyForecast currentForecast = ForecastService.getLatestHourlyForecast(location);
-
         if (currentForecast != null) {
             txtLocation.setText(currentForecast.getLocation().getName());
             // Instant readingTime = Instant.ofEpochSecond(currentForecast.getTimestamp());
