@@ -1,7 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
@@ -19,9 +18,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class SettingsController implements Initializable {
+public class SettingsController extends BasePage implements Initializable {
     @FXML
     public ComboBox<String> cboThemes;
+
+    @Override
+    public void updateData() {
+        String[] layouts = getLayouts();
+        ObservableList<String> options = FXCollections.observableArrayList(layouts);
+        cboThemes.setItems(options);
+    }
 
     /**
      * Toggle between the light and dark theme
@@ -37,9 +43,7 @@ public class SettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        String[] layouts = getLayouts();
-        ObservableList<String> options = FXCollections.observableArrayList(layouts);
-        cboThemes.setItems(options);
+        this.updateData();
     }
 
     @FXML
@@ -65,7 +69,7 @@ public class SettingsController implements Initializable {
     public static void setCurrentTheme(Theme newTheme) {
         AccountUpdateModel updateModel = new AccountUpdateModel();
         updateModel.setCurrentTheme(newTheme);
-        UserService.updateAccount(updateModel);
+        UserService.updateCurrentAccount(updateModel);
     }
 
     /**
@@ -87,7 +91,7 @@ public class SettingsController implements Initializable {
         if (Arrays.asList(getLayouts()).contains(name)) {
             AccountUpdateModel updateModel = new AccountUpdateModel();
             updateModel.setSelectedLayout(name);
-            UserService.updateAccount(updateModel);
+            UserService.updateCurrentAccount(updateModel);
         }
     }
 }

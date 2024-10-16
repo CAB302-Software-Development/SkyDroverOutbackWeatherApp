@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class MapController {
+public class MapController extends BasePage {
   private static final String BASE_URL = "http://localhost:8090/api/crowdsourced";
 
   @FXML
@@ -32,6 +32,11 @@ public class MapController {
     writeDataToJsonFile();
 
     webEngine.load(htmlFile);
+  }
+
+  @Override
+  public void updateData() {
+
   }
 
   private void writeDataToJsonFile() {
