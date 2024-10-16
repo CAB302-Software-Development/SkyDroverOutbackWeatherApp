@@ -2,18 +2,14 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import com.google.gson.Gson;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
 import java.io.FileWriter;
-import java.io.IOException;
 
 public class MapController extends BasePage {
   private static final String BASE_URL = "http://localhost:8090/api/crowdsourced";

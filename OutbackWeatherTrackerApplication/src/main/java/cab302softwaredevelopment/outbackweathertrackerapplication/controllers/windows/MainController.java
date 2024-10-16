@@ -2,17 +2,10 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.PageFactory;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,9 +13,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;

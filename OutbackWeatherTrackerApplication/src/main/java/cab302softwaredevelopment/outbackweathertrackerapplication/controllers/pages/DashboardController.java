@@ -1,7 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WidgetFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
@@ -10,18 +9,14 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetI
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-
 import java.io.*;
 import java.net.URL;
 import java.util.*;

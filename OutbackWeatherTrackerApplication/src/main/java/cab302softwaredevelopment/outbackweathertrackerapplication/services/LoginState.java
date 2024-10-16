@@ -1,12 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import lombok.Getter;
 import lombok.Setter;
 

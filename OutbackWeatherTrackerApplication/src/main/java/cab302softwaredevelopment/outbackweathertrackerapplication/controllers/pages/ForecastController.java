@@ -12,7 +12,6 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateDat
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,7 +24,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-
 import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
