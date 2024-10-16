@@ -1,27 +1,26 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
-public class WeatherWidget3Controller {
-    
+public class WeatherWidget3Controller extends BaseWidgetController {
+    @FXML
     public ImageView weatherIconImageView;
-    public Text temperatureText;
-    public Text Location;
-    public Text Precipitation;
-    public Text Wind;
-    public Text Humidity;
-    public Text FeelsLike;
+    @FXML
+    public Text txtTemperature, txtLocation, txtPrecipitation, txtWind, txtHumidity, txtFeelsLike;
 
-    public void updateWeatherWidget(int temp, String location, String precipitation, int wind, int humid, int feels){
-        temperatureText.setText(temp + "°");
-        Location.setText(location);
-        Precipitation.setText(precipitation);
-        Wind.setText(wind + "km/h");
-        Humidity.setText(humid + "%");
-        FeelsLike.setText(feels + "°");
-// random comment
+    public void updateWidget() {
+        HourlyForecast currentForecast = getLatestHourlyForecast();
 
+        if (currentForecast != null) {
+            txtTemperature.setText(currentForecast.getTemperature_2m() + "°");
+            txtLocation.setText(currentForecast.getLocation().getName());
+            txtPrecipitation.setText(currentForecast.getPrecipitation() + "");
+            txtWind.setText(currentForecast.getWind_speed_10m() + "km/h");
+            txtHumidity.setText(currentForecast.getRelative_humidity_2m() + "%");
+            txtFeelsLike.setText(currentForecast.getApparent_temperature() + "°");
+        }
     }
-
 }

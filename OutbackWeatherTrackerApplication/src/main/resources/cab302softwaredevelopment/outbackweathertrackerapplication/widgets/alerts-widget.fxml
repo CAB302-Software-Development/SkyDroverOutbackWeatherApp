@@ -8,88 +8,56 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefWidth="372.0" spacing="10.0" style="-fx-background-color: #3E6EAC;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.AlertsWidgetController">
-   <children>
-      <HBox alignment="CENTER" prefHeight="25.0" style="-fx-background-color: red; -fx-background-radius: 13.5;">
-         <children>
-            <ImageView fx:id="AlertImage1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-            </ImageView>
-            <VBox prefHeight="150.0" prefWidth="104.0">
-               <children>
-                  <Text fx:id="alertTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert title">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="alertField1" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="AlertField2" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="AlertField3" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-               </children>
-               <padding>
-                  <Insets right="70.0" />
-               </padding>
-            </VBox>
-            <VBox>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="AlertValue1" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value" textAlignment="RIGHT">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="AlertValue2" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value" textAlignment="RIGHT">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="AlertValue3" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value" textAlignment="RIGHT">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-               </children>
-            </VBox>
-            <ImageView fx:id="AlertImage2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </ImageView>
-            <VBox alignment="TOP_CENTER">
-               <children>
-                  <Button fx:id="Notification" mnemonicParsing="false" text="notification" />
-               </children>
-               <HBox.margin>
-                  <Insets top="10.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox fx:id="Close" alignment="TOP_CENTER">
-               <children>
-                  <Button mnemonicParsing="false" text="close" />
-               </children>
-               <HBox.margin>
-                  <Insets top="10.0" />
-               </HBox.margin>
-            </VBox>
-         </children>
-      </HBox>
-   </children>
+<VBox alignment="CENTER" spacing="10.0" styleClass="alerts-widget"
+      stylesheets="@../themes/style.css,@../themes/theme-light.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.AlertsWidgetController">
+   <HBox alignment="CENTER" prefHeight="25.0" >
+      <ImageView fx:id="imgAlert1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin><Insets right="10.0"/></HBox.margin>
+      </ImageView>
+      <VBox prefHeight="150.0" prefWidth="104.0">
+         <padding><Insets right="70.0"/></padding>
+         <Text fx:id="txtAlertTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert title">
+            <font><Font size="24.0"/></font>
+         </Text>
+         <Text fx:id="txtAlertField1" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
+            <font><Font size="18.0"/></font>
+         </Text>
+         <Text fx:id="txtAlertField2" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
+            <font><Font size="18.0"/></font>
+         </Text>
+         <Text fx:id="txtAlertField3" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
+            <font><Font size="18.0"/></font>
+         </Text>
+      </VBox>
+      <VBox>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
+            <font><Font size="24.0"/></font>
+         </Text>
+         <Text fx:id="txtAlertValue1" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value"
+               textAlignment="RIGHT">
+            <font><Font size="18.0"/></font>
+         </Text>
+         <Text fx:id="txtAlertValue2" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value"
+               textAlignment="RIGHT">
+            <font><Font size="18.0"/></font>
+         </Text>
+         <Text fx:id="txtAlertValue3" strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value"
+               textAlignment="RIGHT">
+            <font><Font size="18.0"/></font>
+         </Text>
+      </VBox>
+      <ImageView fx:id="imgAlert2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin><Insets left="10.0"/></HBox.margin>
+      </ImageView>
+      <VBox alignment="TOP_CENTER">
+         <HBox.margin><Insets top="10.0"/></HBox.margin>
+         <Button fx:id="btnNotification" mnemonicParsing="false" text="notification"/>
+      </VBox>
+      <VBox fx:id="vbClose" alignment="TOP_CENTER">
+         <HBox.margin><Insets top="10.0"/></HBox.margin>
+         <Button mnemonicParsing="false" text="close"/>
+      </VBox>
+   </HBox>
 </VBox>

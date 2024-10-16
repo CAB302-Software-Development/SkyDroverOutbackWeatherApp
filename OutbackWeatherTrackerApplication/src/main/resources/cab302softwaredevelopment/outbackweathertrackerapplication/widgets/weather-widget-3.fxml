@@ -9,63 +9,40 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox alignment="CENTER" prefHeight="230.0" prefWidth="270.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget3Controller">
-   <children>
-      <Text fx:id="Location" style="-fx-fill: white;" text="Location">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <ImageView fx:id="weatherIconImageView" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" />
-      <Text fx:id="temperatureText" style="-fx-fill: white;" text="CurrentTemp°">
-         <font>
-            <Font size="36.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="10.0" />
-         </VBox.margin>
-      </Text>
-      <Text fx:id="Precipitation" style="-fx-fill: white;" text="Precipitation">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="10.0" />
-         </VBox.margin>
-      </Text>
-      <HBox alignment="CENTER" prefHeight="19.0" prefWidth="279.0" spacing="40.0">
-         <children>
-            <VBox>
-               <children>
-                  <Label alignment="CENTER" text="Wind" textFill="WHITE" wrapText="true">
-                     <font>
-                        <Font name="Comic Sans MS" size="13.0" />
-                     </font>
-                  </Label>
-                  <Text fx:id="Wind" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-               </children>
-            </VBox>
-            <VBox>
-               <children>
-                  <Label text="Humidity" textFill="WHITE" wrapText="true">
-                     <font>
-                        <Font name="Comic Sans MS" size="13.0" />
-                     </font>
-                  </Label>
-                  <Text fx:id="Humidity" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-               </children>
-            </VBox>
-            <VBox>
-               <children>
-                  <Label text="Feels Like" textFill="WHITE" wrapText="true">
-                     <font>
-                        <Font name="Comic Sans MS" size="13.0" />
-                     </font>
-                  </Label>
-                  <Text fx:id="FeelsLike" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-   </children>
+<VBox alignment="CENTER" styleClass="weather-widget-3"
+      stylesheets="@../themes/style.css,@../themes/theme-light.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget3Controller">
+   <Text  fx:id="txtLocation" text="Location">
+      <font><Font size="14.0"/></font>
+   </Text>
+   <ImageView fx:id="weatherIconImageView" fitHeight="80.0" fitWidth="80.0" preserveRatio="true"/>
+   <Text fx:id="txtTemperature" text="CurrentTemp°">
+      <font><Font size="36.0"/></font>
+      <VBox.margin><Insets bottom="10.0"/></VBox.margin>
+   </Text>
+   <Text fx:id="txtPrecipitation" text="Precipitation">
+      <font><Font size="18.0"/></font>
+      <VBox.margin><Insets bottom="10.0"/></VBox.margin>
+   </Text>
+   <HBox alignment="CENTER" prefHeight="19.0" prefWidth="279.0" spacing="40.0">
+      <VBox>
+         <Label alignment="CENTER" text="Wind" textFill="WHITE" wrapText="true">
+            <font><Font name="Comic Sans MS" size="13.0"/></font>
+         </Label>
+         <Text fx:id="txtWind" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+      </VBox>
+      <VBox>
+         <Label text="Humidity" textFill="WHITE" wrapText="true">
+            <font><Font name="Comic Sans MS" size="13.0"/></font>
+         </Label>
+         <Text fx:id="txtHumidity" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+      </VBox>
+      <VBox>
+         <Label text="Feels Like" textFill="WHITE" wrapText="true">
+            <font><Font name="Comic Sans MS" size="13.0"/></font>
+         </Label>
+         <Text fx:id="txtFeelsLike" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+      </VBox>
+   </HBox>
 </VBox>

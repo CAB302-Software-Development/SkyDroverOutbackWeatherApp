@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.Instant;
 import java.util.Map;
 
-public class CurrentTempController implements IConfigurableWidget {
+public class CurrentTempController extends BaseWidgetController {
     @FXML
     public ImageView weatherIconImageView;
     @FXML
@@ -32,15 +32,8 @@ public class CurrentTempController implements IConfigurableWidget {
     @FXML
     private Button removeButton;
 
-    Location location = null;
-
-    public void applyConfig(WidgetConfig config) {
-        long locationId = config.getLocationId();
-
-        location = new LocationDAO.LocationQuery()
-                .whereId(locationId)
-                .getSingleResult();
-
+    @Override
+    public void updateWidget() {
         loadTemperatureData(LoginState.getCurrentAccount().getPreferCelsius());
     }
 
@@ -59,7 +52,10 @@ public class CurrentTempController implements IConfigurableWidget {
                 .addOrderAsc("timestamp")
                 .getSingleResult();
 
-        assert forecast != null;
+        if (forecast == null) {
+            lblTemp.setText("No forecast set.");
+            return;
+        }
 
         double temperature = (preferCelsius) ?
                 forecast.getTemperature_2m() :

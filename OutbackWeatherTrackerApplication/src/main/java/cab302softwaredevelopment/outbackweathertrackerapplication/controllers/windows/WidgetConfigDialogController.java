@@ -76,6 +76,9 @@ public class WidgetConfigDialogController implements Initializable {
 
     private void initializeDialog() {
         widgetTypeComboBox.getSelectionModel().select(widgetInfo.type);
+        widgetTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            widgetInfo.type = newValue;
+        });
         updateConfigFields();
     }
 
@@ -98,18 +101,10 @@ public class WidgetConfigDialogController implements Initializable {
                 new Label("Height"), ifRowSpan);
 
         switch (selectedType) {
-            case CurrentTemp -> {
+            default -> {
                 ComboBox<Location> locationComboBox = createLocationComboBox();
-                configFieldsVBox.getChildren().addAll( new Label("Select location: "), locationComboBox);
+                configFieldsVBox.getChildren().addAll(new Label("Select location: "), locationComboBox);
             }
-            case Precipitation -> {
-
-            }
-            case Forecast -> {
-
-            }
-
-
         }
     }
 

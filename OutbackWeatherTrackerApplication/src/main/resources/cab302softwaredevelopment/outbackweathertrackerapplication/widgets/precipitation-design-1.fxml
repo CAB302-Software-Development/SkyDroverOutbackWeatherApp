@@ -7,39 +7,26 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox alignment="CENTER" fillWidth="false" prefHeight="230.0" prefWidth="270.0" style="-fx-background-color: linear-gradient(to bottom, #fff400,#756e00); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.PrecipitationWidgetController">
-   <children>
-      <VBox alignment="CENTER">
-         <children>
-            <HBox alignment="CENTER_LEFT">
-               <children>
-                  <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" />
-               </children>
-            </HBox>
-            <Text fx:id="txtPercentage" strokeType="OUTSIDE" strokeWidth="0.0" text="Percentage">
-               <font>
-                  <Font size="48.0" />
-               </font>
-            </Text>
-            <HBox>
-               <children>
-                  <Text fx:id="txtWidgetDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Chance of precipitation" />
-               </children>
-            </HBox>
-            <HBox>
-               <children>
-                  <Text fx:id="txtTemperature" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperature">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                  </Text>
-               </children>
-               <padding>
-                  <Insets top="50.0" />
-               </padding>
-            </HBox>
-         </children>
-      </VBox>
-   </children>
-
-            </VBox>
+<VBox alignment="CENTER" fillWidth="false" styleClass="precipitation-widget"
+      stylesheets="@../themes/style.css,@../themes/theme-light.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.PrecipitationWidgetController">
+   <VBox alignment="CENTER">
+      <HBox alignment="CENTER_LEFT">
+         <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location"/>
+      </HBox>
+      <Text fx:id="txtPercentage" strokeType="OUTSIDE" strokeWidth="0.0" text="Percentage">
+         <font><Font size="48.0"/></font>
+      </Text>
+      <HBox>
+         <Text fx:id="txtWidgetDescription" strokeType="OUTSIDE" strokeWidth="0.0"
+               text="Chance of precipitation"/>
+      </HBox>
+      <HBox>
+         <padding><Insets top="50.0"/></padding>
+         <Text fx:id="txtTemperature" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperature">
+            <font><Font size="12.0"/></font>
+         </Text>
+      </HBox>
+   </VBox>
+</VBox>

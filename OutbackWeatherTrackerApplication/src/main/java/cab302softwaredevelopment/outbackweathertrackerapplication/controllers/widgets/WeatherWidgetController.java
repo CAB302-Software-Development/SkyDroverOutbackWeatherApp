@@ -1,43 +1,44 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherCondition;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
-public class WeatherWidgetController {
-
-    @FXML
-  private Text weatherConditionText;
+public class WeatherWidgetController extends BaseWidgetController {
 
   @FXML
-  private ImageView weatherIconImageView;
+  private ImageView imgWeatherIcon;
 
   @FXML
-  private Text dateTimeText;
+  private Text txtWeatherCondition, txtDateTime, txtTemperature, txtMinMaxTemp;
 
-  @FXML
-  private Text temperatureText;
+  public void updateWidget() {
+    HourlyForecast currentForecast = getLatestHourlyForecast();
+    DailyForecast todayForecast = getTodayForecast();
 
-  @FXML
-  private Text minMaxTempText;
-
-  // Method to update the weather widget
-  public void updateWeatherWidget(String condition, String iconPath, String dateTime, int temperature, int high, int low) {
-    // Update weather condition
-    weatherConditionText.setText(condition);
-
-    // Update weather icon
-    Image weatherIcon = new Image(iconPath);
-    weatherIconImageView.setImage(weatherIcon);
-
-    // Update date and time
-    dateTimeText.setText(dateTime);
-
-    // Update temperature
-    temperatureText.setText(temperature + "°");
-
-    // Update high and low temperatures
-    minMaxTempText.setText("H: " + high + "° L: " + low + "°");
+    if (currentForecast != null && todayForecast != null) {
+      WeatherCondition condition = WeatherCondition.fromReading(currentForecast);
+      txtWeatherCondition.setText(condition.getName());
+      Image weatherIcon = null;
+      try {
+        String imagePath = ApplicationEntry.class.getResource(condition.getImagePath()).toURI().toString();
+        weatherIcon = new Image(imagePath);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      imgWeatherIcon.setImage(weatherIcon);
+      txtDateTime.setText("00:00");
+      txtTemperature.setText(currentForecast.getTemperature_2m() + "°");
+      txtMinMaxTemp.setText(
+              "H: " + todayForecast.getTemperature_2m_max() + "° " +
+              "L: " + todayForecast.getTemperature_2m_min() + "°");
+    } else {
+      // TODO Show error
+    }
   }
 }

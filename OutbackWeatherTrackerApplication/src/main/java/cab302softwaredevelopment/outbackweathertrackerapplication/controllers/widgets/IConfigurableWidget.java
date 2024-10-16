@@ -6,4 +6,5 @@ import java.util.Map;
 
 public interface IConfigurableWidget {
     void applyConfig(WidgetConfig config);
+    void updateWidget();
 }

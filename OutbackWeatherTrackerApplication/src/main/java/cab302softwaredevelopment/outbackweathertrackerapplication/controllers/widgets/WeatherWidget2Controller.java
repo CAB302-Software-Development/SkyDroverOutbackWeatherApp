@@ -1,27 +1,29 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 
-import javax.sound.sampled.Line;
+public class WeatherWidget2Controller extends BaseWidgetController {
+    @FXML
+    public Text txtMinMaxTemp;
+    @FXML
+    public LineChart lgGraph;
+    @FXML
+    public Text txtLocation;
 
-public class WeatherWidget2Controller {
-    public Text minMaxTempText;
-    public LineChart Graph;
-    public Text Location;
-
-    public void updateWeatherWidget(String location, int high, int low, XYChart.Series<String,Number> chart) {
-        // Update weather condition
-        Location.setText(location);
-
-
-        chart = updateChart();
-        Graph.getData().add(chart);
-
-        // Update high and low temperatures
-        minMaxTempText.setText("H: " + high + "° L: " + low + "°");
+    public void updateWidget() {
+        DailyForecast todaysForecast = getTodayForecast();
+        if (todaysForecast != null) {
+            txtLocation.setText(todaysForecast.getLocation().getName());
+            XYChart.Series<String,Number> chart = updateChart();
+            lgGraph.getData().add(chart);
+            txtMinMaxTemp.setText(
+                    "H: " + todaysForecast.getTemperature_2m_max() + "° " +
+                    "L: " + todaysForecast.getTemperature_2m_min() + "°");
+        }
     }
 
     public XYChart.Series updateChart(){
