@@ -11,6 +11,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -82,9 +83,7 @@ public class ForecastController extends BasePage implements Initializable {
      * Loads the user's locations into the combo box.
      */
     private void loadUserLocations() {
-        List<Location> locations = (new LocationDAO.LocationQuery())
-                .whereAccount(LoginState.getCurrentAccount())
-                .getResults();
+        List<Location> locations = LocationService.getCurrentUserLocations();
         locationComboBox.getItems().setAll(locations);
     }
 
