@@ -3,8 +3,11 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.PageFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -63,17 +66,20 @@ public class MainController implements Initializable {
         controller = this;
         pageFactory = new PageFactory(root);
 
-        Node swpProfile = pageFactory.createSwapPanel("panels/profile-panel.fxml", btnProfile);
         Node swpDashboard = pageFactory.createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
-        Node swpForecast = pageFactory.createSwapPanel("panels/forecast-panel.fxml", btnForecast);
-        Node swpMap = pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
-        Node swpAlerts = pageFactory.createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
-        Node swpReports = pageFactory.createSwapPanel("panels/reports-panel.fxml", btnReports);
-        Node swpSettings = pageFactory.createSwapPanel("panels/settings-panel.fxml", btnSettings);
         root.centerProperty().set(swpDashboard);
 
+        new Thread(() -> {
+            pageFactory.createSwapPanel("panels/profile-panel.fxml", btnProfile);
+            pageFactory.createSwapPanel("panels/forecast-panel.fxml", btnForecast);
+            pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
+            pageFactory.createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
+            pageFactory.createSwapPanel("panels/reports-panel.fxml", btnReports);
+            pageFactory.createSwapPanel("panels/settings-panel.fxml", btnSettings);
+        }).start();
+
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateUIData, 0, 5, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::updateUIData, 5, 5, TimeUnit.MINUTES);
     }
 
     private void updateUIData() {
