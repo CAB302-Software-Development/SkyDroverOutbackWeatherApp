@@ -5,18 +5,19 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
     requires jdk.jdi;
-    requires java.sql;
     requires com.google.gson;
     requires java.net.http;
     requires org.hibernate.orm.core;
     requires jakarta.persistence;
     requires java.naming;
     requires org.hibernate.orm.community.dialects;
-    requires java.desktop;
     requires static lombok;
     requires spring.security.crypto;
     requires com.gluonhq.maps;
     requires javafx.web;
+    requires javafx.graphics;
+    requires com.fasterxml.jackson.databind;
+    requires java.desktop;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 

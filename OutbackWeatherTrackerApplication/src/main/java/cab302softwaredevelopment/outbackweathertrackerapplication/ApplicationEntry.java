@@ -2,7 +2,6 @@ package cab302softwaredevelopment.outbackweathertrackerapplication;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
@@ -12,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.Session;
-import java.util.List;
+
 import java.awt.*;
 import java.io.IOException;
 
