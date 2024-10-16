@@ -18,6 +18,16 @@ public class ForecastService {
 
     public static HourlyForecast getLatestHourlyForecast(Location location) {
         int nowEpoch = (int) DateData.getNearestHourEpoch(ZonedDateTime.now());
+
+        if (ConnectionService.isOffline()) {
+            HourlyForecast latest = new HourlyForecastDAO.HourlyForecastQuery()
+                    .addOrderDesc("timestamp")
+                    .getSingleResult();
+            if (nowEpoch > latest.getTimestamp()) {
+                return latest;
+            }
+        }
+
         HourlyForecast currentForecast = new HourlyForecastDAO.HourlyForecastQuery()
                 .whereLocation(location)
                 .whereTimestamp(nowEpoch)
@@ -26,14 +36,24 @@ public class ForecastService {
     }
 
     public static DailyForecast getTodayForecast(Location location) {
-        DateData now = new DateData(LocalDate.now());
+        int nowEpoch = (int) (new DateData(LocalDate.now())).getDayStartEpoch();
+
+        if (ConnectionService.isOffline()) {
+            DailyForecast latest = new DailyForecastDAO.DailyForecastQuery()
+                    .addOrderDesc("timestamp")
+                    .getSingleResult();
+            if (nowEpoch > latest.getTimestamp()) {
+                return latest;
+            }
+        }
+
         DailyForecast todayForecast = new DailyForecastDAO.DailyForecastQuery()
-                .whereTimestamp((int) now.getDayStartEpoch())
+                .whereTimestamp(nowEpoch)
                 .getSingleResult();
         return todayForecast;
     }
 
-    public static void updateForecastsForUser(Account account, int futureDays, int pastDays) {
+    public static boolean updateForecastsForUser(Account account, int futureDays, int pastDays) {
         try {
             Sdk sdk = new Sdk();
             List<Location> locations = (new LocationDAO.LocationQuery())
@@ -43,15 +63,14 @@ public class ForecastService {
                 sdk.updateDailyForecast(location, futureDays, pastDays);
                 sdk.updateHourlyForecast(location, futureDays, pastDays);
             }
-            if (LoginState.isOffline()) LoginState.setOffline(false);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            if (!LoginState.isOffline()) LoginState.setOffline(true);
+            return false;
         }
-
     }
 
-    public static void updateForecastsForCurrentUser(int futureDays, int pastDays) {
-            updateForecastsForUser(LoginState.getCurrentAccount(), futureDays, pastDays);
+    public static boolean updateForecastsForCurrentUser(int futureDays, int pastDays) {
+        return updateForecastsForUser(LoginState.getCurrentAccount(), futureDays, pastDays);
     }
 }
