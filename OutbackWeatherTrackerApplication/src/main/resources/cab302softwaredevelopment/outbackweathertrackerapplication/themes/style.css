@@ -73,12 +73,6 @@
     -fx-background-color: transparent;
 }
 
-.widget-temp {
-    -fx-background-color: colour-1;
-    -fx-background-radius: 10;
-    -fx-padding: 20;
-}
-
 .chart {
     -fx-background-color: primary;
     -fx-font-size: 20;
@@ -99,7 +93,6 @@
 .default-color2.chart-series-line { -fx-stroke: #238591; }
 
 
-/* styles.css */
 .forecast-day {
     -fx-background-color: #ffffff;
     -fx-border-color: #cccccc;
@@ -122,4 +115,114 @@
 
 .precipitation-label, .wind-speed-label {
     -fx-font-size: 12px;
+}
+
+/** Widgets */
+.current-temp-widget {
+    -fx-background-color: colour-1;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}
+.current-temp-widget Label {
+    -fx-text-fill: white;
+}
+
+.precipitation-widget {
+    -fx-background-color: linear-gradient(to bottom, #fff400,#756e00);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+
+.soil-widget {
+    -fx-background-color: linear-gradient(to bottom, #d2913c, #74552d);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+.soil-widget .text-medium {
+    -fx-font-size: 18px;
+}
+.soil-widget .text-large {
+    -fx-font-size: 40px;
+}
+
+.temperature-widget {
+    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+.temperature-widget Text {
+    -fx-fill: white;
+}
+
+.weather-widget {
+    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+.weather-widget Text {
+    -fx-fill: white;
+}
+
+.weather-widget-2 {
+    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+.weather-widget-2 Text {
+    -fx-fill: white;
+}
+.weather-widget-2 .line-chart {
+    -fx-background-color: transparent;
+}
+
+.weather-widget-3 {
+    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+.weather-widget-3 Text {
+    -fx-fill: white;
+}
+
+.weather-widget-4 {
+    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+.weather-widget-4 Text {
+    -fx-fill: white;
+}
+
+.wind-widget {
+    -fx-background-color: linear-gradient(to bottom, #001c75,#00b9ff);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}
+
+.alerts-widget {
+    -fx-background-color: #3E6EAC;
+}
+.alerts-widget HBox {
+    -fx-background-color: red;
+    -fx-background-radius: 13.5;
+}
+
+
+/** Panels */
+.alerts-panel {
+    -fx-background-color: #3E6EAC;
+}
+.alerts-panel .hbox1 {
+    -fx-background-radius: 13px; -fx-background-color: red;
+}
+.alerts-panel .scroll-pane1 {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+.alerts-panel .hbox2 {
+    -fx-background-color: red;
+    -fx-background-radius: 13.5;
+}
+.alerts-panel .vbox1 {
+    -fx-background-color: #3E6EAC;
 }

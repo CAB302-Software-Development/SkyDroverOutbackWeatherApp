@@ -1,5 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherCondition;
@@ -20,16 +21,24 @@ public class WeatherWidgetController extends BaseWidgetController {
     HourlyForecast currentForecast = getLatestHourlyForecast();
     DailyForecast todayForecast = getTodayForecast();
 
-    if (currentForecast != null) {
+    if (currentForecast != null && todayForecast != null) {
       WeatherCondition condition = WeatherCondition.fromReading(currentForecast);
       txtWeatherCondition.setText(condition.getName());
-      Image weatherIcon = new Image(condition.getImagePath());
+      Image weatherIcon = null;
+      try {
+        String imagePath = ApplicationEntry.class.getResource(condition.getImagePath()).toURI().toString();
+        weatherIcon = new Image(imagePath);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
       imgWeatherIcon.setImage(weatherIcon);
       txtDateTime.setText("00:00");
       txtTemperature.setText(currentForecast.getTemperature_2m() + "°");
       txtMinMaxTemp.setText(
               "H: " + todayForecast.getTemperature_2m_max() + "° " +
               "L: " + todayForecast.getTemperature_2m_min() + "°");
+    } else {
+      // TODO Show error
     }
   }
 }

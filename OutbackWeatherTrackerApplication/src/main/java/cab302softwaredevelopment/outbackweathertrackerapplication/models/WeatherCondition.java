@@ -5,7 +5,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import lombok.Getter;
 
 public enum WeatherCondition {
-    Cloudy("Cloudy", "");
+    Cloudy("Cloudy", "images/partlycloudy.png");
 
     @Getter
     final String name;

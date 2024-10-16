@@ -52,7 +52,10 @@ public class CurrentTempController extends BaseWidgetController {
                 .addOrderAsc("timestamp")
                 .getSingleResult();
 
-        assert forecast != null;
+        if (forecast == null) {
+            lblTemp.setText("No forecast set.");
+            return;
+        }
 
         double temperature = (preferCelsius) ?
                 forecast.getTemperature_2m() :

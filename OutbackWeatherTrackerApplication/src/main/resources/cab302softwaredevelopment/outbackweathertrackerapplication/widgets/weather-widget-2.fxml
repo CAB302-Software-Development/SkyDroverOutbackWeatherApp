@@ -9,36 +9,25 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="224.0" prefWidth="257.0" spacing="10.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget2Controller">
-   <children>
-      <VBox>
-         <children>
-            <HBox>
-               <children>
-                  <Text fx:id="Location" style="-fx-fill: white;" text="Location">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Text>
-               </children>
-            </HBox>
-            <Text fx:id="minMaxTempText" style="-fx-fill: white;" text="H: 27° L: 18°">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </Text>
-         </children>
-         <padding>
-            <Insets left="20.0" />
-         </padding>
-      </VBox>
-      <LineChart fx:id="Graph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false" style="-fx-background-color: transparent;" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" tickLabelsVisible="false" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" />
-        </yAxis>
-      </LineChart>
-   </children>
+<VBox alignment="CENTER" spacing="10.0" styleClass="weather-widget-2"
+      stylesheets="@../themes/style.css,@../themes/theme-light.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget2Controller">
+   <VBox>
+      <padding><Insets left="20.0"/></padding>
+      <HBox>
+         <Text fx:id="txtLocation" text="Location">
+            <font><Font size="30.0"/></font>
+         </Text>
+      </HBox>
+      <Text fx:id="txtMinMaxTemp" text="H: 27° L: 18°">
+         <font><Font size="12.0"/></font>
+      </Text>
+   </VBox>
+   <LineChart fx:id="lgGraph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false"
+              styleClass="line-chart" verticalGridLinesVisible="false"
+              verticalZeroLineVisible="false">
+      <xAxis> <CategoryAxis side="BOTTOM" tickLabelsVisible="false"/> </xAxis>
+      <yAxis> <NumberAxis minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false"/> </yAxis>
+   </LineChart>
 </VBox>

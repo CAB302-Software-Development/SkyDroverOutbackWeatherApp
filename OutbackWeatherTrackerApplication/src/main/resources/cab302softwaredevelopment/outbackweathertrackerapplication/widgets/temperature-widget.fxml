@@ -10,104 +10,55 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.TempWidgetController">
-   <children>
-      <VBox prefHeight="199.0" prefWidth="218.0" spacing="5.0" style="-fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC); -fx-background-radius: 15; -fx-padding: 20;">
-         <children>
-            <VBox alignment="CENTER">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <children>
-                  <Label fx:id="lblLocation" text="Location" textFill="WHITE">
-                     <font>
-                        <Font name="Arial Black" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <HBox spacing="20.0">
-               <children>
-                  <VBox>
-                     <children>
-                        <Label fx:id="lblCurrTempLabel" text="Current Temp" textFill="#cdc6c6">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Text fx:id="txtCurrTemp" style="-fx-fill: white;" text="10°C">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="lblSoilTempLabel" text="Soil Temp" textFill="#cdc6c6">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Text fx:id="txtSoilTemp" style="-fx-fill: white;" text="100°C">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-               </children>
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-            </HBox>
-            <HBox spacing="35.0">
-               <children>
-                  <VBox>
-                     <children>
-                        <Label fx:id="lblFeelsTempLabel" text="Feels Like" textFill="#cdc6c6">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Text fx:id="txtFeelsTemp" style="-fx-fill: white;" text="-10°C">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="lblSurfTempLabel" text="Surface Temp" textFill="#cdc6c6">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Text fx:id="txtSurfTemp" style="-fx-fill: white;" text="-10°C">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </HBox>
-            <ImageView fitHeight="45.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-               <VBox.margin>
-                  <Insets left="150.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../images/🦆%20icon%20_thermometer_.png" />
-               </image>
-            </ImageView>
-         </children>
+<VBox spacing="5.0" styleClass="temperature-widget"
+      stylesheets="@../themes/style.css,@../themes/theme-light.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.TempWidgetController">
+   <VBox alignment="CENTER">
+      <Label fx:id="lblLocation" text="Location" textFill="WHITE">
+         <font><Font name="Arial Black" size="18.0"/></font>
+      </Label>
+   </VBox>
+   <HBox spacing="20.0">
+      <padding><Insets top="10.0"/></padding>
+      <VBox>
+         <Label fx:id="lblCurrTempLabel" text="Current Temp" textFill="#cdc6c6">
+            <font><Font size="11.0"/></font>
+         </Label>
+         <Text fx:id="txtCurrTemp" text="10°C">
+            <font><Font size="18.0"/></font>
+         </Text>
       </VBox>
-   </children>
-</AnchorPane>
+      <VBox>
+         <Label fx:id="lblSoilTempLabel" text="Soil Temp" textFill="#cdc6c6">
+            <font><Font size="11.0"/></font>
+         </Label>
+         <Text fx:id="txtSoilTemp" text="100°C">
+            <font><Font size="18.0"/></font>
+         </Text>
+      </VBox>
+   </HBox>
+   <HBox spacing="35.0">
+      <padding><Insets top="20.0"/></padding>
+      <VBox>
+         <Label fx:id="lblFeelsTempLabel" text="Feels Like" textFill="#cdc6c6">
+            <font><Font size="11.0"/></font>
+         </Label>
+         <Text fx:id="txtFeelsTemp" text="-10°C">
+            <font><Font size="18.0"/></font>
+         </Text>
+      </VBox>
+      <VBox>
+         <Label fx:id="lblSurfTempLabel" text="Surface Temp" textFill="#cdc6c6">
+            <font><Font size="11.0"/></font>
+         </Label>
+         <Text fx:id="txtSurfTemp" text="-10°C">
+            <font><Font size="18.0"/></font>
+         </Text>
+      </VBox>
+   </HBox>
+   <ImageView fitHeight="45.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+      <VBox.margin><Insets left="150.0"/></VBox.margin>
+      <Image url="@../images/icon_thermometer_.png"/>
+   </ImageView>
+</VBox>

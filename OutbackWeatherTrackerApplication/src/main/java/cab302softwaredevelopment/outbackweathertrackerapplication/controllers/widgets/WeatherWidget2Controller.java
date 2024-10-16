@@ -16,12 +16,14 @@ public class WeatherWidget2Controller extends BaseWidgetController {
 
     public void updateWidget() {
         DailyForecast todaysForecast = getTodayForecast();
-        txtLocation.setText(todaysForecast.getLocation().getName());
-        XYChart.Series<String,Number> chart = updateChart();
-        lgGraph.getData().add(chart);
-        txtMinMaxTemp.setText(
-                "H: " + todaysForecast.getTemperature_2m_max() + "° " +
-                "L: " + todaysForecast.getTemperature_2m_min() + "°");
+        if (todaysForecast != null) {
+            txtLocation.setText(todaysForecast.getLocation().getName());
+            XYChart.Series<String,Number> chart = updateChart();
+            lgGraph.getData().add(chart);
+            txtMinMaxTemp.setText(
+                    "H: " + todaysForecast.getTemperature_2m_max() + "° " +
+                    "L: " + todaysForecast.getTemperature_2m_min() + "°");
+        }
     }
 
     public XYChart.Series updateChart(){
