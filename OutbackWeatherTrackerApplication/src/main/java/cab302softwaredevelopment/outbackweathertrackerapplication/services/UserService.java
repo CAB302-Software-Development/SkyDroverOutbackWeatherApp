@@ -34,6 +34,16 @@ public class UserService {
         return new AccountDAO.AccountQuery().whereId(id).getSingleResult();
     }
 
+    public static boolean updateCurrentAccount(AccountUpdateModel newAccount) {
+        newAccount.setId(LoginState.getCurrentAccount().getId());
+        boolean result = updateAccount(newAccount);
+        if (result) {
+            Account updatedAccount = getByID(newAccount.getId());
+            LoginState.setCurrentAccount(updatedAccount);
+        }
+        return result;
+    }
+
     public static boolean updateAccount(AccountUpdateModel newAccount) {
         Account currentAccount = getByID(newAccount.getId());
 
