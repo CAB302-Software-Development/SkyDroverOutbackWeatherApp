@@ -30,5 +30,10 @@ public abstract class BaseWidgetController implements IConfigurableWidget {
                 .getSingleResult();
     }
 
+    @Override
+    public void unregister() {
+        WidgetFactory.getWidgetManager().unregisterWidget(this);
+    }
+
     public abstract void updateWidget();
 }
