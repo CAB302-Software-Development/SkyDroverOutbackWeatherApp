@@ -1,9 +1,9 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import javafx.collections.FXCollections;
@@ -12,21 +12,34 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
+import javafx.scene.control.*;
+
+import java.util.List;
+
 public class SettingsController extends BasePage implements Initializable {
     @FXML
-    public ComboBox<String> cboThemes;
+    private ComboBox<String> cboThemes, cboNotificationPreferences;
+    @FXML
+    private ComboBox<String> cboDataSelection;
+    @FXML
+    private ListView<Location> lstLocations;
+    @FXML
+    private Button btnAddLocation, btnUpdateLocation, btnDeleteLocation;
 
     @Override
     public void updateData() {
         String[] layouts = getLayouts();
         ObservableList<String> options = FXCollections.observableArrayList(layouts);
         cboThemes.setItems(options);
+        refreshLocationList();
     }
 
     /**
@@ -44,6 +57,8 @@ public class SettingsController extends BasePage implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.updateData();
+        initializeThemes();
+        initializeLocations();
     }
 
     @FXML
@@ -94,4 +109,45 @@ public class SettingsController extends BasePage implements Initializable {
             UserService.updateCurrentAccount(updateModel);
         }
     }
+
+    private void initializeThemes() {
+        String[] layouts = getLayouts();
+        ObservableList<String> options = FXCollections.observableArrayList(layouts);
+        cboThemes.setItems(options);
+        cboThemes.setValue(getCurrentTheme().toString()); // Set current theme
+    }
+
+    private void initializeLocations() {
+        List<Location> locations = LocationService.getCurrentUserLocations();
+        lstLocations.setItems(FXCollections.observableArrayList(locations));
+    }
+
+    @FXML
+    private void onAddLocation() {
+        LocationCreateModel location = new LocationCreateModel();
+        LocationService.addLocationForCurrentUser(location);
+        refreshLocationList();
+    }
+
+    @FXML
+    private void onDeleteLocation() {
+        Location selectedLocation = lstLocations.getSelectionModel().getSelectedItem();
+        if (selectedLocation != null) {
+            LocationService.deleteLocation(selectedLocation);
+            refreshLocationList();
+        }
+    }
+
+    private void refreshLocationList() {
+        List<Location> locations = LocationService.getCurrentUserLocations();
+        lstLocations.setItems(FXCollections.observableArrayList(locations));
+    }
+
+    @FXML
+    private void onSwapTheme() {
+        Theme selectedTheme = Theme.valueOf(cboThemes.getValue());
+        setCurrentTheme(selectedTheme);
+        MainController.refreshDisplay();
+    }
+
 }
