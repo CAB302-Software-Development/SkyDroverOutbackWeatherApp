@@ -97,4 +97,11 @@ public class MainController implements Initializable {
             alert.showAndWait();
         }
     }
+
+    public static void shutdownScheduler() {
+        if (controller == null) return;
+        if (controller.scheduler != null && !controller.scheduler.isShutdown()) {
+            controller.scheduler.shutdown();
+        }
+    }
 }

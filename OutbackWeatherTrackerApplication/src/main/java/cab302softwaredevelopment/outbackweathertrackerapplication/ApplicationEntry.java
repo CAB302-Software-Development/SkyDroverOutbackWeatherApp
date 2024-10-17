@@ -67,6 +67,7 @@ public class ApplicationEntry extends Application {
     rootStage = stage;
     rootStage.setOnCloseRequest(event -> {
       ConnectionService.getInstance().shutdownScheduler();
+      MainController.shutdownScheduler();
       Platform.exit();
     });
     rootStage.show();
