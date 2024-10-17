@@ -1,5 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
@@ -8,8 +9,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,14 +24,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-
 import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ForecastController implements Initializable {
+public class ForecastController extends BasePage implements Initializable {
     @FXML
     private VBox vbRoot;
     @FXML
@@ -73,7 +74,7 @@ public class ForecastController implements Initializable {
             loadDailyForecastData();
             loadHourlyForecastData();
         } else {
-            showAlert("No Locations Found", "Please add a location to view forecasts.");
+            MainController.showAlert("No Locations Found", "Please add a location to view forecasts.");
         }
     }
 
@@ -132,7 +133,7 @@ public class ForecastController implements Initializable {
     private void refreshForecastData() {
         Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
         if (selectedLocation == null) {
-            showAlert("No Location Selected", "Please select a location to refresh data.");
+            MainController.showAlert("No Location Selected", "Please select a location to refresh data.");
             return;
         }
 
@@ -141,38 +142,29 @@ public class ForecastController implements Initializable {
 
         new Thread(() -> {
             try {
-                sdk.updateDailyForecast(selectedLocation, 7, 0);
-                sdk.updateHourlyForecast(selectedLocation, 2, 2);
+                boolean result = ForecastService.updateForecastsForCurrentUser(7, 2);
 
                 Platform.runLater(() -> {
                     loadDailyForecastData();
+                    loadHourlyForecastData();
 
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
-                    showAlert("Data Refreshed", "Forecast data has been updated.");
+                    if (result) {
+                        MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                    } else {
+                        ConnectionService.setOffline(true);
+                    }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 Platform.runLater(() -> {
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
-                    showAlert("Error", "Failed to refresh forecast data.");
+                    MainController.showAlert("Error", "Failed to refresh forecast data.");
                 });
             }
         }).start();
-    }
-
-    private void showAlert(String title, String message) {
-        if (vbRoot == null) {
-            Logger.printLog(title, message);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(vbRoot.getScene().getWindow());
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
-        }
     }
 
     private Node createForecastDayTile(DailyForecast forecast) {
@@ -212,5 +204,10 @@ public class ForecastController implements Initializable {
         root.getChildren().addAll(lblDate, lblMaxTemp, lblMinTemp, lblPrecipitation, lblWindSpeed);
 
         return root;
+    }
+
+    @Override
+    public void updateData() {
+
     }
 }

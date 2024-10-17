@@ -2,9 +2,8 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 
-import java.util.Map;
-
 public interface IConfigurableWidget {
     void applyConfig(WidgetConfig config);
+    void unregister();
     void updateWidget();
 }

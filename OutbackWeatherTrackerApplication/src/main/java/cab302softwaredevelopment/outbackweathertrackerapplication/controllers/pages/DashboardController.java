@@ -1,7 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.IConfigurableWidget;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WidgetFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
@@ -10,23 +9,20 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetI
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DashboardController implements Initializable {
+public class DashboardController extends BasePage implements Initializable {
     @FXML
     public Pane pnlRoot;
     @FXML
@@ -47,10 +43,12 @@ public class DashboardController implements Initializable {
     private boolean isEditing = false;
     private boolean unsavedChanges = false;
 
+    private WidgetFactory widgetFactory;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Account account = LoginState.getCurrentAccount();
-        txtWelcome.setText("Welcome " + account.getEmail().split("@")[0]);
+        widgetFactory = new WidgetFactory();
+        txtWelcome.setText("Welcome " + LoginState.getCurrentAccount().getEmail().split("@")[0]);
         currentLayout = getCurrentLayout();
         resetLayoutComboBox();
         loadWidgetsToGrid();
@@ -110,40 +108,16 @@ public class DashboardController implements Initializable {
 
     public void loadWidgetsToGrid() {
         dashboardGrid.getChildren().clear();
+        widgetFactory.clearAllWidgets();
         try {
             for (WidgetInfo info : currentLayout) {
-                Node widgetNode = WidgetFactory.createWidget(info);
-
-                if (widgetNode != null) {
-                    StackPane widgetContainer = new StackPane(widgetNode);
-
-                    if (isEditing) {
-                        Button editButton = new Button();
-                        editButton.getStyleClass().add("edit-button");
-                        editButton.setOnAction(e -> editWidget(currentLayout.indexOf(info)));
-
-                        Button deleteButton = new Button();
-                        deleteButton.getStyleClass().add("delete-button");
-                        deleteButton.setOnAction(e -> dashboardGrid.getChildren().remove(widgetContainer));
-
-                        AnchorPane overlayPane = new AnchorPane(editButton, deleteButton);
-                        AnchorPane.setTopAnchor(editButton, 5.0);
-                        AnchorPane.setRightAnchor(editButton, 5.0);
-                        AnchorPane.setTopAnchor(deleteButton, 5.0);
-                        AnchorPane.setRightAnchor(deleteButton, 35.0);
-                        overlayPane.setPickOnBounds(false);
-
-                        widgetContainer.getChildren().add(overlayPane);
-                    }
-
-                    GridPane.setColumnIndex(widgetContainer, info.columnIndex);
-                    GridPane.setRowIndex(widgetContainer, info.rowIndex);
-                    GridPane.setColumnSpan(widgetContainer, info.colSpan);
-                    GridPane.setRowSpan(widgetContainer, info.rowSpan);
-
-                    dashboardGrid.getChildren().add(widgetContainer);
-
+                StackPane widgetContainer;
+                if (isEditing) {
+                    widgetContainer = widgetFactory.createEditWidget(info, this);
+                } else {
+                    widgetContainer = widgetFactory.createWidget(info);
                 }
+                dashboardGrid.getChildren().add(widgetContainer);
             }
         } catch (Exception e) {
             throw new RuntimeException("Error loading widgets to grid", e);
@@ -153,59 +127,6 @@ public class DashboardController implements Initializable {
             resetOccupied();
         }
     }
-
-    /**
-
-    public void loadWidgetsToGrid() {
-        dashboardGrid.getChildren().clear();
-        try {
-            for (WidgetInfo info : currentLayout) {
-                FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(info.type.getFilepath()));
-                Node widgetNode = loader.load();
-
-                Object controller = loader.getController();
-                if (controller instanceof IConfigurableWidget) {
-                    ((IConfigurableWidget) controller).applyConfig(new WidgetConfig(info.config));
-                }
-
-                StackPane widgetContainer = new StackPane(widgetNode);
-
-                if (isEditing) {
-                    Button editButton = new Button();
-                    editButton.getStyleClass().add("edit-button");
-                    editButton.setOnAction(e -> editWidget(currentLayout.indexOf(info)));
-
-                    Button deleteButton = new Button();
-                    deleteButton.getStyleClass().add("delete-button");
-                    deleteButton.setOnAction(e -> dashboardGrid.getChildren().remove(widgetContainer));
-
-                    AnchorPane overlayPane = new AnchorPane(editButton, deleteButton);
-                    AnchorPane.setTopAnchor(editButton, 5.0);
-                    AnchorPane.setRightAnchor(editButton, 5.0);
-                    AnchorPane.setTopAnchor(deleteButton, 5.0);
-                    AnchorPane.setRightAnchor(deleteButton, 35.0);
-
-                    overlayPane.setPickOnBounds(false);
-
-                    widgetContainer.getChildren().add(overlayPane);
-                }
-
-                GridPane.setColumnIndex(widgetContainer, info.columnIndex);
-                GridPane.setRowIndex(widgetContainer, info.rowIndex);
-                GridPane.setColumnSpan(widgetContainer, info.colSpan);
-                GridPane.setRowSpan(widgetContainer, info.rowSpan);
-                dashboardGrid.getChildren().add(widgetContainer);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (isEditing) {
-            resetOccupied();
-        }
-    }
-     */
-
 
     private void resetOccupied() {
         int numRows = dashboardGrid.getRowCount();
@@ -297,6 +218,11 @@ public class DashboardController implements Initializable {
         changeLayout(layoutName);
     }
 
+    public void editWidget(WidgetInfo widgetInfo) {
+        int index = currentLayout.indexOf(widgetInfo);
+        if (index != -1) editWidget(index);
+    }
+
     private void editWidget(int index) {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/widget-config-dialog.fxml"));
@@ -361,7 +287,7 @@ public class DashboardController implements Initializable {
 
         AccountUpdateModel updateModel = new AccountUpdateModel();
         updateModel.setDashboardLayouts(existingLayouts);
-        unsavedChanges = !UserService.updateAccount(updateModel);
+        unsavedChanges = !UserService.updateCurrentAccount(updateModel);
     }
 
     private void exportLayouts() {
@@ -372,5 +298,14 @@ public class DashboardController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void updateData() {
+        widgetFactory.updateAllWidgets();
+    }
+
+    public void removeFromGrid(StackPane widgetContainer) {
+        dashboardGrid.getChildren().remove(widgetContainer);
     }
 }
