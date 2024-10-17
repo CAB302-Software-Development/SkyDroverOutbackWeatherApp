@@ -9,8 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import java.net.URL;
-import java.util.ResourceBundle;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -27,9 +25,8 @@ public class SettingsController extends BasePage {
     private Button btnAddLocation, btnDeleteLocation;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        super.initialize(location, resources);
-
+    public void initialize() {
+        super.initialize();
         this.updateData();
 
         ObservableList<Theme> options = FXCollections.observableArrayList(Theme.values());
