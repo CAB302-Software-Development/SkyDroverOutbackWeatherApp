@@ -4,25 +4,20 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEnt
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WidgetFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class DashboardController extends BasePage implements Initializable {
+public class DashboardController extends BasePage {
     @FXML
     public Pane pnlRoot;
     @FXML
@@ -44,20 +39,24 @@ public class DashboardController extends BasePage implements Initializable {
     private boolean unsavedChanges = false;
 
     private WidgetFactory widgetFactory;
+    private UserService userService;
+
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
+        super.initialize();
+        userService = UserService.getInstance();
         widgetFactory = new WidgetFactory();
-        txtWelcome.setText("Welcome " + LoginState.getCurrentAccount().getEmail().split("@")[0]);
-        currentLayout = getCurrentLayout();
+        txtWelcome.setText("Welcome " + userService.getCurrentAccount().getEmail().split("@")[0]);
+        currentLayout = userService.getCurrentLayout();
         resetLayoutComboBox();
         loadWidgetsToGrid();
     }
 
     private void resetLayoutComboBox() {
         cboSelectedLayout.getItems().clear();
-        cboSelectedLayout.getItems().addAll(LoginState.getCurrentAccount().getDashboardLayouts().keySet());
-        cboSelectedLayout.getSelectionModel().select(LoginState.getCurrentAccount().getSelectedLayout());
+        cboSelectedLayout.getItems().addAll(userService.getCurrentAccount().getDashboardLayouts().keySet());
+        cboSelectedLayout.getSelectionModel().select(userService.getCurrentAccount().getSelectedLayout());
         cboSelectedLayout.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             changeLayout(newValue);
         });
@@ -68,7 +67,7 @@ public class DashboardController extends BasePage implements Initializable {
         if (event.getSource() == btnEditDashboard){
             enterEditMode();
         } else if (event.getSource() == btnSave) {
-            saveLayout();
+            saveCurrentLayout();
         } else if (event.getSource() == btnCancel) {
             exitEditMode();
         } else if (event.getSource() == btnNewLayout) {
@@ -184,19 +183,13 @@ public class DashboardController extends BasePage implements Initializable {
         editWidget(currentLayout.indexOf(newWidgetInfo));
     }
 
-    public static List<WidgetInfo> getCurrentLayout() {
-        HashMap<String, WidgetInfo[]> dashboardLayouts = LoginState.getCurrentAccount().getDashboardLayouts();
-        WidgetInfo[] layout = dashboardLayouts.get(LoginState.getCurrentAccount().getSelectedLayout());
-        return Arrays.stream(layout).collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public void changeLayout(String newLayout) {
         if (checkUnsavedChanges()) return;
 
-        Account account = LoginState.getCurrentAccount();
+        Account account = userService.getCurrentAccount();
         if (account.getDashboardLayouts().containsKey(newLayout)) {
             account.setSelectedLayout(newLayout);
-            currentLayout = getCurrentLayout();
+            currentLayout = userService.getCurrentLayout();
         } else if (cboSelectedLayout.getItems().contains(newLayout)) {
             currentLayout = new ArrayList<>();
         }
@@ -206,7 +199,7 @@ public class DashboardController extends BasePage implements Initializable {
     public void createNewLayout(String layoutName) {
         if (!isEditing || checkUnsavedChanges()) return;
 
-        if (LoginState.getCurrentAccount().getDashboardLayouts().containsKey(layoutName)) {
+        if (userService.getCurrentAccount().getDashboardLayouts().containsKey(layoutName)) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -222,6 +215,23 @@ public class DashboardController extends BasePage implements Initializable {
         int index = currentLayout.indexOf(widgetInfo);
         if (index != -1) editWidget(index);
     }
+
+
+    // private void editWidget(int index) {
+    //     WidgetInfo widgetInfo = currentLayout.get(index);
+    //     WidgetInfo updatedWidgetInfo = InputService.getWidgetConfig(widgetInfo, this);
+    //     if (updatedWidgetInfo != null) {
+    //         if (!currentLayout.get(index).equals(updatedWidgetInfo)) {
+    //             currentLayout.set(index, updatedWidgetInfo);
+    //             unsavedChanges = true;
+    //         }
+    //     } else {
+    //         currentLayout.remove(index);
+    //         unsavedChanges = true;
+    //     }
+    //     loadWidgetsToGrid();
+    // }
+
 
     private void editWidget(int index) {
         try {
@@ -269,7 +279,7 @@ public class DashboardController extends BasePage implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent()) {
             if (result.get() == saveButton) {
-                saveLayout();
+                saveCurrentLayout();
                 return false;
             } else if (result.get() == discardButton) {
                 unsavedChanges = false;
@@ -281,17 +291,13 @@ public class DashboardController extends BasePage implements Initializable {
         return true;
     }
 
-    private void saveLayout() {
-        HashMap<String, WidgetInfo[]> existingLayouts = LoginState.getCurrentAccount().getDashboardLayouts();
-        existingLayouts.put(cboSelectedLayout.getValue(), currentLayout.toArray(WidgetInfo[]::new));
-
-        AccountUpdateModel updateModel = new AccountUpdateModel();
-        updateModel.setDashboardLayouts(existingLayouts);
-        unsavedChanges = !UserService.updateCurrentAccount(updateModel);
+    private void saveCurrentLayout() {
+        boolean result = userService.saveLayout(cboSelectedLayout.getValue(), currentLayout.toArray(WidgetInfo[]::new));
+        unsavedChanges = !result;
     }
 
     private void exportLayouts() {
-        HashMap<String, WidgetInfo[]> data = LoginState.getCurrentAccount().getDashboardLayouts();
+        HashMap<String, WidgetInfo[]> data = userService.getCurrentAccount().getDashboardLayouts();
         Gson gson = new Gson();
         try (Writer writer = new FileWriter("user_preferences.json")) {
             gson.toJson(data, writer);
