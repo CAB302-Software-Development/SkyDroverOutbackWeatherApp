@@ -5,7 +5,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.L
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.IntField;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import javafx.collections.FXCollections;
@@ -46,6 +47,8 @@ public class WidgetConfigDialogController implements Initializable {
 
     private DashboardController parent;
     List<Location> locations;
+    UserService userService;
+    LocationService locationService;
 
     public void setWidgetInfo(WidgetInfo widgetInfo, DashboardController parent) {
         this.widgetInfo = widgetInfo;
@@ -57,9 +60,9 @@ public class WidgetConfigDialogController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        locations = new LocationDAO.LocationQuery()
-                .whereAccount(LoginState.getCurrentAccount())
-                .getResults();
+        userService = UserService.getInstance();
+        locationService = LocationService.getInstance();
+        locations = locationService.getCurrentUserLocations();
 
         widgetTypeComboBox.setItems(FXCollections.observableArrayList(WidgetType.values()));
         widgetTypeComboBox.setOnAction(event -> {
