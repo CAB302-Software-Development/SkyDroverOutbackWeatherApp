@@ -3,7 +3,6 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherCondition;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -19,8 +18,8 @@ public class WeatherWidgetController extends BaseWidgetController {
   private Text txtWeatherCondition, txtDateTime, txtTemperature, txtMinMaxTemp;
 
   public void updateWidget() {
-    HourlyForecast currentForecast = ForecastService.getLatestHourlyForecast(location);
-    DailyForecast todayForecast = ForecastService.getTodayForecast(location);
+    HourlyForecast currentForecast = forecastService.getLatestHourlyForecast(location);
+    DailyForecast todayForecast = forecastService.getTodayForecast(location);
 
     if (currentForecast != null && todayForecast != null) {
       WeatherCondition condition = WeatherCondition.fromReading(currentForecast);

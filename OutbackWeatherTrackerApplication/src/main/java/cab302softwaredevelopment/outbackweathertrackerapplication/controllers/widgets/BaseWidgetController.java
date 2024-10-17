@@ -1,11 +1,15 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 
 public abstract class BaseWidgetController implements IConfigurableWidget {
     Location location;
+    UserService userService;
+    LocationService locationService;
+    ForecastService forecastService;
 
     /**
      * Method to apply widget configuration.
@@ -15,6 +19,10 @@ public abstract class BaseWidgetController implements IConfigurableWidget {
      */
     @Override
     public void applyConfig(WidgetConfig config) {
+         userService = UserService.getInstance();
+         locationService = LocationService.getInstance();
+         forecastService = ForecastService.getInstance();
+
         long locationId = config.getLocationId();
         location = new LocationDAO.LocationQuery()
                 .whereId(locationId)
