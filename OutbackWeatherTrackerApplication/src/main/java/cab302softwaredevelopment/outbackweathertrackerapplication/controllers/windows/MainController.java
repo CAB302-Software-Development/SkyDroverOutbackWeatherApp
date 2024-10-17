@@ -3,11 +3,8 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.PageFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -54,7 +51,7 @@ public class MainController implements Initializable {
     }
 
     public static List<String> getCurrentThemeData() {
-        Theme currentTheme = LoginState.getCurrentAccount().getCurrentTheme();
+        Theme currentTheme = UserService.getInstance().getCurrentAccount().getCurrentTheme();
         String iconsPath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/icons.css")).toExternalForm();
         String themePath = Objects.requireNonNull(ApplicationEntry.class.getResource(currentTheme.getFilePath())).toExternalForm();
         String stylePath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/style.css")).toExternalForm();
@@ -72,14 +69,16 @@ public class MainController implements Initializable {
         new Thread(() -> {
             pageFactory.createSwapPanel("panels/profile-panel.fxml", btnProfile);
             pageFactory.createSwapPanel("panels/forecast-panel.fxml", btnForecast);
-            pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
             pageFactory.createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
             pageFactory.createSwapPanel("panels/reports-panel.fxml", btnReports);
             pageFactory.createSwapPanel("panels/settings-panel.fxml", btnSettings);
         }).start();
 
+        // Map page needs to be on main thread to work
+        pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
+
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateUIData, 5, 5, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::updateUIData, 5, 300, TimeUnit.SECONDS);
     }
 
     private void updateUIData() {
