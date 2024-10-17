@@ -4,14 +4,12 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.wi
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ForecastController extends BasePage implements Initializable {
+public class ForecastController extends BasePage {
     @FXML
     private VBox vbRoot;
     @FXML
@@ -46,7 +44,8 @@ public class ForecastController extends BasePage implements Initializable {
     private Sdk sdk;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
+        super.initialize();
         sdk = new Sdk();
 
         progressIndicator.setVisible(false);
@@ -82,9 +81,7 @@ public class ForecastController extends BasePage implements Initializable {
      * Loads the user's locations into the combo box.
      */
     private void loadUserLocations() {
-        List<Location> locations = (new LocationDAO.LocationQuery())
-                .whereAccount(LoginState.getCurrentAccount())
-                .getResults();
+        List<Location> locations = locationService.getCurrentUserLocations();
         locationComboBox.getItems().setAll(locations);
     }
 
@@ -142,7 +139,7 @@ public class ForecastController extends BasePage implements Initializable {
 
         new Thread(() -> {
             try {
-                boolean result = ForecastService.updateForecastsForCurrentUser(7, 2);
+                boolean result = forecastService.updateForecastsForCurrentUser(7, 2);
 
                 Platform.runLater(() -> {
                     loadDailyForecastData();
@@ -153,7 +150,7 @@ public class ForecastController extends BasePage implements Initializable {
                     if (result) {
                         MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
                     } else {
-                        ConnectionService.setOffline(true);
+                        connectionService.setOffline(true);
                     }
                 });
             } catch (Exception e) {

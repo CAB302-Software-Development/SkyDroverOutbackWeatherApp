@@ -3,7 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.PageFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,7 +51,7 @@ public class MainController implements Initializable {
     }
 
     public static List<String> getCurrentThemeData() {
-        Theme currentTheme = LoginState.getCurrentAccount().getCurrentTheme();
+        Theme currentTheme = UserService.getInstance().getCurrentAccount().getCurrentTheme();
         String iconsPath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/icons.css")).toExternalForm();
         String themePath = Objects.requireNonNull(ApplicationEntry.class.getResource(currentTheme.getFilePath())).toExternalForm();
         String stylePath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/style.css")).toExternalForm();
@@ -63,17 +63,22 @@ public class MainController implements Initializable {
         controller = this;
         pageFactory = new PageFactory(root);
 
-        Node swpProfile = pageFactory.createSwapPanel("panels/profile-panel.fxml", btnProfile);
         Node swpDashboard = pageFactory.createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
-        Node swpForecast = pageFactory.createSwapPanel("panels/forecast-panel.fxml", btnForecast);
-        Node swpMap = pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
-        Node swpAlerts = pageFactory.createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
-        Node swpReports = pageFactory.createSwapPanel("panels/reports-panel.fxml", btnReports);
-        Node swpSettings = pageFactory.createSwapPanel("panels/settings-panel.fxml", btnSettings);
         root.centerProperty().set(swpDashboard);
 
+        new Thread(() -> {
+            pageFactory.createSwapPanel("panels/profile-panel.fxml", btnProfile);
+            pageFactory.createSwapPanel("panels/forecast-panel.fxml", btnForecast);
+            pageFactory.createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
+            pageFactory.createSwapPanel("panels/reports-panel.fxml", btnReports);
+            pageFactory.createSwapPanel("panels/settings-panel.fxml", btnSettings);
+        }).start();
+
+        // Map page needs to be on main thread to work
+        pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
+
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateUIData, 0, 5, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::updateUIData, 5, 300, TimeUnit.SECONDS);
     }
 
     private void updateUIData() {
@@ -90,6 +95,13 @@ public class MainController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText(message);
             alert.showAndWait();
+        }
+    }
+
+    public static void shutdownScheduler() {
+        if (controller == null) return;
+        if (controller.scheduler != null && !controller.scheduler.isShutdown()) {
+            controller.scheduler.shutdown();
         }
     }
 }

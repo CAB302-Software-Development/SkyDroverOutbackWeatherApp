@@ -8,26 +8,29 @@ import java.util.concurrent.TimeUnit;
 
 public class ConnectionService {
     @Getter
-    private static boolean isOffline = false;
+    private static ConnectionService instance = new ConnectionService();
 
-    private static ScheduledExecutorService scheduler;
+    @Getter
+    private boolean isOffline = false;
 
-    public static void init() {
+    private ScheduledExecutorService scheduler;
+
+    public void init() {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         updateSchedulerDelay(600);
     }
 
-    private static void updateSchedulerDelay(int seconds) {
-        scheduler.scheduleAtFixedRate(ConnectionService::updateLocalDB, 0, seconds, TimeUnit.MINUTES);
+    private void updateSchedulerDelay(int seconds) {
+        scheduler.scheduleAtFixedRate(this::updateLocalDB, 0, seconds, TimeUnit.MINUTES);
     }
 
-    private static void updateLocalDB() {
-        setOffline(ForecastService.updateForecastsForCurrentUser(7, 2));
+    private void updateLocalDB() {
+        setOffline(ForecastService.getInstance().updateForecastsForCurrentUser(7, 2));
     }
 
-    public static void setOffline(boolean value) {
+    public void setOffline(boolean value) {
         if (isOffline != value) {
-            ConnectionService.isOffline = value;
+            isOffline = value;
             if (isOffline()) {
                 updateSchedulerDelay(10);
                 MainController.showAlert("Offline Mode", "You are currently offline. Data may be outdated.");
@@ -38,7 +41,7 @@ public class ConnectionService {
         }
     }
 
-    public static void shutdownScheduler() {
+    public void shutdownScheduler() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }

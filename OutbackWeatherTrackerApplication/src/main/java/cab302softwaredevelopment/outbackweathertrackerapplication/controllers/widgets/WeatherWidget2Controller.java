@@ -1,7 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -16,7 +15,7 @@ public class WeatherWidget2Controller extends BaseWidgetController {
     public Text txtLocation;
 
     public void updateWidget() {
-        DailyForecast todaysForecast = ForecastService.getTodayForecast(location);
+        DailyForecast todaysForecast = forecastService.getTodayForecast(location);
         txtLocation.setText(todaysForecast.getLocation().getName());
         XYChart.Series<String,Number> chart = updateChart();
         lgGraph.getData().add(chart);

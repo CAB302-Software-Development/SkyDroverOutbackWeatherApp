@@ -3,16 +3,18 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import javafx.event.ActionEvent;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class LoginController {
@@ -73,6 +75,13 @@ public class LoginController {
 
     private boolean isLogin = true;
 
+    private UserService userService;
+
+    @FXML
+    public void initialize() {
+        userService = UserService.getInstance();
+    }
+
 
     // Private front-end logic / helpers
 
@@ -109,7 +118,7 @@ public class LoginController {
                 continueToApplication();
             }
         } else if (e.getSource() == guestLinkLogin || e.getSource() == guestLinkSignup) {
-            LoginState.logout();
+            userService.logout();
             continueToApplication();
         }
     }
@@ -168,7 +177,7 @@ public class LoginController {
                 return false;
             }
 
-            LoginState.login(account);
+            userService.login(account);
             return true;        }
         catch (Exception e) {
             e.printStackTrace();
@@ -209,7 +218,7 @@ public class LoginController {
                 return false;
             }
 
-            LoginState.login(createdAccount);
+            userService.login(createdAccount);
 
             return true;
         }

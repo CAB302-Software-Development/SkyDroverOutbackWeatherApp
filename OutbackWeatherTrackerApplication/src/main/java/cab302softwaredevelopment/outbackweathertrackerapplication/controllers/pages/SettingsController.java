@@ -1,97 +1,90 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import java.util.List;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.ResourceBundle;
-
-public class SettingsController extends BasePage implements Initializable {
+public class SettingsController extends BasePage {
     @FXML
-    public ComboBox<String> cboThemes;
+    public VBox vbRoot;
+    @FXML
+    private ComboBox<Theme> cboThemes;
+    @FXML
+    private ListView<Location> lstLocations;
+    @FXML
+    private Button btnAddLocation, btnDeleteLocation;
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.updateData();
+
+        ObservableList<Theme> options = FXCollections.observableArrayList(Theme.values());
+        cboThemes.setItems(options);
+
+        List<Location> locations = locationService.getCurrentUserLocations();
+        lstLocations.setItems(FXCollections.observableArrayList(locations));
+
+        lstLocations.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(Location item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        updateData();
+    }
 
     @Override
     public void updateData() {
-        String[] layouts = getLayouts();
-        ObservableList<String> options = FXCollections.observableArrayList(layouts);
-        cboThemes.setItems(options);
+        cboThemes.getSelectionModel().select(userService.getCurrentAccount().getCurrentTheme());
+        refreshLocationList();
     }
 
-    /**
-     * Toggle between the light and dark theme
-     */
+    private void refreshLocationList() {
+        List<Location> locations = locationService.getCurrentUserLocations();
+        lstLocations.setItems(FXCollections.observableArrayList(locations));
+    }
+
     @FXML
-    public void swapTheme() {
-        switch (getCurrentTheme()) {
-            case Dark -> setCurrentTheme(Theme.Light);
-            case Light -> setCurrentTheme(Theme.Dark);
+    private void handleButtonAction(ActionEvent event) {
+        if (event.getSource() == btnAddLocation) {
+            LocationCreateModel location = InputService.getLocation("Select location", "Please select your location on the map");
+            if (location != null) {
+                locationService.addLocationForCurrentUser(location);
+                refreshLocationList();
+            }
+        } else if (event.getSource() == btnDeleteLocation) {
+            Location selectedLocation = lstLocations.getSelectionModel().getSelectedItem();
+            if (selectedLocation != null) {
+                locationService.deleteLocation(selectedLocation);
+                refreshLocationList();
+            }
         }
-        MainController.refreshDisplay();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.updateData();
     }
 
     @FXML
-    private void comboAction(ActionEvent event) {
-        setSelectedLayout(cboThemes.getValue());
-        MainController.refreshDisplay();
-    }
-
-    /**
-     * Retrieves the current theme of the application.
-     *
-     * @return The current theme.
-     */
-    public static Theme getCurrentTheme() {
-        return LoginState.getCurrentAccount().getCurrentTheme();
-    }
-
-    /**
-     * Sets a new theme for the application and saves the preferences to file.
-     *
-     * @param newTheme The new theme to apply.
-     */
-    public static void setCurrentTheme(Theme newTheme) {
-        AccountUpdateModel updateModel = new AccountUpdateModel();
-        updateModel.setCurrentTheme(newTheme);
-        UserService.updateCurrentAccount(updateModel);
-    }
-
-    /**
-     * Gets a list of available layouts for the dashboard.
-     *
-     * @return An array of layout names.
-     */
-    public static String[] getLayouts() {
-        HashMap<String, WidgetInfo[]> dashboardLayouts = LoginState.getCurrentAccount().getDashboardLayouts();
-        return dashboardLayouts.keySet().toArray(String[]::new);
-    }
-
-    /**
-     * Sets the current layout for the dashboard.
-     *
-     * @param name The name of the layout to set.
-     */
-    public static void setSelectedLayout(String name) {
-        if (Arrays.asList(getLayouts()).contains(name)) {
-            AccountUpdateModel updateModel = new AccountUpdateModel();
-            updateModel.setSelectedLayout(name);
-            UserService.updateCurrentAccount(updateModel);
+    private void onSwapTheme() {
+        Theme currentTheme = userService.getCurrentAccount().getCurrentTheme();
+        Theme newTheme = cboThemes.getValue();
+        if (currentTheme != newTheme) {
+            userService.setCurrentTheme(newTheme);
+            MainController.refreshDisplay();
         }
     }
 }

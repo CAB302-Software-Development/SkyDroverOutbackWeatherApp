@@ -1,23 +1,14 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ForecastService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.Instant;
-import java.util.Map;
 
 public class CurrentTempController extends BaseWidgetController {
     @FXML
@@ -27,7 +18,7 @@ public class CurrentTempController extends BaseWidgetController {
 
     @Override
     public void updateWidget() {
-        loadTemperatureData(LoginState.getCurrentAccount().getPreferCelsius());
+        loadTemperatureData(userService.getCurrentAccount().getPreferCelsius());
     }
 
     private void loadTemperatureData(boolean preferCelsius) {
@@ -36,7 +27,7 @@ public class CurrentTempController extends BaseWidgetController {
             return;
         }
         lblLocation.setText(location.getName());
-        HourlyForecast forecast = ForecastService.getLatestHourlyForecast(location);
+        HourlyForecast forecast = forecastService.getLatestHourlyForecast(location);
 
         if (forecast == null) {
             lblTemp.setText("No forecast found.");

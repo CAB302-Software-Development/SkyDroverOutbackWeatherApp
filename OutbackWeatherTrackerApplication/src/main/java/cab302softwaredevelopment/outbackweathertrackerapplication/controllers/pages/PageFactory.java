@@ -19,18 +19,19 @@ public class PageFactory {
     }
 
     public Node createSwapPanel(String fxmlPath, Button button) {
-        FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(fxmlPath));
-        Node panelNode;
         try {
-            panelNode = loader.load();
+            FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource(fxmlPath));
+            Node panelNode = loader.load();
             if (loader.getController() instanceof ISwapPanel pageController) {
                 pageManager.registerPage(pageController);
             }
+            button.setOnAction(actionEvent -> this.root.centerProperty().set(panelNode));
+            return panelNode;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            button.disableProperty().set(true);
+            return null;
         }
-        button.setOnAction(actionEvent -> this.root.centerProperty().set(panelNode));
-        return panelNode;
     }
 
     public void updateAllPages() {

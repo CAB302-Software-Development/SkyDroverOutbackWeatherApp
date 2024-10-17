@@ -14,11 +14,13 @@
 }
 
 .text-primary {
-    -fx-fill: primary-colour;
+    -fx-fill: primary-comp;
+    -fx-text-fill: primary-comp;
 }
 
 .text-secondary {
-    -fx-fill: primary-comp;
+    -fx-fill: secondary-comp;
+    -fx-text-fill: secondary-comp;
 }
 
 .border-primary {
@@ -225,4 +227,7 @@
 }
 .alerts-panel .vbox1 {
     -fx-background-color: #3E6EAC;
+}
+
+.location-selector-popup {
 }
