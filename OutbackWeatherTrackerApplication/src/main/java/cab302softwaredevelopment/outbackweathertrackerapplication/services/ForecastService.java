@@ -9,17 +9,20 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 public class ForecastService {
+    @Getter
+    private static ForecastService instance = new ForecastService();
 
-    public static HourlyForecast getLatestHourlyForecast(Location location) {
+    public HourlyForecast getLatestHourlyForecast(Location location) {
         int nowEpoch = (int) DateData.getNearestHourEpoch(ZonedDateTime.now());
 
-        if (ConnectionService.isOffline()) {
+        if (ConnectionService.getInstance().isOffline()) {
             HourlyForecast latest = new HourlyForecastDAO.HourlyForecastQuery()
                     .addOrderDesc("timestamp")
                     .getSingleResult();
@@ -35,10 +38,10 @@ public class ForecastService {
         return currentForecast;
     }
 
-    public static DailyForecast getTodayForecast(Location location) {
+    public DailyForecast getTodayForecast(Location location) {
         int nowEpoch = (int) (new DateData(LocalDate.now())).getDayStartEpoch();
 
-        if (ConnectionService.isOffline()) {
+        if (ConnectionService.getInstance().isOffline()) {
             DailyForecast latest = new DailyForecastDAO.DailyForecastQuery()
                     .addOrderDesc("timestamp")
                     .getSingleResult();
@@ -53,11 +56,11 @@ public class ForecastService {
         return todayForecast;
     }
 
-    public static boolean updateForecastsForUser(Account account, int futureDays, int pastDays) {
+    public boolean updateForecastsForUser(Account account, int futureDays, int pastDays) {
         try {
             Sdk sdk = new Sdk();
             List<Location> locations = (new LocationDAO.LocationQuery())
-                    .whereAccount(LoginState.getCurrentAccount())
+                    .whereAccount(UserService.getInstance().getCurrentAccount())
                     .getResults();
             for (Location location : locations) {
                 sdk.updateDailyForecast(location, futureDays, pastDays);
@@ -70,7 +73,7 @@ public class ForecastService {
         }
     }
 
-    public static boolean updateForecastsForCurrentUser(int futureDays, int pastDays) {
-        return updateForecastsForUser(LoginState.getCurrentAccount(), futureDays, pastDays);
+    public boolean updateForecastsForCurrentUser(int futureDays, int pastDays) {
+        return updateForecastsForUser(UserService.getInstance().getCurrentAccount(), futureDays, pastDays);
     }
 }
