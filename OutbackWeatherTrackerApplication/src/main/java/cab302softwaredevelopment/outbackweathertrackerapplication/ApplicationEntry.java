@@ -51,7 +51,7 @@ public class ApplicationEntry extends Application {
   }
 
   public static void openMainWindow() throws IOException {
-    ConnectionService.init();
+    ConnectionService.getInstance().init();
     FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/main-view.fxml"));
     Scene scene = new Scene(loader.load(), MainController.WIDTH, MainController.HEIGHT);
     MainController controller = loader.getController();
@@ -66,7 +66,7 @@ public class ApplicationEntry extends Application {
   private static void setMainStage(Stage stage) {
     rootStage = stage;
     rootStage.setOnCloseRequest(event -> {
-      ConnectionService.shutdownScheduler();
+      ConnectionService.getInstance().shutdownScheduler();
       Platform.exit();
     });
     rootStage.show();
