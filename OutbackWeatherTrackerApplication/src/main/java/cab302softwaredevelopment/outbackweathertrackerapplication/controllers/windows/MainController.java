@@ -25,33 +25,64 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Controller for the main window
+ */
 public class MainController implements Initializable {
+    /**
+     * The width of the main window
+     */
     public static final int WIDTH = 1080;
+    /**
+     * The height of the main window
+     */
     public static final int HEIGHT = 600;
+    /**
+     * The title of the main window
+     */
     public static final String TITLE = "Outback Weather Tracker Application";
 
+    /**
+     * The controller for the main window
+     */
     private static MainController controller;
 
+    /**
+     * The button for the profile page
+     */
     @FXML
     public Button btnProfile, btnDashboard, btnMap, btnForecast, btnAlerts, btnReports, btnSettings, btnDrawer;
+    /**
+     * The vertical box for the navbar
+     */
     @FXML
     public VBox vbNavbar;
+
     private Scene scene;
     @FXML
     BorderPane root;
 
     private ScheduledExecutorService scheduler;
-
+    /**
+     * Sets the scene for the main window
+     * @param scene The scene to set
+     */
     public void setScene(Scene scene) {
         this.scene = scene;
         refreshDisplay();
     }
 
+    /**
+     * Refreshes the display of the main window
+     */
     public static void refreshDisplay() {
         controller.scene.getStylesheets().clear();
         controller.scene.getStylesheets().addAll(getCurrentThemeData());
     }
-
+    /**
+     * Gets the current theme data
+     * @return The current theme data
+     */
     public static List<String> getCurrentThemeData() {
         Theme currentTheme = LoginState.getCurrentAccount().getCurrentTheme();
         String iconsPath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/icons.css")).toExternalForm();
@@ -59,7 +90,11 @@ public class MainController implements Initializable {
         String stylePath = Objects.requireNonNull(ApplicationEntry.class.getResource("themes/style.css")).toExternalForm();
         return Arrays.asList(stylePath, themePath, iconsPath);
     }
-
+    /**
+     * Initializes the controller
+     * @param url The URL
+     * @param resourceBundle The resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = this;
@@ -105,7 +140,9 @@ public class MainController implements Initializable {
         button.setOnAction(actionEvent -> root.centerProperty().set(panelNode));
         return panelNode;
     }
-
+    /**
+     * Shuts down the scheduler
+     */
     public void shutdownScheduler() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();

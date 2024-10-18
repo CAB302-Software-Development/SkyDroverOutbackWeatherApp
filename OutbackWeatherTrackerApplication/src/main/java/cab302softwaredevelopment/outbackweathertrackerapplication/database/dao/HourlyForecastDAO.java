@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
 
+  /**
+   * Constructor for the HourlyForecastDAO.
+   */
   public HourlyForecastDAO() {
     // The forecast DAO needs to know what type of forecast it is dealing with
     super(HourlyForecast.class);
@@ -19,10 +22,19 @@ public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
    */
   public static class HourlyForecastQuery extends ForecastQuery<HourlyForecast,HourlyForecastQuery> {
 
+    /**
+     * Constructor for the HourlyForecastQuery.
+     */
     public HourlyForecastQuery() {
       super(HourlyForecast.class, HourlyForecastQuery.class);
     }
 
+    /**
+     * Adds a where clause to the query to filter by location ID.
+     *
+     * @param location_id The ID of the location to filter by.
+     * @return The query builder.
+     */
     @Override
     public HourlyForecastQuery self() {
       return this;

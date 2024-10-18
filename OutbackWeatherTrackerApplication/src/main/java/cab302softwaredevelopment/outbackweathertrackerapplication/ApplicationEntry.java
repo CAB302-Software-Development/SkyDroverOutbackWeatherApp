@@ -13,6 +13,9 @@ import org.hibernate.Session;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * The main entry point for the application.
+ */
 public class ApplicationEntry extends Application {
   private static Stage rootStage;
 
@@ -38,6 +41,11 @@ public class ApplicationEntry extends Application {
     }
   }
 
+  /**
+   * Opens the login window.
+   *
+   * @throws IOException if the FXML file cannot be loaded.
+   */
   public static void openLoginWindow() throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("windows/login-signup.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
@@ -48,6 +56,11 @@ public class ApplicationEntry extends Application {
     rootStage.show();
   }
 
+  /**
+   * Opens the main window.
+   *
+   * @throws IOException if the FXML file cannot be loaded.
+   */
   public static void openMainWindow() throws IOException {
     FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/main-view.fxml"));
     Scene scene = new Scene(loader.load(), MainController.WIDTH, MainController.HEIGHT);

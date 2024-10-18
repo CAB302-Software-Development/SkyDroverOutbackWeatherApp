@@ -10,6 +10,8 @@ import org.hibernate.Session;
 
 /**
  * An abstract Data Access Object for forecast entities.
+ *
+ * @param <T> the type of the forecast data
  */
 public abstract class ForecastDAO<T> {
   // The class of the model that this DAO is for
@@ -124,8 +126,10 @@ public abstract class ForecastDAO<T> {
 }
 
 /**
- * An abstract query builder class for forecast entities
- * supports common query operations for forecast entities
+ * An abstract query builder class for forecast entities.
+ *
+ * @param <T> the type of the forecast data
+ * @param <K> the type of the query builder
  */
 abstract class ForecastQuery<T,K> {
   CriteriaQuery<T> criteria;

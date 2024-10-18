@@ -16,15 +16,15 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+/**
+ * A class representing a daily forecast.
+ */
 @Getter
 @Entity(name = "dailyForecast")
 @Table(name = "dailyForecast", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"location_account_id","location_latitude","location_longitude","location_elevation", "timestamp"})
 })
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-/**
- * A model class for the DailyForecast entity.
- */
 public class DailyForecast {
   /**
    * The ID of the daily forecast.
@@ -44,6 +44,7 @@ public class DailyForecast {
 
   /**
    * The timestamp of the daily forecast.
+   *
    */
   @Column(name="timestamp", nullable = false)
   private Integer timestamp;
@@ -176,6 +177,9 @@ public class DailyForecast {
   @Column(name="et0_fao_evapotranspiration")
   private Double et0_fao_evapotranspiration;
 
+  /**
+   * Default constructor that represents a DailyForecast object.
+   */
   public DailyForecast() {
   }
 
@@ -246,7 +250,9 @@ public class DailyForecast {
     this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
   }
 
-
+  /**
+   * @return The ID of the daily forecast.
+   */
   @Override
   public String toString() {
     return "DailyForecast{" +

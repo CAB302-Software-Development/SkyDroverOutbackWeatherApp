@@ -109,9 +109,24 @@ public class Account {
   @Setter
   private HashMap<String, WidgetInfo[]> dashboardLayouts = new LayoutsConverter().convertToEntityAttribute("{'default':[]}");
 
+  /**
+   * Default constructor for the Account entity.
+   */
   public Account() {
   }
 
+  /**
+   * Parameterized constructor for Account.
+   *
+   * @param id the unique identifier for the account
+   * @param email the email address associated with the account
+   * @param password the password for the account
+   * @param preferCelsius preference for temperature unit
+   * @param isGuest whether the account is a guest account
+   * @param currentTheme the current theme of the account
+   * @param selectedLayout the selected layout for the account
+   * @param dashboardLayouts the dashboard layouts for the account
+   */
   public Account(UUID id, String email,String password,Boolean preferCelsius,Boolean isGuest,Theme currentTheme,String selectedLayout,HashMap<String,WidgetInfo[]> dashboardLayouts){
     this.id = id;
     this.email = email;

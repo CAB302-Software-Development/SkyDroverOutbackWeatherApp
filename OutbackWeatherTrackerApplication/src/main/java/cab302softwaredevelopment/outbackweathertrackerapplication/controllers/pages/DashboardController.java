@@ -24,6 +24,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Dashboard page.
+ */
 public class DashboardController implements Initializable {
     @FXML
     public Pane pnlRoot;
@@ -45,6 +48,12 @@ public class DashboardController implements Initializable {
     private boolean isEditing = false;
     private boolean unsavedChanges = false;
 
+    /**
+     * Initialises the controller.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Account account = LoginState.getCurrentAccount();
@@ -53,7 +62,9 @@ public class DashboardController implements Initializable {
         resetLayoutComboBox();
         loadWidgetsToGrid();
     }
-
+    /**
+     * Resets the layout combo box.
+     */
     private void resetLayoutComboBox() {
         cboSelectedLayout.getItems().clear();
         cboSelectedLayout.getItems().addAll(LoginState.getCurrentAccount().getDashboardLayouts().keySet());
@@ -62,7 +73,11 @@ public class DashboardController implements Initializable {
             changeLayout(newValue);
         });
     }
-
+    /**
+     * Handles button clicks.
+     *
+     * @param event The event that triggered the action.
+     */
     @FXML
     public void handleButtonClick(ActionEvent event) {
         if (event.getSource() == btnEditDashboard){
@@ -83,7 +98,9 @@ public class DashboardController implements Initializable {
 
         }
     }
-
+    /**
+     * Enters edit mode for the dashboard.
+     */
     private void enterEditMode() {
         isEditing = true;
         bpHeader.setVisible(false);
@@ -93,7 +110,9 @@ public class DashboardController implements Initializable {
         resetLayoutComboBox();
         loadWidgetsToGrid();
     }
-
+    /**
+     * Exits edit mode for the dashboard.
+     */
     private void exitEditMode() {
         if(checkUnsavedChanges()) return;
 
@@ -105,7 +124,9 @@ public class DashboardController implements Initializable {
         resetLayoutComboBox();
         loadWidgetsToGrid();
     }
-
+    /**
+     * Loads widgets to the grid.
+     */
     public void loadWidgetsToGrid() {
         dashboardGrid.getChildren().clear();
         try {
@@ -155,7 +176,9 @@ public class DashboardController implements Initializable {
         }
     }
 
-
+    /**
+     * Resets the occupied cells.
+     */
     private void resetOccupied() {
         int numRows = dashboardGrid.getRowCount();
         int numCols = dashboardGrid.getColumnCount();
@@ -181,6 +204,11 @@ public class DashboardController implements Initializable {
         }
     }
 
+    /**
+     * Sets the occupied cells.
+     *
+     * @param info The widget info.
+     */
     private void setOccupied(WidgetInfo info) {
         int row = info.rowIndex;
         int col = info.columnIndex;
@@ -190,7 +218,12 @@ public class DashboardController implements Initializable {
             }
         }
     }
-
+    /**
+     * Checks if the cell is occupied.
+     *
+     * @param info The widget info.
+     * @return True if the cell is occupied, false otherwise.
+     */
     public boolean checkOccupied(WidgetInfo info) {
         int row = info.rowIndex;
         int col = info.columnIndex;
@@ -202,7 +235,12 @@ public class DashboardController implements Initializable {
         return false;
     }
 
-
+    /**
+     * Adds a widget at the specified column and row index.
+     *
+     * @param columnIndex The column index.
+     * @param rowIndex The row index.
+     */
     private void addWidgetAt(int columnIndex, int rowIndex) {
         WidgetInfo newWidgetInfo = new WidgetInfo(WidgetType.CurrentTemp, rowIndex, columnIndex, 1, 1, new HashMap<>());
         currentLayout.add(newWidgetInfo);
@@ -211,13 +249,21 @@ public class DashboardController implements Initializable {
         loadWidgetsToGrid();
         editWidget(currentLayout.indexOf(newWidgetInfo));
     }
-
+    /**
+     * Gets the current layout.
+     *
+     * @return The current layout.
+     */
     public static List<WidgetInfo> getCurrentLayout() {
         HashMap<String, WidgetInfo[]> dashboardLayouts = LoginState.getCurrentAccount().getDashboardLayouts();
         WidgetInfo[] layout = dashboardLayouts.get(LoginState.getCurrentAccount().getSelectedLayout());
         return Arrays.stream(layout).collect(Collectors.toCollection(ArrayList::new));
     }
-
+    /**
+     * Changes the layout.
+     *
+     * @param newLayout The new layout.
+     */
     public void changeLayout(String newLayout) {
         if (checkUnsavedChanges()) return;
 
@@ -230,7 +276,11 @@ public class DashboardController implements Initializable {
         }
         loadWidgetsToGrid();
     }
-
+    /**
+     * Creates a new layout.
+     *
+     * @param layoutName The layout name.
+     */
     public void createNewLayout(String layoutName) {
         if (!isEditing || checkUnsavedChanges()) return;
 
@@ -245,7 +295,11 @@ public class DashboardController implements Initializable {
         cboSelectedLayout.getSelectionModel().select(layoutName);
         changeLayout(layoutName);
     }
-
+    /**
+     * Edits the widget.
+     *
+     * @param index The index.
+     */
     private void editWidget(int index) {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/widget-config-dialog.fxml"));
@@ -278,7 +332,11 @@ public class DashboardController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Checks for unsaved changes.
+     *
+     * @return True if there are unsaved changes, false otherwise.
+     */
     private boolean checkUnsavedChanges() {
         if (!unsavedChanges) return false;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -303,7 +361,9 @@ public class DashboardController implements Initializable {
         }
         return true;
     }
-
+    /**
+     * Saves the layout.
+     */
     private void saveLayout() {
         HashMap<String, WidgetInfo[]> existingLayouts = LoginState.getCurrentAccount().getDashboardLayouts();
         existingLayouts.put(cboSelectedLayout.getValue(), currentLayout.toArray(WidgetInfo[]::new));
@@ -312,7 +372,9 @@ public class DashboardController implements Initializable {
         updateModel.setDashboardLayouts(existingLayouts);
         unsavedChanges = !LoginState.updateAccount(updateModel);
     }
-
+    /**
+     * Exports the layouts.
+     */
     private void exportLayouts() {
         HashMap<String, WidgetInfo[]> data = LoginState.getCurrentAccount().getDashboardLayouts();
         Gson gson = new Gson();

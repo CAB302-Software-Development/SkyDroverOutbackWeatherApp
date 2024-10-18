@@ -29,6 +29,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the Forecast page
+ *
+ * This class is responsible for handling the Forecast page.
+ */
 public class ForecastController implements Initializable {
     @FXML
     private VBox vbRoot;
@@ -44,6 +49,9 @@ public class ForecastController implements Initializable {
     private HBox hbForecasts;
     private Sdk sdk;
 
+    /**
+     * Initializes the controller
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sdk = new Sdk();

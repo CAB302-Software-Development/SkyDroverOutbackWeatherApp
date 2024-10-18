@@ -18,22 +18,47 @@ import java.time.format.DateTimeFormatter;
 import java.time.Instant;
 import java.util.Map;
 
+/**
+ * Controller for the Current Temperature widget.
+ */
 public class CurrentTempController implements IConfigurableWidget {
+    /**
+     * The image view for the weather icon.
+     */
     @FXML
     public ImageView weatherIconImageView;
+    /**
+     * The label for the date and time.
+     */
     @FXML
     public Label lblDateTime, lblTemp, lblLocation;
+    /**
+     * The root VBox for the widget.
+     */
     @FXML
     public VBox root;
+    /**
+     * The line chart for the temperature data.
+     */
     @FXML
     LineChart<Number,Number> lineChart;
+    /**
+     * The button to configure the widget.
+     */
     @FXML
     private Button configButton;
+    /**
+     * The button to remove the widget.
+     */
     @FXML
     private Button removeButton;
 
     Location location = null;
-
+    /**
+     * Initialises the widget, and applies the configuration.
+     *
+     * @param config The configuration for the widget.
+     */
     public void applyConfig(WidgetConfig config) {
         long locationId = config.getLocationId();
 

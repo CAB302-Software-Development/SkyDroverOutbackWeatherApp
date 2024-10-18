@@ -24,9 +24,6 @@ import org.hibernate.annotations.OnDeleteAction;
     @UniqueConstraint(columnNames = {"location_account_id","location_latitude","location_longitude","location_elevation", "timestamp"})
 })
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-/**
- * A model class for the HourlyForecast entity.
- */
 public class HourlyForecast {
   /**
    * The ID of the hourly forecast.
@@ -367,9 +364,62 @@ public class HourlyForecast {
   @Column(name="terrestrial_radiation_instant")
   private Double terrestrial_radiation_instant;
 
+  /**
+   * Default constructor for HourlyForecast
+   */
   public HourlyForecast() {
   }
 
+  /**
+   * Constructor for HourlyForecast
+   * @param location Location
+   * @param timestamp Integer
+   * @param temperature_2m Double
+   * @param relative_humidity_2m Double
+   * @param dew_point_2m Double
+   * @param apparent_temperature Double
+   * @param precipitation Double
+   * @param rain Double
+   * @param showers Double
+   * @param snowfall Double
+   * @param snow_depth Double
+   * @param weather_code Integer
+   * @param pressure_msl Double
+   * @param surface_pressure Double
+   * @param cloud_cover Double
+   * @param cloud_cover_low Double
+   * @param cloud_cover_mid Double
+   * @param cloud_cover_high Double
+   * @param visibility Double
+   * @param et0_fao_evapotranspiration Double
+   * @param vapour_pressure_deficit Double
+   * @param wind_speed_10m Double
+   * @param wind_speed_40m Double
+   * @param wind_speed_80m Double
+   * @param wind_speed_120m Double
+   * @param wind_direction_10m Double
+   * @param wind_direction_40m Double
+   * @param wind_direction_80m Double
+   * @param wind_direction_120m Double
+   * @param wind_gusts_10m Double
+   * @param surface_temperature Double
+   * @param soil_temperature_0_to_10cm Double
+   * @param soil_temperature_10_to_35cm Double
+   * @param soil_temperature_35_to_100cm Double
+   * @param soil_temperature_100_to_300cm Double
+   * @param soil_moisture_0_to_10cm Double
+   * @param soil_moisture_10_to_35cm Double
+   * @param soil_moisture_35_to_100cm Double
+   * @param soil_moisture_100_to_300cm Double
+   * @param is_day boolean
+   * @param sunshine_duration Double
+   * @param shortwave_radiation Double
+   * @param direct_radiation Double
+   * @param diffuse_radiation Double
+   * @param direct_normal_irradiance Double
+   * @param global_tilted_irradiance Double
+   * @param terrestrial_radiation Double
+   */
   public HourlyForecast(Location location, Integer timestamp, Double temperature_2m,
       Double relative_humidity_2m, Double dew_point_2m, Double apparent_temperature,
       Double precipitation, Double rain, Double showers, Double snowfall, Double snow_depth,
