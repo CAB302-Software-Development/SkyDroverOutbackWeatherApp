@@ -19,6 +19,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 
+/**
+ * A model class for the Account entity.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -82,6 +85,9 @@ public class Location {
   @Column(name="name", nullable = false)
   private String name;
 
+  /**
+   * Default constructor for the Location class.
+   */
   public Location() {
   }
 
@@ -110,6 +116,10 @@ public class Location {
     return Objects.hash(account.getId(), longitude, latitude);
   }
 
+  /**
+   * Method to get the ID of the location.
+   * @return The ID of the location.
+   */
   @Override
   public String toString() {
     return "Location{" +

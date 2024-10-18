@@ -18,12 +18,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the settings page.
+ */
 public class SettingsController implements Initializable {
+    /**
+     * The combo box for selecting the theme.
+     */
     @FXML
     public ComboBox<String> cboThemes;
 
     /**
-     * Toggle between the light and dark theme
+     * Swaps the current theme of the application.
      */
     @FXML
     public void swapTheme() {
@@ -33,14 +39,23 @@ public class SettingsController implements Initializable {
         }
         MainController.refreshDisplay();
     }
-
+    /**
+     * Initialises the settings page.
+     *
+     * @param location The location of the FXML file.
+     * @param resources The resources for the FXML file.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         String[] layouts = getLayouts();
         ObservableList<String> options = FXCollections.observableArrayList(layouts);
         cboThemes.setItems(options);
     }
-
+    /**
+     * Handles the action of selecting a theme from the combo box.
+     *
+     * @param event The event that triggered the action.
+     */
     @FXML
     private void comboAction(ActionEvent event) {
         setSelectedLayout(cboThemes.getValue());

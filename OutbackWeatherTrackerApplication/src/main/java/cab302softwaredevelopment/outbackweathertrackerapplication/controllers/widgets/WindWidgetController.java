@@ -12,19 +12,45 @@ import javafx.scene.control.Label;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+/**
+ * A controller class for the Wind widget.
+ */
 public class WindWidgetController implements IConfigurableWidget {
 
-
+    /**
+     * The location text.
+     */
     public Text txtLocation;
+    /**
+     * The wind speed text.
+     */
     public Label Gust;
+    /**
+     * The wind direction text.
+     */
     public Label Wind;
+    /**
+     * The wind speed text.
+     */
     public Label Direction;
+    /**
+     * The wind speed text.
+     */
     public Text txtWindspeed;
+    /**
+     * The wind gust speed text.
+     */
     public Text txtGustSpeed;
+    /**
+     * The wind direction text.
+     */
     public Text NSEW;
 
     Location location = null;
 
+    /**
+     * Applies the provided configuration to the widget.
+     */
     public void applyConfig(WidgetConfig config) {
         long locationId = config.getLocationId();
 
@@ -34,7 +60,9 @@ public class WindWidgetController implements IConfigurableWidget {
 
         updateWindWidget();
     }
-
+    /**
+     * Updates the wind widget with the provided wind information.
+     */
     public void updateWindWidget() {
         int nowEpoch = (int) DateData.getNearestHourEpoch(ZonedDateTime.now());
         HourlyForecast currentForecast = new HourlyForecastDAO.HourlyForecastQuery()

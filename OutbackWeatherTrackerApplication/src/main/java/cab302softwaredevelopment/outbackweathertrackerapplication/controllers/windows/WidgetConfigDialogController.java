@@ -19,6 +19,9 @@ import lombok.Getter;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Controller for the widget configuration dialog.
+ */
 public class WidgetConfigDialogController implements Initializable {
 
     @FXML
@@ -47,6 +50,12 @@ public class WidgetConfigDialogController implements Initializable {
     private DashboardController parent;
     List<Location> locations;
 
+    /**
+     * Sets the widget info and parent controller for the dialog.
+     *
+     * @param widgetInfo The widget info to set.
+     * @param parent The parent controller to set.
+     */
     public void setWidgetInfo(WidgetInfo widgetInfo, DashboardController parent) {
         this.widgetInfo = widgetInfo;
         widgetConfig = new WidgetConfig(this.widgetInfo.config);
@@ -55,6 +64,9 @@ public class WidgetConfigDialogController implements Initializable {
         initializeDialog();
     }
 
+    /**
+     * Initializes the dialog.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         locations = new LocationDAO.LocationQuery()
@@ -74,11 +86,17 @@ public class WidgetConfigDialogController implements Initializable {
         deleteButton.setOnAction(event -> onDelete());
     }
 
+    /**
+     * Initializes the dialog.
+     */
     private void initializeDialog() {
         widgetTypeComboBox.getSelectionModel().select(widgetInfo.type);
         updateConfigFields();
     }
 
+    /**
+     * Updates the configuration fields.
+     */
     private void updateConfigFields() {
         configFieldsVBox.getChildren().clear();
 
@@ -113,6 +131,11 @@ public class WidgetConfigDialogController implements Initializable {
         }
     }
 
+    /**
+     * Creates a location combo box.
+     *
+     * @return The location combo box.
+     */
     private ComboBox<Location> createLocationComboBox() {
         ComboBox<Location> locationComboBox = new ComboBox<>();
         locationComboBox.setItems(FXCollections.observableArrayList(locations));
@@ -141,7 +164,9 @@ public class WidgetConfigDialogController implements Initializable {
 
         return locationComboBox;
     }
-
+    /**
+     * Handles the save action.
+     */
     private void onSave() {
         if (widgetInfo == null) {
             widgetInfo = new WidgetInfo();
@@ -161,12 +186,18 @@ public class WidgetConfigDialogController implements Initializable {
 
         dialogPane.getScene().getWindow().hide();
     }
-
+    /**
+     * Handles the delete action.
+     */
     private void onDelete() {
         widgetInfo = null;
         dialogPane.getScene().getWindow().hide();
     }
-
+    /**
+     * Shows an error message.
+     *
+     * @param message The message to show.
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(dialogPane.getScene().getWindow());

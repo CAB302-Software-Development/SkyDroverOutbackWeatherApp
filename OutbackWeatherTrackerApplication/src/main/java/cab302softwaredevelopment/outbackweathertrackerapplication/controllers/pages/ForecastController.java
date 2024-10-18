@@ -66,10 +66,22 @@ public class ForecastController implements Initializable {
         loadUserLocations();
 
         locationComboBox.setConverter(new StringConverter<>() {
+            /**
+             * Converts a location to a string.
+             *
+             * @param location The location to convert.
+             * @return The string representation of the location.
+             */
             @Override
             public String toString(Location location) {
                 return location.getName();
             }
+            /**
+             * Converts a string to a location.
+             *
+             * @param string The string to convert.
+             * @return The location representation of the string.
+             */
             @Override
             public Location fromString(String string) {
                 return null;

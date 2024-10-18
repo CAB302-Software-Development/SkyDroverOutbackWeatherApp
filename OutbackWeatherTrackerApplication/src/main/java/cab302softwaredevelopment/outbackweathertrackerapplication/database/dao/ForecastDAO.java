@@ -9,9 +9,9 @@ import java.util.List;
 import org.hibernate.Session;
 
 /**
- * An abstract Data Access Object for forecast entities.
+ * A Data Access Object for the Forecast entity.
  *
- * @param <T> the type of the forecast data
+ * @param <T> The type of the Forecast entity
  */
 public abstract class ForecastDAO<T> {
   // The class of the model that this DAO is for
@@ -19,9 +19,9 @@ public abstract class ForecastDAO<T> {
   private final Class<T> forecastClass;
 
   /**
-   * Creates a new ForecastDAO for the specified model class.
+   * Default constructor for the ForecastDAO class.
    *
-   * @param modelClass The class of the model that this DAO is for.
+   * @param modelClass The class of the model that this DAO is for
    */
   public ForecastDAO(Class<T> modelClass) {
     this.forecastClass = modelClass;
@@ -31,11 +31,6 @@ public abstract class ForecastDAO<T> {
    * Inserts a new Forecast into the database.
    *
    * @param forecast The Forecast object to be inserted
-   *                <p>
-   *                This method begins a transaction and attempts to save the provided Forecast
-   *                object to the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void insert(T forecast) {
     Session session = DatabaseConnection.getSession();
@@ -55,11 +50,6 @@ public abstract class ForecastDAO<T> {
    * Updates an existing Forecast in the database.
    *
    * @param forecast the Forecast object to be updated
-   *                <p>
-   *                This method begins a transaction and attempts to update the provided Forecast
-   *                object in the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void update(T forecast) {
     Session session = DatabaseConnection.getSession();
@@ -79,11 +69,6 @@ public abstract class ForecastDAO<T> {
    * Deletes an Forecast from the database by its ID.
    *
    * @param id The ID of the Forecast to be deleted
-   *                <p>
-   *                This method begins a transaction and attempts to delete the Forecast object with the
-   *                specified ID from the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is rolled
-   *                back and the exception stack trace is printed.
    */
   public void delete(int id) {
     Session session = DatabaseConnection.getSession();
@@ -104,11 +89,6 @@ public abstract class ForecastDAO<T> {
    * Deletes an Forecast from the database
    *
    * @param forecast The Forecast to be deleted
-   *                <p>
-   *                This method begins a transaction and attempts to delete the provided Forecast
-   *                object from the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void delete(T forecast) {
     Session session = DatabaseConnection.getSession();

@@ -23,11 +23,7 @@ public class AccountDAO {
    * Inserts a new Account into the database.
    *
    * @param account the Account object to be inserted
-   *                <p>
-   *                This method begins a transaction and attempts to save the provided Account
-   *                object to the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
+   *
    */
   public void insert(Account account) {
     Session session = DatabaseConnection.getSession();
@@ -46,12 +42,7 @@ public class AccountDAO {
   /**
    * Updates an existing Account in the database.
    *
-   * @param account the Account object to be updated
-   *                <p>
-   *                This method begins a transaction and attempts to update the provided Account
-   *                object in the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
+   * @param account The Account object to be updated
    */
   public void update(Account account) {
     Session session = DatabaseConnection.getSession();
@@ -71,11 +62,6 @@ public class AccountDAO {
    * Deletes an Account from the database by its ID.
    *
    * @param id The ID of the Account to be deleted
-   *           <p>
-   *           This method begins a transaction and attempts to delete the Account object with the
-   *           specified ID from the database. If the operation is successful, the transaction is
-   *           committed. If an exception occurs during the operation, the transaction is rolled
-   *           back and the exception stack trace is printed.
    */
   public void delete(UUID id) {
     Session session = DatabaseConnection.getSession();
@@ -96,11 +82,6 @@ public class AccountDAO {
    * Deletes an Account from the database
    *
    * @param account The Account to be deleted
-   *                <p>
-   *                This method begins a transaction and attempts to delete the provided Account
-   *                object from the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void delete(Account account) {
     Session session = DatabaseConnection.getSession();
@@ -161,6 +142,9 @@ public class AccountDAO {
     CriteriaBuilder builder;
     Root<Account> root;
 
+    /**
+     * Default constructor for the AccountQuery class.
+     */
     public AccountQuery() {
       Session session = DatabaseConnection.getSession();
       builder = session.getCriteriaBuilder();

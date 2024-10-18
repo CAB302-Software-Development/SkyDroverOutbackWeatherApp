@@ -17,7 +17,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 
-
+/**
+ * A model class for the HourlyForecast entity.
+ */
 @Getter
 @Entity(name = "HourlyForecast")
 @Table(name = "hourlyForecast", uniqueConstraints = {

@@ -14,13 +14,19 @@ import java.net.http.HttpResponse;
 
 import java.io.FileWriter;
 import java.io.IOException;
-
+/**
+ * A controller class for the Map page.
+ */
 public class MapController {
   private static final String BASE_URL = "http://localhost:8090/api/crowdsourced";
-
+  /**
+   * The WebView for the map.
+   */
   @FXML
   private WebView mapWebView;
-
+  /**
+   * Initialises the map page.
+   */
   @FXML
   public void initialize() {
     WebEngine webEngine = mapWebView.getEngine();

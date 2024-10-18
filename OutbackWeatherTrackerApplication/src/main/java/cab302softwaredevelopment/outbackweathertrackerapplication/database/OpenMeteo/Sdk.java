@@ -27,6 +27,9 @@ public class Sdk {
 
   final String apiHost = "http://api.open-meteo.com/";
   //final String apiHost = "http://127.0.0.1:8080/";
+  /**
+   * Default constructor for the Sdk class.
+   */
   public Sdk() {
   }
 

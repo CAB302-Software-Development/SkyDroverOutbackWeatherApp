@@ -1,9 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets;
 
 /**
- * Controller for the Forecast widget
- * <p>
- * This class is responsible for handling the Forecast widget.
+ * A controller class for the Forecast widget.
  */
 public class ForecastController {
 }

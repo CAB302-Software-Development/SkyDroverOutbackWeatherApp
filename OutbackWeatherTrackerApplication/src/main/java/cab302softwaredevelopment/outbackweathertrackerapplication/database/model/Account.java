@@ -96,7 +96,7 @@ public class Account {
   /**
    * Whether the account is a guest account.
    */
-  @Setter
+   @Setter
   @Default
   private Boolean isGuest = false;
 

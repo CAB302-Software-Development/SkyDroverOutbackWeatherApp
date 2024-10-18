@@ -9,20 +9,30 @@ import java.util.List;
  */
 public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
 
+  /**
+   * Default constructor for the DailyForecastDAO class.
+   */
   public DailyForecastDAO() {
     // The forecast DAO needs to know what type of forecast it is dealing with
     super(DailyForecast.class);
   }
 
   /**
-   * A query builder class for the DailyForecast entity.
+   * A query class for DailyForecast objects.
    */
   public static class DailyForecastQuery extends ForecastQuery<DailyForecast,DailyForecastQuery> {
-
+    /**
+     * Default constructor for the DailyForecastQuery class.
+     */
     public DailyForecastQuery() {
       super(DailyForecast.class, DailyForecastQuery.class);
     }
-
+    /**
+     * Sets the location ID to filter by.
+     *
+     * @param location_id The location ID to filter by.
+     * @return The DailyForecastQuery object.
+     */
     @Override
     public DailyForecastQuery self() {
       return this;

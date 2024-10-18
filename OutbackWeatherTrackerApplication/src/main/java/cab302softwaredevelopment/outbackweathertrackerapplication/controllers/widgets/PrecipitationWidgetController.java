@@ -13,24 +13,37 @@ import javafx.scene.text.Text;
 import java.time.*;
 import java.util.Map;
 
-
+/**
+ * A controller class for the Precipitation widget.
+ */
 public class PrecipitationWidgetController implements IConfigurableWidget {
 
-
+    /**
+     * The location text.
+     */
     @FXML
     private Text txtLocation;
-
+    /**
+     * The percentage text.
+     */
     @FXML
     private Text txtPercentage;
-
+    /**
+     * The widget description text.
+     */
     @FXML
     private Text txtWidgetDescription;
-
+    /**
+     * The temperature text.
+     */
     @FXML
     private Text txtTemperature;
 
     Location location = null;
 
+    /**
+     * Applies the provided configuration to the widget.
+     */
     public void applyConfig(WidgetConfig config) {
         long locationId = config.getLocationId();
 
@@ -41,6 +54,9 @@ public class PrecipitationWidgetController implements IConfigurableWidget {
         updatePrecipitationWidget();
     }
 
+    /**
+     * Updates the precipitation widget with the provided weather information.
+     */
     public void updatePrecipitationWidget() {
         int nowEpoch = (int) DateData.getNearestHourEpoch(ZonedDateTime.now());
         HourlyForecast currentForecast = new HourlyForecastDAO.HourlyForecastQuery()

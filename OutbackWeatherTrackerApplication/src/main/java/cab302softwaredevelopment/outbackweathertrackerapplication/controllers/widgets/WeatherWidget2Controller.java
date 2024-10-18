@@ -18,7 +18,7 @@ public class WeatherWidget2Controller {
     /**
      * The line chart for the weather data.
      */
-    public LineChart Graph;
+    public LineChart<String, Number> Graph;
     /**
      * The text for the location.
      */
@@ -47,8 +47,8 @@ public class WeatherWidget2Controller {
      *
      * @return The updated chart.
      */
-    public XYChart.Series updateChart(){
-        XYChart.Series series = new XYChart.Series();
+    public XYChart.Series<String, Number> updateChart(){
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.getData().add(new XYChart.Data<String,Number>("Today",22));
         series.getData().add(new XYChart.Data<String,Number>("Tomorrow",19));
         series.getData().add(new XYChart.Data<String,Number>("Day 2",10));

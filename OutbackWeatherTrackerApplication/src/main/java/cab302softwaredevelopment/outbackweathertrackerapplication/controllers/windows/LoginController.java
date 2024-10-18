@@ -15,10 +15,21 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+/**
+ * Controller for the Login page.
+ */
 public class LoginController {
-
+    /**
+     * The height of the login window.
+     */
     public static final int HEIGHT = 400;
+    /**
+     * The width of the login window.
+     */
     public static final int WIDTH = 700;
+    /**
+     * The title of the login window.
+     */
     public static final String TITLE = "Login";
 
     // Email regex pattern
@@ -140,15 +151,12 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
-
-    // Public business logic
-
     /**
+     * Handles the login process.
      *
-     * @param email
-     * @param password
-     * @return
+     * @param email The email to login with.
+     * @param password The password to login with.
+     * @return True if login was successful, false otherwise.
      */
     public boolean handleLogin(String email, String password) {
         try {
@@ -177,10 +185,11 @@ public class LoginController {
     }
 
     /**
+     * Handles the sign up process.
      *
-     * @param email
-     * @param password
-     * @return
+     * @param email The email to sign up with.
+     * @param password The password to sign up with.
+     * @return True if sign up was successful, false otherwise.
      */
     public boolean handleSignUp(String email, String password) {
         try {
@@ -220,10 +229,11 @@ public class LoginController {
     }
 
     /**
+     * Validates the credentials.
      *
-     * @param email
-     * @param password
-     * @return
+     * @param email The email to validate.
+     * @param password The password to validate.
+     * @return True if the credentials are valid, false otherwise.
      */
     public boolean validateCredentials(String email, String password) {
         if (!Pattern.compile(EMAIL_PATTERN).matcher(email).matches()) {

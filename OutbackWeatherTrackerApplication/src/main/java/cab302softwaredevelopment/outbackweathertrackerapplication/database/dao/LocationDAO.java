@@ -21,11 +21,6 @@ public class LocationDAO {
    * Inserts a new Location into the database.
    *
    * @param location the Location object to be inserted
-   *                <p>
-   *                This method begins a transaction and attempts to save the provided Location
-   *                object to the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void insert(Location location) {
     Session session = DatabaseConnection.getSession();
@@ -45,11 +40,6 @@ public class LocationDAO {
    * Updates an existing Location in the database.
    *
    * @param location the Location object to be updated
-   *                <p>
-   *                This method begins a transaction and attempts to update the provided Location
-   *                object in the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void update(Location location) {
     Session session = DatabaseConnection.getSession();
@@ -69,11 +59,6 @@ public class LocationDAO {
    * Deletes an Location from the database by its ID.
    *
    * @param id The ID of the Location to be deleted
-   *           <p>
-   *           This method begins a transaction and attempts to delete the Location object with the
-   *           specified ID from the database. If the operation is successful, the transaction is
-   *           committed. If an exception occurs during the operation, the transaction is rolled
-   *           back and the exception stack trace is printed.
    */
   public void delete(Long id) {
     Location location = new LocationQuery().whereId(id).getSingleResult();
@@ -86,11 +71,6 @@ public class LocationDAO {
    * Deletes an Location from the database
    *
    * @param location The Location to be deleted
-   *                <p>
-   *                This method begins a transaction and attempts to delete the provided Location
-   *                object from the database. If the operation is successful, the transaction is
-   *                committed. If an exception occurs during the operation, the transaction is
-   *                rolled back and the exception stack trace is printed.
    */
   public void delete(Location location) {
     Session session = DatabaseConnection.getSession();
@@ -114,6 +94,9 @@ public class LocationDAO {
     CriteriaBuilder builder;
     Root<Location> root;
 
+    /**
+     * Constructs a new LocationQuery object.
+     */
     public LocationQuery() {
       Session session = DatabaseConnection.getSession();
       builder = session.getCriteriaBuilder();

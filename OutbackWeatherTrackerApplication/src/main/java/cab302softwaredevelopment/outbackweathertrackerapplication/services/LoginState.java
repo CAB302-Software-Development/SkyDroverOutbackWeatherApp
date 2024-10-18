@@ -10,20 +10,36 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * A class for managing the login state of the application.
+ */
 public class LoginState {
     @Getter
     private static Account currentAccount;
     @Getter
     private static boolean isOffline;
 
+    /**
+     * Logs in the specified account.
+     *
+     * @param account The account to log in.
+     */
     public static void login(Account account) {
         currentAccount = account;
     }
 
+    /**
+     * Returns whether the current account is a guest account.
+     *
+     * @return Whether the current account is a guest account.
+     */
     public static boolean isGuest() {
         return currentAccount.getIsGuest();
     }
 
+    /**
+     * Logs out the current account.
+     */
     public static void logout() {
         Account guestAccount = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
         if(guestAccount == null) {
@@ -46,6 +62,12 @@ public class LoginState {
         currentAccount = guestAccount;
     }
 
+    /**
+     * Updates the current account with the specified account.
+     *
+     * @param newAccount The account to update the current account with.
+     * @return Whether the account was updated successfully.
+     */
     public static boolean updateAccount(AccountUpdateModel newAccount) {
         Account.AccountBuilder accountBuilder = Account.builder();
         accountBuilder.id(currentAccount.getId());
@@ -102,6 +124,11 @@ public class LoginState {
         }
     }
 
+    /**
+     * Sets the offline status of the application.
+     *
+     * @param value The offline status to set.
+     */
     public static void setOffline(boolean value) {
         // TODO display toast and other indicators of offline status
         isOffline = value;

@@ -29,7 +29,12 @@ public enum Theme {
     public String getFilePath() {
         return this.filePath;
     }
-
+    /**
+     * Gets the theme from the file path.
+     *
+     * @param filePath The file path
+     * @return The theme
+     */
     @Override
     public String toString() {
         return this.name();
