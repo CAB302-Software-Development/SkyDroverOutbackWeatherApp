@@ -25,16 +25,30 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * A model class for the Account entity.
+ */
 @Converter(autoApply = true)
 class LayoutsConverter implements AttributeConverter<HashMap<String, WidgetInfo[]>, String> {
 
   private static final Gson gson = new Gson();
 
+  /**
+   * Converts the Layouts object to a JSON string.
+   *
+   * @param layouts The Layouts object to convert.
+   * @return The JSON string representation of the Layouts object.
+   */
   @Override
   public String convertToDatabaseColumn(HashMap<String, WidgetInfo[]> layouts) {
     return gson.toJson(layouts);  // Convert the Layouts object to a JSON string
   }
-
+  /**
+   * Converts the JSON string to a Layouts object.
+   *
+   * @param json The JSON string to convert.
+   * @return The Layouts object representation of the JSON string.
+   */
   @Override
   public HashMap<String, WidgetInfo[]> convertToEntityAttribute(String json) {
     Type type = new TypeToken<HashMap<String, WidgetInfo[]>>() {}.getType();

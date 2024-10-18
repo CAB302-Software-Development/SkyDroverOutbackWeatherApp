@@ -13,7 +13,9 @@ import org.hibernate.Session;
  * A Data Access Object for the Account entity.
  */
 public class AccountDAO {
-
+  /**
+   * Default constructor for the AccountDAO class.
+   */
   public AccountDAO() {
   }
 
