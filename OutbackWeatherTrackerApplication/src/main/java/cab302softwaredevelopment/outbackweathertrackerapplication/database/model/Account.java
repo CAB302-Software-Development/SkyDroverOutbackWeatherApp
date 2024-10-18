@@ -60,11 +60,10 @@ class LayoutsConverter implements AttributeConverter<HashMap<String, WidgetInfo[
 @Table(name = "account", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
+
 @Builder
 @Getter
-/**
- * A model class for the Account entity.
- */
+
 public class Account {
 
   /**
@@ -171,6 +170,11 @@ public class Account {
     return BCrypt.checkpw(password, this.password);
   }
 
+  /**
+   * Returns the string representation of the account.
+   *
+   * @return The string representation of the account.
+   */
   @Override
   public String toString() {
     return "Account{" +

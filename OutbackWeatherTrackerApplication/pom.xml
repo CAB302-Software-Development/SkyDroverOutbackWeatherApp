@@ -177,14 +177,6 @@
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -227,6 +219,16 @@
         <version>3.2.2</version>
         <configuration>
           <argLine>--add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</argLine>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.0</version>
+        <configuration>
+          <destDir>javadocs</destDir>
+          <reportOutputDirectory>${project.build.directory}/javadocs</reportOutputDirectory>
         </configuration>
       </plugin>
     </plugins>

@@ -374,53 +374,60 @@ public class HourlyForecast {
 
   /**
    * Constructor for HourlyForecast
-   * @param location Location
-   * @param timestamp Integer
-   * @param temperature_2m Double
-   * @param relative_humidity_2m Double
-   * @param dew_point_2m Double
-   * @param apparent_temperature Double
-   * @param precipitation Double
-   * @param rain Double
-   * @param showers Double
-   * @param snowfall Double
-   * @param snow_depth Double
-   * @param weather_code Integer
-   * @param pressure_msl Double
-   * @param surface_pressure Double
-   * @param cloud_cover Double
-   * @param cloud_cover_low Double
-   * @param cloud_cover_mid Double
-   * @param cloud_cover_high Double
-   * @param visibility Double
-   * @param et0_fao_evapotranspiration Double
-   * @param vapour_pressure_deficit Double
-   * @param wind_speed_10m Double
-   * @param wind_speed_40m Double
-   * @param wind_speed_80m Double
-   * @param wind_speed_120m Double
-   * @param wind_direction_10m Double
-   * @param wind_direction_40m Double
-   * @param wind_direction_80m Double
-   * @param wind_direction_120m Double
-   * @param wind_gusts_10m Double
-   * @param surface_temperature Double
-   * @param soil_temperature_0_to_10cm Double
-   * @param soil_temperature_10_to_35cm Double
-   * @param soil_temperature_35_to_100cm Double
-   * @param soil_temperature_100_to_300cm Double
-   * @param soil_moisture_0_to_10cm Double
-   * @param soil_moisture_10_to_35cm Double
-   * @param soil_moisture_35_to_100cm Double
-   * @param soil_moisture_100_to_300cm Double
-   * @param is_day boolean
-   * @param sunshine_duration Double
-   * @param shortwave_radiation Double
-   * @param direct_radiation Double
-   * @param diffuse_radiation Double
-   * @param direct_normal_irradiance Double
-   * @param global_tilted_irradiance Double
-   * @param terrestrial_radiation Double
+   *
+   * @param location The associated location of the hourly forecast.
+   * @param timestamp The timestamp of the forecast in Unix time.
+   * @param temperature_2m The temperature at 2 meters above ground level in degrees Celsius.
+   * @param relative_humidity_2m The relative humidity at 2 meters above ground level in percentage.
+   * @param dew_point_2m The dew point temperature at 2 meters above ground level in degrees Celsius.
+   * @param apparent_temperature The perceived temperature considering wind chill, humidity, and solar radiation in degrees Celsius.
+   * @param precipitation The total precipitation (rain, showers, snow) in millimeters.
+   * @param rain The amount of rain from large-scale weather systems in millimeters.
+   * @param showers The amount of convective precipitation (showers) in millimeters.
+   * @param snowfall The amount of snowfall in centimeters.
+   * @param snow_depth The depth of snow on the ground in centimeters.
+   * @param weather_code The weather condition code following WMO weather interpretation codes.
+   * @param pressure_msl The atmospheric pressure reduced to mean sea level in hPa.
+   * @param surface_pressure The atmospheric pressure at the surface in hPa.
+   * @param cloud_cover The total cloud cover as a percentage.
+   * @param cloud_cover_low The low-level cloud cover (up to 3 km altitude) as a percentage.
+   * @param cloud_cover_mid The mid-level cloud cover (3 to 8 km altitude) as a percentage.
+   * @param cloud_cover_high The high-level cloud cover (above 8 km altitude) as a percentage.
+   * @param visibility The visibility distance in meters.
+   * @param et0_fao_evapotranspiration The reference evapotranspiration (ET₀) based on FAO-56 Penman-Monteith equations in millimeters.
+   * @param vapour_pressure_deficit The vapor pressure deficit (VPD) in kilopascals (kPa).
+   * @param wind_speed_10m The wind speed at 10 meters above ground level in meters per second (m/s).
+   * @param wind_speed_40m The wind speed at 40 meters above ground level in meters per second (m/s).
+   * @param wind_speed_80m The wind speed at 80 meters above ground level in meters per second (m/s).
+   * @param wind_speed_120m The wind speed at 120 meters above ground level in meters per second (m/s).
+   * @param wind_direction_10m The wind direction at 10 meters above ground level in degrees.
+   * @param wind_direction_40m The wind direction at 40 meters above ground level in degrees.
+   * @param wind_direction_80m The wind direction at 80 meters above ground level in degrees.
+   * @param wind_direction_120m The wind direction at 120 meters above ground level in degrees.
+   * @param wind_gusts_10m The maximum wind gusts at 10 meters above ground level in meters per second (m/s).
+   * @param surface_temperature The surface temperature in degrees Celsius.
+   * @param soil_temperature_0_to_10cm The average soil temperature at 0 to 10 cm depth in degrees Celsius.
+   * @param soil_temperature_10_to_35cm The average soil temperature at 10 to 35 cm depth in degrees Celsius.
+   * @param soil_temperature_35_to_100cm The average soil temperature at 35 to 100 cm depth in degrees Celsius.
+   * @param soil_temperature_100_to_300cm The average soil temperature at 100 to 300 cm depth in degrees Celsius.
+   * @param soil_moisture_0_to_10cm The volumetric soil moisture content at 0 to 10 cm depth in cubic meters per cubic meter (m³/m³).
+   * @param soil_moisture_10_to_35cm The volumetric soil moisture content at 10 to 35 cm depth in cubic meters per cubic meter (m³/m³).
+   * @param soil_moisture_35_to_100cm The volumetric soil moisture content at 35 to 100 cm depth in cubic meters per cubic meter (m³/m³).
+   * @param soil_moisture_100_to_300cm The volumetric soil moisture content at 100 to 300 cm depth in cubic meters per cubic meter (m³/m³).
+   * @param is_day Indicates whether it is day (true) or night (false).
+   * @param sunshine_duration The duration of sunshine in seconds per hour.
+   * @param shortwave_radiation The average shortwave solar radiation in watts per square meter (W/m²).
+   * @param direct_radiation The average direct solar radiation on the horizontal plane in watts per square meter (W/m²).
+   * @param diffuse_radiation The average diffuse solar radiation in watts per square meter (W/m²).
+   * @param direct_normal_irradiance The average direct solar radiation on the normal plane in watts per square meter (W/m²).
+   * @param global_tilted_irradiance The average global solar radiation on a tilted plane in watts per square meter (W/m²).
+   * @param terrestrial_radiation The average total radiation received on a tilted plane in watts per square meter (W/m²).
+   * @param shortwave_radiation_instant The instantaneous shortwave solar radiation in watts per square meter (W/m²).
+   * @param direct_radiation_instant The instantaneous direct solar radiation on the horizontal plane in watts per square meter (W/m²).
+   * @param diffuse_radiation_instant The instantaneous diffuse solar radiation in watts per square meter (W/m²).
+   * @param direct_normal_irradiance_instant The instantaneous direct solar radiation on the normal plane in watts per square meter (W/m²).
+   * @param global_tilted_irradiance_instant The instantaneous global solar radiation on a tilted plane in watts per square meter (W/m²).
+   * @param terrestrial_radiation_instant The instantaneous total radiation received on a tilted plane in watts per square meter (W/m²).
    */
   public HourlyForecast(Location location, Integer timestamp, Double temperature_2m,
       Double relative_humidity_2m, Double dew_point_2m, Double apparent_temperature,

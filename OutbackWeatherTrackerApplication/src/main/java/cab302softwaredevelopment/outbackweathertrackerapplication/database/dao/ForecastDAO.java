@@ -147,7 +147,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereLocationId(long location_id) {
-    criteria.where(builder.equal(root.get("location").get("id"), location_id));
+    criteria.where(builder.equal(root.get("location_id"), location_id));
     return self();
   }
 

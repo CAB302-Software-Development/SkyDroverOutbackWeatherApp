@@ -38,3 +38,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
+    - name: Publish JavaDocs
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: OutbackWeatherTrackerApplication/target/javadocs
