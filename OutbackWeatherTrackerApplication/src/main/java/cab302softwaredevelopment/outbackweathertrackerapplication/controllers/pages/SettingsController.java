@@ -67,12 +67,14 @@ public class SettingsController extends BasePage {
             LocationCreateModel location = InputService.getLocation("Select location", "Please select your location on the map");
             if (location != null) {
                 locationService.addLocationForCurrentUser(location);
+                MainController.getController().updateUIData();
                 refreshLocationList();
             }
         } else if (event.getSource() == btnDeleteLocation) {
             Location selectedLocation = lstLocations.getSelectionModel().getSelectedItem();
             if (selectedLocation != null) {
                 locationService.deleteLocation(selectedLocation);
+                MainController.getController().updateUIData();
                 refreshLocationList();
             }
         }

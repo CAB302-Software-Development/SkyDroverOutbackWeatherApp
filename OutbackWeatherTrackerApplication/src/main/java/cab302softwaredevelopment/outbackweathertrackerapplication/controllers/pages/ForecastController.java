@@ -8,11 +8,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,11 +19,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import java.net.URL;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class ForecastController extends BasePage {
     @FXML
@@ -92,7 +88,7 @@ public class ForecastController extends BasePage {
             return;
         }
 
-        DateData temp = new DateData(LocalDate.now(), 7);
+        DateData temp = new DateData(LocalDateTime.now(), 7);
         List<DailyForecast> forecasts = (new DailyForecastDAO.DailyForecastQuery())
                 .whereLocationId(selectedLocation.getId())
                 .whereTimestampGE((int) temp.getDayStartEpoch())
@@ -110,7 +106,7 @@ public class ForecastController extends BasePage {
             return;
         }
 
-        DateData temp = new DateData(LocalDate.now());
+        DateData temp = new DateData(LocalDateTime.now());
         List<HourlyForecast> forecasts = (new HourlyForecastDAO.HourlyForecastQuery())
                 .whereLocation(selectedLocation)
                 .whereTimestampGE((int) temp.getDayStartEpoch())

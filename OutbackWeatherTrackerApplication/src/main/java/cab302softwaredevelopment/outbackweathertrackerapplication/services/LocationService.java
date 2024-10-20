@@ -82,6 +82,40 @@ public class LocationService {
         }
     }
 
+    public String getStateFromCoordinates(double lat, double lon) throws Exception {
+        String urlStr = String.format("https://nominatim.openstreetmap.org/reverse?format=json&lat=%f&lon=%f&addressdetails=1", lat, lon);
+
+        URL url = new URI(urlStr).toURL();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("User-Agent", "Java Application");
+
+        int responseCode = conn.getResponseCode();
+        if (responseCode == 200) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
+            JsonObject addressObject = jsonObject.getAsJsonObject("address");
+
+            if (addressObject != null && addressObject.has("state")) {
+                String state = addressObject.get("state").getAsString();
+                return state;
+            } else {
+                throw new Exception("State information not found in response");
+            }
+        } else {
+            throw new Exception("HTTP Request failed with code: " + responseCode);
+        }
+    }
+
+
     public LocationCreateModel geocodeAddress(String address) {
         try {
             String urlStr = String.format("https://nominatim.openstreetmap.org/search?q=%s&format=json&limit=1",
@@ -117,5 +151,7 @@ public class LocationService {
         }
     }
 
-
+    public Location getById(long location) {
+        return new LocationDAO.LocationQuery().whereAccount(UserService.getInstance().getCurrentAccount()).whereId(location).getSingleResult();
+    }
 }

@@ -12,6 +12,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateDat
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ForecastService {
     }
 
     public DailyForecast getTodayForecast(Location location) {
-        int nowEpoch = (int) (new DateData(LocalDate.now())).getDayStartEpoch();
+        int nowEpoch = (int) (new DateData(LocalDateTime.now())).getDayStartEpoch();
 
         if (ConnectionService.getInstance().isOffline()) {
             DailyForecast latest = new DailyForecastDAO.DailyForecastQuery()

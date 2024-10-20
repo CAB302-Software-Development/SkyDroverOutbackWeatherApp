@@ -25,6 +25,7 @@ public class ConnectionService {
     }
 
     private void updateLocalDB() {
+        new Thread(() -> AlertsService.getInstance().updateBOMAlertsForCurrentUserLocations()).start();
         setOffline(ForecastService.getInstance().updateForecastsForCurrentUser(7, 2));
     }
 
