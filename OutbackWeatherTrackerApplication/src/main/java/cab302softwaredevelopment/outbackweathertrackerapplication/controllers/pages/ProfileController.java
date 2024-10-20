@@ -13,6 +13,10 @@ public class ProfileController extends BasePage {
     private PasswordField passwordField, confirmPasswordField;
     @FXML
     private CheckBox celsiusCheckBox;
+    @FXML
+    private Button saveButton, clearDataButton;
+    @FXML
+    private Label guestUserLabel;
 
     @Override
     public void updateData() {
@@ -20,12 +24,35 @@ public class ProfileController extends BasePage {
     }
 
     private void updateProfileInfo() {
-        emailField.setText(userService.getCurrentAccount().getEmail());
-        celsiusCheckBox.setSelected(userService.getCurrentAccount().getPreferCelsius());
+        if (userService.isGuest()) {
+            handleGuestUser();
+        } else {
+            emailField.setText(userService.getCurrentAccount().getEmail());
+            celsiusCheckBox.setSelected(userService.getCurrentAccount().getPreferCelsius());
+        }
+    }
+
+    private void handleGuestUser() {
+        // Disable all fields and buttons
+        emailField.setDisable(true);
+        passwordField.setDisable(true);
+        confirmPasswordField.setDisable(true);
+        celsiusCheckBox.setDisable(true);
+        saveButton.setDisable(true);
+        clearDataButton.setDisable(true);
+
+        // Display a message to the guest user
+        guestUserLabel.setText("Guest users cannot update profile details. Please log in or create an account.");
+        guestUserLabel.setVisible(true);
     }
 
     @FXML
     private void handleSave() {
+        if (userService.isGuest()) {
+            showAlert("Guest Account", "Guest users cannot update profile details.");
+            return;
+        }
+
         String newEmail = emailField.getText();
         String newPassword = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
@@ -53,6 +80,12 @@ public class ProfileController extends BasePage {
 
     @FXML
     private void handleClearStoredData() {
+        if (userService.isGuest()) {
+            showAlert("Guest Account", "Guest users cannot clear stored data.");
+            return;
+        }
+
+        // Show a confirmation dialog to the user
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Confirm Data Reset");
         confirmationAlert.setHeaderText("Are you sure you want to clear all stored data?");

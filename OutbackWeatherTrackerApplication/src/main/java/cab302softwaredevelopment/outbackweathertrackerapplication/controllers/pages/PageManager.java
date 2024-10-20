@@ -1,5 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
+import javafx.application.Platform;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class PageManager {
 
     public void updatePages() {
         for (ISwapPanel observer : observers) {
-            observer.updateData();
+            Platform.runLater(observer::updateData);
         }
     }
 

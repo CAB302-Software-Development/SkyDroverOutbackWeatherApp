@@ -17,6 +17,8 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
+    <Label fx:id="guestUserLabel" visible="false" style="-fx-text-fill: red; -fx-font-size: 14px; -fx-background-color: white;"/>
+
     <Label text="Profile Settings" style="-fx-font-size: 18px;"/>
 
     <Label text="Email:"/>
@@ -30,6 +32,6 @@
 
     <CheckBox fx:id="celsiusCheckBox" text="Prefer Celsius"/>
 
-    <Button text="Save Changes" onAction="#handleSave"/>
-    <Button text="Delete stored user data" onAction="#handleClearStoredData"/>
+    <Button fx:id="saveButton" text="Save Changes" onAction="#handleSave"/>
+    <Button fx:id="clearDataButton" text="Delete stored user data" onAction="#handleClearStoredData"/>
 </VBox>
