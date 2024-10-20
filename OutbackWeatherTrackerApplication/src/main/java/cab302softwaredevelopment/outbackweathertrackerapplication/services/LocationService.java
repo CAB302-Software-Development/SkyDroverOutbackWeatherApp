@@ -117,5 +117,16 @@ public class LocationService {
         }
     }
 
-
+    public boolean deleteAllUserLocations() {
+        try {
+            LocationDAO dao = new LocationDAO();
+            for (Location location : getCurrentUserLocations()) {
+                dao.delete(location);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

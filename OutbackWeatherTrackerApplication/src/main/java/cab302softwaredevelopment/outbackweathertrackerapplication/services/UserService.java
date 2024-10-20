@@ -81,12 +81,6 @@ public class UserService {
             accountBuilder.email(existing.getEmail());
         }
 
-        if (newAccount.getPassword() != null) {
-            accountBuilder.password(newAccount.getPassword());
-        } else {
-            accountBuilder.password(existing.getPassword());
-        }
-
         if (newAccount.getCurrentTheme() != null) {
             accountBuilder.currentTheme(newAccount.getCurrentTheme());
         } else {
@@ -111,7 +105,12 @@ public class UserService {
             accountBuilder.selectedLayout(existing.getSelectedLayout());
         }
 
+        accountBuilder.password(existing.getPassword());
+
         Account updatedAccount = accountBuilder.build();
+        if (newAccount.getPassword() != null) {
+            updatedAccount.setPassword(newAccount.getPassword());
+        }
 
         try {
             AccountDAO accountDAO = new AccountDAO();
