@@ -95,7 +95,7 @@ public class DashboardController extends BasePage {
 
     private void exitEditMode() {
         if(checkUnsavedChanges()) return;
-
+        currentLayout = userService.getCurrentLayout();
         isEditing = false;
         hbEditModeToolbar.setVisible(false);
         hbEditModeToolbar.setManaged(false);
@@ -295,6 +295,13 @@ public class DashboardController extends BasePage {
     }
 
     public void removeFromGrid(StackPane widgetContainer) {
+        unsavedChanges = true;
         dashboardGrid.getChildren().remove(widgetContainer);
+    }
+
+    public void deleteWidget(WidgetInfo widgetInfo) {
+        unsavedChanges = true;
+        currentLayout.remove(widgetInfo);
+        loadWidgetsToGrid();
     }
 }
