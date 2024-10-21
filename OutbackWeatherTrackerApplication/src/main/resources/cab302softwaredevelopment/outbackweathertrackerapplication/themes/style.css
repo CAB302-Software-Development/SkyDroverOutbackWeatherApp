@@ -148,7 +148,7 @@
 }
 
 .temperature-widget {
-    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-color: linear-gradient(to bottom, #0195ff,primary);
     -fx-background-radius: 15;
     -fx-padding: 20;
 }
@@ -157,7 +157,7 @@
 }
 
 .weather-widget {
-    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-color: linear-gradient(to bottom, #0195ff,primary);
     -fx-background-radius: 15;
     -fx-padding: 20;
 }
@@ -166,7 +166,7 @@
 }
 
 .weather-widget-2 {
-    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-color: linear-gradient(to bottom, #0195ff,primary);
     -fx-background-radius: 15;
     -fx-padding: 20;
 }
@@ -178,7 +178,7 @@
 }
 
 .weather-widget-3 {
-    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-color: linear-gradient(to bottom, #0195ff,primary);
     -fx-background-radius: 15;
     -fx-padding: 20;
 }
@@ -187,7 +187,7 @@
 }
 
 .weather-widget-4 {
-    -fx-background-color: linear-gradient(to bottom, #0195ff,#3E6EAC);
+    -fx-background-color: linear-gradient(to bottom, #0195ff,primary);
     -fx-background-radius: 15;
     -fx-padding: 20;
 }
@@ -202,7 +202,7 @@
 }
 
 .alerts-widget {
-    -fx-background-color: #3E6EAC;
+    -fx-background-color: primary;
 }
 .alerts-widget HBox {
     -fx-background-color: red;
@@ -212,7 +212,7 @@
 
 /** Panels */
 .alerts-panel {
-    -fx-background-color: #3E6EAC;
+    -fx-background-color: primary;
 }
 .alerts-panel .hbox1 {
     -fx-background-radius: 13px; -fx-background-color: red;
@@ -226,8 +226,25 @@
     -fx-background-radius: 13.5;
 }
 .alerts-panel .vbox1 {
-    -fx-background-color: #3E6EAC;
+    -fx-background-color: primary;
 }
 
 .location-selector-popup {
+}
+
+.page-header {
+}
+
+.alert-config {
+    -fx-background-color: #FFFFFF;
+}
+
+.weather-alert {
+    -fx-background-color: #ef9739;
+}
+.weather-alert Text {
+    -fx-fill: white;
+}
+.weather-alert Hyperlink {
+
 }

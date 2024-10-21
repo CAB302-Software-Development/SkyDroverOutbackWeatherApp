@@ -7,6 +7,7 @@ public abstract class BasePage implements ISwapPanel {
     LocationService locationService;
     ForecastService forecastService;
     ConnectionService connectionService;
+    AlertsService alertsService;
 
     @Override
     public void initialize() {
@@ -14,6 +15,7 @@ public abstract class BasePage implements ISwapPanel {
         locationService = LocationService.getInstance();
         forecastService = ForecastService.getInstance();
         connectionService = ConnectionService.getInstance();
+        alertsService = AlertsService.getInstance();
     }
 
     @Override

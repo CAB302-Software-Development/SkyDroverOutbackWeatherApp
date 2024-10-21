@@ -18,7 +18,11 @@ public class PageManager {
 
     public void updatePages() {
         for (ISwapPanel observer : observers) {
-            Platform.runLater(observer::updateData);
+            try {
+                Platform.runLater(observer::updateData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

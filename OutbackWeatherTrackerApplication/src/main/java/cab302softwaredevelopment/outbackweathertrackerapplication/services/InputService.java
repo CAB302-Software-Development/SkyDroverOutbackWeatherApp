@@ -4,6 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEnt
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LocationSelectorController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import javafx.fxml.FXMLLoader;
@@ -69,5 +71,13 @@ public class InputService {
             e.printStackTrace();
             return null; // Handle error case
         }
+    }
+
+    public static HourlyForecastDAO.HourlyForecastQuery getHourlyForecastQuery() {
+        return new HourlyForecastDAO.HourlyForecastQuery();
+    }
+
+    public static DailyForecastDAO.DailyForecastQuery getDailyForecastQuery() {
+        return new DailyForecastDAO.DailyForecastQuery();
     }
 }

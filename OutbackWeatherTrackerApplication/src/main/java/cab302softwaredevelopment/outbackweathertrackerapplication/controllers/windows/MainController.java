@@ -13,6 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
+
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,7 @@ public class MainController implements Initializable {
     public static final int HEIGHT = 600;
     public static final String TITLE = "Outback Weather Tracker Application";
 
+    @Getter
     private static MainController controller;
 
     @FXML
@@ -78,10 +81,10 @@ public class MainController implements Initializable {
         pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateUIData, 5, 300, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::updateUIData, 0, 300, TimeUnit.SECONDS);
     }
 
-    private void updateUIData() {
+    public void updateUIData() {
         pageFactory.updateAllPages();
     }
 

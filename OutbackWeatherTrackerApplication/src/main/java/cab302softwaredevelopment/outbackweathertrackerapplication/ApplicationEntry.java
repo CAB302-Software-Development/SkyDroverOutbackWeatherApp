@@ -1,9 +1,12 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AlertDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;

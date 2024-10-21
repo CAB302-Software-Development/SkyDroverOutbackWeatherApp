@@ -1,7 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;

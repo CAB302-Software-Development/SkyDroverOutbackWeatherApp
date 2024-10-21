@@ -17,6 +17,8 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires spring.security.crypto;
     requires com.gluonhq.maps;
     requires javafx.web;
+    requires java.prefs;
+    requires org.json;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
