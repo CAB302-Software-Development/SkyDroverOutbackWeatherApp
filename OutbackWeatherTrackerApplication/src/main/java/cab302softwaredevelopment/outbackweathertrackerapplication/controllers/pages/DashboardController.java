@@ -216,23 +216,6 @@ public class DashboardController extends BasePage {
         if (index != -1) editWidget(index);
     }
 
-
-    // private void editWidget(int index) {
-    //     WidgetInfo widgetInfo = currentLayout.get(index);
-    //     WidgetInfo updatedWidgetInfo = InputService.getWidgetConfig(widgetInfo, this);
-    //     if (updatedWidgetInfo != null) {
-    //         if (!currentLayout.get(index).equals(updatedWidgetInfo)) {
-    //             currentLayout.set(index, updatedWidgetInfo);
-    //             unsavedChanges = true;
-    //         }
-    //     } else {
-    //         currentLayout.remove(index);
-    //         unsavedChanges = true;
-    //     }
-    //     loadWidgetsToGrid();
-    // }
-
-
     private void editWidget(int index) {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/widget-config-dialog.fxml"));

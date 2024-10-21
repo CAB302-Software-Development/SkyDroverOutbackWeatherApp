@@ -10,19 +10,21 @@
       styleClass="weather-widget" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidgetController"
       stylesheets="@../themes/style.css,@../themes/theme-light.css">
+    <!--
     <Text fx:id="txtWeatherCondition" text="WeatherCondition">
         <font><Font size="14.0" /></font>
     </Text>
-    <ImageView fx:id="imgWeatherIcon" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" >
+    -->
+    <ImageView fx:id="imgWeatherIcon" fitHeight="50.0" fitWidth="50.0" preserveRatio="true" >
         <Image url="@../images/partlycloudy.png"/>
     </ImageView>
-    <Text fx:id="txtDateTime" text="DATE | TIME AM">
+    <Text fx:id="txtDateTime" text="DATE | TIME AM" styleClass="text-medium">
         <font><Font size="12.0" /></font>
     </Text>
-    <Text fx:id="txtTemperature" text="CurrentTemp°">
-        <font><Font size="36.0" /></font>
+    <Text fx:id="txtTemperature" text="CurrentTemp°" styleClass="text-large">
+        <font><Font size="24.0" /></font>
     </Text>
-    <Text fx:id="txtMinMaxTemp" text="H: 27° L: 18°">
+    <Text fx:id="txtMinMaxTemp" text="H: 27° L: 18°" styleClass="text-medium">
         <font><Font size="12.0" /></font>
     </Text>
 
