@@ -16,10 +16,12 @@
 
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.geometry.Insets?>
 <VBox spacing="20.0" styleClass="alerts-panel"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.AlertsController">
+    <padding><Insets topRightBottomLeft="10"/></padding>
     <HBox styleClass="page-header" alignment="CENTER">
         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Alerts" >
             <font><Font size="36.0"/></font>

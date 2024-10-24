@@ -1,11 +1,11 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.models;
 
 import com.google.gson.annotations.SerializedName;
-
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WidgetInfo {
+public class WidgetInfo implements Serializable {
     @SerializedName("widgetType")
     public WidgetType type;
     public int rowIndex;

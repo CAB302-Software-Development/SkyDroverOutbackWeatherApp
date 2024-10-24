@@ -76,47 +76,34 @@
             </AnchorPane>
 
 
-            <AnchorPane fx:id="signupPane" visible="false" managed="false"
-                        prefHeight="400.0" prefWidth="350.0" styleClass="background-secondary-inv" BorderPane.alignment="CENTER">
-               <Text layoutX="45.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up"
-                     wrappingWidth="263">
-                  <font><Font name="System Bold" size="24.0"/></font>
+            <AnchorPane visible="false" managed="false"  fx:id="signupPane" prefHeight="400.0" prefWidth="350.0" styleClass="background-secondary-inv" BorderPane.alignment="CENTER">
+               <Text layoutX="45.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up" wrappingWidth="263">
+                  <font><Font name="System Bold" size="24.0" /></font>
                </Text>
-
-               <Label layoutX="50.0" layoutY="129.0" text="Email"/>
-               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="147.0"
-                          pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../images/account_circle_icon.png"/>
+               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../images/account_circle_icon.png" />
                </ImageView>
-               <TextField fx:id="emailTextFieldSignup" promptText="Email Address" styleClass="textbox"
-                          layoutX="90.0" layoutY="148.0" prefHeight="28.0" prefWidth="180.0"/>
-
-               <Label layoutX="40.0" layoutY="213.0" text="Password"/>
-               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="227.0"
-                          pickOnBounds="true" preserveRatio="true">
+               <TextField fx:id="emailTextFieldSignup" layoutX="90.0" layoutY="86.0" prefHeight="28.0" prefWidth="180.0" promptText="Email Address" styleClass="textbox" />
+               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../images/password_icon.png" />
+               </ImageView>
+               <PasswordField fx:id="passwordTextFieldSignup" layoutX="90.0" layoutY="140.0" prefHeight="28.0" prefWidth="180.0" promptText="Password" styleClass="textbox" />
+               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../images/password_icon.png"/>
                </ImageView>
-               <PasswordField fx:id="passwordTextFieldSignup" promptText="Password" styleClass="textbox"
-                              layoutX="90.0" layoutY="222.0" prefHeight="28.0" prefWidth="180.0"/>
+               <PasswordField fx:id="passwordTextConfirm" layoutX="90.0" layoutY="200.0" prefHeight="28.0" prefWidth="180.0" promptText="Confirm Password" styleClass="textbox" />
+               <Button fx:id="btnLocation" layoutX="126.0" layoutY="247.0" mnemonicParsing="false" text="Select Location" onAction="#handleButtonPress" />
 
-               <Button fx:id="signupButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false"
-                       prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Sign Up" onAction="#handleButtonPress"/>
+               <Button fx:id="signupButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false" onAction="#handleButtonPress" prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Sign Up" />
 
-               <Hyperlink styleClass="hyperlink" text="Already have an account? Log in" alignment="CENTER"
-                          layoutX="113.0" layoutY="338.0"
-                          prefHeight="13.0" prefWidth="122.0"
-                          onAction="#switchToLogin">
-                  <font><Font size="8.0"/></font>
+               <Hyperlink alignment="CENTER" layoutX="113.0" layoutY="338.0" onAction="#switchToLogin" prefHeight="13.0" prefWidth="122.0" styleClass="hyperlink" text="Already have an account? Log in">
+                  <font><Font size="8.0" /></font>
                </Hyperlink>
-               <Hyperlink fx:id="guestLinkSignup" styleClass="hyperlink" text="Continue As Guest"
-                          onAction="#handleButtonPress" alignment="CENTER"
-                          layoutX="143.0" layoutY="355.0"
-                          prefHeight="17.0" prefWidth="73.0">
-                  <font><Font size="8.0"/></font>
+               <Hyperlink fx:id="guestLinkSignup" alignment="CENTER" layoutX="143.0" layoutY="355.0" onAction="#handleButtonPress" prefHeight="17.0" prefWidth="73.0" styleClass="hyperlink" text="Continue As Guest">
+                  <font><Font size="8.0" /></font>
                </Hyperlink>
-               <Label fx:id="signupMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
-                      prefWidth="183.0" textFill="RED" visible="false">
-                  <font><Font name="System Bold" size="12.0"/></font>
+               <Label fx:id="signupMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0" prefWidth="183.0" textFill="RED" visible="false">
+                  <font><Font name="System Bold" size="12.0" /></font>
                </Label>
             </AnchorPane>
          </VBox>

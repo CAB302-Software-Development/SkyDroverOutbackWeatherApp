@@ -17,7 +17,7 @@
       <font><Font size="14.0"/></font>
    </Text>
    <ImageView fx:id="weatherIconImageView" fitHeight="80.0" fitWidth="80.0" preserveRatio="true"/>
-   <Text fx:id="txtTemperature" text="CurrentTemp°">
+   <Text fx:id="txtTemperature" text="Loading">
       <font><Font size="36.0"/></font>
       <VBox.margin><Insets bottom="10.0"/></VBox.margin>
    </Text>

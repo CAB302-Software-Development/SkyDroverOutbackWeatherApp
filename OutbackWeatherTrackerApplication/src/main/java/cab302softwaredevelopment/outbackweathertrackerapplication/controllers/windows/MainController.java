@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.PageFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.fxml.FXML;
@@ -11,10 +12,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MainController implements Initializable {
+public class MainController {
     public static final int WIDTH = 1080;
     public static final int HEIGHT = 600;
     public static final String TITLE = "Outback Weather Tracker Application";
@@ -33,7 +37,7 @@ public class MainController implements Initializable {
     private static MainController controller;
 
     @FXML
-    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnAlerts, btnReports, btnSettings, btnDrawer;
+    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnAlerts, btnSettings, btnDrawer;
     @FXML
     public VBox vbNavbar;
     private Scene scene;
@@ -42,6 +46,8 @@ public class MainController implements Initializable {
 
     private ScheduledExecutorService scheduler;
     private PageFactory pageFactory;
+
+    private ImageView imgProfile, imgProfileOffline;
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -61,10 +67,28 @@ public class MainController implements Initializable {
         return Arrays.asList(stylePath, themePath, iconsPath);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    public void initialize() {
         controller = this;
         pageFactory = new PageFactory(root);
+
+        try {
+            String profileURL = ApplicationEntry.class.getResource("images/account_circle.png").toExternalForm();
+            String offlineURL = ApplicationEntry.class.getResource("images/offline.png").toExternalForm();
+            imgProfile =  new ImageView(profileURL);
+            imgProfileOffline = new ImageView(offlineURL);
+            imgProfile.setFitWidth(30);
+            imgProfile.setFitHeight(30);
+            imgProfile.setPreserveRatio(true);
+
+            imgProfileOffline.setFitWidth(30);
+            imgProfileOffline.setFitHeight(30);
+            imgProfileOffline.setPreserveRatio(true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        btnProfile.graphicProperty().setValue(imgProfile);
 
         Node swpDashboard = pageFactory.createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
         root.centerProperty().set(swpDashboard);
@@ -73,7 +97,6 @@ public class MainController implements Initializable {
             pageFactory.createSwapPanel("panels/profile-panel.fxml", btnProfile);
             pageFactory.createSwapPanel("panels/forecast-panel.fxml", btnForecast);
             pageFactory.createSwapPanel("panels/alerts-panel.fxml", btnAlerts);
-            pageFactory.createSwapPanel("panels/reports-panel.fxml", btnReports);
             pageFactory.createSwapPanel("panels/settings-panel.fxml", btnSettings);
         }).start();
 
@@ -81,10 +104,15 @@ public class MainController implements Initializable {
         pageFactory.createSwapPanel("panels/map-panel.fxml", btnMap);
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::updateUIData, 0, 300, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::updateUIData, 2, 300, TimeUnit.SECONDS);
     }
 
     public void updateUIData() {
+        if (ConnectionService.getInstance().isOffline()) {
+            btnProfile.graphicProperty().setValue(imgProfileOffline);
+        } else {
+            btnProfile.graphicProperty().setValue(imgProfile);
+        }
         pageFactory.updateAllPages();
     }
 

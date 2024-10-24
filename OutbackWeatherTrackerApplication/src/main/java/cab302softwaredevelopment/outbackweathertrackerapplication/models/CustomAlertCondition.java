@@ -104,4 +104,9 @@ public class CustomAlertCondition implements IAlertCondition {
     public String toString() {
         return getAlertTitle();
     }
+
+    @Override
+    public String getAlertTitle() {
+        return alertTitle;
+    }
 }

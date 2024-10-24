@@ -32,18 +32,16 @@ public class LocationService {
         addLocationForUser(UserService.getInstance().getCurrentAccount(), location);
     }
     public void addLocationForUser(Account account, LocationCreateModel location) {
-        Location newLocation = new Location(
-                account,
-                location.getLongitude(),
-                location.getLatitude(),
-                location.getElevation(),
-                location.getName());
-        locationDAO.insert(newLocation);
+        locationDAO.insert(location.build(account));
     }
 
     public List<Location> getCurrentUserLocations() {
+        return getLocationsForUser(UserService.getInstance().getCurrentAccount());
+    }
+
+    public List<Location> getLocationsForUser(Account account) {
         return (new LocationDAO.LocationQuery())
-                .whereAccount(UserService.getInstance().getCurrentAccount())
+                .whereAccount(account)
                 .getResults();
     }
 
@@ -152,18 +150,23 @@ public class LocationService {
     }
 
     public boolean deleteAllUserLocations() {
+        return deleteLocationsForUser(UserService.getInstance().getCurrentAccount());
+    }
+    public Location getById(long location) {
+        Location locationObj = new LocationDAO.LocationQuery().whereId(location).getSingleResult();
+        return locationObj;
+    }
+
+    public boolean deleteLocationsForUser(Account account) {
         try {
-            LocationDAO dao = new LocationDAO();
-            for (Location location : getCurrentUserLocations()) {
-                dao.delete(location);
+            List<Location> locations = (new LocationDAO.LocationQuery()).whereAccount(account).getResults();
+            for (Location location : locations) {
+                locationDAO.delete(location);
             }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-    }
-    public Location getById(long location) {
-        return new LocationDAO.LocationQuery().whereAccount(UserService.getInstance().getCurrentAccount()).whereId(location).getSingleResult();
     }
 }

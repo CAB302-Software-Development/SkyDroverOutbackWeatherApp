@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -126,7 +127,7 @@ public class AlertsController extends BasePage {
         return switch (alertType) {
             case BOMAlert -> new BOMWeatherAlert(location);
             case HotWeek -> new CustomAlertCondition(
-                    "",
+                    ExampleAlerts.HotWeek.getTitle(),
                     "",
                     new DailyForecastDAO.DailyForecastQuery()
                             .whereLocationId(location.getId())
@@ -137,7 +138,7 @@ public class AlertsController extends BasePage {
                     "temperature_2m_max",
                     30);
             case WindyWeek -> new CustomAlertCondition(
-                    "",
+                    ExampleAlerts.WindyWeek.getTitle(),
                     "",
                     new DailyForecastDAO.DailyForecastQuery()
                             .whereLocationId(location.getId())
@@ -155,10 +156,15 @@ public class AlertsController extends BasePage {
         List<WeatherAlert> alerts = new ArrayList<>();
         List<IAlertCondition> conditions = alertsService.getAlertPreferences();
         conditions.forEach(c -> alerts.addAll(c.getAlerts()));
+
+        //List<WeatherAlert> alerts = new ArrayList<>();
+        //alerts.add(new WeatherAlert("20/10:19 EDT Final Flood Warning for the Kiewa River", "http://www.bom.gov.au/vic/warnings/flood/kiewariver.shtml", "Sat, 19 Oct 2024 23:19:33 GMT"));
+
         activeAlerts.getItems().clear();
         activeAlerts.setItems(FXCollections.observableArrayList(conditions));
 
         VBox vbScrollContent = new VBox();
+        vbScrollContent.setSpacing(10);
         for (WeatherAlert alert : alerts) {
             Text description = new Text(alert.getTitle());
             Text date = new Text(alert.getPubDate());
@@ -167,6 +173,7 @@ public class AlertsController extends BasePage {
             if (alert.getLink() != null) alertContainer.getChildren().add(new Hyperlink(alert.getLink()));
             alertContainer.getStyleClass().add("weather-alert");
             alertContainer.prefHeight(150);
+            alertContainer.setPadding(new Insets(10));
             vbScrollContent.getChildren().add(alertContainer);
         }
         alertScrollPane.setContent(vbScrollContent);

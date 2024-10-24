@@ -37,7 +37,12 @@ public class AlertDAO {
             String type = jsonObject.getString("type");
 
             if (type.equals("BOMWeatherAlert")) {
-                alertConditions.add(new BOMWeatherAlert(jsonObject.getLong("location")));
+                long locationId = jsonObject.getLong("location");
+                try {
+                    alertConditions.add(new BOMWeatherAlert(locationId));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else if (type.equals("CustomAlertCondition")) {
                 String name = jsonObject.getString("name");
                 String message = jsonObject.getString("message");

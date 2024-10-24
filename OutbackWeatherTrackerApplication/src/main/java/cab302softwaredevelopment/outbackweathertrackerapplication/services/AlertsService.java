@@ -24,7 +24,7 @@ public class AlertsService {
     private static AlertsService instance = new AlertsService();
 
     private AlertDAO alertDAO = new AlertDAO();
-    private Map<Location, List<WeatherAlert>> locationWarnings = new HashMap<>();
+    private Map<Long, List<WeatherAlert>> locationWarnings = new HashMap<>();
 
     public void addAlertPreference(IAlertCondition alertCondition) {
         alertDAO.saveAlertPreference(alertCondition);
@@ -41,16 +41,17 @@ public class AlertsService {
     public List<WeatherAlert> getBOMAlertsForLocation(Location location) {
         if (locationWarnings.isEmpty()) updateBOMAlertsForCurrentUserLocations();
 
-        if (locationWarnings.containsKey(location)) {
-            return locationWarnings.get(location);
+        if (locationWarnings.containsKey(location.getId())) {
+            return locationWarnings.get(location.getId());
         } else {
-            return new ArrayList<>();
+            updateBOMAlertsForLocation(location);
+            List<WeatherAlert> temp = locationWarnings.get(location.getId());
+            return temp;
         }
     }
 
     public void updateBOMAlertsForLocation(Location location) {
         try {
-            locationWarnings.clear();
             List<WeatherAlert> alerts = new ArrayList<>();
             String region = LocationService
                     .getInstance()
@@ -69,7 +70,7 @@ public class AlertsService {
                     alerts.add(new WeatherAlert(title, link, pubDate));
                 }
             }
-            locationWarnings.put(location, alerts);
+            locationWarnings.put(location.getId(), alerts);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

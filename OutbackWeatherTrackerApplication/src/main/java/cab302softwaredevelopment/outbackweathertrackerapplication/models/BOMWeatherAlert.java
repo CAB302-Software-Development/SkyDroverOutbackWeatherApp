@@ -40,7 +40,7 @@ public class BOMWeatherAlert implements IAlertCondition {
     public JSONObject toJsonObject() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "BOMWeatherAlert");
-        jsonObject.put("location", location.getId());
+        jsonObject.put("location", (long) location.getId());
         return jsonObject;
     }
 }

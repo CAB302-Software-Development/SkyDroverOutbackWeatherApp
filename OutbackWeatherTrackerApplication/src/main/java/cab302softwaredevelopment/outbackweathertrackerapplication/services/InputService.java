@@ -11,6 +11,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetI
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,7 +22,6 @@ import java.util.Optional;
 
 public class InputService {
 
-    // Method to request string input directly via TextInputDialog
     public static String getString(String title, String content) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(title);
@@ -30,12 +31,12 @@ public class InputService {
         return result.orElse(null);
     }
 
-    // Method to request location using the FXML and LocationPopupController
     public static LocationCreateModel getLocation(String title, String content) {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/location-selector.fxml"));
             Parent root = loader.load();
             LocationSelectorController controller = loader.getController();
+            controller.setContent(content);
 
             Stage stage = new Stage();
             stage.setTitle(title);
@@ -47,7 +48,7 @@ public class InputService {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return null; // Handle the error case
+            return null;
         }
     }
 
@@ -69,15 +70,25 @@ public class InputService {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return null; // Handle error case
+            return null;
         }
     }
 
-    public static HourlyForecastDAO.HourlyForecastQuery getHourlyForecastQuery() {
-        return new HourlyForecastDAO.HourlyForecastQuery();
-    }
+    /**
+     * Displays a confirmation dialog and returns true if the user confirms the action.
+     *
+     * @param title   the title of the confirmation dialog
+     * @param header  the header text of the confirmation dialog
+     * @param content the content text of the confirmation dialog
+     * @return true if the user clicks OK, false otherwise
+     */
+    public static boolean getConfirmation(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
 
-    public static DailyForecastDAO.DailyForecastQuery getDailyForecastQuery() {
-        return new DailyForecastDAO.DailyForecastQuery();
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 }

@@ -1,5 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.models;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +18,15 @@ public class LocationCreateModel {
         this.latitude = latitude;
         this.longitude = longitude;
         this.elevation = elevation;
+    }
+
+    public Location build(Account account) {
+        Location newLocation = new Location(
+                account,
+                getLongitude(),
+                getLatitude(),
+                getElevation(),
+                getName());
+        return newLocation;
     }
 }

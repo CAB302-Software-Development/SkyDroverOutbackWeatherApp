@@ -16,7 +16,7 @@
    <VBox>
       <padding><Insets left="20.0"/></padding>
       <HBox>
-         <Text fx:id="txtLocation" text="Location">
+         <Text fx:id="txtLocation">
             <font><Font size="30.0"/></font>
          </Text>
       </HBox>

@@ -15,9 +15,9 @@ public class WindWidgetController extends BaseWidgetController {
         HourlyForecast currentForecast = forecastService.getLatestHourlyForecast(location);
         if (currentForecast != null) {
             txtLocation.setText(currentForecast.getLocation().getName());
-            txtWindspeed.setText(currentForecast.getWind_direction_10m() + " km/h");
-            txtGustSpeed.setText(currentForecast.getWind_gusts_10m() + " km/h");
-            txtNSEW.setText(currentForecast.getWind_direction_10m() + "");
+            txtWindspeed.setText(currentForecast.getWind_direction_10m() + " m/s");
+            txtGustSpeed.setText(currentForecast.getWind_gusts_10m() + " m/s");
+            txtNSEW.setText(currentForecast.getWind_direction_10m() + "°");
         }
     }
 }

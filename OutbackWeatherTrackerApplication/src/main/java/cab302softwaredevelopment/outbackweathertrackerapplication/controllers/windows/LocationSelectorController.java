@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -17,11 +19,11 @@ import java.util.ResourceBundle;
 
 public class LocationSelectorController implements Initializable {
     @FXML
+    public Label lblContent;
+    @FXML
     private MapView mapView;
-
     @FXML
     private TextField addressField;
-
     @FXML
     private Button btnConfirm, btnCancel, btnSearch;
 
@@ -82,5 +84,9 @@ public class LocationSelectorController implements Initializable {
     private void closePopup() {
         Stage stage = (Stage) btnConfirm.getScene().getWindow();
         stage.close();
+    }
+
+    public void setContent(String content) {
+        lblContent.setText(content);
     }
 }
