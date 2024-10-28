@@ -1,0 +1,37 @@
+name: Generate Javadocs
+
+on:
+  push:
+    branches:
+      - "development"     # Trigger on push to development branch
+      - "main"            # Trigger on push to main branch
+      - "feature/*"       # Trigger on push to any feature branch
+  pull_request:
+    branches:
+      - "development"     # Trigger on PRs to development branch
+      - "main"            # Trigger on PRs to main branch
+      - "feature/*"       # Trigger on PRs to any feature branch
+  workflow_dispatch:      # Allows manual trigger via GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21 Corretto
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'corretto'
+        cache: maven
+
+    - name: Generate Javadocs
+      run: |
+        mvn javadoc:javadoc --file OutbackWeatherTrackerApplication/pom.xml -DoutputDirectory=/tmp/reports
+
+    - name: Archive Javadocs
+      uses: actions/upload-artifact@v4
+      with:
+          name: JavaDocs
+          path: /tmp/reports
