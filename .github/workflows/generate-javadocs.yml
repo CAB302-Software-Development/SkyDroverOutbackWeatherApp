@@ -27,6 +27,10 @@ jobs:
         distribution: 'corretto'
         cache: maven
 
+    - name: Build with Maven
+      run: |
+        mvn -B package --file OutbackWeatherTrackerApplication/pom.xml install -DskipTests
+
     - name: Generate Javadocs
       run: |
         mvn javadoc:javadoc --file OutbackWeatherTrackerApplication/pom.xml -DoutputDirectory=/tmp/reports
