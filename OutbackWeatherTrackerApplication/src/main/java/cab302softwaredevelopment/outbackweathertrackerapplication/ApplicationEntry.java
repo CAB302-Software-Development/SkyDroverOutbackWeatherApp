@@ -22,7 +22,6 @@ public class ApplicationEntry extends Application {
    * Starts the application and sets up the main stage and scene.
    *
    * @param stage The primary stage for the application.
-   * @throws IOException if the FXML file cannot be loaded.
    */
   @Override
   public void start(Stage stage) {

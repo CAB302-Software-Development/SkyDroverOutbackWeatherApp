@@ -1,4 +1,4 @@
-name: Build and Test Action
+name: Build and Test
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - "development"     # Trigger on PRs to development branch
       - "main"            # Trigger on PRs to main branch
       - "feature/*"       # Trigger on PRs to any feature branch
-  workflow_dispatch:        # Allows manual trigger via GitHub UI
+  workflow_dispatch:      # Allows manual trigger via GitHub UI
 
 env:
   JAVA_DISTRIBUTION: "corretto"
