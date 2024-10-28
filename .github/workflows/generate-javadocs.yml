@@ -33,10 +33,10 @@ jobs:
 
     - name: Generate Javadocs
       run: |
-        mvn javadoc:javadoc --file OutbackWeatherTrackerApplication/pom.xml -DoutputDirectory=/tmp/reports
+        mvn javadoc:javadoc --file OutbackWeatherTrackerApplication/pom.xml
 
     - name: Archive Javadocs
       uses: actions/upload-artifact@v4
       with:
           name: JavaDocs
-          path: /tmp/reports
+          path: OutbackWeatherTrackerApplication/target/reports/apidocs/
