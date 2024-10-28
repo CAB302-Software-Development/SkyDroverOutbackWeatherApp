@@ -28,53 +28,37 @@
       <right>
          <VBox>
             <AnchorPane fx:id="loginPane" prefHeight="400.0" prefWidth="350.0" styleClass="background-secondary-inv" BorderPane.alignment="CENTER">
-               <Text layoutX="45.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login To Your Account"
-                     wrappingWidth="263">
+               <Text layoutX="45.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login To Your Account" wrappingWidth="263">
                   <font><Font name="System Bold" size="24.0"/></font>
                </Text>
 
                <Label layoutX="50.0" layoutY="129.0" text="Email"/>
-               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="147.0"
-                          pickOnBounds="true" preserveRatio="true">
+               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../images/account_circle_icon.png"/>
                </ImageView>
-               <TextField fx:id="emailTextFieldLogin" promptText="Email Address" styleClass="textbox"
-                          layoutX="90.0" layoutY="148.0" prefHeight="28.0" prefWidth="180.0"/>
+               <TextField fx:id="emailTextFieldLogin" promptText="Email Address" styleClass="textbox" layoutX="90.0" layoutY="148.0" prefHeight="28.0" prefWidth="180.0" onAction="#handleEnter"/>
 
                <Label layoutX="40.0" layoutY="213.0" text="Password"/>
-               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="227.0"
-                          pickOnBounds="true" preserveRatio="true">
+               <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="227.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../images/password_icon.png"/>
                </ImageView>
-               <PasswordField fx:id="passwordTextFieldLogin" promptText="Password" styleClass="textbox"
-                              layoutX="90.0" layoutY="222.0" prefHeight="28.0" prefWidth="180.0"/>
+               <PasswordField fx:id="passwordTextFieldLogin" promptText="Password" styleClass="textbox" layoutX="90.0" layoutY="222.0" prefHeight="28.0" prefWidth="180.0" onAction="#handleEnter"/>
 
-               <Button fx:id="loginButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false"
-                       prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Login" onAction="#handleButtonPress"/>
+               <Button fx:id="loginButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Login" onAction="#handleButtonPress"/>
 
-               <Hyperlink styleClass="hyperlink" text="Forgot?" alignment="CENTER"
-                          layoutX="240.0" layoutY="202.0"
-                          prefHeight="13.0" prefWidth="34.0">
+               <Hyperlink styleClass="hyperlink" text="Forgot?" alignment="CENTER" layoutX="240.0" layoutY="202.0" prefHeight="13.0" prefWidth="34.0">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
-               <Hyperlink styleClass="hyperlink" text="Don't Have an Account? Sign Up" alignment="CENTER"
-                          layoutX="113.0" layoutY="338.0"
-                          prefHeight="13.0" prefWidth="122.0"
-                          onAction="#switchToSignup">
+               <Hyperlink styleClass="hyperlink" text="Don't Have an Account? Sign Up" alignment="CENTER" layoutX="113.0" layoutY="338.0" prefHeight="13.0" prefWidth="122.0" onAction="#switchToSignup">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
-               <Hyperlink fx:id="guestLinkLogin" styleClass="hyperlink" text="Continue As Guest"
-                          onAction="#handleButtonPress" alignment="CENTER"
-                          layoutX="143.0" layoutY="355.0"
-                          prefHeight="17.0" prefWidth="73.0">
+               <Hyperlink fx:id="guestLinkLogin" styleClass="hyperlink" text="Continue As Guest" onAction="#handleButtonPress" alignment="CENTER" layoutX="143.0" layoutY="355.0" prefHeight="17.0" prefWidth="73.0">
                   <font><Font size="8.0"/></font>
                </Hyperlink>
-               <Label fx:id="loginMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0"
-                      prefWidth="183.0" textFill="RED" visible="false">
+               <Label fx:id="loginMessageLabel" alignment="CENTER" layoutX="82.0" layoutY="264.0" prefHeight="18.0" prefWidth="183.0" textFill="RED" visible="false">
                   <font><Font name="System Bold" size="12.0"/></font>
                </Label>
             </AnchorPane>
-
 
             <AnchorPane visible="false" managed="false"  fx:id="signupPane" prefHeight="400.0" prefWidth="350.0" styleClass="background-secondary-inv" BorderPane.alignment="CENTER">
                <Text layoutX="45.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up" wrappingWidth="263">
@@ -83,15 +67,15 @@
                <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../images/account_circle_icon.png" />
                </ImageView>
-               <TextField fx:id="emailTextFieldSignup" layoutX="90.0" layoutY="86.0" prefHeight="28.0" prefWidth="180.0" promptText="Email Address" styleClass="textbox" />
+               <TextField fx:id="emailTextFieldSignup" layoutX="90.0" layoutY="86.0" prefHeight="28.0" prefWidth="180.0" promptText="Email Address" styleClass="textbox" onAction="#handleEnter"/>
                <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../images/password_icon.png" />
                </ImageView>
-               <PasswordField fx:id="passwordTextFieldSignup" layoutX="90.0" layoutY="140.0" prefHeight="28.0" prefWidth="180.0" promptText="Password" styleClass="textbox" />
+               <PasswordField fx:id="passwordTextFieldSignup" layoutX="90.0" layoutY="140.0" prefHeight="28.0" prefWidth="180.0" promptText="Password" styleClass="textbox" onAction="#handleEnter"/>
                <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../images/password_icon.png"/>
                </ImageView>
-               <PasswordField fx:id="passwordTextConfirm" layoutX="90.0" layoutY="200.0" prefHeight="28.0" prefWidth="180.0" promptText="Confirm Password" styleClass="textbox" />
+               <PasswordField fx:id="passwordTextConfirm" layoutX="90.0" layoutY="200.0" prefHeight="28.0" prefWidth="180.0" promptText="Confirm Password" styleClass="textbox" onAction="#handleEnter"/>
                <Button fx:id="btnLocation" layoutX="126.0" layoutY="247.0" mnemonicParsing="false" text="Select Location" onAction="#handleButtonPress" />
 
                <Button fx:id="signupButton" alignment="CENTER" layoutX="125.0" layoutY="295.0" mnemonicParsing="false" onAction="#handleButtonPress" prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Sign Up" />

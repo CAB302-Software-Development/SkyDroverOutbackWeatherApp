@@ -255,4 +255,21 @@ public class LoginController {
 
         return true;
     }
+
+    public void handleEnter(ActionEvent actionEvent) {
+        if (isLogin) {
+            String email = emailTextFieldLogin.getText().toLowerCase(Locale.ROOT);
+            String password = passwordTextFieldLogin.getText();
+            if (handleLogin(email, password)) {
+                continueToApplication();
+            }
+        } else {
+            String email = emailTextFieldSignup.getText().toLowerCase(Locale.ROOT);
+            String password = passwordTextFieldSignup.getText();
+            String passwordConfirm = passwordTextConfirm.getText();
+            if (handleSignUp(email, password, passwordConfirm, selectedLocation)) {
+                continueToApplication();
+            }
+        }
+    }
 }
