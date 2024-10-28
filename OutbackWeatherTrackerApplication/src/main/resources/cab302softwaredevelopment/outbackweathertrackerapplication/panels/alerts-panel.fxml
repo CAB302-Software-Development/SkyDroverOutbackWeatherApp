@@ -3,77 +3,22 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER_LEFT" prefHeight="499.0" prefWidth="833.0" spacing="20.0" styleClass="alerts-panel"
-      stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.AlertsController">
-    <Text fx:id="AlertPageTitle" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Alerts ">
-        <font><Font size="36.0"/></font>
+<VBox alignment="CENTER_LEFT" prefHeight="499.0" prefWidth="833.0" spacing="20.0" styleClass="background-primary" stylesheets="@../themes/style.css,@../themes/theme-light.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.AlertsController">
+    <Text fx:id="AlertPageTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Alerts ">
+        <font><Font size="36.0" /></font>
+      <VBox.margin>
+         <Insets left="10.0" />
+      </VBox.margin>
     </Text>
-    <HBox styleClass="hbox1" fx:id="AlertFilters" alignment="CENTER" spacing="50.0">
-        <Button mnemonicParsing="false"
-                text="Filter" textFill="WHITE">
-            <padding><Insets bottom="10.0" left="40.0" right="40.0" top="10.0"/></padding>
+    <HBox fx:id="AlertFilters" alignment="CENTER" spacing="50.0" styleClass="hbox1">
+        <Button mnemonicParsing="false" styleClass="button-primary" text="Filter">
+            <padding><Insets bottom="10.0" left="40.0" right="40.0" top="10.0" /></padding>
         </Button>
     </HBox>
-    <ScrollPane styleClass="scroll-pane1" fx:id="alertScrollPane" fitToHeight="true" fitToWidth="true">
-        <VBox styleClass="vbox1" alignment="CENTER" prefWidth="372.0" spacing="10.0">
-            <HBox styleClass="hbox2" alignment="CENTER" prefHeight="25.0">
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin><Insets right="10.0"/></HBox.margin>
-                </ImageView>
-                <VBox prefHeight="150.0" prefWidth="104.0">
-                    <padding><Insets right="70.0"/></padding>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert title">
-                        <font><Font size="24.0"/></font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
-                        <font><Font size="18.0"/></font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
-                        <font><Font size="18.0"/></font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert fieldname">
-                        <font><Font size="18.0"/></font>
-                    </Text>
-                </VBox>
-                <VBox>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
-                        <font><Font size="24.0"/></font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value"
-                          textAlignment="RIGHT">
-                        <font><Font size="18.0"/></font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value"
-                          textAlignment="RIGHT">
-                        <font><Font size="18.0"/></font>
-                    </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alert value"
-                          textAlignment="RIGHT">
-                        <font><Font size="18.0"/></font>
-                    </Text>
-                </VBox>
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin><Insets left="10.0"/></HBox.margin>
-                </ImageView>
-                <VBox alignment="TOP_CENTER">
-                    <HBox.margin><Insets top="10.0"/></HBox.margin>
-                    <Button mnemonicParsing="false" text="notification"/>
-                </VBox>
-                <VBox alignment="TOP_CENTER">
-                    <HBox.margin>
-                        <Insets top="10.0"/>
-                    </HBox.margin>
-                    <Button mnemonicParsing="false" text="close"/>
-                </VBox>
-            </HBox>
-        </VBox>
-    </ScrollPane>
+    <ScrollPane fx:id="alertScrollPane" fitToHeight="true" fitToWidth="true" styleClass="scroll-pane" />
 </VBox>

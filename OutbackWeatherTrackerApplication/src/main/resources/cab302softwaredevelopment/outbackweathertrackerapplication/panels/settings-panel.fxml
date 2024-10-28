@@ -9,19 +9,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbRoot" spacing="10" styleClass="background-primary"
-      stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController">
-    <padding><Insets topRightBottomLeft="20"/></padding>
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Theme:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="text-primary"/>
-        <ComboBox fx:id="cboThemes" onAction="#onSwapTheme" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+<VBox fx:id="vbRoot" spacing="10" styleClass="background-primary" stylesheets="@../themes/style.css,@../themes/theme-light.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController">
+    <padding><Insets topRightBottomLeft="20" /></padding>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label styleClass="text-primary" text="Theme:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <ComboBox fx:id="cboThemes" onAction="#onSwapTheme" GridPane.columnIndex="1" GridPane.rowIndex="0" />
     </HBox>
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Locations:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="text-primary"/>
-        <Button fx:id="btnAddLocation" onAction="#handleButtonAction" text="Add Location" styleClass="button-secondary"/>
-        <Button fx:id="btnDeleteLocation" onAction="#handleButtonAction" text="Delete Location" styleClass="button-secondary"/>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label styleClass="text-primary" text="Locations:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Button fx:id="btnAddLocation" onAction="#handleButtonAction" styleClass="button-primary" text="Add Location" />
+        <Button fx:id="btnDeleteLocation" onAction="#handleButtonAction" styleClass="button-primary" text="Delete Location" />
     </HBox>
-    <ListView fx:id="lstLocations" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <ListView fx:id="lstLocations" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 </VBox>

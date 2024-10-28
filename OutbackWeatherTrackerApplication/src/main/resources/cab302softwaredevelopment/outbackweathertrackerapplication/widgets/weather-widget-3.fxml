@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox alignment="CENTER" styleClass="weather-widget-3"
+<VBox alignment="CENTER" styleClass="background-secondary"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget3Controller">
@@ -27,22 +27,22 @@
    </Text>
    <HBox alignment="CENTER" prefHeight="19.0" prefWidth="279.0" spacing="40.0">
       <VBox>
-         <Label alignment="CENTER" text="Wind" textFill="WHITE" wrapText="true">
+         <Label alignment="CENTER" text="Wind"  wrapText="true">
             <font><Font name="Comic Sans MS" size="13.0"/></font>
          </Label>
-         <Text fx:id="txtWind" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+         <Text fx:id="txtWind"  strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
       </VBox>
       <VBox>
-         <Label text="Humidity" textFill="WHITE" wrapText="true">
+         <Label text="Humidity"  wrapText="true">
             <font><Font name="Comic Sans MS" size="13.0"/></font>
          </Label>
-         <Text fx:id="txtHumidity" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+         <Text fx:id="txtHumidity"  strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
       </VBox>
       <VBox>
-         <Label text="Feels Like" textFill="WHITE" wrapText="true">
+         <Label text="Feels Like"  wrapText="true">
             <font><Font name="Comic Sans MS" size="13.0"/></font>
          </Label>
-         <Text fx:id="txtFeelsLike" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+         <Text fx:id="txtFeelsLike"  strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
       </VBox>
    </HBox>
 </VBox>
