@@ -3,9 +3,27 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import com.gluonhq.maps.MapView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 <VBox xmlns="http://javafx.com/javafx"
-  xmlns:fx="http://javafx.com/fxml"
-  fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
-  styleClass="background-primary">
-  <WebView fx:id="mapWebView"/>
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
+      styleClass="background-primary">
+  <StackPane>
+    <ProgressIndicator/>
+    <MapView fx:id="mapView"/>
+    <BorderPane fx:id="bpOverlayUI" mouseTransparent="true">
+      <top>
+        <HBox>
+          <TextField fx:id="txtSearchBar" promptText="Search for location..." mouseTransparent="false"/>
+          <Button fx:id="btnSearch" onAction="#handleButtonPress" mouseTransparent="false"/>
+        </HBox>
+      </top>
+    </BorderPane>
+  </StackPane>
 </VBox>

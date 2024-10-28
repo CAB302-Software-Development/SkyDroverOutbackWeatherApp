@@ -35,8 +35,10 @@ public class UserService {
     public Account getGuestAccount(LocationCreateModel defaultLocation) {
         try {
             Account guestAccount = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
-            new AccountDAO().delete(guestAccount.getId());
-            LocationService.getInstance().deleteLocationsForUser(guestAccount);
+            if (guestAccount != null) {
+                new AccountDAO().delete(guestAccount.getId());
+                LocationService.getInstance().deleteLocationsForUser(guestAccount);
+            }
 
             Account newGuestAccount = Account.builder()
                     .email("guest@guest.com")

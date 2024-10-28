@@ -13,6 +13,13 @@ public class LocationCreateModel {
     double longitude;
     double elevation;
 
+    public LocationCreateModel(Location location) {
+        this.name = location.getName();
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+        this.elevation = location.getElevation();
+    }
+
     public LocationCreateModel(String name, double latitude, double longitude, double elevation) {
         this.name = name;
         this.latitude = latitude;
