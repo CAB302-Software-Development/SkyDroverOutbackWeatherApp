@@ -51,7 +51,7 @@ abstract class DBTest {
     // Add the accounts to the template
     accountsTemplate.clear();
     accountsTemplate.add(Account.builder().email("test1@gmail.com").password("password").build());
-    accountsTemplate.add(Account.builder().email("test2@gmail.com").password("password").build());
+    accountsTemplate.add(Account.builder().email("test2@gmail.com").password("password").preferCelsius(false).build());
     accountsTemplate.add(Account.builder().email("test3@gmail.com").password("password").build());
 
     // Add the locations to the template

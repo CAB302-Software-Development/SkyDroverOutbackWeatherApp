@@ -194,17 +194,6 @@ public class AccountDAO {
     }
 
     /**
-     * Adds an email contains filter to the query.
-     *
-     * @param email The string to filter by
-     * @return This AccountQuery object
-     */
-    public AccountQuery whereEmailLike(String email) {
-      predicates.add(builder.like(root.get("email"), "%" + email + "%"));
-      return this;
-    }
-
-    /**
      * Adds a Celsius preference filter to the query.
      *
      * @param preferCelsius The Celsius preference to filter for

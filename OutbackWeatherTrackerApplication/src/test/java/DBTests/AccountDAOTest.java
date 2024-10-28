@@ -9,12 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.parallel.Execution;
@@ -263,6 +265,90 @@ public class AccountDAOTest extends DBTest {
     assertEquals(account.getEmail(), account_result.getEmail());
     assertEquals(account.getPreferCelsius(), account_result.getPreferCelsius());
     assertNotNull(account_result.getDashboardLayouts());
+  }
+
+  @Nested
+  public class AccountQueryTests{
+    @Test
+    void testGetAccountById() {
+      // Insert the new accounts
+      addAccounts();
+
+      for (Account account : accountsTemplate) {
+
+        // Retrieve the account
+        Account account_result = new AccountDAO.AccountQuery()
+            .whereId(account.getId())
+            .getSingleResult();
+
+        // Verify the account
+        assertEquals(account.getId(), account_result.getId());
+      }
+    }
+
+    @Test
+    void testGetAccountByEmail() {
+      // Insert the new accounts
+      addAccounts();
+
+      for (Account account : accountsTemplate) {
+
+        // Retrieve the account
+        Account account_result = new AccountDAO.AccountQuery()
+            .whereEmail(account.getEmail())
+            .getSingleResult();
+
+        // Verify the account
+        assertEquals(account.getEmail(), account_result.getEmail());
+      }
+    }
+
+    @Test
+    void testFilterForCelsiusPreference() {
+      // Insert the new accounts
+      addAccounts();
+
+      // Retrieve the accounts
+      List<Account> accounts = new AccountDAO.AccountQuery()
+          .wherePreferCelsius(true)
+          .getResults();
+
+      // Verify the accounts
+      for (Account account : accounts) {
+        assertTrue(account.getPreferCelsius());
+      }
+
+      // Retrieve the accounts
+      accounts = new AccountDAO.AccountQuery()
+          .wherePreferCelsius(false)
+          .getResults();
+
+      // Verify the accounts
+      for (Account account : accounts) {
+        assertFalse(account.getPreferCelsius());
+      }
+    }
+
+    @Test
+    void testFilterForCelsiusPreferenceAndEmail() {
+      // Insert the new accounts
+      addAccounts();
+
+      for (Account account : accountsTemplate) {
+
+        // Retrieve account with the same email and celsius preference
+        Account account_result = new AccountDAO.AccountQuery()
+            .whereEmail(account.getEmail())
+            .wherePreferCelsius(account.getPreferCelsius())
+            .getSingleResult();
+        // Verify the account
+        assertNotNull(account_result);
+        assertEquals(account.getEmail(), account_result.getEmail());
+        assertEquals(account.getPreferCelsius(), account_result.getPreferCelsius());
+      }
+    }
+
+
   }
 
 }
