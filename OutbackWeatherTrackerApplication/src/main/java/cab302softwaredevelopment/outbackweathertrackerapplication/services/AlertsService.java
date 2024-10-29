@@ -34,6 +34,10 @@ public class AlertsService {
         return alertDAO.getAllAlertPreferences();
     }
 
+    public void removeAllAlertPreferences() {
+        alertDAO.clearAllAlertPreferences();
+    }
+
     public void removeAlertCondition(IAlertCondition condition) {
         alertDAO.deleteAlertPreference(condition);
     }

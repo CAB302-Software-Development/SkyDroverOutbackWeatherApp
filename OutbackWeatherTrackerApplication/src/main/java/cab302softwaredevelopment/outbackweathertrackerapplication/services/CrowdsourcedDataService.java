@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedDataModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -12,7 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class CrowdsourcedDataService {
+    @Getter
+    private static CrowdsourcedDataService instance = new CrowdsourcedDataService();
     private static final String BASE_URL = "http://localhost:8080/api/marker";
+
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 

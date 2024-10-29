@@ -14,7 +14,7 @@ public class CrowdsourcedDataDTO {
 
     private String userName;
 
-    private int actualTemp;
+    private Integer actualTemp;
 
-    private int feelsLikeTemp;
+    private Integer feelsLikeTemp;
 }
