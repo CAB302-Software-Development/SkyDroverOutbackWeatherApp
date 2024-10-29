@@ -314,7 +314,6 @@ public class LocationDAO {
    *
    * @return A list of all Location objects in the database
    */
-  @Deprecated
   public List<Location> getAll() {
     return new LocationQuery()
         .getResults();

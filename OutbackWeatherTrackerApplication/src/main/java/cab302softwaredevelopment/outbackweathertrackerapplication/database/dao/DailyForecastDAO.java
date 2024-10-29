@@ -33,7 +33,6 @@ public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
    * Retrieves all DailyForecast objects from the database.
    * @return A list of all DailyForecast objects in the database.
    */
-  @Deprecated
   public List<DailyForecast> getAll() {
     return new DailyForecastQuery()
         .getResults();
@@ -73,7 +72,7 @@ public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
    */
   @Deprecated
   public DailyForecast getById(int id) {
-    return (DailyForecast) new DailyForecastQuery()
+    return new DailyForecastQuery()
         .whereId(id)
         .getSingleResult();
   }

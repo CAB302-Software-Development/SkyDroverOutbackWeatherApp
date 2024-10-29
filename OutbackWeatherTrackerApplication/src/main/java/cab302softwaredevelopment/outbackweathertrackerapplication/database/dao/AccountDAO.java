@@ -121,7 +121,6 @@ public class AccountDAO {
    *
    * @return A list of all Account objects in the database
    */
-  @Deprecated
   public List<Account> getAll() {
     return new AccountQuery()
         .getResults();

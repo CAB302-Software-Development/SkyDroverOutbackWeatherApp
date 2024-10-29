@@ -152,6 +152,7 @@ abstract class ForecastQuery<T,K> {
     this.childClass = (Class<K>) childClass.getClass();
   }
 
+
   /**
    * Returns the query object itself.
    * Needed for the ForecastQuery to return the correct type of query object.
@@ -159,6 +160,42 @@ abstract class ForecastQuery<T,K> {
    *
    */
   public abstract K self();
+
+  /**
+   * Adds a field filter to the query.
+   *
+   * @param field The field to filter by
+   * @param value The value to filter for
+   * @return This ForecastQuery object
+   */
+  public K whereField(String field, Object value) {
+    predicates.add(builder.equal(root.get(field), value));
+    return self();
+  }
+
+  /**
+   * Adds a field filter less than or equal to filter to the query.
+   * @param field The field to filter by
+   * @param value The largest value to filter for
+   * @return This ForecastQuery object
+   */
+  public K whereFieldLE(String field, Object value) {
+    assert value instanceof Comparable;
+    predicates.add(builder.lessThanOrEqualTo(root.get(field), (Comparable) value));
+    return self();
+  }
+
+  /**
+   * Adds a field filter greater than or equal to filter to the query.
+   * @param field The field to filter by
+   * @param value The smallest value to filter for
+   * @return This ForecastQuery object
+   */
+  public K whereFieldGE(String field, Object value) {
+    assert value instanceof Comparable;
+    predicates.add(builder.greaterThanOrEqualTo(root.get(field), (Comparable) value));
+    return self();
+  }
 
   /**
    * Adds an associated location_id filter to the query.
@@ -189,7 +226,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereId(int id) {
-    predicates.add(builder.equal(root.get("id"), id));
+    whereField("id", id);
     return self();
   }
 
@@ -200,18 +237,7 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereTimestamp(int timestamp) {
-    predicates.add(builder.equal(root.get("timestamp"), timestamp));
-    return self();
-  }
-
-  /**
-   * Adds a timestamp greater than or equal filter to the query.
-   *
-   * @param timestamp The minimum timestamp to filter by
-   * @return This ForecastQuery object
-   */
-  public K whereTimestampGE(int timestamp) {
-    predicates.add(builder.greaterThanOrEqualTo(root.get("timestamp"), timestamp));
+    whereField("timestamp", timestamp);
     return self();
   }
 
@@ -222,7 +248,18 @@ abstract class ForecastQuery<T,K> {
    * @return This ForecastQuery object
    */
   public K whereTimestampLE(int timestamp) {
-    predicates.add(builder.lessThanOrEqualTo(root.get("timestamp"), timestamp));
+    whereFieldLE("timestamp", timestamp);
+    return self();
+  }
+
+  /**
+   * Adds a timestamp greater than or equal filter to the query.
+   *
+   * @param timestamp The minimum timestamp to filter by
+   * @return This ForecastQuery object
+   */
+  public K whereTimestampGE(int timestamp) {
+    whereFieldGE("timestamp", timestamp);
     return self();
   }
 
@@ -277,6 +314,4 @@ abstract class ForecastQuery<T,K> {
     session.close();
     return forecast;
   }
-
-
 }

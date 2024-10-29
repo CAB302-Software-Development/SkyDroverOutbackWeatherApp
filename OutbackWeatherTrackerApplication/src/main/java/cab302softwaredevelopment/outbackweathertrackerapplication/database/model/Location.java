@@ -34,6 +34,7 @@ class LocationId implements Serializable {
 @Entity(name = "location")
 @Table(name = "location")
 @IdClass(LocationId.class)
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 /**
  * A model class for the Location entity.
@@ -50,9 +51,11 @@ public class Location {
    * The account that this location is associated with.
    */
   @Id
+
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
+  @EqualsAndHashCode.Exclude
   private Account account;
 
   /**

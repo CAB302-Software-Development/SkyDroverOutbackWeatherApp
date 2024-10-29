@@ -2,7 +2,6 @@ package DBTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
@@ -13,14 +12,11 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-@Execution(SAME_THREAD)
-@Timeout(value = 100000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 100 seconds
+
+@Timeout(value = 100000, unit = TimeUnit.MILLISECONDS) // No test should take longer than 100 seconds
 public class OpenMeteoSDKTest extends DBTest {
 
   private int getCurrentDayTimestamp() {

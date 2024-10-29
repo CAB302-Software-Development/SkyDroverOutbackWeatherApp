@@ -34,7 +34,6 @@ public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
    *
    * @return A list of all HourlyForecast objects in the database.
    */
-  @Deprecated
   public List<HourlyForecast> getAll() {
     return new HourlyForecastQuery()
         .getResults();
@@ -74,7 +73,7 @@ public class HourlyForecastDAO extends ForecastDAO<HourlyForecast> {
    */
   @Deprecated
   public HourlyForecast getById(int id) {
-    return (HourlyForecast) new HourlyForecastQuery()
+    return new HourlyForecastQuery()
         .whereId(id)
         .getSingleResult();
   }

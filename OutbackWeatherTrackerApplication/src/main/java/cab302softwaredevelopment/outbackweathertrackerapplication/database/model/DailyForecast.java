@@ -11,8 +11,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,6 +25,9 @@ import org.hibernate.annotations.OnDeleteAction;
     @UniqueConstraint(columnNames = {"location_account_id","location_latitude","location_longitude","location_elevation", "timestamp"})
 })
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
+@ToString
+@Builder
+@EqualsAndHashCode
 /**
  * A model class for the DailyForecast entity.
  */
@@ -40,6 +46,7 @@ public class DailyForecast {
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
+  @EqualsAndHashCode.Exclude
   private Location location;
 
   /**
@@ -244,37 +251,6 @@ public class DailyForecast {
     this.wind_direction_10m_dominant = wind_direction_10m_dominant;
     this.shortwave_radiation_sum = shortwave_radiation_sum;
     this.et0_fao_evapotranspiration = et0_fao_evapotranspiration;
-  }
-
-
-  @Override
-  public String toString() {
-    return "DailyForecast{" +
-        "id=" + id +
-        ", location=" + location +
-        ", timestamp=" + timestamp +
-        ", weather_code=" + weather_code +
-        ", temperature_2m_max=" + temperature_2m_max +
-        ", temperature_2m_min=" + temperature_2m_min +
-        ", apparent_temperature_max=" + apparent_temperature_max +
-        ", apparent_temperature_min=" + apparent_temperature_min +
-        ", sunrise=" + sunrise +
-        ", sunset=" + sunset +
-        ", daylight_duration=" + daylight_duration +
-        ", sunshine_duration=" + sunshine_duration +
-        ", uv_index_max=" + uv_index_max +
-        ", uv_index_clear_sky_max=" + uv_index_clear_sky_max +
-        ", precipitation_sum=" + precipitation_sum +
-        ", rain_sum=" + rain_sum +
-        ", showers_sum=" + showers_sum +
-        ", snowfall_sum=" + snowfall_sum +
-        ", precipitation_hours=" + precipitation_hours +
-        ", wind_speed_10m_max=" + wind_speed_10m_max +
-        ", wind_gusts_10m_max=" + wind_gusts_10m_max +
-        ", wind_direction_10m_dominant=" + wind_direction_10m_dominant +
-        ", shortwave_radiation_sum=" + shortwave_radiation_sum +
-        ", et0_fao_evapotranspiration=" + et0_fao_evapotranspiration +
-        '}';
   }
 }
 

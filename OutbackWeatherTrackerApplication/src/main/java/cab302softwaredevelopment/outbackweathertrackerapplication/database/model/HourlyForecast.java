@@ -11,8 +11,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -24,6 +27,9 @@ import org.hibernate.annotations.OnDeleteAction;
     @UniqueConstraint(columnNames = {"location_account_id","location_latitude","location_longitude","location_elevation", "timestamp"})
 })
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
+@ToString
+@Builder
+@EqualsAndHashCode
 /**
  * A model class for the HourlyForecast entity.
  */
@@ -42,24 +48,25 @@ public class HourlyForecast {
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
+  @EqualsAndHashCode.Exclude
   private Location location;
 
   /**
    * The timestamp of the hourly forecast.
    */
-  @Column(name="timestamp")
+  @Column(name="timestamp", nullable = false)
   private Integer timestamp;
 
   /**
    * The temperature at 2m above ground level.
    */
-  @Column(name="temperature_2m")
+  @Column(name="temperature_2m", nullable = false)
   private Double temperature_2m;
 
   /**
    * The relative humidity at 2m above ground level.
    */
-  @Column(name="relative_humidity_2m")
+  @Column(name="relative_humidity_2m", nullable = false)
   private Double relative_humidity_2m;
 
   /**
@@ -72,13 +79,13 @@ public class HourlyForecast {
    * 	Apparent temperature is the perceived feels-like temperature combining wind chill factor,
    * 	relative humidity and solar radiation
    */
-  @Column(name="apparent_temperature")
+  @Column(name="apparent_temperature", nullable = false)
   private Double apparent_temperature;
 
   /**
    * 	Total precipitation (rain, showers, snow) sum of the preceding hour
    */
-  @Column(name="precipitation")
+  @Column(name="precipitation", nullable = false)
   private Double precipitation;
 
   /**
@@ -109,21 +116,21 @@ public class HourlyForecast {
   /**
    * Weather condition as a numeric code. Follow WMO weather interpretation codes.
    */
-  @Column(name="weather_code")
+  @Column(name="weather_code", nullable = false)
   private Integer weather_code;
 
   /**
    * 	Atmospheric air pressure reduced to mean sea level (msl) or
    * 	Typically pressure on mean sea level is used in meteorology.
    */
-  @Column(name="pressure_msl")
+  @Column(name="pressure_msl", nullable = false)
   private Double pressure_msl;
 
   /**
    * 	Pressure at surface. Typically pressure on mean sea level is used in meteorology.
    * 	Surface pressure gets lower with increasing elevation.
    */
-  @Column(name="surface_pressure")
+  @Column(name="surface_pressure", nullable = false)
   private Double surface_pressure;
 
   /**
@@ -153,7 +160,7 @@ public class HourlyForecast {
   /**
    * 	Viewing distance in meters. Influenced by low clouds, humidity and aerosols.
    */
-  @Column(name="visibility")
+  @Column(name="visibility", nullable = false)
   private Double visibility;
 
   /**
@@ -229,7 +236,7 @@ public class HourlyForecast {
   /**
    * 	Surface temperature in degrees Celsius
    */
-  @Column(name="surface_temperature")
+  @Column(name="surface_temperature", nullable = false)
   private Double surface_temperature;
 
   /**
@@ -283,7 +290,7 @@ public class HourlyForecast {
   /**
    * 	Whether it is day or night
    */
-  @Column(name="is_day")
+  @Column(name="is_day", nullable = false)
   private boolean is_day;
 
   /**
@@ -443,66 +450,4 @@ public class HourlyForecast {
     this.global_tilted_irradiance_instant = global_tilted_irradiance_instant;
     this.terrestrial_radiation_instant = terrestrial_radiation_instant;
   }
-
-
-  @Override
-  public String toString() {
-    return "HourlyForecast{" +
-        "id=" + id +
-        ", location=" +  location +
-        ", timestamp=" + timestamp +
-        ", temperature_2m=" + temperature_2m +
-        ", relative_humidity_2m=" + relative_humidity_2m +
-        ", dew_point_2m=" + dew_point_2m +
-        ", apparent_temperature=" + apparent_temperature +
-        ", precipitation=" + precipitation +
-        ", rain=" + rain +
-        ", showers=" + showers +
-        ", snowfall=" + snowfall +
-        ", snow_depth=" + snow_depth +
-        ", weather_code=" + weather_code +
-        ", pressure_msl=" + pressure_msl +
-        ", surface_pressure=" + surface_pressure +
-        ", cloud_cover=" + cloud_cover +
-        ", cloud_cover_low=" + cloud_cover_low +
-        ", cloud_cover_mid=" + cloud_cover_mid +
-        ", cloud_cover_high=" + cloud_cover_high +
-        ", visibility=" + visibility +
-        ", et0_fao_evapotranspiration=" + et0_fao_evapotranspiration +
-        ", vapour_pressure_deficit=" + vapour_pressure_deficit +
-        ", wind_speed_10m=" + wind_speed_10m +
-        ", wind_speed_40m=" + wind_speed_40m +
-        ", wind_speed_80m=" + wind_speed_80m +
-        ", wind_speed_120m=" + wind_speed_120m +
-        ", wind_direction_10m=" + wind_direction_10m +
-        ", wind_direction_40m=" + wind_direction_40m +
-        ", wind_direction_80m=" + wind_direction_80m +
-        ", wind_direction_120m=" + wind_direction_120m +
-        ", wind_gusts_10m=" + wind_gusts_10m +
-        ", surface_temperature=" + surface_temperature +
-        ", soil_temperature_0_to_10cm=" + soil_temperature_0_to_10cm +
-        ", soil_temperature_10_to_35cm=" + soil_temperature_10_to_35cm +
-        ", soil_temperature_35_to_100cm=" + soil_temperature_35_to_100cm +
-        ", soil_temperature_100_to_300cm=" + soil_temperature_100_to_300cm +
-        ", soil_moisture_0_to_10cm=" + soil_moisture_0_to_10cm +
-        ", soil_moisture_10_to_35cm=" + soil_moisture_10_to_35cm +
-        ", soil_moisture_35_to_100cm=" + soil_moisture_35_to_100cm +
-        ", soil_moisture_100_to_300cm=" + soil_moisture_100_to_300cm +
-        ", is_day=" + is_day +
-        ", sunshine_duration=" + sunshine_duration +
-        ", shortwave_radiation=" + shortwave_radiation +
-        ", direct_radiation=" + direct_radiation +
-        ", diffuse_radiation=" + diffuse_radiation +
-        ", direct_normal_irradiance=" + direct_normal_irradiance +
-        ", global_tilted_irradiance=" + global_tilted_irradiance +
-        ", terrestrial_radiation=" + terrestrial_radiation +
-        ", shortwave_radiation_instant=" + shortwave_radiation_instant +
-        ", direct_radiation_instant=" + direct_radiation_instant +
-        ", diffuse_radiation_instant=" + diffuse_radiation_instant +
-        ", direct_normal_irradiance_instant=" + direct_normal_irradiance_instant +
-        ", global_tilted_irradiance_instant=" + global_tilted_irradiance_instant +
-        ", terrestrial_radiation_instant=" + terrestrial_radiation_instant +
-        '}';
-  }
-
 }
