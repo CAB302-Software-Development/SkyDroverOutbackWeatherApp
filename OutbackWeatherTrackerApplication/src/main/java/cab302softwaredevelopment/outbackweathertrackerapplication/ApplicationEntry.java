@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import org.hibernate.Session;
 import java.awt.*;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class ApplicationEntry extends Application {
   private static Stage rootStage;
@@ -50,16 +52,21 @@ public class ApplicationEntry extends Application {
   }
 
   public static void openMainWindow() throws IOException {
-    ConnectionService.getInstance().init();
-    FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/main-view.fxml"));
-    Scene scene = new Scene(loader.load(), MainController.WIDTH, MainController.HEIGHT);
-    MainController controller = loader.getController();
-    controller.setScene(scene);
+    if (isInternetAvailable()) {
+      ConnectionService.getInstance().init();
+      FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/main-view.fxml"));
+      Scene scene = new Scene(loader.load(), MainController.WIDTH, MainController.HEIGHT);
+      MainController controller = loader.getController();
+      controller.setScene(scene);
 
-    Stage newStage = new Stage();
-    newStage.setTitle(MainController.TITLE);
-    newStage.setScene(scene);
-    setMainStage(newStage);
+      Stage newStage = new Stage();
+      newStage.setTitle(MainController.TITLE);
+      newStage.setScene(scene);
+      setMainStage(newStage);
+    } else {
+      MainController.showAlert("No Internet Connection", "Please check your internet connection and try again.");
+      ConnectionService.getInstance().setOffline(true);
+    }
   }
 
   private static void setMainStage(Stage stage) {
@@ -72,6 +79,18 @@ public class ApplicationEntry extends Application {
     rootStage.show();
   }
 
+  private static boolean isInternetAvailable() {
+    try {
+      URL url = new URL("http://www.google.com");
+      HttpURLConnection urlConnect = (HttpURLConnection) url.openConnection();
+      urlConnect.setConnectTimeout(5000);
+      urlConnect.connect();
+      return urlConnect.getResponseCode() == 200;
+    } catch (IOException e) {
+      return false;
+    }
+  }
+
   /**
    * Main method that launches the application.
    *
@@ -81,7 +100,7 @@ public class ApplicationEntry extends Application {
     Session session = DatabaseConnection.getSession();
     // addTestData();
     Logger.printLog("Application started");
-    launch();
+    launch(args);
   }
 
   /**
@@ -109,5 +128,4 @@ public class ApplicationEntry extends Application {
     locationDAO.insert(new Location(account,153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
     locationDAO.insert(new Location(account,153.0372, -27.5703, 23.0,"Coopers Plains")); // coopers plains
   }
-
 }

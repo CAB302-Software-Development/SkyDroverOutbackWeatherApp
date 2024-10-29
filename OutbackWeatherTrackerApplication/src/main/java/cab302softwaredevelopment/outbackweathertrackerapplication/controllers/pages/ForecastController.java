@@ -1,7 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
@@ -12,7 +11,6 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.services.Conne
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,11 +20,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import java.net.URL;
-import java.time.*;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
+import java.time.LocalDate;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class ForecastController extends BasePage {
     @FXML
@@ -38,15 +37,17 @@ public class ForecastController extends BasePage {
     @FXML
     private ProgressIndicator progressIndicator;
     @FXML
-    private LineChart<Number,Number> lineChart;
+    private LineChart<Number, Number> lineChart;
     @FXML
     private HBox hbForecasts;
-    private Sdk sdk;
+
+    private boolean isRefreshing = false;
+    private Location currentLocation;
+    private final LocationService locationService = LocationService.getInstance();
 
     @Override
     public void initialize() {
         super.initialize();
-        sdk = new Sdk();
 
         progressIndicator.setVisible(false);
 
@@ -55,31 +56,39 @@ public class ForecastController extends BasePage {
         lineChart.getYAxis().setLabel("Temperature");
         lineChart.setTitle("Hourly Temperature");
 
+        setupLocationComboBox();
         loadUserLocations();
 
+        if (!locationComboBox.getItems().isEmpty()) {
+            locationComboBox.getSelectionModel().selectFirst();
+            refreshForecastData(false); // Initial load
+        } else {
+            MainController.showAlert("No Locations Found", "Please add a location to view forecasts.");
+        }
+    }
+
+    private void setupLocationComboBox() {
         locationComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(Location location) {
-                return location.getName();
+                return location != null ? location.getName() : "";
             }
+
             @Override
             public Location fromString(String string) {
                 return null;
             }
         });
 
-        if (!locationComboBox.getItems().isEmpty()) {
-            locationComboBox.getSelectionModel().selectFirst();
-            loadDailyForecastData();
-            loadHourlyForecastData();
-        } else {
-            MainController.showAlert("No Locations Found", "Please add a location to view forecasts.");
-        }
+        // Add listener for location changes
+        locationComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.equals(currentLocation)) {
+                currentLocation = newValue;
+                refreshForecastData(false);
+            }
+        });
     }
 
-    /**
-     * Loads the user's locations into the combo box.
-     */
     private void loadUserLocations() {
         List<Location> locations = locationService.getCurrentUserLocations();
         locationComboBox.getItems().setAll(locations);
@@ -87,35 +96,35 @@ public class ForecastController extends BasePage {
 
     @FXML
     private void loadDailyForecastData() {
-        Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
+        Location selectedLocation = currentLocation;
         if (selectedLocation == null) {
             return;
         }
 
         DateData temp = new DateData(LocalDate.now(), 7);
-        List<DailyForecast> forecasts = (new DailyForecastDAO.DailyForecastQuery())
-                .whereLocationId(selectedLocation.getId())
-                .whereTimestampGE((int) temp.getDayStartEpoch())
-                .whereTimestampLE((int) temp.getDayEndEpoch())
-                .getResults();
+        List<DailyForecast> forecasts = new DailyForecastDAO.DailyForecastQuery()
+            .whereLocationId(selectedLocation.getId())
+            .whereTimestampGE((int) temp.getDayStartEpoch())
+            .whereTimestampLE((int) temp.getDayEndEpoch())
+            .getResults();
 
         hbForecasts.getChildren().clear();
         forecasts.forEach(f -> hbForecasts.getChildren().add(createForecastDayTile(f)));
     }
 
     private void loadHourlyForecastData() {
-        Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
+        Location selectedLocation = currentLocation;
         if (selectedLocation == null) {
             lineChart.getData().clear();
             return;
         }
 
         DateData temp = new DateData(LocalDate.now());
-        List<HourlyForecast> forecasts = (new HourlyForecastDAO.HourlyForecastQuery())
-                .whereLocation(selectedLocation)
-                .whereTimestampGE((int) temp.getDayStartEpoch())
-                .whereTimestampLE((int) temp.getDayEndEpoch())
-                .getResults();
+        List<HourlyForecast> forecasts = new HourlyForecastDAO.HourlyForecastQuery()
+            .whereLocation(selectedLocation)
+            .whereTimestampGE((int) temp.getDayStartEpoch())
+            .whereTimestampLE((int) temp.getDayEndEpoch())
+            .getResults();
 
         XYChart.Series tempSeries = new XYChart.Series();
         for (int i = 0; i < forecasts.size(); i++) {
@@ -127,13 +136,20 @@ public class ForecastController extends BasePage {
     }
 
     @FXML
-    private void refreshForecastData() {
-        Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
+    public void refreshForecastData() {
+        refreshForecastData(true);
+    }
+
+    private void refreshForecastData(boolean showSuccessMessage) {
+        if (isRefreshing) return;
+
+        Location selectedLocation = currentLocation;
         if (selectedLocation == null) {
             MainController.showAlert("No Location Selected", "Please select a location to refresh data.");
             return;
         }
 
+        isRefreshing = true;
         progressIndicator.setVisible(true);
         refreshButton.setDisable(true);
 
@@ -147,8 +163,12 @@ public class ForecastController extends BasePage {
 
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
+                    isRefreshing = false;
+
                     if (result) {
-                        MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                        if (showSuccessMessage) {
+                            MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                        }
                     } else {
                         connectionService.setOffline(true);
                     }
@@ -158,6 +178,7 @@ public class ForecastController extends BasePage {
                 Platform.runLater(() -> {
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
+                    isRefreshing = false;
                     MainController.showAlert("Error", "Failed to refresh forecast data.");
                 });
             }
@@ -178,14 +199,6 @@ public class ForecastController extends BasePage {
         Label lblDate = new Label(date.format(DateTimeFormatter.ofPattern("EEE, MMM d")));
         lblDate.getStyleClass().add("date-label");
 
-        // Weather Icon
-        // ImageView weatherIcon = new ImageView();
-        // int weatherCode = forecast.getWeather_code();
-        // Image iconImage = getWeatherIcon(weatherCode);
-        // weatherIcon.setImage(iconImage);
-        // weatherIcon.setFitWidth(50);
-        // weatherIcon.setFitHeight(50);
-
         Label lblMaxTemp = new Label("Max: " + forecast.getTemperature_2m_max() + "°C");
         lblMaxTemp.getStyleClass().add("max-temp-label");
 
@@ -205,6 +218,8 @@ public class ForecastController extends BasePage {
 
     @Override
     public void updateData() {
-
+        if (!isRefreshing) {
+            refreshForecastData(false);
+        }
     }
 }

@@ -1,16 +1,21 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.ForecastController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.PageFactory;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WidgetFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import java.net.URL;
@@ -21,6 +26,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 public class MainController implements Initializable {
     public static final int WIDTH = 1080;
@@ -30,15 +37,18 @@ public class MainController implements Initializable {
     private static MainController controller;
 
     @FXML
-    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnAlerts, btnReports, btnSettings, btnDrawer;
+    public Button btnProfile, btnDashboard, btnMap, btnForecast, btnAlerts, btnReports, btnSettings, btnRefresh, btnDrawer;
     @FXML
     public VBox vbNavbar;
     private Scene scene;
     @FXML
     private BorderPane root;
+    @FXML
+    public ProgressIndicator progressIndicator;
 
     private ScheduledExecutorService scheduler;
     private PageFactory pageFactory;
+    private final AtomicBoolean isRefreshing = new AtomicBoolean(false);
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -63,6 +73,8 @@ public class MainController implements Initializable {
         controller = this;
         pageFactory = new PageFactory(root);
 
+        setupRefreshButton();
+
         Node swpDashboard = pageFactory.createSwapPanel("panels/dashboard-panel.fxml", btnDashboard);
         root.centerProperty().set(swpDashboard);
 
@@ -81,8 +93,80 @@ public class MainController implements Initializable {
         scheduler.scheduleAtFixedRate(this::updateUIData, 5, 300, TimeUnit.SECONDS);
     }
 
+    private void setupRefreshButton() {
+        if (progressIndicator != null) {
+            progressIndicator.setVisible(false);
+        }
+
+        btnRefresh.setOnAction(e -> performGlobalRefresh());
+    }
+
+    private void performGlobalRefresh() {
+        // Prevent multiple simultaneous refreshes
+        if (isRefreshing.get()) {
+            return;
+        }
+
+        try {
+            isRefreshing.set(true);
+            btnRefresh.setDisable(true);
+            if (progressIndicator != null) {
+                progressIndicator.setVisible(true);
+            }
+
+            // Start refresh in background thread
+            new Thread(() -> {
+                try {
+                    // Force refresh connection service
+                    ConnectionService.getInstance().forceRefresh();
+
+                    // Update UI on JavaFX thread
+                    Platform.runLater(() -> {
+                        try {
+                            // Force refresh all pages
+                            pageFactory.updateAllPages();
+
+                            // Update all widgets
+                            WidgetFactory.getWidgetManager().updateWidgets();
+
+                            showAlert("Refresh Complete", "All data has been refreshed.");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showAlert("Refresh Error", "An error occurred while refreshing the UI.");
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Platform.runLater(() ->
+                        showAlert("Connection Error", "Failed to refresh data from server.")
+                    );
+                } finally {
+                    Platform.runLater(() -> {
+                        isRefreshing.set(false);
+                        btnRefresh.setDisable(false);
+                        if (progressIndicator != null) {
+                            progressIndicator.setVisible(false);
+                        }
+                    });
+                }
+            }).start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            isRefreshing.set(false);
+            btnRefresh.setDisable(false);
+            if (progressIndicator != null) {
+                progressIndicator.setVisible(false);
+            }
+            showAlert("Error", "An unexpected error occurred during refresh.");
+        }
+    }
+
     private void updateUIData() {
-        pageFactory.updateAllPages();
+        if (!isRefreshing.get()) {
+            pageFactory.updateAllPages();
+        }
     }
 
     public static void showAlert(String title, String message) {

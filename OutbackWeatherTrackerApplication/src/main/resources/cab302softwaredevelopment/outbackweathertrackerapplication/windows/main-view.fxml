@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
 <!--
     This serves as a central hub for the application UI. This contains
@@ -11,45 +15,47 @@
     dynamically loading and displaying content panels.
  -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.Region?>
-<BorderPane prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController"
-            fx:id="root">
+<BorderPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController">
     <left>
-        <VBox fx:id="vbNavbar" prefHeight="200.0" prefWidth="40.0" alignment="TOP_CENTER" styleClass="background-secondary" spacing="10.0">
+        <VBox fx:id="vbNavbar" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="40.0" spacing="10.0" styleClass="background-secondary">
             <padding>
-                <Insets left="5.0" right="5.0" top="10.0" bottom="10.0"/>
+                <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
 
-            <Button fx:id="btnProfile" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/account_circle.png"/></ImageView></graphic>
+            <Button fx:id="btnProfile" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/account_circle.png" /></ImageView></graphic>
             </Button>
-            <Button fx:id="btnDashboard" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/Dashboard.png"/></ImageView></graphic>
+            <Button fx:id="btnDashboard" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/Dashboard.png" /></ImageView></graphic>
             </Button>
-            <Button fx:id="btnMap" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/Map.png"/></ImageView></graphic>
+            <Button fx:id="btnMap" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/Map.png" /></ImageView></graphic>
             </Button>
-            <Button fx:id="btnForecast" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/Group.png"/></ImageView></graphic>
+            <Button fx:id="btnForecast" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/Group.png" /></ImageView></graphic>
             </Button>
-            <Button fx:id="btnAlerts" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/!.png"/></ImageView></graphic>
+            <Button fx:id="btnAlerts" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/!.png" /></ImageView></graphic>
             </Button>
-            <Button fx:id="btnReports" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/reports.png"/></ImageView></graphic>
+            <Button fx:id="btnReports" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/reports.png" /></ImageView></graphic>
             </Button>
 
             <Region VBox.vgrow="ALWAYS" />
+           <ProgressIndicator fx:id="progressIndicator" progress="0.0" />
+         <Button fx:id="btnRefresh" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+            <graphic>
+              <ImageView>
+                <Image url="@../images/refreshbutton.png"/>
+              </ImageView>
+            </graphic>
+         </Button>
 
-            <Button fx:id="btnSettings" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/Settings.png"/></ImageView></graphic>
+            <Button fx:id="btnSettings" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/Settings.png" /></ImageView></graphic>
             </Button>
-            <Button fx:id="btnDrawer" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/Drawer.png"/></ImageView></graphic>
+            <Button fx:id="btnDrawer" maxHeight="30" maxWidth="30" mnemonicParsing="false" styleClass="navbar-button">
+                <graphic><ImageView><Image url="@../images/Drawer.png" /></ImageView></graphic>
             </Button>
         </VBox>
     </left>
