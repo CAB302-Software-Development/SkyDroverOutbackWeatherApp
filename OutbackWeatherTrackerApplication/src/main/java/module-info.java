@@ -12,10 +12,12 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires jakarta.persistence;
     requires java.naming;
     requires org.hibernate.orm.community.dialects;
-    requires java.desktop;
     requires static lombok;
     requires spring.security.crypto;
     requires javafx.web;
+    requires javafx.graphics;
+    requires com.fasterxml.jackson.databind;
+    requires java.desktop;
     requires java.prefs;
     requires org.json;
     requires com.gluonhq.attach.storage;
@@ -28,6 +30,8 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     exports cab302softwaredevelopment.outbackweathertrackerapplication.utils;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.models;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.services;
+    exports cab302softwaredevelopment.outbackweathertrackerapplication.models.dto;
 
     exports cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets to javafx.fxml;
