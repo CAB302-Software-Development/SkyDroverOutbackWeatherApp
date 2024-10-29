@@ -11,7 +11,7 @@
 
 <VBox alignment="CENTER" styleClass="weather-widget-3"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget3Controller">
    <Text  fx:id="txtLocation" text="Location">
       <font><Font size="14.0"/></font>

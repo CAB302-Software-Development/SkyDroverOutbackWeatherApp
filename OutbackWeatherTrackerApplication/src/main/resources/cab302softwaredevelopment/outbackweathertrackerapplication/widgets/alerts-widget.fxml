@@ -10,7 +10,7 @@
 
 <VBox alignment="CENTER" spacing="10.0" styleClass="alerts-widget"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.AlertsWidgetController">
    <HBox alignment="CENTER" prefHeight="25.0" >
       <ImageView fx:id="imgAlert1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">

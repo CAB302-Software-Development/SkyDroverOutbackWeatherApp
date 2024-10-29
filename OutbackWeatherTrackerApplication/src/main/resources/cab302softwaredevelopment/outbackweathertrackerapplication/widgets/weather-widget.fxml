@@ -6,8 +6,8 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
-<VBox alignment="CENTER" spacing="10.0"
-      styleClass="weather-widget" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+<VBox alignment="CENTER" spacing="10.0" styleClass="weather-widget"
+      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidgetController"
       stylesheets="@../themes/style.css,@../themes/theme-light.css">
     <!--

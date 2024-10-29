@@ -12,7 +12,7 @@
 
 <VBox spacing="5.0" styleClass="temperature-widget"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.TempWidgetController">
    <VBox alignment="CENTER">
       <Label fx:id="lblLocation" textFill="WHITE">
