@@ -5,7 +5,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.D
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO.HourlyForecastQuery;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast.DailyForecastBuilder;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast.HourlyForecastBuilder;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -52,7 +54,7 @@ public class Sdk {
     apiURL = apiURLs.getFirst();
   }
 
-  public List<DailyForecast.DailyForecastBuilder> getDailyForecastBuilders(Location location, int futureDays, int pastDays){
+  public List<DailyForecastBuilder> getDailyForecastBuilders(Location location, int futureDays, int pastDays){
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
     double elevation = location.getElevation();
@@ -235,7 +237,7 @@ public class Sdk {
    * @param pastDays The number of days in the past to retrieve the forecast for.
    * @return A list of HourlyForecastBuilders representing the forecasts.
    */
-  public List<HourlyForecast.HourlyForecastBuilder> getHourlyForecastBuilders(Location location, int futureDays, int pastDays) {
+  public List<HourlyForecastBuilder> getHourlyForecastBuilders(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
     double elevation = location.getElevation();
