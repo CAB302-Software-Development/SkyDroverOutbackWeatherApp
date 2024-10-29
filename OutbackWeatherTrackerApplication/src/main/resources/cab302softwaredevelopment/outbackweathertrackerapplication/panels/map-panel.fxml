@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.web.WebView?>
-
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import com.gluonhq.maps.MapView?>
@@ -10,20 +8,37 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
+
+<?import javafx.scene.layout.AnchorPane?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
       styleClass="background-primary">
-  <StackPane>
-    <ProgressIndicator/>
-    <MapView fx:id="mapView"/>
-    <BorderPane fx:id="bpOverlayUI" mouseTransparent="true">
-      <top>
-        <HBox>
-          <TextField fx:id="txtSearchBar" promptText="Search for location..." mouseTransparent="false"/>
-          <Button fx:id="btnSearch" onAction="#handleButtonPress" mouseTransparent="false"/>
-        </HBox>
-      </top>
-    </BorderPane>
-  </StackPane>
+  <AnchorPane fx:id="apContent">
+    <StackPane>
+      <ProgressIndicator/>
+      <MapView fx:id="mapView"/>
+    </StackPane>
+
+    <VBox>
+      <VBox fx:id="vbCrowdDataView">
+
+      </VBox>
+
+      <VBox fx:id="vbLocationForecastView">
+        <!-- Temperature -->
+        <!-- Wind speed -->
+        <!-- Precipitation -->
+        <!-- Humidity -->
+        <!-- Cloud cover? -->
+      </VBox>
+    </VBox>
+
+    <HBox>
+      <TextField fx:id="txtSearchBar" promptText="Search for location..."/>
+      <Button fx:id="btnSearch" onAction="#handleButtonPress"/>
+    </HBox>
+
+    <!-- Make contribution -->
+  </AnchorPane>
 </VBox>

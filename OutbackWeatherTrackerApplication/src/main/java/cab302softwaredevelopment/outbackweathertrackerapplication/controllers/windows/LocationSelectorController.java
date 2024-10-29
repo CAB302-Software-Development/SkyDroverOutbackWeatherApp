@@ -2,6 +2,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.PointMapLayer;
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
 import javafx.event.ActionEvent;
@@ -27,6 +28,8 @@ public class LocationSelectorController implements Initializable {
     @FXML
     private Button btnConfirm, btnCancel, btnSearch;
 
+    private PointMapLayer pointMapLayer;
+
     @Getter
     private LocationCreateModel selectedLocation;
     private LocationService locationService;
@@ -46,6 +49,9 @@ public class LocationSelectorController implements Initializable {
                 setSelectedLocation(new LocationCreateModel(null, latitude, longitude, 0));
             }
         });
+
+        pointMapLayer = new PointMapLayer(mapView);
+        mapView.addLayer(pointMapLayer);
     }
 
     @FXML
@@ -79,6 +85,7 @@ public class LocationSelectorController implements Initializable {
         }
         addressField.setText(newLocation.getName());
         selectedLocation = newLocation;
+        pointMapLayer.setSelectedLocation(new MapPoint(selectedLocation.getLatitude(), selectedLocation.getLongitude()));
     }
 
     private void closePopup() {

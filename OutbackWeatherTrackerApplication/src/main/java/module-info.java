@@ -20,6 +20,7 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires org.json;
     requires com.gluonhq.attach.storage;
     requires com.gluonhq.maps;
+    requires com.gluonhq.attach.util;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
