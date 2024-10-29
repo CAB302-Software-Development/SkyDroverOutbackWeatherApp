@@ -20,6 +20,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.Optional;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -143,11 +146,9 @@ public class ForecastController extends BasePage {
     private void refreshForecastData(boolean showSuccessMessage) {
         if (isRefreshing) return;
 
-        Location selectedLocation = currentLocation;
-        if (selectedLocation == null) {
-            MainController.showAlert("No Location Selected", "Please select a location to refresh data.");
-            return;
-        }
+        // Store current state for comparison
+        Location previousSelection = locationComboBox.getValue();
+        List<Location> previousLocations = new ArrayList<>(locationComboBox.getItems());
 
         isRefreshing = true;
         progressIndicator.setVisible(true);
@@ -155,34 +156,134 @@ public class ForecastController extends BasePage {
 
         new Thread(() -> {
             try {
-                boolean result = forecastService.updateForecastsForCurrentUser(7, 2);
+                // First, refresh the locations list
+                List<Location> currentUserLocations = locationService.getCurrentUserLocations();
 
                 Platform.runLater(() -> {
-                    loadDailyForecastData();
-                    loadHourlyForecastData();
+                    try {
+                        // Update locations and handle any changes
+                        handleLocationUpdates(currentUserLocations, previousLocations, previousSelection);
 
-                    progressIndicator.setVisible(false);
-                    refreshButton.setDisable(false);
-                    isRefreshing = false;
+                        // Only proceed with forecast update if we have locations
+                        if (!currentUserLocations.isEmpty()) {
+                            boolean result = forecastService.updateForecastsForCurrentUser(7, 2);
 
-                    if (result) {
-                        if (showSuccessMessage) {
-                            MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                            if (result) {
+                                loadDailyForecastData();
+                                loadHourlyForecastData();
+
+                                if (showSuccessMessage) {
+                                    MainController.showAlert("Success", "Weather data has been updated successfully.");
+                                }
+                            } else {
+                                connectionService.setOffline(true);
+                                MainController.showAlert("Connection Error",
+                                    "Unable to fetch new weather data. Using cached data.");
+                            }
                         }
-                    } else {
-                        connectionService.setOffline(true);
+                    } catch (Exception e) {
+                        handleError("Error updating data", e);
+                    } finally {
+                        progressIndicator.setVisible(false);
+                        refreshButton.setDisable(false);
+                        isRefreshing = false;
                     }
                 });
             } catch (Exception e) {
-                e.printStackTrace();
                 Platform.runLater(() -> {
+                    handleError("Refresh failed", e);
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
                     isRefreshing = false;
-                    MainController.showAlert("Error", "Failed to refresh forecast data.");
                 });
             }
         }).start();
+    }
+
+    private void handleLocationUpdates(List<Location> currentLocations,
+        List<Location> previousLocations,
+        Location previousSelection) {
+        locationComboBox.getItems().clear();
+
+        if (currentLocations.isEmpty()) {
+            handleNoLocations();
+            return;
+        }
+
+        locationComboBox.getItems().addAll(currentLocations);
+        List<Location> removedLocations = findRemovedLocations(currentLocations, previousLocations);
+
+        if (!removedLocations.isEmpty()) {
+            handleRemovedLocations(removedLocations, previousSelection, currentLocations);
+        } else {
+            maintainPreviousSelection(previousSelection, currentLocations);
+        }
+    }
+
+    private void handleNoLocations() {
+        clearDisplays();
+        MainController.showAlert("No Locations",
+            "You currently have no locations set up.\n" +
+                "Please add a location in the Settings page.");
+    }
+
+    private List<Location> findRemovedLocations(List<Location> currentLocations, List<Location> previousLocations) {
+        return previousLocations.stream()
+            .filter(prev -> currentLocations.stream().noneMatch(curr -> curr.getId() == prev.getId()))
+            .toList();
+    }
+
+    private void handleRemovedLocations(List<Location> removedLocations, Location previousSelection, List<Location> currentLocations) {
+        if (previousSelection == null) {
+            // Handle first login scenario
+            locationComboBox.setValue(currentLocations.get(0));
+            MainController.showAlert("Welcome",
+                "Welcome! The default location is set to '" +
+                    currentLocations.get(0).getName() + "'.");
+        } else if (removedLocations.stream().anyMatch(loc -> loc.getId() == previousSelection.getId())) {
+            locationComboBox.setValue(currentLocations.get(0));
+            MainController.showAlert("Location Removed",
+                "The previously selected location '" + previousSelection.getName() +
+                    "' is no longer available.\nSwitching to '" +
+                    currentLocations.get(0).getName() + "'.");
+        } else {
+            maintainPreviousSelection(previousSelection, currentLocations);
+        }
+
+
+        String removedNames = removedLocations.stream()
+            .map(Location::getName)
+            .collect(Collectors.joining(", "));
+
+        if (!removedNames.isEmpty()) {
+            MainController.showAlert("Locations Updated",
+                "The following location(s) have been removed: " + removedNames);
+        }
+    }
+
+    private void maintainPreviousSelection(Location previousSelection, List<Location> currentLocations) {
+        if (previousSelection != null) {
+            Optional<Location> stillExists = currentLocations.stream()
+                .filter(l -> l.getId() == previousSelection.getId())
+                .findFirst();
+
+            stillExists.ifPresentOrElse(
+                locationComboBox::setValue,
+                () -> locationComboBox.setValue(currentLocations.get(0))
+            );
+        } else {
+            locationComboBox.setValue(currentLocations.get(0));
+        }
+    }
+
+    private void clearDisplays() {
+        hbForecasts.getChildren().clear();
+        lineChart.getData().clear();
+        currentLocation = null;
+    }
+
+    private void handleError(String context, Exception e) {
+        e.printStackTrace();
     }
 
     private Node createForecastDayTile(DailyForecast forecast) {
