@@ -182,6 +182,14 @@
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
               <version>${lombok.version}</version>
+              <executions>
+                <execution>
+                  <phase>generate-sources</phase>
+                  <goals>
+                    <goal>delombok</goal>
+                  </goals>
+                </execution>
+              </executions>
             </path>
           </annotationProcessorPaths>
 
@@ -232,6 +240,7 @@
         <version>3.10.1</version>
         <configuration>
           <outputDirectory>${project.build.directory}/reports</outputDirectory>
+          <sourcepath>${project.build.directory}/generated-sources/delombok</sourcepath>
         </configuration>
       </plugin>
     </plugins>
