@@ -4,6 +4,8 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.wi
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.CrowdsourcedDataService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
@@ -73,8 +75,26 @@ public class ApplicationEntry extends Application {
   public static void main(String[] args) {
     addTestData();
     Logger.printLog("Application started, " + stageTitle);
+    testCreateMarker();
     Session session = DatabaseConnection.getSession();
     launch();
+  }
+
+  private static void testCreateMarker() {
+    CrowdsourcedDataDTO crowdsourcedDataDTO = new CrowdsourcedDataDTO();
+    CrowdsourcedDataService crowdsourcedDataService = new CrowdsourcedDataService();
+
+    crowdsourcedDataDTO.setUserName("test name");
+    crowdsourcedDataDTO.setLatitude(1.02202);
+    crowdsourcedDataDTO.setLongitude(2.34324);
+    crowdsourcedDataDTO.setActualTemp(30);
+    crowdsourcedDataDTO.setFeelsLikeTemp(27);
+
+      try {
+          crowdsourcedDataService.createMarker(crowdsourcedDataDTO);
+      } catch (Exception e) {
+          throw new RuntimeException(e);
+      }
   }
 
   private static void addTestData() {

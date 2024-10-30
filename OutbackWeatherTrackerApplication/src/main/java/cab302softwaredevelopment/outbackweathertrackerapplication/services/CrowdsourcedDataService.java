@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CrowdsourcedDataService {
-    private static final String BASE_URL = "http://localhost:8080/api/marker";
+    private static final String BASE_URL = "http://localhost:8080/api/crowdsourced";
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 
@@ -28,7 +28,7 @@ public class CrowdsourcedDataService {
      * @return CrowdsourcedDataModel with created data
      * @throws Exception
      */
-    public CrowdsourcedDataModel createMarker(CrowdsourcedDataModel data) throws Exception {
+    public CrowdsourcedDataModel createMarker(CrowdsourcedDataDTO data) throws Exception {
         String requestBody = objectMapper.writeValueAsString(data);
 
         HttpRequest request = HttpRequest.newBuilder()
