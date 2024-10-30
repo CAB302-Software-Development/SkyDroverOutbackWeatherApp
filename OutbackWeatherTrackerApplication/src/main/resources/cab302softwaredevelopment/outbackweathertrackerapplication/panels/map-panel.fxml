@@ -1,44 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import com.gluonhq.maps.MapView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
-
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController"
-      styleClass="background-primary">
-  <AnchorPane fx:id="apContent">
-    <StackPane>
-      <ProgressIndicator/>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import com.gluonhq.maps.MapView?>
+
+<?import javafx.scene.control.Label?>
+<VBox styleClass="background-primary" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController">
+  <AnchorPane fx:id="apContent" VBox.vgrow="ALWAYS">
+
+    <StackPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0">
+      <ProgressIndicator />
       <MapView fx:id="mapView"/>
     </StackPane>
 
-    <VBox>
-      <VBox fx:id="vbCrowdDataView">
+    <VBox fx:id="vbCrowdDataView" prefWidth="150" prefHeight="150" styleClass="map-panel" visible="false" spacing="10"
+          AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" />
 
+    <StackPane fx:id="spLocationForecastView" AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" visible="false">
+      <ProgressIndicator fx:id="progressIndicator" visible="false"/>
+      <VBox prefHeight="150" prefWidth="150" styleClass="map-panel" spacing="5" >
+        <HBox fx:id="hbTemperature">
+          <Label text="Temperature: " VBox.vgrow="ALWAYS"/>
+          <Label fx:id="lblTemperature"/>
+        </HBox>
+        <HBox fx:id="hbWind">
+          <Label text="Wind speed : " VBox.vgrow="ALWAYS"/>
+          <Label fx:id="lblWind"/>
+        </HBox>
+        <HBox fx:id="hbPrecipitation">
+          <Label text="Precipitation: " VBox.vgrow="ALWAYS"/>
+          <Label fx:id="lblPrecipitation"/>
+        </HBox>
+        <HBox fx:id="hbHumidity">
+          <Label text="Humidity: " VBox.vgrow="ALWAYS"/>
+          <Label fx:id="lblHumidity"/>
+        </HBox>
+        <HBox fx:id="hbClouds">
+          <Label text="Cloud cover: " VBox.vgrow="ALWAYS"/>
+          <Label fx:id="lblClouds"/>
+        </HBox>
       </VBox>
+    </StackPane>
 
-      <VBox fx:id="vbLocationForecastView">
-        <!-- Temperature -->
-        <!-- Wind speed -->
-        <!-- Precipitation -->
-        <!-- Humidity -->
-        <!-- Cloud cover? -->
-      </VBox>
-    </VBox>
+    <TextField fx:id="txtSearchBar" promptText="Search for location..." onAction="#handleButtonPress"/>
 
-    <HBox>
-      <TextField fx:id="txtSearchBar" promptText="Search for location..."/>
-      <Button fx:id="btnSearch" onAction="#handleButtonPress"/>
-    </HBox>
-
-    <!-- Make contribution -->
+    <Button fx:id="btnAddMarker" text="Contribute" styleClass="button-primary" onAction="#handleButtonPress"
+            AnchorPane.topAnchor="30" AnchorPane.rightAnchor="30"/>
+    <Button fx:id="btnRefresh" text="Refresh" styleClass="button-primary" onAction="#handleButtonPress"
+            AnchorPane.topAnchor="30" AnchorPane.rightAnchor="100"/>
   </AnchorPane>
 </VBox>

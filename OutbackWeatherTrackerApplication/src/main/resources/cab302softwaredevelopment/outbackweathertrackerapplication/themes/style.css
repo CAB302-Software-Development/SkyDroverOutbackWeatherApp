@@ -248,3 +248,11 @@
 .weather-alert Hyperlink {
 
 }
+
+.map-panel {
+    -fx-background-color: primary;
+    -fx-opacity: 0.7;
+}
+.map-panel Label {
+    -fx-fill: white;
+}

@@ -2,12 +2,15 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.CrowdsourcedDataDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LocationSelectorController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedDataModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -91,4 +94,22 @@ public class InputService {
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
     }
+
+    public static CrowdsourcedDataModel getCrowdData() {
+        try {
+            FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/crowdsourced-data-dialog.fxml"));
+            Parent root = loader.load();
+            CrowdsourcedDataDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.setTitle("Crowdsourced Data Configuration");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+            return controller.getCrowdsourcedData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -109,9 +110,9 @@ public class MainController {
 
     public void updateUIData() {
         if (ConnectionService.getInstance().isOffline()) {
-            btnProfile.graphicProperty().setValue(imgProfileOffline);
+            Platform.runLater(() -> btnProfile.graphicProperty().setValue(imgProfileOffline));
         } else {
-            btnProfile.graphicProperty().setValue(imgProfile);
+            Platform.runLater(() -> btnProfile.graphicProperty().setValue(imgProfile));
         }
         pageFactory.updateAllPages();
     }

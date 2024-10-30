@@ -77,4 +77,32 @@ public class ForecastService {
     public boolean updateForecastsForCurrentUser(int futureDays, int pastDays) {
         return updateForecastsForUser(UserService.getInstance().getCurrentAccount(), futureDays, pastDays);
     }
+
+    public HourlyForecast updateForecastsForLocationGetHourly(Location location, int futureDays, int pastDays) {
+        boolean result = updateForecastsForLocation(location, futureDays, pastDays);
+        if (result) {
+            return getLatestHourlyForecast(location);
+        } else {
+            return null;
+        }
+    }
+    public DailyForecast updateForecastsForLocationGetDaily(Location location, int futureDays, int pastDays) {
+        boolean result = updateForecastsForLocation(location, futureDays, pastDays);
+        if (result) {
+            return getTodayForecast(location);
+        } else {
+            return null;
+        }
+    }
+    public boolean updateForecastsForLocation(Location location, int futureDays, int pastDays) {
+        try {
+            Sdk sdk = new Sdk();
+            sdk.updateDailyForecast(location, futureDays, pastDays);
+            sdk.updateHourlyForecast(location, futureDays, pastDays);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
