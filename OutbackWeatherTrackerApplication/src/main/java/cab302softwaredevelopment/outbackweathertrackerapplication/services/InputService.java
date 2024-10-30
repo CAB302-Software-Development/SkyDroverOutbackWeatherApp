@@ -5,12 +5,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pa
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.CrowdsourcedDataDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LocationSelectorController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedDataModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +16,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -95,7 +91,7 @@ public class InputService {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-    public static CrowdsourcedDataModel getCrowdData() {
+    public static CrowdsourcedDTO getCrowdData() {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/crowdsourced-data-dialog.fxml"));
             Parent root = loader.load();

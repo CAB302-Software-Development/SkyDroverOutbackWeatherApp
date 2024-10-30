@@ -1,14 +1,12 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedDataModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.SelectablePoint;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.CrowdsourcedDataService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.CrowdsourcedApiService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.PointMapLayer;
@@ -55,7 +53,7 @@ public class MapController extends BasePage {
     @FXML
     private Button btnAddMarker, btnRefresh;
 
-    CrowdsourcedDataService crowdsourcedDataService;
+    CrowdsourcedApiService crowdsourcedDataService;
 
     @Getter
     private LocationCreateModel selectedLocation = null;
@@ -65,7 +63,7 @@ public class MapController extends BasePage {
     @Override
     public void initialize() {
         super.initialize();
-        crowdsourcedDataService = CrowdsourcedDataService.getInstance();
+        crowdsourcedDataService = CrowdsourcedApiService.getInstance();
 
         AnchorPane.setTopAnchor(txtSearchBar, 30.0);
         centeredAnchor = apContent.widthProperty().divide(3);
@@ -99,10 +97,10 @@ public class MapController extends BasePage {
 
     private void addCrowdDataToMap() {
         try {
-            List<CrowdsourcedDataDTO> crowdDataList = crowdsourcedDataService.getLatestFilteredData();
+            List<CrowdsourcedDTO> crowdDataList = crowdsourcedDataService.getLatestFilteredData();
             if (crowdDataList == null) return;
 
-            for (CrowdsourcedDataDTO crowdData : crowdDataList) {
+            for (CrowdsourcedDTO crowdData : crowdDataList) {
                 MapPoint location = new MapPoint(crowdData.getLatitude(), crowdData.getLongitude());
                 SelectablePoint point = new SelectablePoint(
                         location,
@@ -154,7 +152,7 @@ public class MapController extends BasePage {
         return pinCircle;
     }
 
-    private Node getCrowdPin(MapPoint location, CrowdsourcedDataDTO crowdData, boolean selected) {
+    private Node getCrowdPin(MapPoint location, CrowdsourcedDTO crowdData, boolean selected) {
         Circle pinCircle = new Circle(10, Color.RED);
         if (selected) {
             pinCircle.setStroke(Color.YELLOW);
@@ -181,7 +179,7 @@ public class MapController extends BasePage {
         vbCrowdDataView.setVisible(false);
     }
 
-    private void showCrowdDataDetails(CrowdsourcedDataDTO crowdData) {
+    private void showCrowdDataDetails(CrowdsourcedDTO crowdData) {
         vbCrowdDataView.getChildren().clear();
         List<Node> details = new ArrayList<>();
 
@@ -191,12 +189,12 @@ public class MapController extends BasePage {
         if (crowdData.getUserName() != null) {
             details.add(new Label("User: " + crowdData.getUserName()));
         }
-        if (crowdData.getActualTemp() != null) {
-            details.add(new Label("Actual Temp: " + crowdData.getActualTemp() + "°C"));
-        }
-        if (crowdData.getFeelsLikeTemp() != null) {
-            details.add(new Label("Feels Like Temp: " + crowdData.getFeelsLikeTemp() + "°C"));
-        }
+        // if (crowdData.getActualTemp() != null) {
+        //     details.add(new Label("Actual Temp: " + crowdData.getActualTemp() + "°C"));
+        // }
+        // if (crowdData.getFeelsLikeTemp() != null) {
+        //     details.add(new Label("Feels Like Temp: " + crowdData.getFeelsLikeTemp() + "°C"));
+        // }
 
         vbCrowdDataView.getChildren().addAll(details);
         vbCrowdDataView.setVisible(true);
@@ -262,7 +260,7 @@ public class MapController extends BasePage {
                 MainController.showAlert("Error", "Guests are not allowed to add markers, please log in or create an account to continue.");
                 return;
             }
-            CrowdsourcedDataModel data = InputService.getCrowdData();
+            CrowdsourcedDTO data = InputService.getCrowdData();
             if (data == null) return;
             try {
                 crowdsourcedDataService.createMarker(data);

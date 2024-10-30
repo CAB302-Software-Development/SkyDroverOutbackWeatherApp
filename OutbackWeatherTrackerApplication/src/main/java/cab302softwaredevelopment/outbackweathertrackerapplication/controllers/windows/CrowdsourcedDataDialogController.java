@@ -2,7 +2,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedDataModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -30,7 +30,7 @@ public class CrowdsourcedDataDialogController {
     private ButtonType saveButtonType;
 
     @Getter
-    private CrowdsourcedDataModel crowdsourcedData;
+    private CrowdsourcedDTO crowdsourcedData;
 
     private LocationService locationService;
     private List<Location> locations;
@@ -67,7 +67,7 @@ public class CrowdsourcedDataDialogController {
 
     private void populateFields() {
         configFieldsVBox.getChildren().clear();
-        crowdsourcedData = new CrowdsourcedDataModel();
+        crowdsourcedData = new CrowdsourcedDTO();
 
         TextField locationField = new TextField();
         locationField.setPromptText("Enter location name");
