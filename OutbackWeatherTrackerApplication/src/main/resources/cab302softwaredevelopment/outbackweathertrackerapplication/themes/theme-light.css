@@ -1,9 +1,10 @@
 .root {
-    primary: #3E6EAC;
-    primary-comp: #ffffff;
-    secondary: #2F5A94;
-    secondary-comp: #ffffff;
+    primary: #F0F0F0;
+    primary-comp: #000000;
+    secondary: #547EB5;
+    secondary-comp: #FFFFFF;
     complementary-colour: #214A78;
     highlight-colour: #2475e7;
     colour-1: #547EB5;
+    colour-2: #3E6EAC;
 }

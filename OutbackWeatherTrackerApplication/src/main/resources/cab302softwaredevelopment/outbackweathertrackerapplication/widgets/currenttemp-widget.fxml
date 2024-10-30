@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox styleClass="current-temp-widget" fx:id="root" alignment="CENTER" spacing="10.0"
+<VBox styleClass="background-secondary" fx:id="root" alignment="CENTER" spacing="10.0"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
       xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.CurrentTempController">
