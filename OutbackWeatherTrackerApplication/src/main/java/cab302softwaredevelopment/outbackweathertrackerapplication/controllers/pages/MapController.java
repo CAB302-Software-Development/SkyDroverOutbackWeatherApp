@@ -88,7 +88,7 @@ public class MapController extends BasePage {
                 double latitude = clickedPos.getLatitude();
                 double longitude = clickedPos.getLongitude();
                 hideCrowdPanel();
-                setForecastVisible(false);
+                hideForecastPanel();
                 setSelectedLocation(new LocationCreateModel(null, latitude, longitude, 0));
             }
         });
@@ -142,7 +142,7 @@ public class MapController extends BasePage {
             pointMapLayer.setSelectedLocation(location);
             setForecastLoading(true);
             Thread locationThread = new Thread(() -> {
-                HourlyForecast forecast = forecastService.updateForecastsForLocationGetHourly(locationData, 1, 1);
+                HourlyForecast forecast = forecastService.getLatestHourlyForecast(locationData);
                 Platform.runLater(() -> displayForecast(forecast));
             });
             event.consume();
@@ -225,21 +225,23 @@ public class MapController extends BasePage {
         }
     }
 
-    private void setForecastVisible(boolean value) {
-        hbTemperature.setVisible(value);
-        hbClouds.setVisible(value);
-        hbPrecipitation.setVisible(value);
-        hbHumidity.setVisible(value);
-        hbWind.setVisible(value);
+    private void hideForecastPanel() {
+        spLocationForecastView.setVisible(false);
     }
 
     private void setForecastLoading(boolean value) {
-        setForecastVisible(!value);
+        spLocationForecastView.setVisible(true);
+        hbTemperature.setVisible(!value);
+        hbClouds.setVisible(!value);
+        hbPrecipitation.setVisible(!value);
+        hbHumidity.setVisible(!value);
+        hbWind.setVisible(!value);
         progressIndicator.setVisible(value);
     }
 
     private void displayForecast(HourlyForecast forecast) {
         setForecastLoading(false);
+        spLocationForecastView.setVisible(true);
         lblTemperature.setText(forecast.getTemperature_2m() + "");
         lblClouds.setText(forecast.getCloud_cover() + "%");
         lblPrecipitation.setText(forecast.getPrecipitation() + "ml");
