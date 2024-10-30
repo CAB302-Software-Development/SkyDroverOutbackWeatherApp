@@ -2,10 +2,12 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WidgetFactory;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
@@ -79,7 +81,26 @@ public class DashboardController extends BasePage {
                 if (!s.isBlank() && !s.isEmpty()) createNewLayout(s);
             });
         } else if (event.getSource() == btnDeleteLayout) {
+            String selectedLayout = cboSelectedLayout.getValue();
+            if (selectedLayout == null) {
+                MainController.showAlert("Error", "No layout selected.");
+                return;
+            }
 
+            boolean confirmed = InputService.getConfirmation(
+                    "Delete Layout",
+                    "Are you sure you want to delete this layout?",
+                    "This action cannot be undone."
+            );
+
+            if (confirmed) {
+                Account account = userService.getCurrentAccount();
+                account.getDashboardLayouts().remove(selectedLayout);
+                resetLayoutComboBox();
+                String newLayout = cboSelectedLayout.getItems().isEmpty() ? null : cboSelectedLayout.getItems().getFirst();
+                changeLayout(newLayout);
+                MainController.showAlert("Success", "Layout deleted successfully.");
+            }
         }
     }
 
@@ -95,7 +116,7 @@ public class DashboardController extends BasePage {
 
     private void exitEditMode() {
         if(checkUnsavedChanges()) return;
-
+        currentLayout = userService.getCurrentLayout();
         isEditing = false;
         hbEditModeToolbar.setVisible(false);
         hbEditModeToolbar.setManaged(false);
@@ -103,6 +124,7 @@ public class DashboardController extends BasePage {
         bpHeader.setManaged(true);
         resetLayoutComboBox();
         loadWidgetsToGrid();
+        MainController.getController().updateUIData();
     }
 
     public void loadWidgetsToGrid() {
@@ -216,23 +238,6 @@ public class DashboardController extends BasePage {
         if (index != -1) editWidget(index);
     }
 
-
-    // private void editWidget(int index) {
-    //     WidgetInfo widgetInfo = currentLayout.get(index);
-    //     WidgetInfo updatedWidgetInfo = InputService.getWidgetConfig(widgetInfo, this);
-    //     if (updatedWidgetInfo != null) {
-    //         if (!currentLayout.get(index).equals(updatedWidgetInfo)) {
-    //             currentLayout.set(index, updatedWidgetInfo);
-    //             unsavedChanges = true;
-    //         }
-    //     } else {
-    //         currentLayout.remove(index);
-    //         unsavedChanges = true;
-    //     }
-    //     loadWidgetsToGrid();
-    // }
-
-
     private void editWidget(int index) {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/widget-config-dialog.fxml"));
@@ -292,8 +297,15 @@ public class DashboardController extends BasePage {
     }
 
     private void saveCurrentLayout() {
-        boolean result = userService.saveLayout(cboSelectedLayout.getValue(), currentLayout.toArray(WidgetInfo[]::new));
+        String layoutName = cboSelectedLayout.getValue();
+        boolean result = userService.saveLayout(layoutName, currentLayout.toArray(WidgetInfo[]::new));
         unsavedChanges = !result;
+        if (result) {
+            UserService.getInstance().getCurrentAccount().setSelectedLayout(layoutName);
+            MainController.showAlert("Success", "Dashboard has been saved.");
+        } else {
+            MainController.showAlert("Error", "There was an error saving the dashboard.");
+        }
     }
 
     private void exportLayouts() {
@@ -312,6 +324,13 @@ public class DashboardController extends BasePage {
     }
 
     public void removeFromGrid(StackPane widgetContainer) {
+        unsavedChanges = true;
         dashboardGrid.getChildren().remove(widgetContainer);
+    }
+
+    public void deleteWidget(WidgetInfo widgetInfo) {
+        unsavedChanges = true;
+        currentLayout.remove(widgetInfo);
+        loadWidgetsToGrid();
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.CrowdsourcedDataDialogController"
+            fx:id="dialogPane">
+    <content>
+        <VBox spacing="10">
+            <HBox spacing="10">
+                <Label text="Select Location:"/>
+                <ComboBox fx:id="locationComboBox"/>
+            </HBox>
+            <VBox fx:id="configFieldsVBox" spacing="10"/>
+        </VBox>
+    </content>
+    <buttonTypes>
+        <ButtonType fx:id="saveButtonType" text="Save" buttonData="OK_DONE"/>
+        <ButtonType text="Cancel" buttonData="CANCEL_CLOSE"/>
+    </buttonTypes>
+</DialogPane>

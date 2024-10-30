@@ -11,7 +11,7 @@
 
 <VBox styleClass="wind-widget"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WindWidgetController">
     <HBox>
         <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location"/>

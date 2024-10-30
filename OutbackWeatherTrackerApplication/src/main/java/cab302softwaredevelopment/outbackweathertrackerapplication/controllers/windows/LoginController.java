@@ -3,18 +3,19 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class LoginController {
@@ -35,19 +36,14 @@ public class LoginController {
     private AnchorPane loginPane;
     @FXML
     private TextField emailTextFieldLogin;
-
     @FXML
     private PasswordField passwordTextFieldLogin;
-
     @FXML
     private Button loginButton;
-
     @FXML
     private Hyperlink forgotPasswordLink, signUpLink, guestLinkLogin;
-
     @FXML
     private Label loginMessageLabel;
-
     @FXML
     private Text loginTitle;
 
@@ -57,24 +53,20 @@ public class LoginController {
     private AnchorPane signupPane;
     @FXML
     private TextField emailTextFieldSignup;
-
     @FXML
-    private PasswordField passwordTextFieldSignup;
-
+    private PasswordField passwordTextFieldSignup, passwordTextConfirm;
     @FXML
-    private Button signupButton;
-
+    private Button signupButton, btnLocation;
     @FXML
     private Hyperlink loginLink, guestLinkSignup;
-
     @FXML
     private Label signupMessageLabel;
-
     @FXML
     private Text signupTitle;
 
-    private boolean isLogin = true;
 
+    private LocationCreateModel selectedLocation = null;
+    private boolean isLogin = true;
     private UserService userService;
 
     @FXML
@@ -84,7 +76,6 @@ public class LoginController {
 
 
     // Private front-end logic / helpers
-
     @FXML
     private void switchToSignup() {
         loginPane.setVisible(false);
@@ -106,21 +97,37 @@ public class LoginController {
     @FXML
     private void handleButtonPress(ActionEvent e) {
         if (e.getSource() == loginButton) {
-            String email = emailTextFieldLogin.getText();
+            String email = emailTextFieldLogin.getText().toLowerCase(Locale.ROOT);
             String password = passwordTextFieldLogin.getText();
             if (handleLogin(email, password)) {
                 continueToApplication();
             }
         } else if (e.getSource() == signupButton) {
-            String email = emailTextFieldSignup.getText();
+            String email = emailTextFieldSignup.getText().toLowerCase(Locale.ROOT);
             String password = passwordTextFieldSignup.getText();
-            if (handleSignUp(email, password)) {
+            String passwordConfirm = passwordTextConfirm.getText();
+            if (handleSignUp(email, password, passwordConfirm, selectedLocation)) {
                 continueToApplication();
             }
         } else if (e.getSource() == guestLinkLogin || e.getSource() == guestLinkSignup) {
-            userService.logout();
-            continueToApplication();
+            if(handleGuestAccess()) {
+                continueToApplication();
+            }
+        } else if (e.getSource() == btnLocation) {
+            selectedLocation = InputService.getLocation("Select location", "Please select an initial location for weather readings");
+            if (selectedLocation == null) {
+                btnLocation.setText("Select Location");
+            } else {
+                btnLocation.setText("Change Location");
+            }
         }
+    }
+
+    private boolean handleGuestAccess() {
+        selectedLocation = InputService.getLocation("Select location", "Please select an initial location for weather readings");
+        if (selectedLocation == null) return false;
+        userService.logout(selectedLocation);
+        return true;
     }
 
     private void showErrorMessage(String message) {
@@ -191,8 +198,18 @@ public class LoginController {
      * @param password
      * @return
      */
-    public boolean handleSignUp(String email, String password) {
+    public boolean handleSignUp(String email, String password, String passwordConfirm, LocationCreateModel location) {
         try {
+            if (!Objects.equals(password, passwordConfirm)) {
+                showErrorMessage("Passwords do not match");
+                return false;
+            }
+
+            if (location == null) {
+                showErrorMessage("Select a valid location");
+                return false;
+            }
+
             if (!validateCredentials(email, password)) return false;
 
             if ((new AccountDAO.AccountQuery()).whereEmail(email).getSingleResult() != null) {
@@ -200,18 +217,7 @@ public class LoginController {
                 return false;
             }
 
-            AccountDAO accountDAO = new AccountDAO();
-
-            Account newAccount = Account.builder()
-                    .email(email)
-                    .password(password)
-                    .build();
-
-            accountDAO.insert(newAccount);
-
-            Account createdAccount = (new AccountDAO.AccountQuery())
-                    .whereEmail(email)
-                    .getSingleResult();
+            Account createdAccount = userService.createUser(email, password, location);
 
             if (createdAccount == null) {
                 showErrorMessage("Error creating account.");
@@ -246,5 +252,22 @@ public class LoginController {
         }
 
         return true;
+    }
+
+    public void handleEnter(ActionEvent actionEvent) {
+        if (isLogin) {
+            String email = emailTextFieldLogin.getText().toLowerCase(Locale.ROOT);
+            String password = passwordTextFieldLogin.getText();
+            if (handleLogin(email, password)) {
+                continueToApplication();
+            }
+        } else {
+            String email = emailTextFieldSignup.getText().toLowerCase(Locale.ROOT);
+            String password = passwordTextFieldSignup.getText();
+            String passwordConfirm = passwordTextConfirm.getText();
+            if (handleSignUp(email, password, passwordConfirm, selectedLocation)) {
+                continueToApplication();
+            }
+        }
     }
 }

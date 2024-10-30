@@ -39,9 +39,6 @@
             <Button fx:id="btnAlerts" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
                 <graphic><ImageView><Image url="@../images/!.png"/></ImageView></graphic>
             </Button>
-            <Button fx:id="btnReports" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
-                <graphic><ImageView><Image url="@../images/reports.png"/></ImageView></graphic>
-            </Button>
 
             <Region VBox.vgrow="ALWAYS" />
 

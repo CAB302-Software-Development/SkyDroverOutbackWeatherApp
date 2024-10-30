@@ -12,6 +12,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateDat
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ForecastService {
     }
 
     public DailyForecast getTodayForecast(Location location) {
-        int nowEpoch = (int) (new DateData(LocalDate.now())).getDayStartEpoch();
+        int nowEpoch = (int) (new DateData(LocalDateTime.now())).getDayStartEpoch();
 
         if (ConnectionService.getInstance().isOffline()) {
             DailyForecast latest = new DailyForecastDAO.DailyForecastQuery()
@@ -75,5 +76,33 @@ public class ForecastService {
 
     public boolean updateForecastsForCurrentUser(int futureDays, int pastDays) {
         return updateForecastsForUser(UserService.getInstance().getCurrentAccount(), futureDays, pastDays);
+    }
+
+    public HourlyForecast updateForecastsForLocationGetHourly(Location location, int futureDays, int pastDays) {
+        boolean result = updateForecastsForLocation(location, futureDays, pastDays);
+        if (result) {
+            return getLatestHourlyForecast(location);
+        } else {
+            return null;
+        }
+    }
+    public DailyForecast updateForecastsForLocationGetDaily(Location location, int futureDays, int pastDays) {
+        boolean result = updateForecastsForLocation(location, futureDays, pastDays);
+        if (result) {
+            return getTodayForecast(location);
+        } else {
+            return null;
+        }
+    }
+    public boolean updateForecastsForLocation(Location location, int futureDays, int pastDays) {
+        try {
+            Sdk sdk = new Sdk();
+            sdk.updateDailyForecast(location, futureDays, pastDays);
+            sdk.updateHourlyForecast(location, futureDays, pastDays);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

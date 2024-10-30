@@ -13,11 +13,15 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires org.hibernate.orm.community.dialects;
     requires static lombok;
     requires spring.security.crypto;
-    requires com.gluonhq.maps;
     requires javafx.web;
     requires javafx.graphics;
     requires com.fasterxml.jackson.databind;
     requires java.desktop;
+    requires java.prefs;
+    requires org.json;
+    requires com.gluonhq.attach.storage;
+    requires com.gluonhq.maps;
+    requires com.gluonhq.attach.util;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication.database.dao to org.hibernate.orm.core;
 
@@ -28,7 +32,6 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     exports cab302softwaredevelopment.outbackweathertrackerapplication.services;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.models.dto;
 
-    //exports cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
     exports cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets to javafx.fxml;
 
     opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets to javafx.fxml;
