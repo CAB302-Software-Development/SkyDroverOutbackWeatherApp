@@ -4,34 +4,28 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.wi
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.CrowdsourcedDataService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.Session;
-
 import java.awt.*;
 import java.io.IOException;
 
 public class ApplicationEntry extends Application {
   private static Stage rootStage;
 
-  public static final String stageTitle = "Outback Weather Tracker";
-
   /**
    * Starts the application and sets up the main stage and scene.
    *
    * @param stage The primary stage for the application.
-   * @throws IOException if the FXML file cannot be loaded.
    */
   @Override
   public void start(Stage stage) {
     if (!GraphicsEnvironment.isHeadless()) {
-      PreferencesService.loadPreferences();
       rootStage = stage;
 
       // TODO Check if valid credentials already exist, skip login window if so
@@ -49,21 +43,32 @@ public class ApplicationEntry extends Application {
     FXMLLoader fxmlLoader = new FXMLLoader(ApplicationEntry.class.getResource("windows/login-signup.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), LoginController.WIDTH, LoginController.HEIGHT);
 
-    rootStage = new Stage();
-    rootStage.setTitle("Login");
-    rootStage.setScene(scene);
-    rootStage.show();
+    Stage newStage = new Stage();
+    newStage.setTitle(LoginController.TITLE);
+    newStage.setScene(scene);
+    setMainStage(newStage);
   }
 
   public static void openMainWindow() throws IOException {
+    ConnectionService.getInstance().init();
     FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/main-view.fxml"));
     Scene scene = new Scene(loader.load(), MainController.WIDTH, MainController.HEIGHT);
     MainController controller = loader.getController();
     controller.setScene(scene);
 
-    rootStage = new Stage();
-    rootStage.setTitle(stageTitle);
-    rootStage.setScene(scene);
+    Stage newStage = new Stage();
+    newStage.setTitle(MainController.TITLE);
+    newStage.setScene(scene);
+    setMainStage(newStage);
+  }
+
+  private static void setMainStage(Stage stage) {
+    rootStage = stage;
+    rootStage.setOnCloseRequest(event -> {
+      ConnectionService.getInstance().shutdownScheduler();
+      MainController.shutdownScheduler();
+      Platform.exit();
+    });
     rootStage.show();
   }
 
@@ -73,39 +78,30 @@ public class ApplicationEntry extends Application {
    * @param args Command-line arguments.
    */
   public static void main(String[] args) {
-    addTestData();
-    Logger.printLog("Application started, " + stageTitle);
-    testCreateMarker();
     Session session = DatabaseConnection.getSession();
+    // addTestData();
+    Logger.printLog("Application started");
     launch();
   }
 
-  private static void testCreateMarker() {
-    CrowdsourcedDataDTO crowdsourcedDataDTO = new CrowdsourcedDataDTO();
-    CrowdsourcedDataService crowdsourcedDataService = new CrowdsourcedDataService();
-
-    crowdsourcedDataDTO.setUserName("test name");
-    crowdsourcedDataDTO.setLatitude(1.02202);
-    crowdsourcedDataDTO.setLongitude(2.34324);
-    crowdsourcedDataDTO.setActualTemp(30);
-    crowdsourcedDataDTO.setFeelsLikeTemp(27);
-
-      try {
-          crowdsourcedDataService.createMarker(crowdsourcedDataDTO);
-      } catch (Exception e) {
-          throw new RuntimeException(e);
-      }
-  }
-
+  /**
+   * Adds some test data to the database. This is only used for testing purposes.
+   */
   private static void addTestData() {
-    Logger.printLog("Application started, " + stageTitle);
+    Logger.printLog("Application started");
     Session session = DatabaseConnection.getSession();
     AccountDAO accountDAO = new AccountDAO();
     LocationDAO locationDAO = new LocationDAO();
 
     // Insert some new accounts
     // Add the accounts to the template
-    accountDAO.insert(new Account("guest@guest.com", "SecurePass1!",true));
+    //Account newAccount = new Account("guest@guest.com", "SecurePass1!",true);
+    Account newAccount = Account.builder()
+        .email("guest@guest.com")
+        .password("SecurePass1!")
+        .isGuest(true)
+        .build();
+    accountDAO.insert(newAccount);
 
     Account account = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
 

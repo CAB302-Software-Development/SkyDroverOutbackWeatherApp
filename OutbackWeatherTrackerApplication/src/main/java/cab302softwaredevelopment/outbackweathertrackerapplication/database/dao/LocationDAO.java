@@ -5,8 +5,11 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.hibernate.Session;
 /**
  * A Data Access Object for the Location entity.
@@ -34,7 +37,7 @@ public class LocationDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -58,7 +61,7 @@ public class LocationDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -74,18 +77,10 @@ public class LocationDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(int id) {
-    Session session = DatabaseConnection.getSession();
-    try {
-      session.beginTransaction();
-      Location location = session.get(Location.class, id);
-      session.delete(location);
-      session.getTransaction().commit();
-    } catch (Exception e) {
-      session.getTransaction().rollback();
-      e.printStackTrace();
-    } finally {
-      session.close();
+  public void delete(Long id) {
+    Location location = new LocationQuery().whereId(id).getSingleResult();
+    if (location != null) {
+      delete(location);
     }
   }
 
@@ -107,7 +102,7 @@ public class LocationDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -118,12 +113,14 @@ public class LocationDAO {
    */
   public static class LocationQuery {
     CriteriaQuery<Location> criteria;
+    List<Predicate> predicates;
     CriteriaBuilder builder;
     Root<Location> root;
 
     public LocationQuery() {
       Session session = DatabaseConnection.getSession();
       builder = session.getCriteriaBuilder();
+      predicates = new ArrayList<>();
       criteria = builder.createQuery(Location.class);
       root = criteria.from(Location.class);
       criteria.select(root);
@@ -135,8 +132,8 @@ public class LocationDAO {
      * @param id The ID to filter by
      * @return This LocationQuery object
      */
-    public LocationQuery whereId(int id) {
-      criteria.where(builder.equal(root.get("id"), id));
+    public LocationQuery whereId(long id) {
+      predicates.add(builder.equal(root.get("id"), id));
       return this;
     }
 
@@ -146,8 +143,8 @@ public class LocationDAO {
      * @param account_id The associated account ID to filter by
      * @return This LocationQuery object
      */
-    public LocationQuery whereAccountId(int account_id) {
-      criteria.where(builder.equal(root.get("account").get("id"), account_id));
+    public LocationQuery whereAccountId(UUID account_id) {
+      predicates.add(builder.equal(root.get("account").get("id"), account_id));
       return this;
     }
 
@@ -158,7 +155,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereAccount(Account account) {
-      criteria.where(builder.equal(root.get("account"), account));
+      predicates.add(builder.equal(root.get("account"), account));
       return this;
     }
 
@@ -169,7 +166,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereName(String name) {
-      criteria.where(builder.equal(root.get("name"), name));
+      predicates.add(builder.equal(root.get("name"), name));
       return this;
     }
 
@@ -180,7 +177,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereNameLike(String name) {
-      criteria.where(builder.like(root.get("name"), "%"+ name + "%"));
+      predicates.add(builder.like(root.get("name"), "%"+ name + "%"));
       return this;
     }
 
@@ -191,7 +188,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereLongitude(Double longitude) {
-      criteria.where(builder.equal(root.get("longitude"), longitude));
+      predicates.add(builder.equal(root.get("longitude"), longitude));
       return this;
     }
 
@@ -202,7 +199,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereLongitudeGE(Double longitude) {
-      criteria.where(builder.greaterThanOrEqualTo(root.get("longitude"), longitude));
+      predicates.add(builder.greaterThanOrEqualTo(root.get("longitude"), longitude));
       return this;
     }
 
@@ -213,7 +210,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereLongitudeLE(Double longitude) {
-      criteria.where(builder.lessThanOrEqualTo(root.get("longitude"), longitude));
+      predicates.add(builder.lessThanOrEqualTo(root.get("longitude"), longitude));
       return this;
     }
 
@@ -224,7 +221,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereLatitude(Double latitude) {
-      criteria.where(builder.equal(root.get("latitude"), latitude));
+      predicates.add(builder.equal(root.get("latitude"), latitude));
       return this;
     }
 
@@ -235,7 +232,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereLatitudeGE(Double latitude) {
-      criteria.where(builder.greaterThanOrEqualTo(root.get("latitude"), latitude));
+      predicates.add(builder.greaterThanOrEqualTo(root.get("latitude"), latitude));
       return this;
     }
 
@@ -246,7 +243,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereLatitudeLE(Double latitude) {
-      criteria.where(builder.lessThanOrEqualTo(root.get("latitude"), latitude));
+      predicates.add(builder.lessThanOrEqualTo(root.get("latitude"), latitude));
       return this;
     }
 
@@ -257,7 +254,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereElevation(Double elevation) {
-      criteria.where(builder.equal(root.get("elevation"), elevation));
+      predicates.add(builder.equal(root.get("elevation"), elevation));
       return this;
     }
 
@@ -268,7 +265,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereElevationGE(Double elevation) {
-      criteria.where(builder.greaterThanOrEqualTo(root.get("elevation"), elevation));
+      predicates.add(builder.greaterThanOrEqualTo(root.get("elevation"), elevation));
       return this;
     }
 
@@ -279,7 +276,7 @@ public class LocationDAO {
      * @return This LocationQuery object
      */
     public LocationQuery whereElevationLE(Double elevation) {
-      criteria.where(builder.lessThanOrEqualTo(root.get("elevation"), elevation));
+      predicates.add(builder.lessThanOrEqualTo(root.get("elevation"), elevation));
       return this;
     }
 
@@ -290,7 +287,9 @@ public class LocationDAO {
      */
     public List<Location> getResults() {
       Session session = DatabaseConnection.getSession();
-      List<Location> locations = session.createQuery(criteria).getResultList();
+      Predicate[] predicateArray = new Predicate[predicates.size()];
+      predicates.toArray(predicateArray);
+      List<Location> locations = session.createQuery(criteria.where(predicateArray)).getResultList();
       session.close();
       return locations;
     }
@@ -302,7 +301,9 @@ public class LocationDAO {
      */
     public Location getSingleResult() {
       Session session = DatabaseConnection.getSession();
-      Location location = session.createQuery(criteria).getResultStream().findFirst().orElse(null);
+      Predicate[] predicateArray = new Predicate[predicates.size()];
+      predicates.toArray(predicateArray);
+      Location location = session.createQuery(criteria.where(predicateArray)).getResultStream().findFirst().orElse(null);
       session.close();
       return location;
     }
@@ -318,7 +319,7 @@ public class LocationDAO {
     return new LocationQuery()
         .getResults();
   }
-
+  // test
   /**
    * Retrieves all Location objects from the database that are associated with a specific location.
    *
@@ -326,7 +327,7 @@ public class LocationDAO {
    * @return A list of all Location objects in the database that are associated with the specified location.
    */
   @Deprecated
-  public List<Location> getByAccountId(int account_id) {
+  public List<Location> getByAccountId(UUID account_id) {
     return new LocationQuery()
         .whereAccountId(account_id)
         .getResults();
@@ -352,7 +353,7 @@ public class LocationDAO {
    * @return The Location object with the specified ID or null if no Location is found.
    */
   @Deprecated
-  public Location getById(int id) {
+  public Location getById(long id) {
     return new LocationQuery()
         .whereId(id)
         .getSingleResult();

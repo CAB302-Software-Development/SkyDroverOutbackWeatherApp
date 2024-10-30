@@ -9,7 +9,6 @@
         "columnIndex": 0,
         "colSpan": 1,
         "rowSpan": 1,
-        "widgetId": "test1",
         "config": {
           "locationId": 1
         }
@@ -20,7 +19,6 @@
       "columnIndex":1,
       "colSpan":1,
       "rowSpan":1,
-      "widgetId": "test2",
       "config": {
         "locationId": 2
       }

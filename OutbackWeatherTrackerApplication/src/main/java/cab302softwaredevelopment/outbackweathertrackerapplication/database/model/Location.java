@@ -2,21 +2,38 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.database.mode
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+class LocationId implements Serializable {
+  private Account account;
+  private Double longitude;
+  private Double latitude;
+  private Double elevation;
+}
+
+@Getter
 @Entity(name = "location")
 @Table(name = "location")
+@IdClass(LocationId.class)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 /**
  * A model class for the Location entity.
@@ -24,48 +41,45 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Location {
 
   /**
-   * The ID of the location.
+   * The unique identifier for the location.
    */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter @Setter
-  private Integer id;
+  @Column(name="id", nullable = false)
+  private Long id;
 
   /**
    * The account that this location is associated with.
    */
+  @Id
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
-  @Getter
   private Account account;
 
   /**
    * The longitude of the location.
    */
+  @Id
   @Column(name="longitude", nullable = false)
-  @Getter
   private Double longitude;
 
   /**
    * The latitude of the location.
    */
+  @Id
   @Column(name="latitude", nullable = false)
-  @Getter
   private Double latitude;
 
   /**
    * The elevation of the location.
    */
+  @Id
   @Column(name="elevation", nullable = false)
-  @Getter
   private Double elevation;
 
   /**
    * The name of the location.
    */
   @Column(name="name", nullable = false)
-  @Getter
   private String name;
 
   public Location() {
@@ -85,8 +99,16 @@ public class Location {
     this.latitude = latitude;
     this.elevation = elevation;
     this.name = name;
+    this.id = generateId();
   }
 
+  /**
+   * Method to generate the hash ID from the composite key fields.
+   * @return The hash value as an integer.
+   */
+  private long generateId() {
+    return Objects.hash(account.getId(), longitude, latitude);
+  }
 
   @Override
   public String toString() {

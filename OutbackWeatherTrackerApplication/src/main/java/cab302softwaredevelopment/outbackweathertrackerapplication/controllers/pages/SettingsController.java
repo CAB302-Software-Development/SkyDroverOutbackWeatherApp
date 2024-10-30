@@ -1,45 +1,90 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.PreferencesService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import java.util.List;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.ResourceBundle;
-
-public class SettingsController implements Initializable {
+public class SettingsController extends BasePage {
     @FXML
-    public ComboBox<String> cboThemes;
-
-    /**
-     * Toggle between the light and dark theme
-     */
+    public VBox vbRoot;
     @FXML
-    public void swapTheme() {
-        switch (PreferencesService.getCurrentTheme()) {
-            case Dark -> PreferencesService.setCurrentTheme(Theme.Light);
-            case Light -> PreferencesService.setCurrentTheme(Theme.Dark);
-        }
-        MainController.refreshDisplay();
+    private ComboBox<Theme> cboThemes;
+    @FXML
+    private ListView<Location> lstLocations;
+    @FXML
+    private Button btnAddLocation, btnDeleteLocation;
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.updateData();
+
+        ObservableList<Theme> options = FXCollections.observableArrayList(Theme.values());
+        cboThemes.setItems(options);
+
+        List<Location> locations = locationService.getCurrentUserLocations();
+        lstLocations.setItems(FXCollections.observableArrayList(locations));
+
+        lstLocations.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(Location item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        updateData();
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        String[] layouts = PreferencesService.getLayouts();
-        ObservableList<String> options = FXCollections.observableArrayList(layouts);
-        cboThemes.setItems(options);
+    public void updateData() {
+        cboThemes.getSelectionModel().select(userService.getCurrentAccount().getCurrentTheme());
+        refreshLocationList();
+    }
+
+    private void refreshLocationList() {
+        List<Location> locations = locationService.getCurrentUserLocations();
+        lstLocations.setItems(FXCollections.observableArrayList(locations));
     }
 
     @FXML
-    private void comboAction(ActionEvent event) {
-        PreferencesService.setSelectedLayout(cboThemes.getValue());
-        MainController.refreshDisplay();
+    private void handleButtonAction(ActionEvent event) {
+        if (event.getSource() == btnAddLocation) {
+            LocationCreateModel location = InputService.getLocation("Select location", "Please select your location on the map");
+            if (location != null) {
+                locationService.addLocationForCurrentUser(location);
+                refreshLocationList();
+            }
+        } else if (event.getSource() == btnDeleteLocation) {
+            Location selectedLocation = lstLocations.getSelectionModel().getSelectedItem();
+            if (selectedLocation != null) {
+                locationService.deleteLocation(selectedLocation);
+                refreshLocationList();
+            }
+        }
+    }
+
+    @FXML
+    private void onSwapTheme() {
+        Theme currentTheme = userService.getCurrentAccount().getCurrentTheme();
+        Theme newTheme = cboThemes.getValue();
+        if (currentTheme != newTheme) {
+            userService.setCurrentTheme(newTheme);
+            MainController.refreshDisplay();
+        }
     }
 }

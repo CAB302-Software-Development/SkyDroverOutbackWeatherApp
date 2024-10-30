@@ -4,8 +4,11 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.Datab
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.hibernate.Session;
 
 /**
@@ -34,7 +37,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -58,7 +61,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -74,7 +77,7 @@ public class AccountDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(int id) {
+  public void delete(UUID id) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
@@ -83,7 +86,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -107,7 +110,7 @@ public class AccountDAO {
       session.getTransaction().commit();
     } catch (Exception e) {
       session.getTransaction().rollback();
-      e.printStackTrace();
+      throw e;
     } finally {
       session.close();
     }
@@ -131,7 +134,7 @@ public class AccountDAO {
    * @return The Account object with the specified ID or null if no Account is found
    */
   @Deprecated
-  public Account getById(int id) {
+  public Account getById(UUID id) {
     return new AccountQuery()
         .whereId(id)
         .getSingleResult();
@@ -155,12 +158,14 @@ public class AccountDAO {
    */
   public static class AccountQuery {
     CriteriaQuery<Account> criteria;
+    List<Predicate> predicates;
     CriteriaBuilder builder;
     Root<Account> root;
 
     public AccountQuery() {
       Session session = DatabaseConnection.getSession();
       builder = session.getCriteriaBuilder();
+      predicates = new ArrayList<>();
       criteria = builder.createQuery(Account.class);
       root = criteria.from(Account.class);
       criteria.select(root);
@@ -172,8 +177,8 @@ public class AccountDAO {
      * @param id The ID to filter by
      * @return This AccountQuery object
      */
-    public AccountQuery whereId(int id) {
-      criteria.where(builder.equal(root.get("id"), id));
+    public AccountQuery whereId(UUID id) {
+      predicates.add(builder.equal(root.get("id"), id));
       return this;
     }
 
@@ -184,18 +189,7 @@ public class AccountDAO {
      * @return This AccountQuery object
      */
     public AccountQuery whereEmail(String email) {
-      criteria.where(builder.equal(root.get("email"), email));
-      return this;
-    }
-
-    /**
-     * Adds an email contains filter to the query.
-     *
-     * @param email The string to filter by
-     * @return This AccountQuery object
-     */
-    public AccountQuery whereEmailLike(String email) {
-      criteria.where(builder.like(root.get("email"), "%" + email + "%"));
+      predicates.add(builder.equal(root.get("email"), email));
       return this;
     }
 
@@ -206,7 +200,7 @@ public class AccountDAO {
      * @return This AccountQuery object
      */
     public AccountQuery wherePreferCelsius(boolean preferCelsius) {
-      criteria.where(builder.equal(root.get("preferCelsius"), preferCelsius));
+      predicates.add(builder.equal(root.get("preferCelsius"), preferCelsius));
       return this;
     }
 
@@ -217,7 +211,9 @@ public class AccountDAO {
      */
     public List<Account> getResults() {
       Session session = DatabaseConnection.getSession();
-      List<Account> accounts = session.createQuery(criteria).getResultList();
+      Predicate[] predicateArray = new Predicate[predicates.size()];
+      predicates.toArray(predicateArray);
+      List<Account> accounts = session.createQuery(criteria.where(predicateArray)).getResultList();
       session.close();
       return accounts;
     }
@@ -229,7 +225,9 @@ public class AccountDAO {
      */
     public Account getSingleResult() {
       Session session = DatabaseConnection.getSession();
-      Account account = session.createQuery(criteria).getResultStream().findFirst().orElse(null);
+      Predicate[] predicateArray = new Predicate[predicates.size()];
+      predicates.toArray(predicateArray);
+      Account account = session.createQuery(criteria.where(predicateArray)).getResultStream().findFirst().orElse(null);
       session.close();
       return account;
     }

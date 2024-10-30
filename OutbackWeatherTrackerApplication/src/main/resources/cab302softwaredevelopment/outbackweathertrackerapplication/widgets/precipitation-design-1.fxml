@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox alignment="CENTER" fillWidth="false" styleClass="precipitation-widget"
+      stylesheets="@../themes/style.css,@../themes/theme-light.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.PrecipitationWidgetController">
+   <VBox alignment="CENTER">
+      <HBox alignment="CENTER_LEFT">
+         <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location"/>
+      </HBox>
+      <Text fx:id="txtPercentage" strokeType="OUTSIDE" strokeWidth="0.0" text="Percentage">
+         <font><Font size="48.0"/></font>
+      </Text>
+      <HBox>
+         <Text fx:id="txtWidgetDescription" strokeType="OUTSIDE" strokeWidth="0.0"
+               text="Chance of precipitation"/>
+      </HBox>
+      <HBox>
+         <padding><Insets top="50.0"/></padding>
+         <Text fx:id="txtTemperature" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperature">
+            <font><Font size="12.0"/></font>
+         </Text>
+      </HBox>
+   </VBox>
+</VBox>

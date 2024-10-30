@@ -1,0 +1,38 @@
+{
+  "currentTheme":"Light",
+  "dashboardLayouts":
+  {
+    "default":[
+      {
+        "widgetType": "CurrentTemp",
+        "rowIndex": 0,
+        "columnIndex": 0,
+        "colSpan": 1,
+        "rowSpan": 1,
+        "widgetId": "test1",
+        "config": {
+          "locationId": -2026310124
+        }
+      },
+      {
+        "widgetType":"CurrentTemp",
+        "rowIndex":0,
+        "columnIndex":1,
+        "colSpan":1,
+        "rowSpan":1,
+        "widgetId": "test2",
+        "config": {
+          "locationId": 975317286
+        }
+      },
+      {
+        "widgetType":"Placeholder",
+        "rowIndex":0,
+        "columnIndex":2,
+        "colSpan":1,
+        "rowSpan":1
+      }
+    ]
+  },
+  "selectedLayout":"default"
+}

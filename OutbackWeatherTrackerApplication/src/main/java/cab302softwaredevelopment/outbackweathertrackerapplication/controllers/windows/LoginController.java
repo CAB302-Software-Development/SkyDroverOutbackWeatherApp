@@ -3,24 +3,25 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LoginState;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import javafx.event.ActionEvent;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class LoginController {
 
     public static final int HEIGHT = 400;
     public static final int WIDTH = 700;
+    public static final String TITLE = "Login";
 
     // Email regex pattern
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -72,13 +73,18 @@ public class LoginController {
     @FXML
     private Text signupTitle;
 
-
-
     private boolean isLogin = true;
 
-    /**
-     * Swaps view to display sign up screen
-     */
+    private UserService userService;
+
+    @FXML
+    public void initialize() {
+        userService = UserService.getInstance();
+    }
+
+
+    // Private front-end logic / helpers
+
     @FXML
     private void switchToSignup() {
         loginPane.setVisible(false);
@@ -88,9 +94,6 @@ public class LoginController {
         isLogin = false;
     }
 
-    /**
-     * Swaps view to display login screen
-     */
     @FXML
     private void switchToLogin() {
         signupPane.setVisible(false);
@@ -115,121 +118,133 @@ public class LoginController {
                 continueToApplication();
             }
         } else if (e.getSource() == guestLinkLogin || e.getSource() == guestLinkSignup) {
-            LoginState.logout();
+            userService.logout();
             continueToApplication();
         }
     }
 
-    public boolean handleLogin(String email, String password) {
-        if (isInvalidEmail(email)) {
-            showErrorMessage("Invalid email format.");
-            return false;
-        }
-
-        if (isInvalidPassword(password)) {
-            showErrorMessage("Password must be at least 8 characters, " +
-                    "include one uppercase letter, one digit, and one special character.");
-            return false;
-        }
-
-        AccountDAO accountDAO = new AccountDAO();
-        Account account = accountDAO.getByEmail(email);
-        if (account == null) {
-            showErrorMessage("No account exists with specified email.");
-            return false;
-        }
-
-        if (!account.verifyPassword(password)) {
-            showErrorMessage("Incorrect password");
-            return false;
-        }
-
-        LoginState.login(account);
-        return true;
-    }
-
-    public boolean handleSignUp(String email, String password) {
-        if (isInvalidEmail(email)) {
-            showErrorMessage("Invalid email format.");
-            return false;
-        }
-
-        if (isInvalidPassword(password)) {
-            showErrorMessage("Password must be at least 8 characters, include one uppercase letter, one digit, and one special character.");
-            return false;
-        }
-
-        AccountDAO accountDAO = new AccountDAO();
-
-        if (accountDAO.getByEmail(email) != null) {
-            showErrorMessage("User already exists with this email.");
-            return false;
-        }
-
-        Account account = new Account(email, password, true);
-
-        accountDAO.insert(account);
-
-        LoginState.login(account);
-
-        return true;
-    }
-
-    /**
-     * Checks if the given email is invalid based on a predefined email pattern.
-     *
-     * @param email The email string to validate.
-     * @return true if the email does not match the pattern, false otherwise.
-     */
-    private boolean isInvalidEmail(String email) {
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        return !pattern.matcher(email).matches();
-    }
-
-    /**
-     * Checks if the given password is invalid based on a predefined password pattern.
-     *
-     * @param password The password string to validate.
-     * @return true if the password does not match the pattern, false otherwise.
-     */
-    private boolean isInvalidPassword(String password) {
-        Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
-        return !pattern.matcher(password).matches();
-    }
-
-    /**
-     * Shows an error message to the corresponding login or sign up screen
-     * @param message Message to be displayed
-     */
     private void showErrorMessage(String message) {
-        if (isLogin) {
-            loginMessageLabel.setText(message);
-            loginMessageLabel.setVisible(true);
-            signupMessageLabel.setVisible(false);
+        if (loginMessageLabel != null && signupMessageLabel != null) {
+            if (isLogin) {
+                loginMessageLabel.setText(message);
+                loginMessageLabel.setVisible(true);
+                signupMessageLabel.setVisible(false);
+            } else {
+                signupMessageLabel.setText(message);
+                signupMessageLabel.setVisible(true);
+                loginMessageLabel.setVisible(false);
+            }
         } else {
-            signupMessageLabel.setText(message);
-            signupMessageLabel.setVisible(true);
-            loginMessageLabel.setVisible(false);
+            Logger.printLog(message);
         }
+
     }
 
-    private void clearInputFields() {
-        emailTextFieldSignup.setText("");
-        emailTextFieldLogin.setText("");
-        passwordTextFieldLogin.setText("");
-        passwordTextFieldSignup.setText("");
-    }
-
-    /**
-     * Closes the login / sign up window and initializes the main application view
-     */
     private void continueToApplication() {
         try {
-            ((Stage) loginPane.getScene().getWindow()).close();
             ApplicationEntry.openMainWindow();
+            ((Stage) loginPane.getScene().getWindow()).close();
         } catch (IOException e) {
             showErrorMessage("Error starting application");
             e.printStackTrace();
         }
+    }
+
+
+    // Public business logic
+
+    /**
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    public boolean handleLogin(String email, String password) {
+        try {
+            if (!validateCredentials(email, password)) return false;
+
+            Account account = (new AccountDAO.AccountQuery())
+                    .whereEmail(email)
+                    .getSingleResult();
+
+            if (account == null) {
+                showErrorMessage("No account exists with specified email.");
+                return false;
+            }
+
+            if (!account.verifyPassword(password)) {
+                showErrorMessage("Incorrect password");
+                return false;
+            }
+
+            userService.login(account);
+            return true;        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    public boolean handleSignUp(String email, String password) {
+        try {
+            if (!validateCredentials(email, password)) return false;
+
+            if ((new AccountDAO.AccountQuery()).whereEmail(email).getSingleResult() != null) {
+                showErrorMessage("User already exists with this email.");
+                return false;
+            }
+
+            AccountDAO accountDAO = new AccountDAO();
+
+            Account newAccount = Account.builder()
+                    .email(email)
+                    .password(password)
+                    .build();
+
+            accountDAO.insert(newAccount);
+
+            Account createdAccount = (new AccountDAO.AccountQuery())
+                    .whereEmail(email)
+                    .getSingleResult();
+
+            if (createdAccount == null) {
+                showErrorMessage("Error creating account.");
+                return false;
+            }
+
+            userService.login(createdAccount);
+
+            return true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    public boolean validateCredentials(String email, String password) {
+        if (!Pattern.compile(EMAIL_PATTERN).matcher(email).matches()) {
+            showErrorMessage("Invalid email format.");
+            return false;
+        }
+
+        if (!Pattern.compile(PASSWORD_PATTERN).matcher(password).matches()) {
+            showErrorMessage("Password must be at least 8 characters, include one uppercase letter, one digit, and one special character.");
+            return false;
+        }
+
+        return true;
     }
 }
