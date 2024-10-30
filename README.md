@@ -195,6 +195,7 @@ This service allows retrieval, creation, deletion, and updating of user data, as
 
 This service allows retrieval, creation, deletion, and updating of crowdsourced data through the RESTful API.
 
+## Endpoints
 ### 1. `createMarker(CrowdsourcedDTO data)`
 
 **Description**: Create a new marker.
