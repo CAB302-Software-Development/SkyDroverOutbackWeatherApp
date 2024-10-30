@@ -8,61 +8,63 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.StackPane?>
 
-<VBox styleClass="wind-widget"
-      stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
-      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WindWidgetController">
-    <HBox>
-        <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location"/>
-    </HBox>
-    <HBox>
-        <VBox prefHeight="185.0" prefWidth="103.0">
-            <HBox prefHeight="9.0" prefWidth="103.0">
-                <VBox.margin>
-                    <Insets bottom="10.0" top="50.0"/>
-                </VBox.margin>
-                <Label fx:id="lblWind" text="Wind" textFill="WHITE">
-                    <font><Font size="18.0"/></font>
-                </Label>
-            </HBox>
-            <HBox>
-                <padding><Insets bottom="10.0"/></padding>
-                <Label fx:id="lblGust" text="Gust" textFill="WHITE">
-                    <font><Font size="18.0"/></font>
-                </Label>
-            </HBox>
-            <HBox>
-                <Label fx:id="lblDirection" text="Direction" textFill="WHITE">
-                    <font><Font size="18.0"/></font>
-                </Label>
-            </HBox>
-        </VBox>
-        <VBox prefHeight="185.0" prefWidth="103.0">
-            <HBox>
-                <VBox.margin><Insets bottom="10.0" top="50.0"/></VBox.margin>
-                <Text fx:id="txtWindspeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
-                    <font><Font size="18.0"/></font>
-                </Text>
-            </HBox>
-            <HBox>
-                <VBox.margin><Insets bottom="5.0"/></VBox.margin>
-                <Text fx:id="txtGustSpeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
-                    <font><Font size="18.0"/></font>
-                    <HBox.margin><Insets bottom="10.0"/></HBox.margin>
-                </Text>
-            </HBox>
-            <HBox>
-                <Text fx:id="txtNSEW" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="NESW">
-                    <font><Font size="18.0"/></font>
-                </Text>
-            </HBox>
-        </VBox>
-    </HBox>
-    <HBox alignment="BOTTOM_RIGHT">
-        <padding><Insets top="10.0"/></padding>
-        <ImageView fitHeight="57.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../images/Group-2.png"/>
-        </ImageView>
-    </HBox>
-</VBox>
+<StackPane fx:id="root" stylesheets="@../themes/style.css,@../themes/theme-light.css"
+           xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
+           fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WindWidgetController">
+    <VBox styleClass="wind-widget" >
+        <HBox>
+            <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location"/>
+        </HBox>
+        <HBox>
+            <VBox prefHeight="185.0" prefWidth="103.0">
+                <HBox prefHeight="9.0" prefWidth="103.0">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="50.0"/>
+                    </VBox.margin>
+                    <Label fx:id="lblWind" text="Wind" textFill="WHITE">
+                        <font><Font size="18.0"/></font>
+                    </Label>
+                </HBox>
+                <HBox>
+                    <padding><Insets bottom="10.0"/></padding>
+                    <Label fx:id="lblGust" text="Gust" textFill="WHITE">
+                        <font><Font size="18.0"/></font>
+                    </Label>
+                </HBox>
+                <HBox>
+                    <Label fx:id="lblDirection" text="Direction" textFill="WHITE">
+                        <font><Font size="18.0"/></font>
+                    </Label>
+                </HBox>
+            </VBox>
+            <VBox prefHeight="185.0" prefWidth="103.0">
+                <HBox>
+                    <VBox.margin><Insets bottom="10.0" top="50.0"/></VBox.margin>
+                    <Text fx:id="txtWindspeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
+                        <font><Font size="18.0"/></font>
+                    </Text>
+                </HBox>
+                <HBox>
+                    <VBox.margin><Insets bottom="5.0"/></VBox.margin>
+                    <Text fx:id="txtGustSpeed" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="km/h">
+                        <font><Font size="18.0"/></font>
+                        <HBox.margin><Insets bottom="10.0"/></HBox.margin>
+                    </Text>
+                </HBox>
+                <HBox>
+                    <Text fx:id="txtNSEW" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="NESW">
+                        <font><Font size="18.0"/></font>
+                    </Text>
+                </HBox>
+            </VBox>
+        </HBox>
+        <HBox alignment="BOTTOM_RIGHT">
+            <padding><Insets top="10.0"/></padding>
+            <ImageView fitHeight="57.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../images/Group-2.png"/>
+            </ImageView>
+        </HBox>
+    </VBox>
+</StackPane>
