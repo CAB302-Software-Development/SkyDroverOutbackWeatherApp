@@ -19,7 +19,7 @@ public class UserDataService {
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 
-    public UserDataService(HttpClient httpClient) {
+    public UserDataService() {
         this.client = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
     }
