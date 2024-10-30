@@ -121,7 +121,6 @@ public class AccountDAO {
    *
    * @return A list of all Account objects in the database
    */
-  @Deprecated
   public List<Account> getAll() {
     return new AccountQuery()
         .getResults();
@@ -190,17 +189,6 @@ public class AccountDAO {
      */
     public AccountQuery whereEmail(String email) {
       predicates.add(builder.equal(root.get("email"), email));
-      return this;
-    }
-
-    /**
-     * Adds an email contains filter to the query.
-     *
-     * @param email The string to filter by
-     * @return This AccountQuery object
-     */
-    public AccountQuery whereEmailLike(String email) {
-      predicates.add(builder.like(root.get("email"), "%" + email + "%"));
       return this;
     }
 

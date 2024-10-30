@@ -1,21 +1,21 @@
 package DBTests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
+import static org.junit.jupiter.api.Assertions.*;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO.HourlyForecastQuery;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-import org.junit.jupiter.api.parallel.Execution;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.*;
 
-@Execution(SAME_THREAD)
-@Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // no test should take longer than 10 seconds
+@Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // No test should take longer than 10 seconds
 public class HourlyForecastDAOTest extends DBTest {
 
   @Test
@@ -149,29 +149,16 @@ public class HourlyForecastDAOTest extends DBTest {
     addLocations();
     addHourlyForecasts();
 
-    // Use a test location
-    Location testLocation = locationsTemplate.get(1);
-
-    // Add relevant forecast
-    HourlyForecast relevantForecast = new HourlyForecast(testLocation, 1725321600, 20.8, 50.0, 10.0,
-        20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
-        10.8, 15.5, 17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9,
-        0.354, 0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-        650.3, 97.1, 896.4, 747.4, 975.3);
-    hourlyForecastDAO.insert(relevantForecast);
-
     // Retrieve the hourly forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
 
-    // Verify the hourly forecasts
-    assertEquals(hourlyForecastsTemplate.size() + 1, hourlyForecasts.size(),
-        "There should be " + (hourlyForecastsTemplate.size() + 1) + " hourly forecast");
-
-    // Retrieve test location forecasts
-    List<HourlyForecast> testForecasts = hourlyForecastDAO.getByLocation(testLocation);
-
-    // Verify the hourly forecasts
-    assertEquals(1, testForecasts.size(), "There should be 1 hourly forecast");
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      assertNotNull(hourlyForecast.getLocation(), "Location should not be null");
+      List<HourlyForecast> forecastsByLocation = hourlyForecastDAO.getByLocation(hourlyForecast.getLocation());
+      for (HourlyForecast locationForecast : forecastsByLocation) {
+        assertEquals(hourlyForecast.getLocation().getId(), locationForecast.getLocation().getId());
+      }
+    }
   }
 
   @Test
@@ -181,29 +168,16 @@ public class HourlyForecastDAOTest extends DBTest {
     addLocations();
     addHourlyForecasts();
 
-    // Use a test location
-    Location testLocation = locationsTemplate.get(1);
-
-    // Add relevant forecast
-    HourlyForecast relevantForecast = new HourlyForecast(testLocation, 1725321600, 20.8, 50.0, 10.0,
-        20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
-        10.8, 15.5, 17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9,
-        0.354, 0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-        650.3, 97.1, 896.4, 747.4, 975.3);
-    hourlyForecastDAO.insert(relevantForecast);
-
     // Retrieve the hourly forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
 
-    // Verify the hourly forecasts
-    assertEquals(hourlyForecastsTemplate.size() + 1, hourlyForecasts.size(),
-        "There should be " + (hourlyForecastsTemplate.size() + 1) + " hourly forecast");
-
-    // Retrieve test location forecasts
-    List<HourlyForecast> testForecasts = hourlyForecastDAO.getByLocationId(testLocation.getId());
-
-    // Verify the hourly forecasts
-    assertEquals(1, testForecasts.size(), "There should be 1 hourly forecast");
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      assertNotNull(hourlyForecast.getLocation(), "Location should not be null");
+      List<HourlyForecast> forecastsByLocation = hourlyForecastDAO.getByLocationId(hourlyForecast.getLocation().getId());
+      for (HourlyForecast locationForecast : forecastsByLocation) {
+        assertEquals(hourlyForecast.getLocation().getId(), locationForecast.getLocation().getId());
+      }
+    }
   }
 
   @Test
@@ -213,70 +187,257 @@ public class HourlyForecastDAOTest extends DBTest {
     addLocations();
     addHourlyForecasts();
 
-    // Use a test location
-    Location testLocation = locationsTemplate.get(1);
+    for (Location location : locationDAO.getAll()) {
+      // Get the hourly forecasts for the location
+      List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getByLocation(location);
 
-    // Add relevant forecast
-    HourlyForecast relevantForecast = new HourlyForecast(testLocation, 1725321600, 20.8, 50.0, 10.0,
-        20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
-        10.8, 15.5, 17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9,
-        0.354, 0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-        650.3, 97.1, 896.4, 747.4, 975.3);
-    hourlyForecastDAO.insert(relevantForecast);
+      int forecastCount = hourlyForecastDAO.getAll().size();
 
-    // Verify the hourly forecasts
-    assertEquals(hourlyForecastsTemplate.size() + 1, hourlyForecastDAO.getAll().size(),
-        "There should be " + (hourlyForecastsTemplate.size() + 1) + " hourly forecasts");
+      // Delete the location
+      locationDAO.delete(location);
 
-    // Delete the location
-    locationDAO.delete(testLocation);
-
-    // Verify the hourly forecasts
-    assertEquals(hourlyForecastsTemplate.size(), hourlyForecastDAO.getAll().size(),
-        "There should be " + hourlyForecastsTemplate.size() + " hourly forecasts");
-
+      // Verify that the hourly forecasts were deleted
+      assertEquals(forecastCount - hourlyForecasts.size(), hourlyForecastDAO.getAll().size());
+    }
   }
 
   @Test
   void testUpdateForecast() {
     addAccounts();
+    addLocations();
+    addHourlyForecasts();
     // Retrieve the hourly forecasts
     List<HourlyForecast> hourlyForecasts = hourlyForecastDAO.getAll();
 
     // Verify the hourly forecasts
-    assertEquals(0, hourlyForecasts.size(), "Hourly Forecasts should be empty");
+    assertNotEquals(0, hourlyForecasts.size(), "Hourly Forecasts should not be empty");
 
-    // Use a test location
-    Location testLocation = locationsTemplate.get(1);
-    locationDAO.insert(testLocation);
+    for (HourlyForecast hourlyForecast : hourlyForecasts) {
+      // Update the forecast
+      HourlyForecast updatedForecast = defaultHourlyForecastBuilder()
+          .location(hourlyForecast.getLocation())
+          .timestamp(hourlyForecast.getTimestamp() + 1)
+          .id(hourlyForecast.getId())
+          .build();
+      hourlyForecastDAO.update(updatedForecast);
 
-    HourlyForecast originalForecast = new HourlyForecast(testLocation, 1725321600, 20.8, 50.0, 10.0,
-        20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
-        10.8, 15.5, 17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9,
-        0.354, 0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-        650.3, 97.1, 896.4, 747.4, 975.3);
-    hourlyForecastDAO.insert(originalForecast);
+      // Retrieve the hourly forecast
+      HourlyForecast hourlyForecastResult = hourlyForecastDAO.getById(hourlyForecast.getId());
 
-    // Retrieve the hourly forecasts
-    hourlyForecasts = hourlyForecastDAO.getAll();
-
-    // Verify that the forecast was added
-    assertEquals(1, hourlyForecasts.size(), "There should be 1 hourly forecast");
-
-    HourlyForecast updatedForecast = new HourlyForecast(testLocation, 1725321601, 20.8, 50.0, 10.0,
-        20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1026.5, 1023.3, 3.0, 0.0, 0.0, 0.0, 16040.0, 0.42, 1.23,
-        10.8, 15.5, 17.6, 19.4, 152.0, 152.0, 153.0, 153.0, 28.4, 25.3, 21.3, 22.3, 21.1, 18.9,
-        0.354, 0.369, 0.386, 0.386, true, 3600.0, 685.0, 596.0, 89.0, 896.4, 685.0, 893.9, 747.4,
-        650.3, 97.1, 896.4, 747.4, 975.3);
-    updatedForecast.setId(hourlyForecasts.get(0).getId());
-    hourlyForecastDAO.update(updatedForecast);
-
-    // Retrieve the hourly forecasts
-    hourlyForecasts = hourlyForecastDAO.getAll();
-
-    // verify that the timestamp was updated
-    assertEquals(updatedForecast.getTimestamp(), hourlyForecasts.get(0).getTimestamp());
+      // Verify the hourly forecast
+      assertEquals(updatedForecast.getTimestamp(), hourlyForecastResult.getTimestamp());
+    }
   }
 
+  @Nested
+  public class HourlyForecastQueryTests {
+    @Test
+    void testGetHourlyForecastById() {
+      testQueryFilterEquals(
+          HourlyForecastQuery::whereId,
+          HourlyForecast::getId
+      );
+    }
 
+    @Test
+    void testGetHourlyForecastByLocation() {
+      testQueryFilterEquals(
+          HourlyForecastQuery::whereLocation,
+          HourlyForecast::getLocation
+      );
+    }
+
+
+    @Test
+    void testGetHourlyForecastByTimestamp() {
+      testQueryFilterEquals(
+          HourlyForecastQuery::whereTimestamp,
+          HourlyForecast::getTimestamp
+      );
+    }
+
+    @Test
+    void testGetHourlyForecastsByTimestampLE() {
+      testQueryFilterLE(
+          HourlyForecastQuery::whereTimestampLE,
+          HourlyForecast::getTimestamp
+      );
+    }
+
+    @Test
+    void testGetHourlyForecastsByTimestampGE() {
+      testQueryFilterGE(
+          HourlyForecastQuery::whereTimestampGE,
+          HourlyForecast::getTimestamp
+      );
+    }
+
+    @Test
+    void testGetHourlyForecastsByTimestampLEGE() {
+      testQueryFilterLEGE(
+          "timestamp",
+          HourlyForecast::getTimestamp
+      );
+    }
+
+    @TestFactory
+    Stream<DynamicTest> dynamicTestGetHourlyForecastsDesc() {
+      addAccounts();
+      addLocations();
+      addHourlyForecasts();
+      return Arrays.stream(HourlyForecast.class.getDeclaredFields())
+          .filter(field -> Comparable.class.isAssignableFrom(field.getType()))
+          .map(field -> DynamicTest.dynamicTest("Field: " + field.getName(),
+              () -> testGetHourlyForecastsOrdered(field, false)));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> dynamicTestGetHourlyForecastsAsc() {
+      addAccounts();
+      addLocations();
+      addHourlyForecasts();
+      return Arrays.stream(HourlyForecast.class.getDeclaredFields())
+          .filter(field -> Comparable.class.isAssignableFrom(field.getType()))
+          .map(field -> DynamicTest.dynamicTest("Field: " + field.getName(),
+              () -> testGetHourlyForecastsOrdered(field, true)));
+    }
+
+    void testGetHourlyForecastsOrdered(Field field, boolean ascending) {
+      // Make the field accessible for testing purposes
+      field.setAccessible(true);
+
+      // Retrieve the hourly forecast sorted in the appropriate order
+      HourlyForecastQuery query = new HourlyForecastQuery();
+      if (ascending) {
+        query.addOrderAsc(field.getName());
+      } else {
+        query.addOrderDesc(field.getName());
+      }
+      List<HourlyForecast> hourlyForecasts = query.getResults();
+
+      // Verify the hourly forecast is not empty
+      assert !hourlyForecasts.isEmpty();
+
+      // Check if the list is sorted in descending order
+      for (int i = 0; i < hourlyForecasts.size() - 1; i++) {
+        try {
+          Comparable<Object> current = (Comparable<Object>) field.get(hourlyForecasts.get(i));
+          Comparable<Object> next = (Comparable<Object>) field.get(hourlyForecasts.get(i + 1));
+          if (ascending) {
+            assertTrue(current.compareTo(next) <= 0);
+          } else {
+            assertTrue(current.compareTo(next) >= 0);
+          }
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
+        }
+      }
+
+    }
+    <T> void testQueryFilterEquals(
+        BiConsumer<HourlyForecastQuery, T> conditionSetter,
+        Function<HourlyForecast, T> fieldGetter
+    ) {
+      // Insert the new hourly forecasts
+      addAccounts();
+      addLocations();
+      addHourlyForecasts();
+
+      for (HourlyForecast hourlyForecast : hourlyForecastDAO.getAll()) {
+        HourlyForecastQuery query = new HourlyForecastQuery();
+
+        // Apply the condition to the query using the field value from hourlyForecast
+        conditionSetter.accept(query, fieldGetter.apply(hourlyForecast));
+
+        List<HourlyForecast> hourlyForecasts = query.getResults();
+
+        assert !hourlyForecasts.isEmpty();
+        for (HourlyForecast forecast : hourlyForecasts) {
+          assertEquals(fieldGetter.apply(hourlyForecast), fieldGetter.apply(forecast));
+        }
+      }
+    }
+
+    <T extends Comparable<T>> void testQueryFilterLE(
+        BiConsumer<HourlyForecastQuery, T> conditionSetter,
+        Function<HourlyForecast, T> fieldGetter
+    ) {
+      // Insert the new hourly forecasts
+      addAccounts();
+      addLocations();
+      addHourlyForecasts();
+
+      for (HourlyForecast hourlyForecast : hourlyForecastDAO.getAll()) {
+        HourlyForecastQuery query = new HourlyForecastQuery();
+
+        // Apply the condition to the query using the field value from hourlyForecast
+        conditionSetter.accept(query, fieldGetter.apply(hourlyForecast));
+
+        List<HourlyForecast> hourlyForecasts = query.getResults();
+
+        assert !hourlyForecasts.isEmpty();
+        for (HourlyForecast forecast : hourlyForecasts) {
+          assertTrue(fieldGetter.apply(forecast).compareTo(fieldGetter.apply(hourlyForecast)) <= 0);
+        }
+      }
+    }
+
+    <T extends Comparable<T>> void testQueryFilterGE(
+        BiConsumer<HourlyForecastQuery, T> conditionSetter,
+        Function<HourlyForecast, T> fieldGetter
+    ) {
+      // Insert the new hourly forecasts
+      addAccounts();
+      addLocations();
+      addHourlyForecasts();
+
+      for (HourlyForecast hourlyForecast : hourlyForecastDAO.getAll()) {
+        HourlyForecastQuery query = new HourlyForecastQuery();
+
+        // Apply the condition to the query using the field value from hourlyForecast
+        conditionSetter.accept(query, fieldGetter.apply(hourlyForecast));
+
+        List<HourlyForecast> hourlyForecasts = query.getResults();
+
+        assert !hourlyForecasts.isEmpty();
+        for (HourlyForecast forecast : hourlyForecasts) {
+          assertTrue(fieldGetter.apply(forecast).compareTo(fieldGetter.apply(hourlyForecast)) >= 0);
+        }
+      }
+    }
+
+    <T extends Comparable<T>> void testQueryFilterLEGE( // This also tests predicate functionality
+        String fieldName,
+        Function<HourlyForecast, T> fieldGetter
+    ) {
+      // Insert the new hourly forecasts
+      addAccounts();
+      addLocations();
+      addHourlyForecasts();
+
+      for (HourlyForecast hourlyForecast1 : hourlyForecastDAO.getAll()) {
+        for (HourlyForecast hourlyForecast2 : hourlyForecastDAO.getAll()) {
+          HourlyForecastQuery query = new HourlyForecastQuery();
+
+          // Apply the condition to the query using the field value from hourlyForecast
+          query.whereFieldLE(fieldName, fieldGetter.apply(hourlyForecast1));
+          query.whereFieldGE(fieldName, fieldGetter.apply(hourlyForecast2));
+
+          List<HourlyForecast> hourlyForecasts = query.getResults();
+
+          // If the first field is less than the second field, the result should be empty
+          if (fieldGetter.apply(hourlyForecast1).compareTo(fieldGetter.apply(hourlyForecast2)) < 0) {
+            assert hourlyForecasts.isEmpty();
+          } else {
+            assert !hourlyForecasts.isEmpty();
+            // Check that the result is within the bounds
+            for (HourlyForecast forecast : hourlyForecasts) {
+              assertTrue(fieldGetter.apply(forecast).compareTo(fieldGetter.apply(hourlyForecast1)) <= 0);
+              assertTrue(fieldGetter.apply(forecast).compareTo(fieldGetter.apply(hourlyForecast2)) >= 0);
+            }
+          }
+        }
+      }
+    }
+  }
 }

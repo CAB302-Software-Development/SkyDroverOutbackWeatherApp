@@ -5,7 +5,6 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
     requires jdk.jdi;
-    requires java.sql;
     requires com.google.gson;
     requires java.net.http;
     requires org.hibernate.orm.core;

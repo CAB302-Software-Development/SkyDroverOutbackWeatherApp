@@ -1,19 +1,5 @@
 # Outback Weather Tracker
 
-## Overview
-
-**Outback Weather Tracker** is a Java-based application designed to track and analyze detailed weather events for the outback. This project provides a comprehensive solution for monitoring weather conditions and managing data relevant to the unique environment of the outback.
-
-## Features
-
-- **Detailed Weather Tracking**: Monitor and record various weather parameters including temperature, humidity, wind speed, and precipitation.
-- **Historical Data Analysis**: Analyze historical weather data to identify trends and patterns.
-- **Real-Time Updates**: Receive real-time updates and alerts for significant weather events.
-- **User-Friendly Interface**: Easy-to-use graphical interface for interacting with the weather data.
-- **Data Export**: Export weather data for use in reports and further analysis.
-
-## Getting Started
-
 ### Prerequisites
 
 - Java Development Kit (JDK) amazon corretto 21
@@ -36,67 +22,282 @@
 1. run test mvn command:
    ```bash
    mvn test
+##
+# REST API Services
 
-# Project Dependencies
+This document provides an overview of the **User Data Service** endpoints, accessible via HTTP methods for user data management and authentication.
 
-This document outlines the Maven dependencies used in the **Outback Weather Tracker** project. Each dependency is crucial for the project's functionality and is managed through Maven.
+## User Api Service
 
-## Dependencies List
+This service allows retrieval, creation, deletion, and updating of user data, as well as authentication. It supports basic user management and authentication through a RESTful API.
 
-### 1. SQLite JDBC
-- **GroupId**: `org.xerial`
-- **ArtifactId**: `sqlite-jdbc`
-- **Version**: `3.46.0.1`
-- **Maven Repository**: [SQLite JDBC](https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc)
+## Endpoints
 
-### 2. JavaFX Controls
-- **GroupId**: `org.openjfx`
-- **ArtifactId**: `javafx-controls`
-- **Version**: `21`
-- **Maven Repository**: [JavaFX Controls](https://mvnrepository.com/artifact/org.openjfx/javafx-controls/21)
+### 1. `getAllUsers()`
 
-### 3. JavaFX FXML
-- **GroupId**: `org.openjfx`
-- **ArtifactId**: `javafx-fxml`
-- **Version**: `21`
-- **Maven Repository**: [JavaFX FXML](https://mvnrepository.com/artifact/org.openjfx/javafx-fxml/21)
+**Description**: Retrieve all users' data.
 
-### 4. ControlsFX
-- **GroupId**: `org.controlsfx`
-- **ArtifactId**: `controlsfx`
-- **Version**: `11.1.2`
-- **Maven Repository**: [ControlsFX](https://mvnrepository.com/artifact/org.controlsfx/controlsfx/11.1.2)
+- **Method**: `GET`
+- **Endpoint**: `/getAllUsers`
+- **Response**: List of `UserDataDTO`
+- **Throws**: Exception on error
 
-### 5. BootstrapFX Core
-- **GroupId**: `org.kordamp.bootstrapfx`
-- **ArtifactId**: `bootstrapfx-core`
-- **Version**: `0.4.0`
-- **Maven Repository**: [BootstrapFX Core](https://mvnrepository.com/artifact/org.kordamp.bootstrapfx/bootstrapfx-core/0.4.0)
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+ 
+ userApiService.getAllUsers();
+```
+##
 
-### 6. JUnit Jupiter API
-- **GroupId**: `org.junit.jupiter`
-- **ArtifactId**: `junit-jupiter-api`
-- **Version**: `${junit.version}`
-- **Scope**: `test`
-- **Maven Repository**: [JUnit Jupiter API](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
+### 2. `getUserByUsername(String username)` 
+**Description**: Retrieve user data by username. 
+- **Method**: `GET`
+- **Endpoint**: `/getUserByUsername/{username}` 
+- **Parameters**: 
+	- `username` (String): the username to fetch. 
+- **Response**: `AllUserDataModel` 
+- **Throws**: Exception on error 
+- **Code Example**: 
+```java
+ UserApiService userApiService = new UserApiService();
+ 
+ userApiService.getUserByUsername("username");
+```
+##
+### 3. `getUserById(String id)`
 
-### 7. JUnit Jupiter Engine
-- **GroupId**: `org.junit.jupiter`
-- **ArtifactId**: `junit-jupiter-engine`
-- **Version**: `${junit.version}`
-- **Scope**: `test`
-- **Maven Repository**: [JUnit Jupiter Engine](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine)
+**Description**: Retrieve user data by ID.
 
-### 8. TestFX Core
-- **GroupId**: `org.testfx`
-- **ArtifactId**: `testfx-core`
-- **Version**: `4.0.16-alpha`
-- **Scope**: `test`
-- **Maven Repository**: [TestFX Core](https://mvnrepository.com/artifact/org.testfx/testfx-core/4.0.16-alpha)
+- **Method**: `GET`
+- **Endpoint**: `/getUserById/{id}`
+- **Parameters**:
+  - `id` (String): User ID.
+- **Response**: `AllUserDataModel`
+- **Throws**: Exception on error
 
-### 9. TestFX JUnit5
-- **GroupId**: `org.testfx`
-- **ArtifactId**: `testfx-junit5`
-- **Version**: `4.0.16-alpha`
-- **Scope**: `test`
-- **Maven Repository**: [TestFX JUnit5](https://mvnrepository.com/artifact/org.testfx/testfx-junit5/4.0.16-alpha)
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+ 
+ userApiService.getUserById("user id");
+```
+##
+### 4. `createUser(CreateUserDTO userDTO)`
+
+**Description**: Create a new user.
+
+- **Method**: `POST`
+- **Endpoint**: `/createUser`
+- **Parameters**:
+  - `userDTO` (CreateUserDTO): New user data.
+- **Response**: `CreateUserDTO`
+- **Throws**: Exception on error
+
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+ CreateUserDTO createUserDTO = new CreateUserDTO();
+
+ createUserDTO.setUserName("my username");
+ createUserDTO.setUserEmail("my email");
+ createUserDTO.setUserPassword("my password");
+ createUserDTO.setUserTheme("my theme");
+
+ userApiService.createUser(createUserDTO);
+```
+##
+### 5. `login(UserLoginRequestDTO loginRequest)`
+
+**Description**: Log in a user and receive a JWT token.
+
+- **Method**: `POST`
+- **Endpoint**: `/login`
+- **Parameters**:
+  - `loginRequest` (UserLoginRequestDTO): Contains username and password.
+- **Response**: JWT token (`String`)
+- **Throws**: Exception on login failure
+
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+ UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
+
+ userLoginRequestDTO.setUserName("my username");
+ userLoginRequestDTO.setPassword("my password");
+
+ userApiService.login(userLoginRequestDTO);
+```
+##
+### 6. `deleteUser(String userId, String jwtToken)`
+
+**Description**: Delete a user by ID.
+
+- **Method**: `DELETE`
+- **Endpoint**: `/deleteUser`
+- **Parameters**:
+  - `userId` (String): ID of the user to delete.
+  - `jwtToken` (String): Authorization token.
+- **Response**: `true` if successful, `false` otherwise
+- **Throws**: Exception on error
+
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+
+ userApiService.deleteUser("my id", "my jwt token");
+```
+##
+### 7. `updateUser(String userId, UpdateUserDTO userData, String jwtToken)`
+
+**Description**: Update a user’s information.
+
+- **Method**: `PUT`
+- **Endpoint**: `/updateUser/{userId}`
+- **Parameters**:
+  - `userId` (String): User ID to update.
+  - `userData` (AllUserDTO): Updated user information.
+  - `jwtToken` (String): Authorization token.
+- **Response**: Updated `CreateUserDTO`
+- **Throws**: Exception on error
+
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+ UpdateUserDTO updateUserDTOUserDTO = new UpdateUserDTO();
+
+ updateUserDTOUserDTO.setUsername("my updated username");
+ updateUserDTOUserDTO.setUserEmail("my updated email");
+ updateUserDTOUserDTO.setUserTheme("my updated theme");
+ updateUserDTOUserDTO.setUserPassword("my updated password");
+
+ userApiService.updateUser(updateUserDTOUserDTO);
+```
+##
+### 8. `getCurrentUser(String jwtToken)`
+
+**Description**: Retrieve current user data using a JWT token.
+
+- **Method**: `GET`
+- **Endpoint**: `/getUser`
+- **Parameters**:
+  - `jwtToken` (String): Authorization token.
+- **Response**: `UserModel`
+- **Throws**: Exception on error
+
+**Code Example**:
+```java
+ UserApiService userApiService = new UserApiService();
+ 
+ userApiService.getCurrentUser("my jwt token");
+```
+## Crowdsourced Api Service
+
+This service allows retrieval, creation, deletion, and updating of crowdsourced data through the RESTful API.
+
+## Endpoints
+### 1. `createMarker(CrowdsourcedDTO data)`
+
+**Description**: Create a new marker.
+
+- **Parameters**:
+  - `data` (CrowdsourcedDTO): The data to create a marker.
+- **Response**: `CrowdsourcedModel` with created data.
+- **Throws**: Exception
+
+**Code Example**:
+```java
+ CrowdsourcedApiService crowdsourcedApiService = new CrowdsourcedApiService();
+ CrowdsourcedDTO crowdsourcedDTO = new CrowdsourcedDTO();
+
+ crowdsourcedDTO.setUserName("my username");
+ crowdsourcedDTO.setLatitude(-27.4698);
+ crowdsourcedDTO.setLongitude(153.0251);
+ crowdsourcedDTO.setLocation("my location");
+ crowdsourcedDTO.setActualTemp(28);
+ crowdsourcedDTO.setFeelsLikeTemp(24);
+
+ crowdsourcedApiService.createMarker(crowdsourcedDTO);
+```
+##
+### 2. `getMarkerByUserName(String userName)`
+
+**Description**: Get marker by user name.
+
+- **Parameters**:
+  - `userName` (String): The user name to search.
+- **Response**: `Optional<CrowdsourcedModel>`
+- **Throws**: Exception
+
+**Code Example**:
+```java
+ CrowdsourcedApiService crowdsourcedApiService = new CrowdsourcedApiService();
+ 
+ crowdsourcedApiService.getMarkerByUserName("my username");
+```
+##
+### 3. `getMarkerByTempRange(int minTemp, int maxTemp)`
+
+**Description**: Get markers by temperature range.
+
+- **Parameters**:
+  - `minTemp` (int): Minimum temperature.
+  - `maxTemp` (int): Maximum temperature.
+- **Response**: `Optional<List<CrowdsourcedModel>>` within range.
+- **Throws**: Exception
+
+**Code Example**:
+```java
+ CrowdsourcedApiService crowdsourcedApiService = new CrowdsourcedApiService();
+ 
+ crowdsourcedApiService.getMarkerByTempRange(10, 34);
+```
+##
+### 4. `deleteMarkerById(String id)`
+
+**Description**: Delete marker by ID.
+
+- **Parameters**:
+  - `id` (String): The marker ID to delete.
+- **Response**: `true` if deletion was successful, `false` otherwise.
+- **Throws**: Exception
+
+**Code Example**:
+```java
+ CrowdsourcedApiService crowdsourcedApiService = new CrowdsourcedApiService();
+
+ crowdsourcedApiService.deleteMarkerById("my marker id");
+```
+##
+### 5. `getMarkerByGeoRange(double minLat, double maxLat, double minLon, double maxLon)`
+
+**Description**: Get markers by geographic range.
+
+- **Parameters**:
+  - `minLat` (double): Minimum latitude.
+  - `maxLat` (double): Maximum latitude.27.
+  - `minLon` (double): Minimum longitude.
+  - `maxLon` (double): Maximum longitude.
+- **Response**: Optional list of `CrowdsourcedModel` within range.
+- **Throws**: Exception
+
+**Code Example**:
+```java
+ CrowdsourcedApiService crowdsourcedApiService = new CrowdsourcedApiService();
+
+ crowdsourcedApiService.getMarkerByGeoRange(-27.4698, -28.4322, 153.0251, 156.2411);
+```
+##
+### 6. `getLatestFilteredData()`
+
+**Description**: Get the latest filtered markers.
+
+- **Response**: List of `CrowdsourcedDTO` with the latest data.
+- **Throws**: Exception
+
+**Code Example**:
+```java
+ CrowdsourcedApiService crowdsourcedApiService = new CrowdsourcedApiService();
+
+ crowdsourcedApiService.getLatestFilteredData();
+```

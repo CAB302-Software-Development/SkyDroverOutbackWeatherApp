@@ -5,15 +5,21 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.D
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO.HourlyForecastQuery;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast.DailyForecastBuilder;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast.HourlyForecastBuilder;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.net.http.HttpClient;
+import java.net.http.HttpConnectTimeoutException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
@@ -27,36 +33,43 @@ import java.util.List;
  */
 public class Sdk {
 
-  //final String apiHost = "http://api.open-meteo.com/";
-  //final String apiHost = "http://127.0.0.1:8080/";
-  static List<String> apiHosts = new ArrayList<String>(Arrays.asList("http://api.open-meteo.com/","http://cyphix.ddns.net:8000/"));
-  static String apiHost = apiHosts.getFirst();
+  static List<URI> apiURLs;
+
+  static {
+    try {
+      apiURLs = new ArrayList<>(Arrays.asList(new URI("http://cyphix.ddns.net:8000/"),new URI("http://api.open-meteo.com/")));
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  static URI apiURL = apiURLs.getFirst();
   public Sdk() {
   }
 
   private static void rotateApiHost() {
-    String oldApiHost = apiHosts.getFirst();
-    apiHosts.removeFirst();
-    apiHosts.add(oldApiHost);
-    apiHost = apiHosts.getFirst();
+    URI oldApiHost = apiURLs.getFirst();
+    apiURLs.removeFirst();
+    apiURLs.add(oldApiHost);
+    apiURL = apiURLs.getFirst();
   }
 
-  /**
-   * Retrieves the daily forecasts for a location from the OpenMeteo API.
-   *
-   * @param location The location to retrieve the daily forecast for.
-   * @param futureDays The number of days in the future to retrieve the forecast for.
-   * @param pastDays The number of days in the past to retrieve the forecast for.
-   * @return A list of DailyForecast objects representing the forecast.
-   */
-  public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
+  public List<DailyForecastBuilder> getDailyForecastBuilders(Location location, int futureDays, int pastDays){
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
     double elevation = location.getElevation();
 
+    // Test that the server may exist before trying to connect
+    try {
+      InetAddress.getByName(apiURL.getHost());
+    } catch (UnknownHostException e) {
+      // The server does not exist
+      rotateApiHost();
+    }
+
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(
-            apiHost
+            apiURL
                 + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
@@ -96,7 +109,11 @@ public class Sdk {
     } catch (ConnectException e) {
       // Unable to connect to the server
       rotateApiHost();
-      return getDailyForecast(location, futureDays, pastDays);
+      return getDailyForecastBuilders(location, futureDays, pastDays);
+    } catch(HttpConnectTimeoutException e){
+      // Timeout
+      rotateApiHost();
+      return getDailyForecastBuilders(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -106,7 +123,7 @@ public class Sdk {
     if (response.statusCode() != 200) {
       // Server returned an error
       rotateApiHost();
-      return getDailyForecast(location, futureDays, pastDays);
+      return getDailyForecastBuilders(location, futureDays, pastDays);
     }
 
     // parse as json
@@ -116,45 +133,60 @@ public class Sdk {
     JsonObject daily = jsonObject.getAsJsonObject("daily");
     // replace all NULL values from sub-arrays with -1
     for (String key : daily.keySet()) {
-      if (daily.get(key).isJsonArray()) {
-        for (int i = 0; i < daily.getAsJsonArray(key).size(); i++) {
-          if (daily.getAsJsonArray(key).get(i).isJsonNull()) {
-            daily.getAsJsonArray(key).set(i, new JsonPrimitive(Double.NaN));
-          }
+      if (!daily.get(key).isJsonArray()) continue;
+      for (int i = 0; i < daily.getAsJsonArray(key).size(); i++) {
+        if (daily.getAsJsonArray(key).get(i).isJsonNull()) {
+          daily.getAsJsonArray(key).set(i, new JsonPrimitive(Double.NaN));
         }
       }
     }
 
     // time represents the number of samples
     int totalEntries = daily.getAsJsonArray("time").size();
-    List<DailyForecast> dailyForecasts = new ArrayList<>();
+    List<DailyForecast.DailyForecastBuilder> dailyForecasts = new ArrayList<>();
     for (int i = 0; i < totalEntries; i++) {
-      DailyForecast dailyForecast = new DailyForecast(
-          location,
-          daily.getAsJsonArray("time").get(i).getAsInt(),
-          daily.getAsJsonArray("weather_code").get(i).getAsInt(),
-          daily.getAsJsonArray("temperature_2m_max").get(i).getAsDouble(),
-          daily.getAsJsonArray("temperature_2m_min").get(i).getAsDouble(),
-          daily.getAsJsonArray("apparent_temperature_max").get(i).getAsDouble(),
-          daily.getAsJsonArray("apparent_temperature_min").get(i).getAsDouble(),
-          daily.getAsJsonArray("sunrise").get(i).getAsInt(),
-          daily.getAsJsonArray("sunset").get(i).getAsInt(),
-          daily.getAsJsonArray("daylight_duration").get(i).getAsDouble(),
-          daily.getAsJsonArray("sunshine_duration").get(i).getAsDouble(),
-          daily.getAsJsonArray("uv_index_max").get(i).getAsDouble(),
-          daily.getAsJsonArray("uv_index_clear_sky_max").get(i).getAsDouble(),
-          daily.getAsJsonArray("precipitation_sum").get(i).getAsDouble(),
-          daily.getAsJsonArray("rain_sum").get(i).getAsDouble(),
-          daily.getAsJsonArray("showers_sum").get(i).getAsDouble(),
-          daily.getAsJsonArray("snowfall_sum").get(i).getAsDouble(),
-          daily.getAsJsonArray("precipitation_hours").get(i).getAsDouble(),
-          daily.getAsJsonArray("wind_speed_10m_max").get(i).getAsDouble(),
-          daily.getAsJsonArray("wind_gusts_10m_max").get(i).getAsDouble(),
-          daily.getAsJsonArray("wind_direction_10m_dominant").get(i).getAsDouble(),
-          daily.getAsJsonArray("shortwave_radiation_sum").get(i).getAsDouble(),
-          daily.getAsJsonArray("et0_fao_evapotranspiration").get(i).getAsDouble()
-      );
+      DailyForecast.DailyForecastBuilder dailyForecast = DailyForecast.builder()
+          .location(location)
+          .timestamp(daily.getAsJsonArray("time").get(i).getAsInt())
+          .weather_code(daily.getAsJsonArray("weather_code").get(i).getAsInt())
+          .temperature_2m_max(daily.getAsJsonArray("temperature_2m_max").get(i).getAsDouble())
+          .temperature_2m_min(daily.getAsJsonArray("temperature_2m_min").get(i).getAsDouble())
+          .apparent_temperature_max(daily.getAsJsonArray("apparent_temperature_max").get(i).getAsDouble())
+          .apparent_temperature_min(daily.getAsJsonArray("apparent_temperature_min").get(i).getAsDouble())
+          .sunrise(daily.getAsJsonArray("sunrise").get(i).getAsInt())
+          .sunset(daily.getAsJsonArray("sunset").get(i).getAsInt())
+          .daylight_duration(daily.getAsJsonArray("daylight_duration").get(i).getAsDouble())
+          .sunshine_duration(daily.getAsJsonArray("sunshine_duration").get(i).getAsDouble())
+          .uv_index_max(daily.getAsJsonArray("uv_index_max").get(i).getAsDouble())
+          .uv_index_clear_sky_max(daily.getAsJsonArray("uv_index_clear_sky_max").get(i).getAsDouble())
+          .precipitation_sum(daily.getAsJsonArray("precipitation_sum").get(i).getAsDouble())
+          .rain_sum(daily.getAsJsonArray("rain_sum").get(i).getAsDouble())
+          .showers_sum(daily.getAsJsonArray("showers_sum").get(i).getAsDouble())
+          .snowfall_sum(daily.getAsJsonArray("snowfall_sum").get(i).getAsDouble())
+          .precipitation_hours(daily.getAsJsonArray("precipitation_hours").get(i).getAsDouble())
+          .wind_speed_10m_max(daily.getAsJsonArray("wind_speed_10m_max").get(i).getAsDouble())
+          .wind_gusts_10m_max(daily.getAsJsonArray("wind_gusts_10m_max").get(i).getAsDouble())
+          .wind_direction_10m_dominant(daily.getAsJsonArray("wind_direction_10m_dominant").get(i).getAsDouble())
+          .shortwave_radiation_sum(daily.getAsJsonArray("shortwave_radiation_sum").get(i).getAsDouble())
+          .et0_fao_evapotranspiration(daily.getAsJsonArray("et0_fao_evapotranspiration").get(i).getAsDouble());
       dailyForecasts.add(dailyForecast);
+    }
+    return dailyForecasts;
+  }
+
+  /**
+   * Retrieves the daily forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the daily forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of DailyForecast objects representing the forecast.
+   */
+  public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
+    List<DailyForecast.DailyForecastBuilder> dailyForecastBuilders = getDailyForecastBuilders(location, futureDays, pastDays);
+    List<DailyForecast> dailyForecasts = new ArrayList<>();
+    for (DailyForecast.DailyForecastBuilder dailyForecastBuilder : dailyForecastBuilders) {
+      dailyForecasts.add(dailyForecastBuilder.build());
     }
     return dailyForecasts;
   }
@@ -186,7 +218,6 @@ public class Sdk {
         .whereLocation(location)
         .getResults();
 
-    // TODO: fix this garbage
     // Delete all daily forecasts with the same location and a timestamp within range
     for (DailyForecast forecast : existingForecasts) {
       dailyForecastDAO.delete(forecast);
@@ -204,16 +235,24 @@ public class Sdk {
    * @param location The location to retrieve the hourly forecast for.
    * @param futureDays The number of days in the future to retrieve the forecast for.
    * @param pastDays The number of days in the past to retrieve the forecast for.
-   * @return A list of HourlyForecast objects representing the forecast.
+   * @return A list of HourlyForecastBuilders representing the forecasts.
    */
-  public List<HourlyForecast> getHourlyForecast(Location location, int futureDays, int pastDays) {
+  public List<HourlyForecastBuilder> getHourlyForecastBuilders(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
     double elevation = location.getElevation();
 
+    // Test that the server may exist before trying to connect
+    try {
+      InetAddress.getByName(apiURL.getHost());
+    } catch (UnknownHostException e) {
+      // The server does not exist
+      rotateApiHost();
+    }
+
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(
-             apiHost
+            apiURL
                 + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
@@ -283,7 +322,11 @@ public class Sdk {
       // Unable to connect to the server
       // Get the next host to try
       rotateApiHost();
-      return getHourlyForecast(location, futureDays, pastDays);
+      return getHourlyForecastBuilders(location, futureDays, pastDays);
+    } catch(HttpConnectTimeoutException e){
+      // Timeout
+      rotateApiHost();
+      return getHourlyForecastBuilders(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -293,7 +336,7 @@ public class Sdk {
     if (response.statusCode() != 200) {
       // Server returned an error
       rotateApiHost();
-      return getHourlyForecast(location, futureDays, pastDays);
+      return getHourlyForecastBuilders(location, futureDays, pastDays);
     }
 
     // parse as json
@@ -302,75 +345,91 @@ public class Sdk {
     JsonObject hourly = jsonObject.getAsJsonObject("hourly");
     // replace all NULL values from sub-arrays with -1
     for (String key : hourly.keySet()) {
-      if (hourly.get(key).isJsonArray()) {
-        for (int i = 0; i < hourly.getAsJsonArray(key).size(); i++) {
-          if (hourly.getAsJsonArray(key).get(i).isJsonNull()) {
-            hourly.getAsJsonArray(key).set(i, new JsonPrimitive(Double.NaN));
-          }
+      if (!hourly.get(key).isJsonArray()) continue;
+      for (int i = 0; i < hourly.getAsJsonArray(key).size(); i++) {
+        if (hourly.getAsJsonArray(key).get(i).isJsonNull()) {
+          hourly.getAsJsonArray(key).set(i, new JsonPrimitive(Double.NaN));
         }
       }
     }
 
-    // time represents the number of samples
+    // Time represents the number of samples
     int totalEntries = hourly.getAsJsonArray("time").size();
-    List<HourlyForecast> hourlyForecasts = new ArrayList<>();
+    List<HourlyForecast.HourlyForecastBuilder> hourlyForecasts = new ArrayList<>();
     for (int i = 0; i < totalEntries; i++) {
-      HourlyForecast hourlyForecast = new HourlyForecast(
-          location,
-          hourly.getAsJsonArray("time").get(i).getAsInt(),
-          hourly.getAsJsonArray("temperature_2m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("relative_humidity_2m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("dew_point_2m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("apparent_temperature").get(i).getAsDouble(),
-          hourly.getAsJsonArray("precipitation").get(i).getAsDouble(),
-          hourly.getAsJsonArray("rain").get(i).getAsDouble(),
-          hourly.getAsJsonArray("showers").get(i).getAsDouble(),
-          hourly.getAsJsonArray("snowfall").get(i).getAsDouble(),
-          hourly.getAsJsonArray("snow_depth").get(i).getAsDouble(),
-          hourly.getAsJsonArray("weather_code").get(i).getAsInt(),
-          hourly.getAsJsonArray("pressure_msl").get(i).getAsDouble(),
-          hourly.getAsJsonArray("surface_pressure").get(i).getAsDouble(),
-          hourly.getAsJsonArray("cloud_cover").get(i).getAsDouble(),
-          hourly.getAsJsonArray("cloud_cover_low").get(i).getAsDouble(),
-          hourly.getAsJsonArray("cloud_cover_mid").get(i).getAsDouble(),
-          hourly.getAsJsonArray("cloud_cover_high").get(i).getAsDouble(),
-          hourly.getAsJsonArray("visibility").get(i).getAsDouble(),
-          hourly.getAsJsonArray("et0_fao_evapotranspiration").get(i).getAsDouble(),
-          hourly.getAsJsonArray("vapour_pressure_deficit").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_speed_10m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_speed_40m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_speed_80m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_speed_120m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_direction_10m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_direction_40m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_direction_80m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_direction_120m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("wind_gusts_10m").get(i).getAsDouble(),
-          hourly.getAsJsonArray("surface_temperature").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_temperature_0_to_10cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_temperature_10_to_35cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_temperature_35_to_100cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_temperature_100_to_300cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_moisture_0_to_10cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_moisture_10_to_35cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_moisture_35_to_100cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("soil_moisture_100_to_300cm").get(i).getAsDouble(),
-          hourly.getAsJsonArray("is_day").get(i).getAsInt()==1,
-          hourly.getAsJsonArray("sunshine_duration").get(i).getAsDouble(),
-          hourly.getAsJsonArray("shortwave_radiation").get(i).getAsDouble(),
-          hourly.getAsJsonArray("direct_radiation").get(i).getAsDouble(),
-          hourly.getAsJsonArray("diffuse_radiation").get(i).getAsDouble(),
-          hourly.getAsJsonArray("direct_normal_irradiance").get(i).getAsDouble(),
-          hourly.getAsJsonArray("global_tilted_irradiance").get(i).getAsDouble(),
-          hourly.getAsJsonArray("terrestrial_radiation").get(i).getAsDouble(),
-          hourly.getAsJsonArray("shortwave_radiation_instant").get(i).getAsDouble(),
-          hourly.getAsJsonArray("direct_radiation_instant").get(i).getAsDouble(),
-          hourly.getAsJsonArray("diffuse_radiation_instant").get(i).getAsDouble(),
-          hourly.getAsJsonArray("direct_normal_irradiance_instant").get(i).getAsDouble(),
-          hourly.getAsJsonArray("global_tilted_irradiance_instant").get(i).getAsDouble(),
-          hourly.getAsJsonArray("terrestrial_radiation_instant").get(i).getAsDouble()
-      );
+      HourlyForecast.HourlyForecastBuilder hourlyForecast = HourlyForecast.builder()
+          .location(location)
+          .timestamp(hourly.getAsJsonArray("time").get(i).getAsInt())
+          .temperature_2m(hourly.getAsJsonArray("temperature_2m").get(i).getAsDouble())
+          .relative_humidity_2m(hourly.getAsJsonArray("relative_humidity_2m").get(i).getAsDouble())
+          .dew_point_2m(hourly.getAsJsonArray("dew_point_2m").get(i).getAsDouble())
+          .apparent_temperature(hourly.getAsJsonArray("apparent_temperature").get(i).getAsDouble())
+          .precipitation(hourly.getAsJsonArray("precipitation").get(i).getAsDouble())
+          .rain(hourly.getAsJsonArray("rain").get(i).getAsDouble())
+          .showers(hourly.getAsJsonArray("showers").get(i).getAsDouble())
+          .snowfall(hourly.getAsJsonArray("snowfall").get(i).getAsDouble())
+          .snow_depth(hourly.getAsJsonArray("snow_depth").get(i).getAsDouble())
+          .weather_code(hourly.getAsJsonArray("weather_code").get(i).getAsInt())
+          .pressure_msl(hourly.getAsJsonArray("pressure_msl").get(i).getAsDouble())
+          .surface_pressure(hourly.getAsJsonArray("surface_pressure").get(i).getAsDouble())
+          .cloud_cover(hourly.getAsJsonArray("cloud_cover").get(i).getAsDouble())
+          .cloud_cover_low(hourly.getAsJsonArray("cloud_cover_low").get(i).getAsDouble())
+          .cloud_cover_mid(hourly.getAsJsonArray("cloud_cover_mid").get(i).getAsDouble())
+          .cloud_cover_high(hourly.getAsJsonArray("cloud_cover_high").get(i).getAsDouble())
+          .visibility(hourly.getAsJsonArray("visibility").get(i).getAsDouble())
+          .et0_fao_evapotranspiration(hourly.getAsJsonArray("et0_fao_evapotranspiration").get(i).getAsDouble())
+          .vapour_pressure_deficit(hourly.getAsJsonArray("vapour_pressure_deficit").get(i).getAsDouble())
+          .wind_speed_10m(hourly.getAsJsonArray("wind_speed_10m").get(i).getAsDouble())
+          .wind_speed_40m(hourly.getAsJsonArray("wind_speed_40m").get(i).getAsDouble())
+          .wind_speed_80m(hourly.getAsJsonArray("wind_speed_80m").get(i).getAsDouble())
+          .wind_speed_120m(hourly.getAsJsonArray("wind_speed_120m").get(i).getAsDouble())
+          .wind_direction_10m(hourly.getAsJsonArray("wind_direction_10m").get(i).getAsDouble())
+          .wind_direction_40m(hourly.getAsJsonArray("wind_direction_40m").get(i).getAsDouble())
+          .wind_direction_80m(hourly.getAsJsonArray("wind_direction_80m").get(i).getAsDouble())
+          .wind_direction_120m(hourly.getAsJsonArray("wind_direction_120m").get(i).getAsDouble())
+          .wind_gusts_10m(hourly.getAsJsonArray("wind_gusts_10m").get(i).getAsDouble())
+          .surface_temperature(hourly.getAsJsonArray("surface_temperature").get(i).getAsDouble())
+          .soil_temperature_0_to_10cm(hourly.getAsJsonArray("soil_temperature_0_to_10cm").get(i).getAsDouble())
+          .soil_temperature_10_to_35cm(hourly.getAsJsonArray("soil_temperature_10_to_35cm").get(i).getAsDouble())
+          .soil_temperature_35_to_100cm(hourly.getAsJsonArray("soil_temperature_35_to_100cm").get(i).getAsDouble())
+          .soil_temperature_100_to_300cm(hourly.getAsJsonArray("soil_temperature_100_to_300cm").get(i).getAsDouble())
+          .soil_moisture_0_to_10cm(hourly.getAsJsonArray("soil_moisture_0_to_10cm").get(i).getAsDouble())
+          .soil_moisture_10_to_35cm(hourly.getAsJsonArray("soil_moisture_10_to_35cm").get(i).getAsDouble())
+          .soil_moisture_35_to_100cm(hourly.getAsJsonArray("soil_moisture_35_to_100cm").get(i).getAsDouble())
+          .soil_moisture_100_to_300cm(hourly.getAsJsonArray("soil_moisture_100_to_300cm").get(i).getAsDouble())
+          .is_day(hourly.getAsJsonArray("is_day").get(i).getAsInt()==1)
+          .sunshine_duration(hourly.getAsJsonArray("sunshine_duration").get(i).getAsDouble())
+          .shortwave_radiation(hourly.getAsJsonArray("shortwave_radiation").get(i).getAsDouble())
+          .direct_radiation(hourly.getAsJsonArray("direct_radiation").get(i).getAsDouble())
+          .diffuse_radiation(hourly.getAsJsonArray("diffuse_radiation").get(i).getAsDouble())
+          .direct_normal_irradiance(hourly.getAsJsonArray("direct_normal_irradiance").get(i).getAsDouble())
+          .global_tilted_irradiance(hourly.getAsJsonArray("global_tilted_irradiance").get(i).getAsDouble())
+          .terrestrial_radiation(hourly.getAsJsonArray("terrestrial_radiation").get(i).getAsDouble())
+          .shortwave_radiation_instant(hourly.getAsJsonArray("shortwave_radiation_instant").get(i).getAsDouble())
+          .direct_radiation_instant(hourly.getAsJsonArray("direct_radiation_instant").get(i).getAsDouble())
+          .diffuse_radiation_instant(hourly.getAsJsonArray("diffuse_radiation_instant").get(i).getAsDouble())
+          .direct_normal_irradiance_instant(hourly.getAsJsonArray("direct_normal_irradiance_instant").get(i).getAsDouble())
+          .global_tilted_irradiance_instant(hourly.getAsJsonArray("global_tilted_irradiance_instant").get(i).getAsDouble())
+          .terrestrial_radiation_instant(hourly.getAsJsonArray("terrestrial_radiation_instant").get(i).getAsDouble());
+
       hourlyForecasts.add(hourlyForecast);
+    }
+    return hourlyForecasts;
+  }
+
+  /**
+   * Retrieves the hourly forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the hourly forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of HourlyForecast objects representing the forecast.
+   */
+  public List<HourlyForecast> getHourlyForecast(Location location, int futureDays, int pastDays) {
+    List<HourlyForecast.HourlyForecastBuilder> hourlyForecastBuilders = getHourlyForecastBuilders(location, futureDays, pastDays);
+    List<HourlyForecast> hourlyForecasts = new ArrayList<>();
+    for (HourlyForecast.HourlyForecastBuilder hourlyForecastBuilder : hourlyForecastBuilders) {
+      hourlyForecasts.add(hourlyForecastBuilder.build());
     }
     return hourlyForecasts;
   }
@@ -389,11 +448,11 @@ public class Sdk {
     List<HourlyForecast> forecasts = getHourlyForecast(location, futureDays, pastDays);
     HourlyForecastDAO hourlyForecastDAO = new HourlyForecastDAO();
     int minimumTimestamp = Collections.min(forecasts,
-        Comparator.comparing(HourlyForecast::getTimestamp))
+            Comparator.comparing(HourlyForecast::getTimestamp))
         .getTimestamp();
 
     int maximumTimestamp = Collections.max(forecasts,
-        Comparator.comparing(HourlyForecast::getTimestamp))
+            Comparator.comparing(HourlyForecast::getTimestamp))
         .getTimestamp();
 
     List<HourlyForecast> existingForecasts = new HourlyForecastQuery()
@@ -402,7 +461,6 @@ public class Sdk {
         .whereLocation(location)
         .getResults();
 
-    // TODO: fix this garbage
     // Delete all hourly forecasts with the same location and a timestamp within range
     for (HourlyForecast forecast : existingForecasts) {
       hourlyForecastDAO.delete(forecast);

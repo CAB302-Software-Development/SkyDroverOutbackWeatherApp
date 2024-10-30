@@ -21,11 +21,13 @@ import java.util.HashMap;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Builder.Default;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Converter(autoApply = true)
+@EqualsAndHashCode
 class LayoutsConverter implements AttributeConverter<HashMap<String, WidgetInfo[]>, String> {
 
   private static final Gson gson = new Gson();
@@ -48,6 +50,7 @@ class LayoutsConverter implements AttributeConverter<HashMap<String, WidgetInfo[
 })
 @Builder
 @Getter
+@EqualsAndHashCode
 /**
  * A model class for the Account entity.
  */
