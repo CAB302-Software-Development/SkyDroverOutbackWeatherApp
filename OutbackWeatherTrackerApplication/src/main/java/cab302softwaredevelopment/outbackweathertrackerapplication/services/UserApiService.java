@@ -1,9 +1,10 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.AllUserDataModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserDataDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,12 +15,12 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 
-public class UserDataService {
+public class UserApiService {
     private static final String BASE_URL = "http://localhost:8080/api/user";
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 
-    public UserDataService() {
+    public UserApiService() {
         this.client = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
     }
@@ -30,7 +31,7 @@ public class UserDataService {
      * @return List of UserDataDTO
      * @throws Exception
      */
-    public List<UserDataDTO> getAllUsers() throws Exception {
+    public List<UserDTO> getAllUsers() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/getAllUsers"))
                 .GET()
@@ -39,7 +40,7 @@ public class UserDataService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, UserDataDTO.class));
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, UserDTO.class));
         } else {
             throw new Exception("Error fetching all users: " + response.body());
         }
@@ -52,7 +53,7 @@ public class UserDataService {
      * @return AllUserDataModel
      * @throws Exception
      */
-    public AllUserDataModel getUserByUsername(String username) throws Exception {
+    public UserModel getUserByUsername(String username) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/getUserByUsername/" + username))
                 .GET()
@@ -60,13 +61,13 @@ public class UserDataService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), AllUserDataModel.class);
+            return objectMapper.readValue(response.body(), UserModel.class);
         } else {
             throw new Exception("Error fetching user: " + response.body());
         }
     }
 
-    public AllUserDataModel getUserById(String id) throws Exception {
+    public UserModel getUserById(String id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/getUserById/" + id))
                 .GET()
@@ -74,7 +75,7 @@ public class UserDataService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), AllUserDataModel.class);
+            return objectMapper.readValue(response.body(), UserModel.class);
         } else {
             throw new Exception("Error fetching user: " + response.body());
         }
@@ -162,7 +163,7 @@ public class UserDataService {
      * @return CreateUserDTO
      * @throws Exception
      */
-    public CreateUserDTO updateUser(String userId, AllUserDataModel userData, String jwtToken) throws Exception {
+    public CreateUserDTO updateUser(String userId, UpdateUserDTO userData, String jwtToken) throws Exception {
         String requestBody = objectMapper.writeValueAsString(userData);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -187,7 +188,7 @@ public class UserDataService {
      * @return AllUserDataModel
      * @throws Exception
      */
-    public AllUserDataModel getCurrentUser(String jwtToken) throws Exception {
+    public UserModel getCurrentUser(String jwtToken) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/getUser"))
                 .header("Authorization", "Bearer " + jwtToken)
@@ -196,7 +197,7 @@ public class UserDataService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
-            return objectMapper.readValue(response.body(), AllUserDataModel.class);
+            return objectMapper.readValue(response.body(), UserModel.class);
         } else {
             throw new Exception("Error fetching current user: " + response.body());
         }

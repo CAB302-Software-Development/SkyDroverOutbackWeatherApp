@@ -1,7 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedDataModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDataDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;
@@ -11,12 +11,12 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
-public class CrowdsourcedDataService {
+public class CrowdsourcedApiService {
     private static final String BASE_URL = "http://localhost:8080/api/crowdsourced";
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 
-    public CrowdsourcedDataService() {
+    public CrowdsourcedApiService() {
         this.client = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
     }
@@ -28,7 +28,7 @@ public class CrowdsourcedDataService {
      * @return CrowdsourcedDataModel with created data
      * @throws Exception
      */
-    public CrowdsourcedDataModel createMarker(CrowdsourcedDataDTO data) throws Exception {
+    public CrowdsourcedModel createMarker(CrowdsourcedDTO data) throws Exception {
         String requestBody = objectMapper.writeValueAsString(data);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -39,7 +39,7 @@ public class CrowdsourcedDataService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 201) {
-            return objectMapper.readValue(response.body(), CrowdsourcedDataModel.class);
+            return objectMapper.readValue(response.body(), CrowdsourcedModel.class);
         } else {
             throw new Exception("Error creating marker: " + response.body());
         }
@@ -52,7 +52,7 @@ public class CrowdsourcedDataService {
      * @return Optional of CrowdsourcedDataModel
      * @throws Exception
      */
-    public Optional<CrowdsourcedDataModel> getMarkerByUserName(String userName) throws Exception {
+    public Optional<CrowdsourcedModel> getMarkerByUserName(String userName) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/user/" + userName))
                 .GET()
@@ -60,7 +60,7 @@ public class CrowdsourcedDataService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
-            return Optional.of(objectMapper.readValue(response.body(), CrowdsourcedDataModel.class));
+            return Optional.of(objectMapper.readValue(response.body(), CrowdsourcedModel.class));
         } else {
             return Optional.empty();
         }
@@ -74,7 +74,7 @@ public class CrowdsourcedDataService {
      * @return Optional list of CrowdsourcedDataModel within range
      * @throws Exception
      */
-    public Optional<List<CrowdsourcedDataModel>> getMarkerByTempRange(int minTemp, int maxTemp) throws Exception {
+    public Optional<List<CrowdsourcedModel>> getMarkerByTempRange(int minTemp, int maxTemp) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/temperature?minTemp=" + minTemp + "&maxTemp=" + maxTemp))
                 .GET()
@@ -83,7 +83,7 @@ public class CrowdsourcedDataService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return Optional.of(objectMapper.readValue(response.body(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, CrowdsourcedDataModel.class)));
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, CrowdsourcedModel.class)));
         } else {
             return Optional.empty();
         }
@@ -116,7 +116,7 @@ public class CrowdsourcedDataService {
      * @return Optional list of CrowdsourcedDataModel within range
      * @throws Exception
      */
-    public Optional<List<CrowdsourcedDataModel>> getMarkerByGeoRange(double minLat, double maxLat, double minLon, double maxLon) throws Exception {
+    public Optional<List<CrowdsourcedModel>> getMarkerByGeoRange(double minLat, double maxLat, double minLon, double maxLon) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/marker-georange?minLat=" + minLat + "&maxLat=" + maxLat + "&minLon=" + minLon + "&maxLon=" + maxLon))
                 .GET()
@@ -125,7 +125,7 @@ public class CrowdsourcedDataService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return Optional.of(objectMapper.readValue(response.body(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, CrowdsourcedDataModel.class)));
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, CrowdsourcedModel.class)));
         } else {
             return Optional.empty();
         }
@@ -137,7 +137,7 @@ public class CrowdsourcedDataService {
      * @return List of CrowdsourcedDataDTO with latest data
      * @throws Exception
      */
-    public List<CrowdsourcedDataDTO> getLatestFilteredData() throws Exception {
+    public List<CrowdsourcedDTO> getLatestFilteredData() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/latest-markers"))
                 .GET()
@@ -146,7 +146,7 @@ public class CrowdsourcedDataService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, CrowdsourcedDataDTO.class));
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, CrowdsourcedDTO.class));
         } else {
             throw new Exception("Error fetching latest data: " + response.body());
         }

@@ -9,13 +9,13 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class UserDataDTO {
+public class UserDTO {
 
     /**
      * The username of the user.
      * This field is mapped to the "user_name" field in the MongoDB document.
      */
-    private String userName;
+    private String username;
 
     /**
      * The email address of the user.

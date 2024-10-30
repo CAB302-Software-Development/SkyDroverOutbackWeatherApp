@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class CrowdsourcedDataModel {
+public class CrowdsourcedModel {
     private String id;
 
     private String location;

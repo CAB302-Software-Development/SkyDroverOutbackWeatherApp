@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Setter
 @Getter
-public class AllUserDataModel {
+public class UserModel {
 
     /**
      * The unique identifier for each user.

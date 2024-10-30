@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CrowdsourcedDataDTO {
+public class CrowdsourcedDTO {
     private String location;
 
     private double latitude;
