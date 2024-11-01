@@ -40,8 +40,8 @@
             <VBox fx:id="vbAlertConfig" styleClass="alert-config">
                 <ComboBox fx:id="cboLocations" promptText="Select Location..." onAction="#updateAlertsPane"/>
                 <HBox>
-                    <Button fx:id="btnEnable" text="Enable"/>
-                    <Button fx:id="btnDisable" text="Disable"/>
+                    <Button fx:id="btnEnable" text="Enable" onAction="#handleButtonPress"/>
+                    <Button fx:id="btnDisable" text="Disable" onAction="#handleButtonPress"/>
                 </HBox>
                 <TableView fx:id="activeAlerts">
                     <columns>
