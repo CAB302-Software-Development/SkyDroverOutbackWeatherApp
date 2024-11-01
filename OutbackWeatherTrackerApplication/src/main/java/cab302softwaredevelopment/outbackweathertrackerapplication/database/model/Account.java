@@ -4,19 +4,13 @@ import static org.hibernate.Length.LONG32;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import jakarta.persistence.AttributeConverter;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
 import lombok.Builder;
@@ -26,24 +20,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-
-@Converter(autoApply = true)
-@EqualsAndHashCode
-class LayoutsConverter implements AttributeConverter<HashMap<String, WidgetInfo[]>, String> {
-
-  private static final Gson gson = new Gson();
-
-  @Override
-  public String convertToDatabaseColumn(HashMap<String, WidgetInfo[]> layouts) {
-    return gson.toJson(layouts);  // Convert the Layouts object to a JSON string
-  }
-
-  @Override
-  public HashMap<String, WidgetInfo[]> convertToEntityAttribute(String json) {
-    Type type = new TypeToken<HashMap<String, WidgetInfo[]>>() {}.getType();
-    return gson.fromJson(json, type); // Convert the JSON string back to a Layouts object
-  }
-}
 
 @Entity(name = "account")
 @Table(name = "account", uniqueConstraints = {
@@ -120,11 +96,11 @@ public class Account {
   /**
    * The users layouts.
    */
-  @Convert(converter = LayoutsConverter.class)
+  @Convert(converter = WidgetInfoListConverter.class)
   @Column(length=LONG32)
   @Default
   @Setter
-  private HashMap<String, WidgetInfo[]> dashboardLayouts = new LayoutsConverter().convertToEntityAttribute("{'default':[]}");
+  private HashMap<String, WidgetInfo[]> dashboardLayouts = new WidgetInfoListConverter().convertToEntityAttribute("{'default':[]}");
 
   /**
    * The date that data was last modified. (for server sync)
@@ -180,10 +156,10 @@ public class Account {
   }
 
   public String GetDashboardLayoutsString() {
-    return new LayoutsConverter().convertToDatabaseColumn(dashboardLayouts);
+    return new WidgetInfoListConverter().convertToDatabaseColumn(dashboardLayouts);
   }
 
   public void SetDashboardLayoutsString(String layouts) {
-    dashboardLayouts = new LayoutsConverter().convertToEntityAttribute(layouts);
+    dashboardLayouts = new WidgetInfoListConverter().convertToEntityAttribute(layouts);
   }
 }
