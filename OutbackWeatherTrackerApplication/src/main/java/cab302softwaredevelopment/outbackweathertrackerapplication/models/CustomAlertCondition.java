@@ -8,7 +8,6 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import lombok.Getter;
 import lombok.Setter;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CustomAlertCondition {
@@ -20,7 +19,6 @@ public class CustomAlertCondition {
     private boolean enabled = true;
     private boolean forecastType; // True = DailyForecast; False = HourlyForecast;
     private List<FilterValue> filters = new ArrayList<>();
-    private record FilterValue (String field, Boolean isGreaterOrEqual, String value) {}
 
     public CustomAlertCondition(boolean forecastType) {
         this.forecastType = forecastType;
@@ -28,7 +26,7 @@ public class CustomAlertCondition {
 
     public void addAlertCondition(String field, boolean isGreaterOrEqual, String value) throws IllegalStateException {
         filters.stream()
-                .filter(f -> f.field.equals(field) && f.isGreaterOrEqual.equals(isGreaterOrEqual))
+                .filter(f -> f.getField().equals(field) && f.getIsGreaterOrEqual().equals(isGreaterOrEqual))
                 .findAny().ifPresent(f -> {
             throw new IllegalStateException("Filter already exists.");
         });
@@ -51,30 +49,30 @@ public class CustomAlertCondition {
         HourlyForecastDAO.HourlyForecastQuery hourlyForecastQuery = new HourlyForecastDAO.HourlyForecastQuery();
 
         for (FilterValue filter : filters) {
-            if (filter.field.equals("timestamp")) {
-                if (filter.isGreaterOrEqual) {
-                    timestampGE = Integer.parseInt(filter.value) + currentTimeEpoch;
+            if (filter.getField().equals("timestamp")) {
+                if (filter.getIsGreaterOrEqual()) {
+                    timestampGE = Integer.parseInt(filter.getValue()) + currentTimeEpoch;
                 } else {
-                    timestampLE = Integer.parseInt(filter.value) + currentTimeEpoch;
+                    timestampLE = Integer.parseInt(filter.getValue()) + currentTimeEpoch;
                 }
-            } else if (filter.field.equals("count")) {
-                if (filter.isGreaterOrEqual) {
-                    countGE = Integer.parseInt(filter.value);
+            } else if (filter.getField().equals("count")) {
+                if (filter.getIsGreaterOrEqual()) {
+                    countGE = Integer.parseInt(filter.getValue());
                 } else {
-                    countLE = Integer.parseInt(filter.value);
+                    countLE = Integer.parseInt(filter.getValue());
                 }
             } else {
                 if (forecastType) {
-                    if (filter.isGreaterOrEqual) {
-                        dailyForecastQuery.whereFieldGE(filter.field, filter.value);
+                    if (filter.getIsGreaterOrEqual()) {
+                        dailyForecastQuery.whereFieldGE(filter.getField(), filter.getValue());
                     } else {
-                        dailyForecastQuery.whereFieldLE(filter.field, filter.value);
+                        dailyForecastQuery.whereFieldLE(filter.getField(), filter.getValue());
                     }
                 } else {
-                    if (filter.isGreaterOrEqual) {
-                        hourlyForecastQuery.whereFieldGE(filter.field, filter.value);
+                    if (filter.getIsGreaterOrEqual()) {
+                        hourlyForecastQuery.whereFieldGE(filter.getField(), filter.getValue());
                     } else {
-                        hourlyForecastQuery.whereFieldLE(filter.field, filter.value);
+                        hourlyForecastQuery.whereFieldLE(filter.getField(), filter.getValue());
                     }
                 }
             }
