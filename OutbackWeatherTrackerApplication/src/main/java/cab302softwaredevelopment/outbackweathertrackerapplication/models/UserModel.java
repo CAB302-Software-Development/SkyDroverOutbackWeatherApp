@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * This class represents the user data model stored in the MongoDB collection "UserData".
- * It includes fields such as user name, password, email, and account creation and update dates.
+ * It includes fields such as username, password, email, and account creation and update dates.
  * Annotations are used to map the class to the MongoDB collection and to provide aliasing.
  */
 @Setter
