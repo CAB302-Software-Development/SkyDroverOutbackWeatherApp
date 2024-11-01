@@ -1,10 +1,8 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CustomAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DailyForecastField;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.HourlyForecastField;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,11 +19,9 @@ public class ForecastAlertDialogController {
     @FXML
     private VBox configFieldsVBox;
     @FXML
-    private ComboBox<Location> locationComboBox;
-    @FXML
     private DialogPane dialogPane;
     @FXML
-    private ButtonType saveButtonType;
+    private ButtonType saveButtonType, closeButtonType;
     @FXML
     private Button btnAddFilter;
     @FXML
@@ -41,26 +37,17 @@ public class ForecastAlertDialogController {
 
     @FXML
     public void initialize() {
-        LocationService locationService = LocationService.getInstance();
-        List<Location> locations = locationService.getCurrentUserLocations();
-        locationComboBox.setItems(FXCollections.observableArrayList(locations));
-        locationComboBox.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(Location location) {
-                return (location == null) ? "Select a Location" : location.getName();
-            }
-
-            @Override
-            public Location fromString(String string) {
-                return null;
-            }
-        });
-
         Button saveButton = (Button) dialogPane.lookupButton(saveButtonType);
         saveButton.setOnAction(event -> {
             if(buildForecastQuery()) {
                 dialogPane.getScene().getWindow().hide();
             }
+        });
+
+        Button closeButton = (Button) dialogPane.lookupButton(closeButtonType);
+        closeButton.setOnAction(event -> {
+            forecastAlert = null;
+            dialogPane.getScene().getWindow().hide();
         });
 
         btnAddFilter.setOnAction(event -> addFilterInput());
@@ -101,15 +88,24 @@ public class ForecastAlertDialogController {
         TextField valueTextField = new TextField();
         valueTextField.setPromptText("Enter Value");
 
-        HBox filterBox = new HBox(10, fieldComboBox, comparisonComboBox, valueTextField);
-        configFieldsVBox.getChildren().add(filterBox);
+        Button removeButton = new Button("Remove");
+        HBox filterBox = new HBox(10, fieldComboBox, comparisonComboBox, valueTextField, removeButton);
 
+        removeButton.setOnAction(event -> removeFilterInput(filterBox));
+
+        configFieldsVBox.getChildren().add(filterBox);
+        dialogPane.getScene().getWindow().sizeToScene();
         filterInputs.add(new FilterInput(fieldComboBox, comparisonComboBox, valueTextField));
     }
 
+    private void removeFilterInput(HBox filterBox) {
+        configFieldsVBox.getChildren().remove(filterBox);
+        dialogPane.getScene().getWindow().sizeToScene();
+        filterInputs.removeIf(filterInput ->
+                filterInput.fieldComboBox().equals(((ComboBox<?>) filterBox.getChildren().get(0))));
+    }
+
     private boolean buildForecastQuery() {
-        Location location = locationComboBox.getSelectionModel().getSelectedItem();
-        if (location == null) return false;
         forecastAlert = new CustomAlertCondition(forecastType);
         forecastAlert.setAlertTitle(txtTitle.getText());
         forecastAlert.setMessage(txtMessage.getText());

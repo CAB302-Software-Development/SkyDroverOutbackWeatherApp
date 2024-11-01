@@ -7,19 +7,16 @@
             fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.ForecastAlertDialogController">
     <buttonTypes>
         <ButtonType fx:id="saveButtonType" text="Save" buttonData="APPLY"/>
-        <ButtonType text="Cancel" buttonData="CANCEL_CLOSE"/>
+        <ButtonType fx:id="closeButtonType" text="Cancel" buttonData="CANCEL_CLOSE"/>
     </buttonTypes>
 
     <content>
         <VBox spacing="10">
             <TextField fx:id="txtTitle" promptText="Alert Title..."/>
             <TextField fx:id="txtMessage" promptText="Alert Message..."/>
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Location:"/>
-                <ComboBox fx:id="locationComboBox" promptText="Select a Location"/>
-            </HBox>
             <VBox fx:id="configFieldsVBox" spacing="10"/>
             <Button fx:id="btnAddFilter" text="Add Filter" maxWidth="100" alignment="CENTER" />
         </VBox>
     </content>
 </DialogPane>
+
