@@ -2,25 +2,18 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CustomAlertCondition;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.IAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherAlert;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,24 +83,28 @@ public class AlertsController extends BasePage {
             alertsService.removeAlert(selectedCondition);
             updateAlertsPane();
         } else if (event.getSource() == btnEnable) {
-            activeAlerts.getSelectionModel().getSelectedItem().setEnabled(true);
+            CustomAlertCondition selected = activeAlerts.getSelectionModel().getSelectedItem();
+            int index = alertsService.getAlertConfigs().indexOf(selected);
+            selected.setEnabled(true);
+            alertsService.updateAlert(index, selected);
+            updateAlertsPane();
         } else if (event.getSource() == btnDisable) {
-            activeAlerts.getSelectionModel().getSelectedItem().setEnabled(false);
+            CustomAlertCondition selected = activeAlerts.getSelectionModel().getSelectedItem();
+            int index = alertsService.getAlertConfigs().indexOf(selected);
+            selected.setEnabled(false);
+            alertsService.updateAlert(index, selected);
+            updateAlertsPane();
         }
-    }
-
-    private void createExampleConditions() {
     }
 
     @FXML
     private void updateAlertsPane() {
         List<WeatherAlert> alerts = new ArrayList<>();
-        List<CustomAlertCondition> conditions = alertsService.getAlertConfigs();
         Location location = cboLocations.getSelectionModel().getSelectedItem();
-        conditions.forEach(c -> c.getAlert(location).ifPresent(alerts::add));
+        alertsService.getAlertConfigs().forEach(c -> c.getAlert(location).ifPresent(alerts::add));
 
         activeAlerts.getItems().clear();
-        activeAlerts.setItems(FXCollections.observableArrayList(conditions));
+        activeAlerts.setItems(FXCollections.observableArrayList(alertsService.getAlertConfigs()));
 
         VBox vbScrollContent = new VBox();
         vbScrollContent.setSpacing(10);
