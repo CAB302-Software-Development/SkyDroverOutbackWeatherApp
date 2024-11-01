@@ -20,7 +20,7 @@ public class CrowdsourcedModel {
 
     private int feelsLikeTemp;
 
-    private String userName;
+    private String username;
 
     private Date createdDate = new Date();
 }

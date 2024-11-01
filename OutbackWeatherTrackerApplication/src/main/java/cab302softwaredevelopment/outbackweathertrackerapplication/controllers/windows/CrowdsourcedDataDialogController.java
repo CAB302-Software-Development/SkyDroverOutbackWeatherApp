@@ -74,10 +74,10 @@ public class CrowdsourcedDataDialogController {
         configFieldsVBox.getChildren().add(new Label("Location"));
         configFieldsVBox.getChildren().add(locationField);
 
-        TextField userNameField = new TextField();
-        userNameField.setPromptText("Enter your name");
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Enter your name");
         configFieldsVBox.getChildren().add(new Label("User Name"));
-        configFieldsVBox.getChildren().add(userNameField);
+        configFieldsVBox.getChildren().add(usernameField);
 
         TextField actualTempField = new TextField();
         actualTempField.setPromptText("Enter actual temperature");
@@ -92,7 +92,7 @@ public class CrowdsourcedDataDialogController {
         Button saveButton = (Button) dialogPane.lookupButton(saveButtonType);
         saveButton.setOnAction(event -> {
             crowdsourcedData.setLocation(locationField.getText());
-            crowdsourcedData.setUserName(userNameField.getText());
+            crowdsourcedData.setUsername(usernameField.getText());
             crowdsourcedData.setActualTemp(parseInteger(actualTempField.getText()));
             crowdsourcedData.setFeelsLikeTemp(parseInteger(feelsLikeTempField.getText()));
             dialogPane.getScene().getWindow().hide();

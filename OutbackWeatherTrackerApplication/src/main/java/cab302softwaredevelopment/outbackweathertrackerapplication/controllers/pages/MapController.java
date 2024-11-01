@@ -186,8 +186,8 @@ public class MapController extends BasePage {
         if (crowdData.getLocation() != null) {
             details.add(new Label("Location: " + crowdData.getLocation()));
         }
-        if (crowdData.getUserName() != null) {
-            details.add(new Label("User: " + crowdData.getUserName()));
+        if (crowdData.getUsername() != null) {
+            details.add(new Label("User: " + crowdData.getUsername()));
         }
         // if (crowdData.getActualTemp() != null) {
         //     details.add(new Label("Actual Temp: " + crowdData.getActualTemp() + "°C"));

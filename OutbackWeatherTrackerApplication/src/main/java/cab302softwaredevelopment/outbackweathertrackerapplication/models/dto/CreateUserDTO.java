@@ -16,7 +16,7 @@ public class CreateUserDTO {
   /**
    * The username of the new user.
    */
-  private String username;
+  private String userName;
 
   /**
    * The password for the new user account.

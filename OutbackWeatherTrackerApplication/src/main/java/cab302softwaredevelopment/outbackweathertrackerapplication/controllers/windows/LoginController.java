@@ -2,11 +2,26 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.w
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserApiService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +32,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class LoginController {
 
@@ -170,9 +186,113 @@ public class LoginController {
         try {
             if (!validateCredentials(email, password)) return false;
 
+            // Login to account on server
+            UserApiService userApiService = new UserApiService();
+            AccountDAO accountDAO = new AccountDAO();
+
+            UserLoginRequestDTO loginRequest = new UserLoginRequestDTO();
+            loginRequest.setUserEmail(email);
+            loginRequest.setPassword(BCrypt.hashpw(password, "$2a$10$iToUqSeCDLopg8IdvWsuiO"));
+
+            String token;
+            try {
+                token = userApiService.login(loginRequest);
+            } catch (Exception e) {
+                throw new RuntimeException(e); // TODO: Handle this better (show error message)
+            }
+
+            // Get the account
+            UserModel userModel;
+            try {
+                userModel = userApiService.getCurrentUser(token);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            // Check the last modified date
             Account account = (new AccountDAO.AccountQuery())
                     .whereEmail(email)
                     .getSingleResult();
+
+            if (account == null || userModel.getUserAccountUpdateDate().getTime() > account.getLastModified().getTime()) {
+                // Update the local account
+                Gson gson = new Gson();
+                Type type = new TypeToken<HashMap<String, WidgetInfo[]>>() {}.getType();
+
+                // Preserve the current account
+                Account oldAccount = account;
+
+                account = Account.builder()
+                    .id(userModel.getId())
+                    .username(userModel.getUserName())
+                    .password(password)
+                    .email(userModel.getUserEmail())
+                    .currentTheme(Theme.valueOf(userModel.getUserTheme()))
+                    .isGuest(false)
+                    .selectedLayout(userModel.getSelectedLayout())
+                    // Convert the JSON string back to a Layouts object
+                    .dashboardLayouts(gson.fromJson(userModel.getDashboardLayout(), type))
+                    .preferCelsius(userModel.getPreferCelsius())
+                    .JWTToken(token)
+                    .build();
+
+                // Save the account
+                if (oldAccount == null) {
+                    // Account doesnt exist locally, create it
+                    accountDAO.insert(account);
+                }
+                else {
+                    // Account exists locally, update it
+                    accountDAO.update(account);
+                }
+
+                // The local locations are not up to date, update them
+                List<Location> localLocations = LocationService.getInstance().getLocationsForUser(account);
+                List<Location> remoteLocations = gson.fromJson(userModel.getLocations(), new TypeToken<List<Location>>(){}.getType());
+
+                LocationDAO locationDAO = new LocationDAO();
+                // Delete all locations
+                for (Location location : localLocations) {
+                    locationDAO.delete(location);
+                }
+
+                for (Location location : remoteLocations) {
+                    locationDAO.insert(location);
+                }
+
+                account.setLastModified(userModel.getUserAccountUpdateDate());
+                accountDAO.update(account);
+
+            }
+            else{
+                // Update the remote account
+
+                // Get the locations
+                List<Location> locations = LocationService.getInstance().getLocationsForUser(account);
+
+                UpdateUserDTO userDTO = new UpdateUserDTO();
+                userDTO.setUserName(account.getUsername());
+                userDTO.setUserPassword(account.getPassword());
+                userDTO.setUserEmail(account.getEmail());
+                userDTO.setUserTheme(account.getCurrentTheme().toString());
+                userDTO.setPreferCelsius(account.getPreferCelsius());
+                userDTO.setSelectedLayout(account.getSelectedLayout());
+                userDTO.setDashboardLayout(account.GetDashboardLayoutsString());
+                userDTO.setLocations(new Gson().toJson(locations)); // Locations are stored as a JSON string
+
+                CreateUserDTO result;
+                try {
+                    result = userApiService.updateUser(account.getId(), userDTO, account.getJWTToken());
+                } catch (Exception e) {
+                    throw new RuntimeException(e); // TODO: Handle this better (show error message)
+                }
+            }
+
+            // Update the local account
+            account = (new AccountDAO.AccountQuery())
+                .whereEmail(email)
+                .getSingleResult();
+
 
             if (account == null) {
                 showErrorMessage("No account exists with specified email.");

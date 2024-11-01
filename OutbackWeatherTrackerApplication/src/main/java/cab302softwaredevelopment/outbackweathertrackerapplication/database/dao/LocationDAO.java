@@ -9,7 +9,6 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.hibernate.Session;
 /**
  * A Data Access Object for the Location entity.
@@ -143,7 +142,7 @@ public class LocationDAO {
      * @param account_id The associated account ID to filter by
      * @return This LocationQuery object
      */
-    public LocationQuery whereAccountId(UUID account_id) {
+    public LocationQuery whereAccountId(String account_id) {
       predicates.add(builder.equal(root.get("account").get("id"), account_id));
       return this;
     }
@@ -326,7 +325,7 @@ public class LocationDAO {
    * @return A list of all Location objects in the database that are associated with the specified location.
    */
   @Deprecated
-  public List<Location> getByAccountId(UUID account_id) {
+  public List<Location> getByAccountId(String account_id) {
     return new LocationQuery()
         .whereAccountId(account_id)
         .getResults();

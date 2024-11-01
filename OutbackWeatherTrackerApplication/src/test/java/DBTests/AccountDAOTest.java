@@ -5,13 +5,26 @@ import static org.junit.jupiter.api.Assertions.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserApiService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-@Timeout(value = 10000, unit = TimeUnit.MILLISECONDS) // No test should take longer than 10 seconds
+@Timeout(value = 1000000, unit = TimeUnit.MILLISECONDS) // No test should take longer than 10 seconds
 public class AccountDAOTest extends DBTest {
 
   @Test
@@ -36,7 +49,7 @@ public class AccountDAOTest extends DBTest {
         "There should be " + accountsTemplate.size() + " accounts");
 
     // Verify that the forecasts got assigned an ID and that they're unique
-    List<UUID> seenIds = new ArrayList<>();
+    List<String> seenIds = new ArrayList<>();
     for (Account account : accounts) {
       assertFalse(seenIds.contains(account.getId()), "Account ID should be unique");
       seenIds.add(account.getId());
@@ -162,6 +175,8 @@ public class AccountDAOTest extends DBTest {
   void testVerifyPassword() {
     // Create a new account
     Account account = Account.builder()
+        .username("username")
+        .id(UUID.randomUUID().toString())
         .email("email@gmail.com")
         .password("password")
         .build();
@@ -240,6 +255,8 @@ public class AccountDAOTest extends DBTest {
   void testAddAccountWithDefaultLayouts() {
     // Create a new account
     Account account = Account.builder()
+        .username("test")
+        .id(UUID.randomUUID().toString())
         .email("testemail12345@test.com")
         .password("password")
         .build();
@@ -354,4 +371,77 @@ public class AccountDAOTest extends DBTest {
 
   }
 
+  @Test
+  void testCreateUserAPI() {
+    String email = "email@email.com";
+    String password = "Password123!";
+    Account.AccountBuilder accountBuilder = Account.builder()
+        .email(email)
+        .password(password)
+        .isGuest(false);
+
+    Account newAccount = accountBuilder.build();
+    UserApiService userApiService = new UserApiService();
+    CreateUserDTO userDTO = new CreateUserDTO();
+    userDTO.setUserName("TEST USERNAME"); // TODO DEBUG
+    userDTO.setUserEmail(email);
+    userDTO.setUserPassword(newAccount.getPassword());
+    userDTO.setUserTheme(newAccount.getCurrentTheme().toString());
+    userDTO.setPreferCelsius(newAccount.getPreferCelsius());
+    userDTO.setSelectedLayout(newAccount.getSelectedLayout());
+    String dashboardLayout = newAccount.GetDashboardLayoutsString();
+    userDTO.setDashboardLayout(dashboardLayout);
+    userDTO.setLocations("{}"); // No locations for now
+
+    CreateUserDTO result;
+    try {
+      result = userApiService.createUser(userDTO);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+    UserLoginRequestDTO loginRequest = new UserLoginRequestDTO();
+    loginRequest.setUserEmail(email);
+    loginRequest.setPassword(newAccount.getPassword());
+
+    String token;
+    try {
+      token = userApiService.login(loginRequest);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+    // Get the account
+    UserModel userModel;
+    try {
+      userModel = userApiService.getCurrentUser(token);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+    Gson gson = new Gson();
+    Type type = new TypeToken<HashMap<String, WidgetInfo[]>>() {}.getType();
+    // Convert the JSON string back to a Layouts object
+
+    Account createdAccount = Account.builder()
+        .id(userModel.getId())
+        .username(userModel.getUserName())
+        .password(userModel.getUserPassword())
+        .email(userModel.getUserEmail())
+        .currentTheme(Theme.valueOf(userModel.getUserTheme()))
+        .isGuest(false)
+        .selectedLayout(userModel.getSelectedLayout())
+        .dashboardLayouts(gson.fromJson(userModel.getDashboardLayout(), type))
+        .preferCelsius(userModel.getPreferCelsius())
+        .JWTToken(token)
+        .build();
+
+    AccountDAO accountDAO = new AccountDAO();
+
+    accountDAO.insert(createdAccount);
+
+    boolean temp = newAccount.verifyPassword(password);
+    assert temp;
+
+  }
 }

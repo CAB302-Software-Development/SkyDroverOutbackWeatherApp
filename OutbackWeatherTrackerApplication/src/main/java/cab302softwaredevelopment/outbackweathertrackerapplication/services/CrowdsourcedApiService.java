@@ -51,13 +51,13 @@ public class CrowdsourcedApiService {
     /**
      * Get marker by user name.
      *
-     * @param userName the user name to search
+     * @param username the user name to search
      * @return Optional of CrowdsourcedDataModel
      * @throws Exception
      */
-    public Optional<CrowdsourcedModel> getMarkerByUserName(String userName) throws Exception {
+    public Optional<CrowdsourcedModel> getMarkerByUserName(String username) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/user/" + userName))
+                .uri(URI.create(BASE_URL + "/user/" + username))
                 .GET()
                 .build();
 

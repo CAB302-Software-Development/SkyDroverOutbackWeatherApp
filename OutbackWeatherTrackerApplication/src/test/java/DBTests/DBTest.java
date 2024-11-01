@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.hibernate.Session;
 import org.junit.jupiter.api.*;
@@ -102,9 +103,28 @@ abstract class DBTest {
 
     // Add the accounts to the template
     accountsTemplate.clear();
-    accountsTemplate.add(Account.builder().email("test1@gmail.com").password("password").build());
-    accountsTemplate.add(Account.builder().email("test2@gmail.com").password("password").preferCelsius(false).build());
-    accountsTemplate.add(Account.builder().email("test3@gmail.com").password("password").build());
+    accountsTemplate.add(Account.builder()
+        .username("test1")
+        .email("test1@gmail.com")
+        .password("password")
+        .id(UUID.randomUUID().toString())
+        .build()
+    );
+    accountsTemplate.add(Account.builder()
+        .username("test2")
+        .email("test2@gmail.com")
+        .password("password")
+        .preferCelsius(false)
+        .id(UUID.randomUUID().toString())
+        .build()
+    );
+    accountsTemplate.add(Account.builder()
+        .username("test3")
+        .email("test3@gmail.com")
+        .password("password")
+        .id(UUID.randomUUID().toString())
+        .build()
+    );
 
     // Add the locations to the template
     locationsTemplate.clear();

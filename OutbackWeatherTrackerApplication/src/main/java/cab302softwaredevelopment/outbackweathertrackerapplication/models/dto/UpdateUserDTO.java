@@ -11,7 +11,7 @@ public class UpdateUserDTO {
   /**
    * The username of the updated user.
    */
-  private String username;
+  private String userName;
 
   /**
    * The password for the new updated account.

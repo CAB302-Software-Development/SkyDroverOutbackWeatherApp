@@ -8,7 +8,6 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.hibernate.Session;
 
 /**
@@ -77,7 +76,7 @@ public class AccountDAO {
    *           committed. If an exception occurs during the operation, the transaction is rolled
    *           back and the exception stack trace is printed.
    */
-  public void delete(UUID id) {
+  public void delete(String id) {
     Session session = DatabaseConnection.getSession();
     try {
       session.beginTransaction();
@@ -133,7 +132,7 @@ public class AccountDAO {
    * @return The Account object with the specified ID or null if no Account is found
    */
   @Deprecated
-  public Account getById(UUID id) {
+  public Account getById(String id) {
     return new AccountQuery()
         .whereId(id)
         .getSingleResult();
@@ -176,7 +175,7 @@ public class AccountDAO {
      * @param id The ID to filter by
      * @return This AccountQuery object
      */
-    public AccountQuery whereId(UUID id) {
+    public AccountQuery whereId(String id) {
       predicates.add(builder.equal(root.get("id"), id));
       return this;
     }
@@ -200,6 +199,17 @@ public class AccountDAO {
      */
     public AccountQuery wherePreferCelsius(boolean preferCelsius) {
       predicates.add(builder.equal(root.get("preferCelsius"), preferCelsius));
+      return this;
+    }
+
+    /**
+     * Adds a username filter to the query.
+     *
+     * @param username The username to filter by
+     * @return This AccountQuery object
+     */
+    public AccountQuery whereUsername(String username) {
+      predicates.add(builder.equal(root.get("username"), username));
       return this;
     }
 
