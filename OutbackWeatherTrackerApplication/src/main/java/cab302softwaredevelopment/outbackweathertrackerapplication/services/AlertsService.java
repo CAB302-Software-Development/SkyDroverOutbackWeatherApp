@@ -4,6 +4,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CustomAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherAlert;
 import lombok.Getter;
+import lombok.Setter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -24,7 +25,7 @@ public class AlertsService {
     private static final String ALERTS_FILE = "alerts.dat";
 
     private Map<Long, List<WeatherAlert>> locationWarnings = new HashMap<>();
-    @Getter
+    @Getter @Setter
     private List<CustomAlertCondition> alertConfigs;
 
     public AlertsService() {
@@ -38,6 +39,11 @@ public class AlertsService {
 
     public void removeAlert(CustomAlertCondition selectedCondition) {
         alertConfigs.remove(selectedCondition);
+        saveAlerts();
+    }
+
+    public void updateAlert(int index, CustomAlertCondition newCondition) {
+        alertConfigs.set(index, newCondition);
         saveAlerts();
     }
 
