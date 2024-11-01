@@ -45,9 +45,11 @@
             <Button fx:id="btnSettings" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
                 <graphic><ImageView><Image url="@../images/Settings.png"/></ImageView></graphic>
             </Button>
+            <!--
             <Button fx:id="btnDrawer" mnemonicParsing="false" styleClass="navbar-button" maxWidth="30" maxHeight="30">
                 <graphic><ImageView><Image url="@../images/Drawer.png"/></ImageView></graphic>
             </Button>
+            -->
         </VBox>
     </left>
 </BorderPane>
