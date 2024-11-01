@@ -155,7 +155,7 @@ public class DashboardController extends BasePage {
 
         occupiedCells = new boolean[numRows][numCols];
         for (WidgetInfo info : currentLayout) {
-            setOccupied(info);
+            setOccupied(info, true);
         }
 
         for (int r = 0; r < numRows; r++) {
@@ -174,12 +174,12 @@ public class DashboardController extends BasePage {
         }
     }
 
-    private void setOccupied(WidgetInfo info) {
+    private void setOccupied(WidgetInfo info, boolean occupied) {
         int row = info.rowIndex;
         int col = info.columnIndex;
         for (int r = row; r < row + info.rowSpan; r++) {
             for (int c = col; c < col + info.colSpan; c++) {
-                occupiedCells[r][c] = true;
+                occupiedCells[r][c] = occupied;
             }
         }
     }
@@ -200,7 +200,7 @@ public class DashboardController extends BasePage {
         WidgetInfo newWidgetInfo = new WidgetInfo(WidgetType.CurrentTemp, rowIndex, columnIndex, 1, 1, new HashMap<>());
         currentLayout.add(newWidgetInfo);
         unsavedChanges = true;
-        setOccupied(newWidgetInfo);
+        setOccupied(newWidgetInfo, true);
         loadWidgetsToGrid();
         editWidget(currentLayout.indexOf(newWidgetInfo));
     }
@@ -323,13 +323,9 @@ public class DashboardController extends BasePage {
         widgetFactory.updateAllWidgets();
     }
 
-    public void removeFromGrid(StackPane widgetContainer) {
+    public void deleteWidget(WidgetInfo widgetInfo, StackPane widgetContainer) {
         unsavedChanges = true;
         dashboardGrid.getChildren().remove(widgetContainer);
-    }
-
-    public void deleteWidget(WidgetInfo widgetInfo) {
-        unsavedChanges = true;
         currentLayout.remove(widgetInfo);
         loadWidgetsToGrid();
     }

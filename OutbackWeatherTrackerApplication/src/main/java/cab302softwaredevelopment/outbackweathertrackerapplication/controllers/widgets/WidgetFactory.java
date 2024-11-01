@@ -55,10 +55,7 @@ public class WidgetFactory {
 
         Button deleteButton = new Button("Delete");
         deleteButton.getStyleClass().add("button-secondary");
-        deleteButton.setOnAction(e -> {
-            dashboardController.removeFromGrid(widgetContainer);
-            dashboardController.deleteWidget(widgetInfo);
-        });
+        deleteButton.setOnAction(e -> dashboardController.deleteWidget(widgetInfo, widgetContainer));
 
         AnchorPane overlayPane = new AnchorPane(editButton, deleteButton);
         AnchorPane.setTopAnchor(editButton, 5.0);
