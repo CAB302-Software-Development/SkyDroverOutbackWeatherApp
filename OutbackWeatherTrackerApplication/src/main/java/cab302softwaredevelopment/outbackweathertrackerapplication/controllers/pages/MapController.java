@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.SelectablePoint;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
@@ -162,6 +163,7 @@ public class MapController extends BasePage {
         }
         pinCircle.setOnMouseClicked(event -> {
             pointMapLayer.setSelectedLocation(location);
+            hideCrowdPanel();
             setForecastLoading(true);
             Thread locationThread = new Thread(() -> {
                 forecastService.updateForecastsForCurrentUser(2,1);
@@ -199,6 +201,7 @@ public class MapController extends BasePage {
 
         pin.setOnMouseClicked(event -> {
             pointMapLayer.setSelectedLocation(location);
+            hideForecastPanel();
             showCrowdDataDetails(crowdData);
             event.consume();
         });
@@ -222,14 +225,12 @@ public class MapController extends BasePage {
         vbCrowdDataView.getChildren().clear();
         List<Node> details = new ArrayList<>();
 
-        if (crowdData.getLocation() != null) {
-            details.add(new Label("Location: " + crowdData.getLocation()));
-        }
-        if (crowdData.getUsername() != null) {
-            details.add(new Label("User: " + crowdData.getUsername()));
-        }
+        details.add(new Label("Location: " + crowdData.getLocation()));
+        details.add(new Label("User: " + crowdData.getUserName()));
+        details.add(new Label("Feels like temp: " + crowdData.getFeelsLikeTemp()));
+        details.add(new Label("Actual temp: " + crowdData.getActualTemp()));
 
-        // TODO add more fields
+        // TODO add more fields?
 
         vbCrowdDataView.getChildren().addAll(details);
         vbCrowdDataView.setVisible(true);
@@ -313,7 +314,9 @@ public class MapController extends BasePage {
             CrowdsourcedDTO data = InputService.getCrowdData();
             if (data == null) return;
             try {
-                crowdsourcedDataService.createMarker(data);
+                CrowdsourcedModel temp = crowdsourcedDataService.createMarker(data);
+                if (temp == null) MainController.showAlert("Error", "Error de-serialising data from API.");
+
             } catch (Exception e) {
                 MainController.showAlert("Error creating marker", "Could not reach API");
             }

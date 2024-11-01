@@ -37,13 +37,12 @@ public class CustomAlertCondition {
         if (!enabled) return Optional.empty();
 
         // Set defaults
-        long timestampGE = 0;
-        long timestampLE = 86400; // 1 day
-        int countGE = 1;
-        int countLE = Integer.MAX_VALUE;
-
         DateData now = new DateData(LocalDateTime.now());
         long currentTimeEpoch = now.getCurrentEpoch();
+        long timestampGE = currentTimeEpoch;
+        long timestampLE = currentTimeEpoch + 86400; // 1 day
+        int countGE = 1;
+        int countLE = Integer.MAX_VALUE;
 
         DailyForecastDAO.DailyForecastQuery dailyForecastQuery = new DailyForecastDAO.DailyForecastQuery();
         HourlyForecastDAO.HourlyForecastQuery hourlyForecastQuery = new HourlyForecastDAO.HourlyForecastQuery();
