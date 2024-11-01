@@ -1,17 +1,19 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.BOMWeatherAlert;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CustomAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.IAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherAlert;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,30 +28,17 @@ public class AlertsController extends BasePage {
     @FXML
     public ScrollPane alertScrollPane;
     @FXML
-    public Button btnExpandCollapse, btnAddAlert, btnDeleteAlert;
+    public Button btnExpandCollapse, btnAddAlert, btnDeleteAlert, btnEnable, btnDisable;
     @FXML
     public BorderPane bpContentArea;
     @FXML
     public VBox vbAlertConfig;
     @FXML
-    public ListView<IAlertCondition> activeAlerts;
+    public TableView<CustomAlertCondition> activeAlerts;
+    @FXML
+    public TableColumn<CustomAlertCondition, String> colTitle, colEnabled;
     @FXML
     private ComboBox<Location> cboLocations;
-    @FXML
-    private ComboBox<ExampleAlerts> cboExampleAlerts;
-
-    @Getter
-    enum ExampleAlerts {
-        BOMAlert("Bureau Of Meteorology alerts"),
-        HotWeek("Hot week ahead alert"),
-        WindyWeek("Windy week ahead alert");
-
-        private final String title;
-
-        ExampleAlerts(String s) {
-            this.title = s;
-        }
-    }
 
     private boolean isExpanded = false;
 
@@ -75,26 +64,8 @@ public class AlertsController extends BasePage {
             }
         });
 
-        cboExampleAlerts.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(ExampleAlerts object) {
-                if (object == null) return "";
-                return object.getTitle();
-            }
-            @Override
-            public ExampleAlerts fromString(String string) {
-                return null;
-            }
-        });
-        cboExampleAlerts.getItems().setAll(ExampleAlerts.values());
-
-        activeAlerts.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(IAlertCondition item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item == null ? null : item.getAlertTitle());
-            }
-        });
+        colTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlertTitle()));
+        colEnabled.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isEnabled() ? "Enabled" : "Disabled"));
         activeAlerts.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
@@ -111,73 +82,68 @@ public class AlertsController extends BasePage {
                 isExpanded = true;
             }
         } else if (event.getSource() == btnAddAlert) {
-            IAlertCondition condition = createExampleCondition(
-                    cboExampleAlerts.getSelectionModel().getSelectedItem(),
-                    cboLocations.getSelectionModel().getSelectedItem());
-            alertsService.addAlertPreference(condition);
+            CustomAlertCondition condition = InputService.getDailyForecastAlert();
+            alertsService.addAlert(condition);
             updateAlertsPane();
         } else if (event.getSource() == btnDeleteAlert) {
-            IAlertCondition selectedCondition = activeAlerts.getSelectionModel().getSelectedItem();
-            alertsService.removeAlertCondition(selectedCondition);
+            CustomAlertCondition selectedCondition = activeAlerts.getSelectionModel().getSelectedItem();
+            alertsService.removeAlert(selectedCondition);
             updateAlertsPane();
+        } else if (event.getSource() == btnEnable) {
+            activeAlerts.getSelectionModel().getSelectedItem().setEnabled(true);
+        } else if (event.getSource() == btnDisable) {
+            activeAlerts.getSelectionModel().getSelectedItem().setEnabled(false);
         }
     }
 
-    private IAlertCondition createExampleCondition(ExampleAlerts alertType, Location location) {
-        return switch (alertType) {
-            case BOMAlert -> new BOMWeatherAlert(location);
-            case HotWeek -> new CustomAlertCondition(
-                    ExampleAlerts.HotWeek.getTitle(),
-                    "",
-                    new DailyForecastDAO.DailyForecastQuery()
-                            .whereLocationId(location.getId())
-                            .addOrderDesc("temperature_2m_max"),
-                    0L,
-                    604800L,
-                    3,
-                    "temperature_2m_max",
-                    30);
-            case WindyWeek -> new CustomAlertCondition(
-                    ExampleAlerts.WindyWeek.getTitle(),
-                    "",
-                    new DailyForecastDAO.DailyForecastQuery()
-                            .whereLocationId(location.getId())
-                            .addOrderDesc("wind_speed_10m_max"),
-                    0L,
-                    604800L,
-                    3,
-                    "wind_speed_10m_max",
-                    30);
-        };
+    private void createExampleConditions() {
     }
 
     @FXML
     private void updateAlertsPane() {
         List<WeatherAlert> alerts = new ArrayList<>();
-        List<IAlertCondition> conditions = alertsService.getAlertPreferences();
-        conditions.forEach(c -> alerts.addAll(c.getAlerts()));
-
-        //List<WeatherAlert> alerts = new ArrayList<>();
-        //alerts.add(new WeatherAlert("20/10:19 EDT Final Flood Warning for the Kiewa River", "http://www.bom.gov.au/vic/warnings/flood/kiewariver.shtml", "Sat, 19 Oct 2024 23:19:33 GMT"));
+        List<CustomAlertCondition> conditions = alertsService.getAlertConfigs();
+        Location location = cboLocations.getSelectionModel().getSelectedItem();
+        conditions.forEach(c -> c.getAlert(location).ifPresent(alerts::add));
 
         activeAlerts.getItems().clear();
         activeAlerts.setItems(FXCollections.observableArrayList(conditions));
 
         VBox vbScrollContent = new VBox();
         vbScrollContent.setSpacing(10);
-        for (WeatherAlert alert : alerts) {
-            Text description = new Text(alert.getTitle());
-            Text date = new Text(alert.getPubDate());
-            HBox topRow = new HBox(description, date);
-            VBox alertContainer = new VBox(topRow);
-            if (alert.getLink() != null) alertContainer.getChildren().add(new Hyperlink(alert.getLink()));
-            alertContainer.getStyleClass().add("weather-alert");
-            alertContainer.prefHeight(150);
-            alertContainer.setPadding(new Insets(10));
-            vbScrollContent.getChildren().add(alertContainer);
-        }
+        alerts.forEach(a -> vbScrollContent.getChildren().add(createAlertComponent(a)));
+
         alertScrollPane.setContent(vbScrollContent);
     }
+
+    private VBox createAlertComponent(WeatherAlert alert) {
+        Text title = new Text(alert.getTitle());
+        Text message = new Text(alert.getMessage());
+
+        VBox alertContainer = new VBox(title, message);
+        alertContainer.getStyleClass().add("weather-alert");
+        alertContainer.setPadding(new Insets(10));
+
+        int initialDisplayLimit = 2;
+        List<String> alertData = alert.getData();
+        VBox dataListContainer = new VBox();
+        alertData.stream().limit(initialDisplayLimit).forEach(data -> dataListContainer.getChildren().add(new Text(data)));
+
+        Button expandCollapseButton = new Button("Show More");
+        expandCollapseButton.setOnAction(event -> {
+            if (dataListContainer.getChildren().size() > initialDisplayLimit) {
+                dataListContainer.getChildren().setAll(alertData.stream().limit(initialDisplayLimit).map(Text::new).toList());
+                expandCollapseButton.setText("Show More");
+            } else {
+                dataListContainer.getChildren().setAll(alertData.stream().map(Text::new).toList());
+                expandCollapseButton.setText("Show Less");
+            }
+        });
+
+        alertContainer.getChildren().addAll(dataListContainer, expandCollapseButton);
+        return alertContainer;
+    }
+
 
     private void loadUserLocations() {
         List<Location> locations = locationService.getCurrentUserLocations();

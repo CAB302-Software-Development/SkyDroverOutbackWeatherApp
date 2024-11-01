@@ -1,8 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AlertDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.IAlertCondition;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.CustomAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WeatherAlert;
 import lombok.Getter;
 import org.w3c.dom.Document;
@@ -10,7 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -22,25 +21,43 @@ import java.util.Map;
 public class AlertsService {
     @Getter
     private static AlertsService instance = new AlertsService();
+    private static final String ALERTS_FILE = "alerts.dat";
 
-    private AlertDAO alertDAO = new AlertDAO();
     private Map<Long, List<WeatherAlert>> locationWarnings = new HashMap<>();
+    @Getter
+    private List<CustomAlertCondition> alertConfigs;
 
-    public void addAlertPreference(IAlertCondition alertCondition) {
-        alertDAO.saveAlertPreference(alertCondition);
+    public AlertsService() {
+        alertConfigs = loadAlerts();
     }
 
-    public List<IAlertCondition> getAlertPreferences() {
-        return alertDAO.getAllAlertPreferences();
+    public void addAlert(CustomAlertCondition alert) {
+        alertConfigs.add(alert);
+        saveAlerts();
     }
 
-    public void removeAllAlertPreferences() {
-        alertDAO.clearAllAlertPreferences();
+    public void removeAlert(CustomAlertCondition selectedCondition) {
+        alertConfigs.remove(selectedCondition);
+        saveAlerts();
     }
 
-    public void removeAlertCondition(IAlertCondition condition) {
-        alertDAO.deleteAlertPreference(condition);
+    public void saveAlerts() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ALERTS_FILE))) {
+            oos.writeObject(alertConfigs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    @SuppressWarnings("unchecked")
+    private List<CustomAlertCondition> loadAlerts() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ALERTS_FILE))) {
+            return (List<CustomAlertCondition>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return new ArrayList<>();
+        }
+    }
+
 
     public List<WeatherAlert> getBOMAlertsForLocation(Location location) {
         if (locationWarnings.isEmpty()) updateBOMAlertsForCurrentUserLocations();
@@ -71,7 +88,7 @@ public class AlertsService {
                     String title = item.getElementsByTagName("title").item(0).getTextContent();
                     String link = item.getElementsByTagName("link").item(0).getTextContent();
                     String pubDate = item.getElementsByTagName("pubDate").item(0).getTextContent();
-                    alerts.add(new WeatherAlert(title, link, pubDate));
+                    alerts.add(new WeatherAlert( "BOM Weather warning", title, link, pubDate));
                 }
             }
             locationWarnings.put(location.getId(), alerts);

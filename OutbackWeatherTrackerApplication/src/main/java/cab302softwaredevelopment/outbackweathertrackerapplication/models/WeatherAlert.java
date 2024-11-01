@@ -3,15 +3,17 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter
 public class WeatherAlert {
     private String title;
-    private String link;
-    private String pubDate;
+    private String message;
+    private List<String> data;
 
-    public WeatherAlert(String title, String link, String pubDate) {
+    public WeatherAlert(String title, String message, String... data) {
         this.title = title;
-        this.link = link;
-        this.pubDate = pubDate;
+        this.message = message;
+        this.data = List.of(data);
     }
 }

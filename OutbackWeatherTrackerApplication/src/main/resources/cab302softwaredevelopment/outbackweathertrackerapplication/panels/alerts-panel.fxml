@@ -13,15 +13,17 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
 
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.geometry.Insets?>
 <VBox spacing="20.0" styleClass="alerts-panel"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
       xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.AlertsController">
     <padding><Insets topRightBottomLeft="10"/></padding>
+
     <HBox styleClass="page-header" alignment="CENTER">
         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Alerts" >
             <font><Font size="36.0"/></font>
@@ -29,19 +31,28 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnExpandCollapse" text="expand" onAction="#handleButtonPress"/>
     </HBox>
+
     <BorderPane fx:id="bpContentArea">
         <center>
             <ScrollPane styleClass="scroll-pane1" fx:id="alertScrollPane"/>
         </center>
         <right>
             <VBox fx:id="vbAlertConfig" styleClass="alert-config">
-                <ListView fx:id="activeAlerts"/>
+                <ComboBox fx:id="cboLocations" promptText="Select Location..." onAction="#updateAlertsPane"/>
                 <HBox>
-                    <ComboBox fx:id="cboExampleAlerts"/>
+                    <Button fx:id="btnEnable" text="Enable"/>
+                    <Button fx:id="btnDisable" text="Disable"/>
+                </HBox>
+                <TableView fx:id="activeAlerts">
+                    <columns>
+                        <TableColumn fx:id="colTitle" text="Alert title"/>
+                        <TableColumn fx:id="colEnabled" text="Enabled"/>
+                    </columns>
+                </TableView>
+                <HBox>
                     <Button fx:id="btnAddAlert" text="Add" onAction="#handleButtonPress"/>
                     <Button fx:id="btnDeleteAlert" text="Delete Selected" onAction="#handleButtonPress"/>
                 </HBox>
-                <ComboBox fx:id="cboLocations"/>
             </VBox>
         </right>
     </BorderPane>

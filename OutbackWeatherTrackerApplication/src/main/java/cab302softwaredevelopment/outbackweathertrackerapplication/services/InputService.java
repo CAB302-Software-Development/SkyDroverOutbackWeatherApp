@@ -3,8 +3,10 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 import cab302softwaredevelopment.outbackweathertrackerapplication.ApplicationEntry;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.CrowdsourcedDataDialogController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.ForecastAlertDialogController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LocationSelectorController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.WidgetConfigDialogController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.CustomAlertCondition;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
@@ -108,4 +110,29 @@ public class InputService {
         }
     }
 
+    public static CustomAlertCondition getHourlyForecastAlert() {
+        return getForecastAlert(false);
+    }
+
+    public static CustomAlertCondition getDailyForecastAlert() {
+        return getForecastAlert(true);
+    }
+
+    public static CustomAlertCondition getForecastAlert(boolean forecastType) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/forecast-alert-dialog.fxml"));
+            Parent root = loader.load();
+            ForecastAlertDialogController controller = loader.getController();
+            controller.setForecastType(forecastType);
+            Stage stage = new Stage();
+            stage.setTitle("Hourly Forecast Query Configuration");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+            return controller.getForecastAlert();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
