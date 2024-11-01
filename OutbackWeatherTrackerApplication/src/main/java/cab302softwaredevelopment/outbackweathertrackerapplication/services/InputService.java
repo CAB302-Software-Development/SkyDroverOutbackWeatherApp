@@ -125,7 +125,7 @@ public class InputService {
             ForecastAlertDialogController controller = loader.getController();
             controller.setForecastType(forecastType);
             Stage stage = new Stage();
-            stage.setTitle("Hourly Forecast Query Configuration");
+            stage.setTitle(forecastType ? "Daily Forecast Query Configuration" : "Hourly Forecast Query Configuration");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.showAndWait();

@@ -66,9 +66,9 @@ public class UserService {
         widgetConfig.setLocationId(location.getId());
 
         WidgetInfo[] defaultDashboard = new WidgetInfo[]{
-                new WidgetInfo(WidgetType.Temperature, 0, 0, 2, 2, widgetConfig.getConfig()),
+                new WidgetInfo(WidgetType.Temperature, 0, 0, 2, 1, widgetConfig.getConfig()),
                 new WidgetInfo(WidgetType.Soil, 0, 2, 2, 2, widgetConfig.getConfig()),
-                new WidgetInfo(WidgetType.Precipitation, 2, 0, 2, 1, widgetConfig.getConfig())
+                new WidgetInfo(WidgetType.Precipitation, 1, 0, 2, 1, widgetConfig.getConfig())
         };
 
         UserService.getInstance().saveLayoutForUser(account, "default", defaultDashboard);

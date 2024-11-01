@@ -169,4 +169,13 @@ public class LocationService {
             return false;
         }
     }
+
+    public static String getShortName(Location location) {
+        return getShortName(location, 30);
+    }
+    public static String getShortName(Location location, int maxLength) {
+        return  location.getName().length() > maxLength ?
+                location.getName().substring(0, maxLength) + "..." :
+                location.getName();
+    }
 }
