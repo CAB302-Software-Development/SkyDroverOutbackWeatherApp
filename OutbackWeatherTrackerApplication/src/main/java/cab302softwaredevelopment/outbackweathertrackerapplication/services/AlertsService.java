@@ -26,44 +26,19 @@ public class AlertsService {
 
     private Map<Long, List<WeatherAlert>> locationWarnings = new HashMap<>();
     @Getter @Setter
-    private List<CustomAlertCondition> alertConfigs;
-
-    public AlertsService() {
-        alertConfigs = loadAlerts();
-    }
+    private List<CustomAlertCondition> alertConfigs = new ArrayList<>();
 
     public void addAlert(CustomAlertCondition alert) {
         alertConfigs.add(alert);
-        saveAlerts();
     }
 
     public void removeAlert(CustomAlertCondition selectedCondition) {
         alertConfigs.remove(selectedCondition);
-        saveAlerts();
     }
 
     public void updateAlert(int index, CustomAlertCondition newCondition) {
         alertConfigs.set(index, newCondition);
-        saveAlerts();
     }
-
-    public void saveAlerts() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ALERTS_FILE))) {
-            oos.writeObject(alertConfigs);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<CustomAlertCondition> loadAlerts() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ALERTS_FILE))) {
-            return (List<CustomAlertCondition>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            return new ArrayList<>();
-        }
-    }
-
 
     public List<WeatherAlert> getBOMAlertsForLocation(Location location) {
         if (locationWarnings.isEmpty()) updateBOMAlertsForCurrentUserLocations();

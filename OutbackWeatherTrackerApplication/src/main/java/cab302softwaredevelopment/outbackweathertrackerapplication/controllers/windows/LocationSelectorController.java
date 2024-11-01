@@ -37,9 +37,9 @@ public class LocationSelectorController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.locationService = LocationService.getInstance();
-        MapPoint initialPoint = new MapPoint(-27.467331464, 153.02333324);
-        mapView.setZoom(10.0);
-        mapView.flyTo(0, initialPoint, 1.0);
+        MapPoint initialPoint = new MapPoint(-25.2744, 133.7751);
+        mapView.setZoom(4.0);
+        mapView.setCenter(initialPoint);
         mapView.setOnMouseClicked((MouseEvent event) -> {
             if (event.isStillSincePress()) {
                 MapPoint clickedPoint = mapView.getMapPosition(event.getX(), event.getY());

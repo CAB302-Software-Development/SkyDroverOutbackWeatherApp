@@ -16,34 +16,24 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CrowdsourcedDataDialogController {
-
     @FXML
     private VBox configFieldsVBox;
-
     @FXML
     private ComboBox<Location> locationComboBox;
-
     @FXML
     private DialogPane dialogPane;
-
     @FXML
-    private ButtonType saveButtonType;
+    private ButtonType saveButtonType, cancelButtonType;
+    @FXML
+    TextField actualTempField, feelsLikeTempField;
 
     @Getter
-    private CrowdsourcedDTO crowdsourcedData;
+    private CrowdsourcedDTO crowdsourcedData = null;
 
-    private LocationService locationService;
-    private List<Location> locations;
 
     @FXML
     public void initialize() {
-        locationService = LocationService.getInstance();
-        locations = locationService.getCurrentUserLocations();
-        initializeLocationComboBox();
-        populateFields();
-    }
-
-    private void initializeLocationComboBox() {
+        List<Location> locations = LocationService.getInstance().getCurrentUserLocations();
         locationComboBox.setItems(FXCollections.observableArrayList(locations));
         locationComboBox.setConverter(new StringConverter<>() {
             @Override
@@ -56,47 +46,38 @@ public class CrowdsourcedDataDialogController {
                 return null;
             }
         });
-
         locationComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             if (newValue != null) {
                 crowdsourcedData.setLatitude(newValue.getLatitude());
                 crowdsourcedData.setLongitude(newValue.getLongitude());
             }
         });
-    }
-
-    private void populateFields() {
-        configFieldsVBox.getChildren().clear();
-        crowdsourcedData = new CrowdsourcedDTO();
-
-        TextField locationField = new TextField();
-        locationField.setPromptText("Enter location name");
-        configFieldsVBox.getChildren().add(new Label("Location"));
-        configFieldsVBox.getChildren().add(locationField);
-
-        TextField userNameField = new TextField();
-        userNameField.setPromptText("Enter your name");
-        configFieldsVBox.getChildren().add(new Label("User Name"));
-        configFieldsVBox.getChildren().add(userNameField);
-
-        TextField actualTempField = new TextField();
-        actualTempField.setPromptText("Enter actual temperature");
-        configFieldsVBox.getChildren().add(new Label("Actual Temperature"));
-        configFieldsVBox.getChildren().add(actualTempField);
-
-        TextField feelsLikeTempField = new TextField();
-        feelsLikeTempField.setPromptText("Enter feels-like temperature");
-        configFieldsVBox.getChildren().add(new Label("Feels Like Temperature"));
-        configFieldsVBox.getChildren().add(feelsLikeTempField);
 
         Button saveButton = (Button) dialogPane.lookupButton(saveButtonType);
         saveButton.setOnAction(event -> {
-            crowdsourcedData.setLocation(locationField.getText());
-            crowdsourcedData.setUserName(userNameField.getText());
-            crowdsourcedData.setActualTemp(parseInteger(actualTempField.getText()));
-            crowdsourcedData.setFeelsLikeTemp(parseInteger(feelsLikeTempField.getText()));
+            buildCrowdData();
             dialogPane.getScene().getWindow().hide();
         });
+
+        Button cancelButton = (Button) dialogPane.lookupButton(cancelButtonType);
+        cancelButton.setOnAction(event -> {
+            crowdsourcedData = null;
+            dialogPane.getScene().getWindow().hide();
+        });
+    }
+
+    private void buildCrowdData() {
+        Location location = locationComboBox.getSelectionModel().getSelectedItem();
+        crowdsourcedData = new CrowdsourcedDTO();
+        crowdsourcedData.setLocation(location.getName());
+        crowdsourcedData.setLatitude(location.getLatitude());
+        crowdsourcedData.setLongitude(location.getLongitude());
+        if (actualTempField.getText() != null && !actualTempField.getText().isEmpty()) {
+            crowdsourcedData.setActualTemp(parseInteger(actualTempField.getText()));
+        }
+        if (feelsLikeTempField.getText() != null && !feelsLikeTempField.getText().isEmpty()) {
+            crowdsourcedData.setFeelsLikeTemp(parseInteger(feelsLikeTempField.getText()));
+        }
     }
 
     private Integer parseInteger(String text) {

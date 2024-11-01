@@ -315,7 +315,7 @@ public class MapController extends BasePage {
             try {
                 crowdsourcedDataService.createMarker(data);
             } catch (Exception e) {
-                MainController.showAlert("Error creating marker", e.getMessage());
+                MainController.showAlert("Error creating marker", "Could not reach API");
             }
         } else if (event.getSource() == btnRefresh) {
             updateData();

@@ -17,11 +17,11 @@ public class CustomAlertCondition {
     private String message = null;
     @Getter @Setter
     private boolean enabled = true;
-    private boolean forecastType; // True = DailyForecast; False = HourlyForecast;
+    private boolean isDaily; // True = DailyForecast; False = HourlyForecast;
     private List<FilterValue> filters = new ArrayList<>();
 
-    public CustomAlertCondition(boolean forecastType) {
-        this.forecastType = forecastType;
+    public CustomAlertCondition(boolean isDaily) {
+        this.isDaily = isDaily;
     }
 
     public void addAlertCondition(String field, boolean isGreaterOrEqual, String value) throws IllegalStateException {
@@ -62,7 +62,7 @@ public class CustomAlertCondition {
                     countLE = Integer.parseInt(filter.getValue());
                 }
             } else {
-                if (forecastType) {
+                if (isDaily) {
                     if (filter.getIsGreaterOrEqual()) {
                         dailyForecastQuery.whereFieldGE(filter.getField(), filter.getValue());
                     } else {
@@ -78,7 +78,7 @@ public class CustomAlertCondition {
             }
         }
 
-        if (forecastType) {
+        if (isDaily) {
             dailyForecastQuery.whereTimestampGE((int) timestampGE);
             dailyForecastQuery.whereTimestampLE((int) timestampLE);
             dailyForecastQuery.whereLocationId(location.getId());
