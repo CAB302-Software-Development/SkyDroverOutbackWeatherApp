@@ -139,7 +139,7 @@ public class LocationService {
                 double latitude = jsonObject.get("lat").getAsDouble();
                 double longitude = jsonObject.get("lon").getAsDouble();
 
-                return new LocationCreateModel(null, latitude, longitude, 0);
+                return new LocationCreateModel(null, latitude, longitude);
             } else {
                 throw new Exception("HTTP Request failed with code: " + responseCode);
             }

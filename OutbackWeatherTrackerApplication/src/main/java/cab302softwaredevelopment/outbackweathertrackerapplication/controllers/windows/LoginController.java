@@ -262,7 +262,6 @@ public class LoginController {
 
                 account.setLastModified(userModel.getUserAccountUpdateDate());
                 accountDAO.update(account);
-
             }
             else{
                 // Update the remote account

@@ -128,18 +128,18 @@ abstract class DBTest {
 
     // Add the locations to the template
     locationsTemplate.clear();
-    locationsTemplate.add(new Location(accountsTemplate.get(0), 153.02333324, -27.467331464, 27.0,
+    locationsTemplate.add(new Location(accountsTemplate.get(0), 153.02333324, -27.467331464,
         "Brisbane")); // brisbane
-    locationsTemplate.add(new Location(accountsTemplate.get(0), 153.06064, -27.58003, 58.0,
+    locationsTemplate.add(new Location(accountsTemplate.get(0), 153.06064, -27.58003,
         "Sunnybank")); // sunnybank
     locationsTemplate.add(
-        new Location(accountsTemplate.get(0), 153.0246, -27.53436, 48.0, "Moorooka")); // Moorooka
-    locationsTemplate.add(new Location(accountsTemplate.get(0), 153.10236, -27.50578, 14.0,
+        new Location(accountsTemplate.get(0), 153.0246, -27.53436, "Moorooka")); // Moorooka
+    locationsTemplate.add(new Location(accountsTemplate.get(0), 153.10236, -27.50578,
         "Carindale")); // Carindale
     locationsTemplate.add(
-        new Location(accountsTemplate.get(0), 152.9, -27.5, 114.0, "Brookfield")); // Brookfield
+        new Location(accountsTemplate.get(0), 152.9, -27.5, "Brookfield")); // Brookfield
     locationsTemplate.add(
-        new Location(accountsTemplate.get(0), 130.9889, -25.2406, 507.0, "Yulara")); // Yulara
+        new Location(accountsTemplate.get(0), 130.9889, -25.2406, "Yulara")); // Yulara
 
     // Add the hourly forecasts to the template
     hourlyForecastsTemplate.clear();

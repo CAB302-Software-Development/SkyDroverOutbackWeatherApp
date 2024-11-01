@@ -11,27 +11,23 @@ public class LocationCreateModel {
     String name;
     double latitude;
     double longitude;
-    Double elevation;
 
     public LocationCreateModel(double latitude, double longitude) {
         this.name = null;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.elevation = null;
     }
 
     public LocationCreateModel(Location location) {
         this.name = location.getName();
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
-        this.elevation = location.getElevation();
     }
 
-    public LocationCreateModel(String name, double latitude, double longitude, double elevation) {
+    public LocationCreateModel(String name, double latitude, double longitude) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.elevation = elevation;
     }
 
     public Location build(Account account) {
@@ -39,7 +35,6 @@ public class LocationCreateModel {
                 account,
                 getLongitude(),
                 getLatitude(),
-                getElevation(),
                 getName());
         return newLocation;
     }

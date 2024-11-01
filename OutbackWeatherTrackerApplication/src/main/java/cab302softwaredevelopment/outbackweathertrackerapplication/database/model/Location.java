@@ -29,7 +29,6 @@ class LocationId implements Serializable {
   private Account account;
   private Double longitude;
   private Double latitude;
-  private Double elevation;
 }
 
 @Getter
@@ -75,12 +74,6 @@ public class Location {
   @Column(name="latitude", nullable = false)
   private Double latitude;
 
-  /**
-   * The elevation of the location.
-   */
-  @Id
-  @Column(name="elevation", nullable = false)
-  private Double elevation;
 
   /**
    * The name of the location.
@@ -96,14 +89,12 @@ public class Location {
    * @param account The account that this location is associated with.
    * @param longitude The longitude of the location.
    * @param latitude The latitude of the location.
-   * @param elevation The elevation of the location.
    * @param name The name of the location.
    */
-  public Location(Account account,Double longitude, Double latitude,Double elevation, String name) {
+  public Location(Account account,Double longitude, Double latitude, String name) {
     this.account = account;
     this.longitude = longitude;
     this.latitude = latitude;
-    this.elevation = elevation;
     this.name = name;
     this.id = generateId();
   }
