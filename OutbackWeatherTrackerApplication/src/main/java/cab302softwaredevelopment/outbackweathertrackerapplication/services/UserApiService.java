@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserApiService {
-    private static final String BASE_URL = "http://localhost:8080/api/user";
+    private static final String BASE_URL = "http://localhost:8090/api/user";
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 

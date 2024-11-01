@@ -11,10 +11,12 @@ import java.io.Serializable;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -35,7 +37,9 @@ class LocationId implements Serializable {
 @Table(name = "location")
 @IdClass(LocationId.class)
 @EqualsAndHashCode
+@ToString
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
+@Builder
 /**
  * A model class for the Location entity.
  */
@@ -51,7 +55,6 @@ public class Location {
    * The account that this location is associated with.
    */
   @Id
-
   @ManyToOne
   @PrimaryKeyJoinColumn
   @OnDelete(action = OnDeleteAction.CASCADE)
@@ -112,17 +115,4 @@ public class Location {
   private long generateId() {
     return Objects.hash(account.getId(), longitude, latitude);
   }
-
-  @Override
-  public String toString() {
-    return "Location{" +
-        "id=" + id +
-        ", account=" + account +
-        ", longitude=" + longitude +
-        ", latitude=" + latitude +
-        ", elevation=" + elevation +
-        ", name='" + name + "'" +
-        '}';
-  }
-
 }

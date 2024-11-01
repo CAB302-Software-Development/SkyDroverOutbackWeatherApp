@@ -17,13 +17,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Converter(autoApply = true)
@@ -51,6 +52,7 @@ class LayoutsConverter implements AttributeConverter<HashMap<String, WidgetInfo[
 @Builder
 @Getter
 @EqualsAndHashCode
+@ToString
 /**
  * A model class for the Account entity.
  */
@@ -60,8 +62,14 @@ public class Account {
    * The ID of the account.
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+  private String id;
+
+  /**
+   * The username of the account.
+   */
+  @Setter
+  @Column(nullable = false)
+  private String username;
 
   /**
    * The email of the account.
@@ -104,6 +112,12 @@ public class Account {
   private String selectedLayout = "default";
 
   /**
+   * The JWT token of the account once logged in.
+   */
+  @Setter
+  private String JWTToken; // TODO
+
+  /**
    * The users layouts.
    */
   @Convert(converter = LayoutsConverter.class)
@@ -112,18 +126,38 @@ public class Account {
   @Setter
   private HashMap<String, WidgetInfo[]> dashboardLayouts = new LayoutsConverter().convertToEntityAttribute("{'default':[]}");
 
+  /**
+   * The date that data was last modified. (for server sync)
+   */
+  @Setter
+  private Date lastModified; // TODO
+
   public Account() {
   }
 
-  public Account(UUID id, String email,String password,Boolean preferCelsius,Boolean isGuest,Theme currentTheme,String selectedLayout,HashMap<String,WidgetInfo[]> dashboardLayouts){
+  /**
+   * TODO: Add Javadoc
+   * @param id
+   * @param email
+   * @param password
+   * @param preferCelsius
+   * @param isGuest
+   * @param currentTheme
+   * @param selectedLayout
+   * @param dashboardLayouts
+   */
+  public Account(String id, String username, String email,String password,Boolean preferCelsius,Boolean isGuest,Theme currentTheme,String selectedLayout, String JWTToken, HashMap<String,WidgetInfo[]> dashboardLayouts,Date lastModified) {
     this.id = id;
+    this.username = username;
     this.email = email;
     setPassword(password);
     this.preferCelsius = preferCelsius;
     this.isGuest = isGuest;
     this.currentTheme = currentTheme;
     this.selectedLayout = selectedLayout;
+    this.JWTToken = JWTToken;
     this.dashboardLayouts = dashboardLayouts;
+    this.lastModified = new Date(System.currentTimeMillis());
   }
 
   /**
@@ -132,7 +166,7 @@ public class Account {
    * @param password The password to set. (will be hashed)
    */
   public void setPassword(String password) {
-    this.password = BCrypt.hashpw(password, BCrypt.gensalt(10));
+    this.password = BCrypt.hashpw(password, "$2a$10$iToUqSeCDLopg8IdvWsuiO");
   }
 
   /**
@@ -145,13 +179,11 @@ public class Account {
     return BCrypt.checkpw(password, this.password);
   }
 
-  @Override
-  public String toString() {
-    return "Account{" +
-        "id=" + id +
-        ", email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        '}';
+  public String GetDashboardLayoutsString() {
+    return new LayoutsConverter().convertToDatabaseColumn(dashboardLayouts);
   }
 
+  public void SetDashboardLayoutsString(String layouts) {
+    dashboardLayouts = new LayoutsConverter().convertToEntityAttribute(layouts);
+  }
 }

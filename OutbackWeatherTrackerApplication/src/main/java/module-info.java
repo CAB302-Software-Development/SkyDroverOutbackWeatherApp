@@ -39,7 +39,7 @@ module cab302softwaredevelopment.outbackweathertrackerapplication {
     opens cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.models to com.google.gson, javafx.fxml;
     opens cab302softwaredevelopment.outbackweathertrackerapplication.services to com.google.gson;
-    opens cab302softwaredevelopment.outbackweathertrackerapplication.database.model to org.hibernate.orm.core;
+    opens cab302softwaredevelopment.outbackweathertrackerapplication.database.model to org.hibernate.orm.core, com.google.gson;
 
     //database testing
     exports cab302softwaredevelopment.outbackweathertrackerapplication.database;

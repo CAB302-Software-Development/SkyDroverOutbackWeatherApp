@@ -39,7 +39,7 @@ public class UserDataServiceTest {
     public void testAuthenticateUserSuccess() throws Exception {
         UserLoginRequestDTO loginRequest = new UserLoginRequestDTO();
 
-        loginRequest.setUserName("string");
+        loginRequest.setUserEmail("string");
         loginRequest.setPassword("string");
 
         String result = userDataService.login(loginRequest);
@@ -51,7 +51,7 @@ public class UserDataServiceTest {
     public void testAuthenticateUserFailure() throws IOException, InterruptedException {
         // Arrange
         UserLoginRequestDTO loginRequest = new UserLoginRequestDTO();
-        loginRequest.setUserName("wronguser");
+        loginRequest.setUserEmail("wronguser");
         loginRequest.setPassword("wrongpassword");
 
         // Mocking the HTTP response to simulate a failed login
@@ -120,7 +120,7 @@ public class UserDataServiceTest {
         // Arrange
         String userId = "12345";
         UserDataDTO expectedUser = new UserDataDTO();
-        expectedUser.setUserName("testuser");
+        expectedUser.setUsername("testuser");
         expectedUser.setUserEmail("testuser@example.com");
 
         // Mocking the HTTP response to simulate fetching the user by ID
@@ -134,7 +134,7 @@ public class UserDataServiceTest {
         AllUserDataModel result = userDataService.getUserById(userId);
 
         // Assert
-        assertEquals(expectedUser.getUserName(), result.getUserName());
+        assertEquals(expectedUser.getUsername(), result.getUserName());
         assertEquals(expectedUser.getUserEmail(), result.getUserEmail());
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once
     }

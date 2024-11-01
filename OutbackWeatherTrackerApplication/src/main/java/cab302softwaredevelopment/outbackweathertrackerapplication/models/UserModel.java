@@ -20,8 +20,8 @@ public class UserModel {
     private String id;
 
     /**
-     * The username of the user.
-     * This field is mapped to the "user_name" field in the MongoDB document.
+     * The username of the user. This field is mapped to the "user_name" field in the MongoDB
+     * document.
      */
     private String userName;
 
@@ -42,6 +42,30 @@ public class UserModel {
      * This field is mapped to the "user_theme" field in the MongoDB document.
      */
     private String userTheme;
+
+    /**
+     * The preferred temperature unit of the user.
+     * This field is mapped to the "prefer_celsius" field in the MongoDB document.
+     */
+    private Boolean preferCelsius;
+
+    /**
+     * The selected layout of the user.
+     * This field is mapped to the "selected_layout" field in the MongoDB document.
+     */
+    private String selectedLayout;
+
+    /**
+     * The dashboard layout of the user.
+     * This field is mapped to the "dashboard_layout" field in the MongoDB document.
+     */
+    private String dashboardLayout;
+
+    /**
+     * The selected locations of the user.
+     * This field is mapped to the "locations" field in the MongoDB document.
+     */
+    private String locations;
 
     /**
      * The date when the user's account was created.

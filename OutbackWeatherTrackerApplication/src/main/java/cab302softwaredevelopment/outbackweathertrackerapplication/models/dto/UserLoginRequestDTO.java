@@ -14,7 +14,7 @@ public class UserLoginRequestDTO {
     /**
      * The username of the user attempting to log in.
      */
-    private String userName;
+    private String userEmail;
 
     /**
      * The password of the user attempting to log in.

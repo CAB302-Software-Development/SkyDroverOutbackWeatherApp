@@ -12,7 +12,7 @@ public class CrowdsourcedDTO {
 
     private double longitude;
 
-    private String userName;
+    private String username;
 
     private int actualTemp;
 
