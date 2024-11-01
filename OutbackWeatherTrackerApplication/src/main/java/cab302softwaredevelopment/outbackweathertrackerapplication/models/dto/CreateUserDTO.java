@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.models.dto;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
+import org.json.JSONObject;
 
 /**
  * This class represents the model used for creating a new user. It contains the essential details
@@ -45,10 +46,10 @@ public class CreateUserDTO {
   /**
    * The dashboard layout of the user.
    */
-  private JsonObject dashboardLayout;
+  private JSONObject dashboardLayout;
 
   /**
    * The selected locations of the user.
    */
-  private JsonObject locations;
+  private JSONObject locations;
 }
