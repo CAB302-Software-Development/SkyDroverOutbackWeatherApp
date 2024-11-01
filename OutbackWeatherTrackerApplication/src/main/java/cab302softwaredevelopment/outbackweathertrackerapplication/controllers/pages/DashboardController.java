@@ -19,6 +19,10 @@ import javafx.scene.text.Text;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Controller class for managing the application's dashboard.
+ * Provides functionality for displaying, editing, saving, and managing dashboard layouts and widgets.
+ */
 public class DashboardController extends BasePage {
     @FXML
     public Pane pnlRoot;
@@ -55,6 +59,10 @@ public class DashboardController extends BasePage {
         loadWidgetsToGrid();
     }
 
+    /**
+     * Resets the layout ComboBox, populating it with available layouts and setting up a listener
+     * to handle layout changes.
+     */
     private void resetLayoutComboBox() {
         cboSelectedLayout.getItems().clear();
         cboSelectedLayout.getItems().addAll(userService.getCurrentAccount().getDashboardLayouts().keySet());
@@ -64,6 +72,11 @@ public class DashboardController extends BasePage {
         });
     }
 
+    /**
+     * Handles button clicks for editing, saving, canceling, creating, and deleting layouts.
+     *
+     * @param event The ActionEvent triggered by button clicks.
+     */
     @FXML
     public void handleButtonClick(ActionEvent event) {
         if (event.getSource() == btnEditDashboard){
@@ -104,6 +117,9 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Enters edit mode, making the edit toolbar visible and setting up the grid for editing.
+     */
     private void enterEditMode() {
         isEditing = true;
         bpHeader.setVisible(false);
@@ -114,6 +130,9 @@ public class DashboardController extends BasePage {
         loadWidgetsToGrid();
     }
 
+    /**
+     * Exits edit mode, discarding or saving changes as needed and resetting the UI.
+     */
     private void exitEditMode() {
         if(checkUnsavedChanges()) return;
         currentLayout = userService.getCurrentLayout();
@@ -127,6 +146,9 @@ public class DashboardController extends BasePage {
         MainController.getController().updateUIData();
     }
 
+    /**
+     * Clears then loads widgets to the grid based on the current layout, setting up widget containers.
+     */
     public void loadWidgetsToGrid() {
         dashboardGrid.getChildren().clear();
         widgetFactory.clearAllWidgets();
@@ -149,6 +171,9 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Resets the occupied cells array, setting cells as occupied based on the widgets in the current layout.
+     */
     private void resetOccupied() {
         int numRows = dashboardGrid.getRowCount();
         int numCols = dashboardGrid.getColumnCount();
@@ -174,6 +199,12 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Sets cells as occupied or unoccupied based on a widget's dimensions and position.
+     *
+     * @param info The WidgetInfo object containing layout data for the widget.
+     * @param occupied Boolean indicating whether cells should be marked as occupied or free.
+     */
     private void setOccupied(WidgetInfo info, boolean occupied) {
         int row = info.rowIndex;
         int col = info.columnIndex;
@@ -184,6 +215,12 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Checks if the specified widget's cells are already occupied by another widget.
+     *
+     * @param info The WidgetInfo object containing layout data for the widget.
+     * @return True if any cells are occupied; false otherwise.
+     */
     public boolean checkOccupied(WidgetInfo info) {
         int row = info.rowIndex;
         int col = info.columnIndex;
@@ -195,7 +232,12 @@ public class DashboardController extends BasePage {
         return false;
     }
 
-
+    /**
+     * Adds a new widget to the grid at the specified column and row indices.
+     *
+     * @param columnIndex The column index in the grid.
+     * @param rowIndex The row index in the grid.
+     */
     private void addWidgetAt(int columnIndex, int rowIndex) {
         WidgetInfo newWidgetInfo = new WidgetInfo(WidgetType.CurrentTemp, rowIndex, columnIndex, 1, 1, new HashMap<>());
         currentLayout.add(newWidgetInfo);
@@ -205,6 +247,11 @@ public class DashboardController extends BasePage {
         editWidget(currentLayout.indexOf(newWidgetInfo));
     }
 
+    /**
+     * Changes the current layout to the selected layout in the ComboBox.
+     *
+     * @param newLayout The name of the layout to switch to.
+     */
     public void changeLayout(String newLayout) {
         if (checkUnsavedChanges()) return;
 
@@ -218,6 +265,11 @@ public class DashboardController extends BasePage {
         loadWidgetsToGrid();
     }
 
+    /**
+     * Creates a new layout with the specified name and adds it to the available layouts.
+     *
+     * @param layoutName The name of the new layout.
+     */
     public void createNewLayout(String layoutName) {
         if (!isEditing || checkUnsavedChanges()) return;
 
@@ -233,11 +285,21 @@ public class DashboardController extends BasePage {
         changeLayout(layoutName);
     }
 
+    /**
+     * Opens a widget configuration dialog to edit the specified widget.
+     *
+     * @param widgetInfo The WidgetInfo object for the widget to edit.
+     */
     public void editWidget(WidgetInfo widgetInfo) {
         int index = currentLayout.indexOf(widgetInfo);
         if (index != -1) editWidget(index);
     }
 
+    /**
+     * Opens a widget configuration dialog to edit the widget at the specified index.
+     *
+     * @param index The index of the widget in the current layout.
+     */
     private void editWidget(int index) {
         try {
             FXMLLoader loader = new FXMLLoader(ApplicationEntry.class.getResource("windows/widget-config-dialog.fxml"));
@@ -271,6 +333,11 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Checks for unsaved changes and prompts the user to save or discard them.
+     *
+     * @return True if there are unsaved changes and the user cancels; false otherwise.
+     */
     private boolean checkUnsavedChanges() {
         if (!unsavedChanges) return false;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -296,6 +363,9 @@ public class DashboardController extends BasePage {
         return true;
     }
 
+    /**
+     * Saves the current layout to the user's account, marking changes as saved.
+     */
     private void saveCurrentLayout() {
         String layoutName = cboSelectedLayout.getValue();
         boolean result = userService.saveLayout(layoutName, currentLayout.toArray(WidgetInfo[]::new));
@@ -308,6 +378,9 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Exports all layouts for the current user to a JSON file.
+     */
     private void exportLayouts() {
         HashMap<String, WidgetInfo[]> data = userService.getCurrentAccount().getDashboardLayouts();
         Gson gson = new Gson();
@@ -318,11 +391,20 @@ public class DashboardController extends BasePage {
         }
     }
 
+    /**
+     * Updates the data for all widgets in the dashboard.
+     */
     @Override
     public void updateData() {
         widgetFactory.updateAllWidgets();
     }
 
+    /**
+     * Deletes a widget from the dashboard, removing it from the layout and the UI grid.
+     *
+     * @param widgetInfo The WidgetInfo object for the widget to delete.
+     * @param widgetContainer The container holding the widget in the UI grid.
+     */
     public void deleteWidget(WidgetInfo widgetInfo, StackPane widgetContainer) {
         unsavedChanges = true;
         dashboardGrid.getChildren().remove(widgetContainer);

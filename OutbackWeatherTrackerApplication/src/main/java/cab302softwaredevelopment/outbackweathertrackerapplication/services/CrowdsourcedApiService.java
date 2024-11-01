@@ -12,6 +12,11 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class for interacting with the crowdsourced data API.
+ * Provides methods for creating, retrieving, filtering, and deleting markers on a map,
+ * which are representations of user-submitted data points.
+ */
 public class CrowdsourcedApiService {
     @Getter
     private static CrowdsourcedApiService instance = new CrowdsourcedApiService();
@@ -25,11 +30,11 @@ public class CrowdsourcedApiService {
     }
 
     /**
-     * Create a new marker.
+     * Creates a new marker with the specified data.
      *
-     * @param data the data to create a marker
-     * @return CrowdsourcedDataModel with created data
-     * @throws Exception
+     * @param data The data to create the marker.
+     * @return The created CrowdsourcedModel containing the marker details.
+     * @throws Exception if an error occurs during the creation request.
      */
     public CrowdsourcedModel createMarker(CrowdsourcedDTO data) throws Exception {
         String requestBody = objectMapper.writeValueAsString(data);
@@ -49,11 +54,11 @@ public class CrowdsourcedApiService {
     }
 
     /**
-     * Get marker by user name.
+     * Retrieves a marker by the specified username.
      *
-     * @param userName the user name to search
-     * @return Optional of CrowdsourcedDataModel
-     * @throws Exception
+     * @param userName The username associated with the marker.
+     * @return An Optional containing the CrowdsourcedModel if found, otherwise empty.
+     * @throws Exception if an error occurs during the request.
      */
     public Optional<CrowdsourcedModel> getMarkerByUserName(String userName) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -70,12 +75,12 @@ public class CrowdsourcedApiService {
     }
 
     /**
-     * Get markers by temperature range.
+     * Retrieves markers within a specified temperature range.
      *
-     * @param minTemp minimum temperature
-     * @param maxTemp maximum temperature
-     * @return Optional list of CrowdsourcedDataModel within range
-     * @throws Exception
+     * @param minTemp The minimum temperature.
+     * @param maxTemp The maximum temperature.
+     * @return An Optional containing a list of CrowdsourcedModel objects within the specified range.
+     * @throws Exception if an error occurs during the request.
      */
     public Optional<List<CrowdsourcedModel>> getMarkerByTempRange(int minTemp, int maxTemp) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -93,11 +98,11 @@ public class CrowdsourcedApiService {
     }
 
     /**
-     * Delete marker by ID.
+     * Deletes a marker by its unique identifier.
      *
-     * @param id the marker ID to delete
-     * @return true if deletion was successful, false otherwise
-     * @throws Exception
+     * @param id The unique identifier of the marker to delete.
+     * @return True if the deletion was successful, false otherwise.
+     * @throws Exception if an error occurs during the request.
      */
     public boolean deleteMarkerById(String id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -110,14 +115,14 @@ public class CrowdsourcedApiService {
     }
 
     /**
-     * Get markers by geographic range.
+     * Retrieves markers within a specified geographic range.
      *
-     * @param minLat minimum latitude
-     * @param maxLat maximum latitude
-     * @param minLon minimum longitude
-     * @param maxLon maximum longitude
-     * @return Optional list of CrowdsourcedDataModel within range
-     * @throws Exception
+     * @param minLat The minimum latitude.
+     * @param maxLat The maximum latitude.
+     * @param minLon The minimum longitude.
+     * @param maxLon The maximum longitude.
+     * @return An Optional containing a list of CrowdsourcedModel objects within the specified geographic range.
+     * @throws Exception if an error occurs during the request.
      */
     public Optional<List<CrowdsourcedModel>> getMarkerByGeoRange(double minLat, double maxLat, double minLon, double maxLon) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -135,10 +140,10 @@ public class CrowdsourcedApiService {
     }
 
     /**
-     * Get the latest filtered markers.
+     * Retrieves the latest filtered markers.
      *
-     * @return List of CrowdsourcedDataDTO with latest data
-     * @throws Exception
+     * @return A list of CrowdsourcedDTO objects containing the latest crowdsourced data.
+     * @throws Exception if an error occurs during the request.
      */
     public List<CrowdsourcedDTO> getLatestFilteredData() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()

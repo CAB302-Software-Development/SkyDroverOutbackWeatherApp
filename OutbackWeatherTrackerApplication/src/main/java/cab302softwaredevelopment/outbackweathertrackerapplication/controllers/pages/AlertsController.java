@@ -19,22 +19,25 @@ import java.util.List;
 
 public class AlertsController extends BasePage {
     @FXML
-    public ScrollPane alertScrollPane;
+    private ScrollPane alertScrollPane;
     @FXML
-    public Button btnExpandCollapse, btnAddAlert, btnDeleteAlert, btnEnable, btnDisable;
+    private Button btnExpandCollapse, btnAddAlert, btnDeleteAlert, btnEnable, btnDisable;
     @FXML
-    public BorderPane bpContentArea;
+    private BorderPane bpContentArea;
     @FXML
-    public VBox vbAlertConfig;
+    private VBox vbAlertConfig;
     @FXML
-    public TableView<CustomAlertCondition> activeAlerts;
+    private TableView<CustomAlertCondition> activeAlerts;
     @FXML
-    public TableColumn<CustomAlertCondition, String> colTitle, colEnabled;
+    private TableColumn<CustomAlertCondition, String> colTitle, colEnabled;
     @FXML
     private ComboBox<Location> cboLocations;
 
     private boolean isExpanded = false;
 
+    /**
+     * Updates the alert data by loading user-specific locations and updating the alert pane.
+     */
     @Override
     public void updateData() {
         loadUserLocations();
@@ -76,8 +79,10 @@ public class AlertsController extends BasePage {
             }
         } else if (event.getSource() == btnAddAlert) {
             CustomAlertCondition condition = InputService.getDailyForecastAlert();
-            alertsService.addAlert(condition);
-            updateAlertsPane();
+            if (condition != null) {
+                alertsService.addAlert(condition);
+                updateAlertsPane();
+            }
         } else if (event.getSource() == btnDeleteAlert) {
             CustomAlertCondition selectedCondition = activeAlerts.getSelectionModel().getSelectedItem();
             alertsService.removeAlert(selectedCondition);
@@ -97,6 +102,9 @@ public class AlertsController extends BasePage {
         }
     }
 
+    /**
+     * Updates the alert pane to display active alerts and their configurations.
+     */
     @FXML
     private void updateAlertsPane() {
         List<WeatherAlert> alerts = new ArrayList<>();
@@ -141,7 +149,9 @@ public class AlertsController extends BasePage {
         return alertContainer;
     }
 
-
+    /**
+     * Loads the available locations for the user into the ComboBox.
+     */
     private void loadUserLocations() {
         List<Location> locations = locationService.getCurrentUserLocations();
         cboLocations.getItems().setAll(locations);

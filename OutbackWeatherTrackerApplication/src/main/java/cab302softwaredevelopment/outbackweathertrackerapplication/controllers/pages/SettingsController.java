@@ -14,6 +14,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.util.List;
 
+/**
+ * Controller class for managing application settings, including theme selection and location management.
+ * Provides options to change the application's theme, add new locations, and delete existing locations.
+ */
 public class SettingsController extends BasePage {
     @FXML
     public VBox vbRoot;
@@ -50,17 +54,29 @@ public class SettingsController extends BasePage {
         updateData();
     }
 
+    /**
+     * Updates the settings data, including selecting the current theme and refreshing the location list.
+     */
     @Override
     public void updateData() {
         cboThemes.getSelectionModel().select(userService.getCurrentAccount().getCurrentTheme());
         refreshLocationList();
     }
 
+    /**
+     * Refreshes the list of locations displayed in the ListView by reloading the user's current locations.
+     */
     private void refreshLocationList() {
         List<Location> locations = locationService.getCurrentUserLocations();
         lstLocations.setItems(FXCollections.observableArrayList(locations));
     }
 
+    /**
+     * Handles button actions for adding or deleting a location.
+     * Opens a location selection dialog for adding locations and updates the UI after deletion.
+     *
+     * @param event The ActionEvent triggered by button presses.
+     */
     @FXML
     private void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnAddLocation) {
@@ -84,6 +100,9 @@ public class SettingsController extends BasePage {
         }
     }
 
+    /**
+     * Changes the application's theme when a new theme is selected, refreshing the UI to apply the change.
+     */
     @FXML
     private void onSwapTheme() {
         Theme currentTheme = userService.getCurrentAccount().getCurrentTheme();
