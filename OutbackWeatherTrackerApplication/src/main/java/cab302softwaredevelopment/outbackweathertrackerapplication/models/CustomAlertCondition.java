@@ -26,7 +26,12 @@ public class CustomAlertCondition {
         this.forecastType = forecastType;
     }
 
-    public void addAlertCondition(String field, boolean isGreaterOrEqual, String value) {
+    public void addAlertCondition(String field, boolean isGreaterOrEqual, String value) throws IllegalStateException {
+        filters.stream()
+                .filter(f -> f.field.equals(field) && f.isGreaterOrEqual.equals(isGreaterOrEqual))
+                .findAny().ifPresent(f -> {
+            throw new IllegalStateException("Filter already exists.");
+        });
         filters.add(new FilterValue(field, isGreaterOrEqual, value));
     }
 
@@ -36,7 +41,7 @@ public class CustomAlertCondition {
         // Set defaults
         long timestampGE = 0;
         long timestampLE = 86400; // 1 day
-        int countGE = 0;
+        int countGE = 1;
         int countLE = Integer.MAX_VALUE;
 
         DateData now = new DateData(LocalDateTime.now());
@@ -82,19 +87,7 @@ public class CustomAlertCondition {
 
             List<DailyForecast> results = dailyForecastQuery.getResults();
             if (results != null && results.size() >= countGE && results.size() <= countLE) {
-                String[] data = results.stream().map(forecast -> {
-                    StringBuilder returnString = new StringBuilder();
-                    returnString.append("Location: ");
-                    returnString.append(forecast.getLocation().getName());
-                    returnString.append("Temperature MAX: ");
-                    returnString.append(forecast.getTemperature_2m_max().toString());
-                    returnString.append("Temperature MIN: ");
-                    returnString.append(forecast.getTemperature_2m_min().toString());
-                    returnString.append("Time: ");
-                    LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochSecond(forecast.getTimestamp()), ZoneId.systemDefault());
-                    returnString.append(time.format(DateTimeFormatter.ISO_DATE_TIME));
-                    return returnString.toString();
-                }).toArray(String[]::new);
+                String[] data = results.stream().map(DailyForecast::toString).toArray(String[]::new);
                 return Optional.of(new WeatherAlert(alertTitle, message, data));
             }
         } else {
@@ -104,17 +97,7 @@ public class CustomAlertCondition {
 
             List<HourlyForecast> results = hourlyForecastQuery.getResults();
             if (results != null && results.size() >= countGE && results.size() <= countLE) {
-                String[] data = results.stream().map(forecast -> {
-                    StringBuilder returnString = new StringBuilder();
-                    returnString.append("Location: ");
-                    returnString.append(forecast.getLocation().getName());
-                    returnString.append("Temperature: ");
-                    returnString.append(forecast.getTemperature_2m().toString());
-                    returnString.append("Time: ");
-                    LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochSecond(forecast.getTimestamp()), ZoneId.systemDefault());
-                    returnString.append(time.format(DateTimeFormatter.ISO_DATE_TIME));
-                    return returnString.toString();
-                }).toArray(String[]::new);
+                String[] data = results.stream().map(HourlyForecast::toString).toArray(String[]::new);
                 return Optional.of(new WeatherAlert(alertTitle, message, data));
             }
         }
