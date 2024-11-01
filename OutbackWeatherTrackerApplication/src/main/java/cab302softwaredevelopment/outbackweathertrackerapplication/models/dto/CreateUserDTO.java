@@ -46,10 +46,10 @@ public class CreateUserDTO {
   /**
    * The dashboard layout of the user.
    */
-  private JSONObject dashboardLayout;
+  private String dashboardLayout;
 
   /**
    * The selected locations of the user.
    */
-  private JSONObject locations;
+  private String locations;
 }

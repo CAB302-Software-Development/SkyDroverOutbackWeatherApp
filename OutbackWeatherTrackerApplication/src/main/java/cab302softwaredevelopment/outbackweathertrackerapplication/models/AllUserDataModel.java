@@ -58,12 +58,12 @@ public class AllUserDataModel {
   /**
    * The dashboard layout of the user.
    */
-  private JsonObject dashboardLayout;
+  private String dashboardLayout;
 
   /**
    * The selected locations of the user.
    */
-  private JsonObject locations;
+  private String locations;
 
   /**
    * The date when the user's account was created. This field is initialized with the current date
