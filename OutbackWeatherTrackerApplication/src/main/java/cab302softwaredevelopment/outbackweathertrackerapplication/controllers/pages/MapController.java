@@ -142,6 +142,7 @@ public class MapController extends BasePage {
             pointMapLayer.setSelectedLocation(location);
             setForecastLoading(true);
             Thread locationThread = new Thread(() -> {
+                forecastService.updateForecastsForCurrentUser(2,1);
                 HourlyForecast forecast = forecastService.getLatestHourlyForecast(locationData);
                 Platform.runLater(() -> displayForecast(forecast));
             });
@@ -205,16 +206,16 @@ public class MapController extends BasePage {
             pointMapLayer.clearSelectedLocation();
             selectedLocation = null;
         } else {
-            String name;
-            if (newLocation.getName() == null || newLocation.getName().isEmpty()) {
-                try {
-                    name = locationService.getAddressFromCoordinates(newLocation);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    name = "Unknown location";
-                }
-                newLocation.setName(name);
-            }
+            // String name;
+            // if (newLocation.getName() == null || newLocation.getName().isEmpty()) {
+            //     try {
+            //         name = locationService.getAddressFromCoordinates(newLocation);
+            //     } catch (Exception e) {
+            //         e.printStackTrace();
+            //         name = "Unknown location";
+            //     }
+            //     newLocation.setName(name);
+            // }
             selectedLocation = newLocation;
 
             MapPoint point = new MapPoint(selectedLocation.getLatitude(), selectedLocation.getLongitude());
