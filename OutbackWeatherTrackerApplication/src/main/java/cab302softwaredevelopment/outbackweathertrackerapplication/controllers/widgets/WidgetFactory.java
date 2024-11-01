@@ -49,19 +49,22 @@ public class WidgetFactory {
 
     public StackPane createEditWidget(WidgetInfo widgetInfo, DashboardController dashboardController) {
         StackPane widgetContainer = createWidget(widgetInfo);
-        Button editButton = new Button();
-        editButton.getStyleClass().add("edit-button");
+        Button editButton = new Button("Edit");
+        editButton.getStyleClass().add("button-secondary");
         editButton.setOnAction(e -> dashboardController.editWidget(widgetInfo));
 
-        Button deleteButton = new Button();
-        deleteButton.getStyleClass().add("delete-button");
-        deleteButton.setOnAction(e -> dashboardController.removeFromGrid(widgetContainer));
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().add("button-secondary");
+        deleteButton.setOnAction(e -> {
+            dashboardController.removeFromGrid(widgetContainer);
+            dashboardController.deleteWidget(widgetInfo);
+        });
 
         AnchorPane overlayPane = new AnchorPane(editButton, deleteButton);
         AnchorPane.setTopAnchor(editButton, 5.0);
         AnchorPane.setRightAnchor(editButton, 5.0);
         AnchorPane.setTopAnchor(deleteButton, 5.0);
-        AnchorPane.setRightAnchor(deleteButton, 35.0);
+        AnchorPane.setRightAnchor(deleteButton, 40.0);
         overlayPane.setPickOnBounds(false);
 
         widgetContainer.getChildren().add(overlayPane);

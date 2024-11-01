@@ -29,6 +29,9 @@ public abstract class BaseWidgetController implements IConfigurableWidget {
                 .getSingleResult();
     }
 
+    // TODO implement automatic overlay when no location is set
+    // TODO implement overlay that can be activated when "loading"
+
     @Override
     public void unregister() {
         WidgetFactory.getWidgetManager().unregisterWidget(this);

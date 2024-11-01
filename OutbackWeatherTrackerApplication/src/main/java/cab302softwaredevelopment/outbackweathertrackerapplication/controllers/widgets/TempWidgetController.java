@@ -14,6 +14,7 @@ public class TempWidgetController extends BaseWidgetController {
     public void updateWidget() {
         HourlyForecast currentForecast = forecastService.getLatestHourlyForecast(location);
         if (currentForecast != null) {
+            lblLocation.setText(currentForecast.getLocation().getName());
             txtCurrTemp.setText(currentForecast.getTemperature_2m() + "°");
             txtSoilTemp.setText(currentForecast.getSoil_temperature_0_to_10cm() + "°" );
             txtFeelsTemp.setText(currentForecast.getApparent_temperature() + "°");

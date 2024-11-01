@@ -1,9 +1,11 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.*;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.*;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
@@ -79,35 +81,7 @@ public class ApplicationEntry extends Application {
    */
   public static void main(String[] args) {
     Session session = DatabaseConnection.getSession();
-    // addTestData();
     Logger.printLog("Application started");
     launch();
   }
-
-  /**
-   * Adds some test data to the database. This is only used for testing purposes.
-   */
-  private static void addTestData() {
-    Logger.printLog("Application started");
-    Session session = DatabaseConnection.getSession();
-    AccountDAO accountDAO = new AccountDAO();
-    LocationDAO locationDAO = new LocationDAO();
-
-    // Insert some new accounts
-    // Add the accounts to the template
-    //Account newAccount = new Account("guest@guest.com", "SecurePass1!",true);
-    Account newAccount = Account.builder()
-        .email("guest@guest.com")
-        .password("SecurePass1!")
-        .isGuest(true)
-        .build();
-    accountDAO.insert(newAccount);
-
-    Account account = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
-
-    // Insert some new records
-    locationDAO.insert(new Location(account,153.02333324, -27.467331464, 27.0,"Brisbane")); // brisbane
-    locationDAO.insert(new Location(account,153.0372, -27.5703, 23.0,"Coopers Plains")); // coopers plains
-  }
-
 }

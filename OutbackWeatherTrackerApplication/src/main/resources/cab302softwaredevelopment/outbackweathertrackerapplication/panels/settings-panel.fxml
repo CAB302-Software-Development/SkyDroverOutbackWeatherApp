@@ -11,7 +11,7 @@
 
 <VBox fx:id="vbRoot" spacing="10" styleClass="background-primary"
       stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.SettingsController">
     <padding><Insets topRightBottomLeft="20"/></padding>
     <HBox spacing="10" alignment="CENTER_LEFT">

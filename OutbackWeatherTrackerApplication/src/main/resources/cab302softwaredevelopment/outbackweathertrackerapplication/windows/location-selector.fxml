@@ -6,15 +6,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <VBox spacing="10" alignment="CENTER" styleClass="location-selector-popup"
       xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LocationSelectorController"
       prefHeight="400.0" prefWidth="600.0">
+    <Label fx:id="lblContent" >
+        <font><Font size="20"/></font>
+    </Label>
     <HBox>
         <TextField fx:id="addressField" promptText="Enter address"/>
         <Button fx:id="btnSearch" text="Search" onAction="#handleButtonPress"/>
     </HBox>
-    <MapView fx:id="mapView" prefHeight="300" prefWidth="400"/>
+    <StackPane>
+        <ProgressIndicator/>
+        <MapView fx:id="mapView" prefHeight="300" prefWidth="400"/>
+    </StackPane>
     <Button fx:id="btnConfirm" text="Confirm" onAction="#handleButtonPress"/>
     <Button fx:id="btnCancel" text="Cancel" onAction="#handleButtonPress"/>
 </VBox>
