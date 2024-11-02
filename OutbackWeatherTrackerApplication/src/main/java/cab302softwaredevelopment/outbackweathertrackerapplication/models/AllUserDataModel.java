@@ -24,7 +24,7 @@ public class AllUserDataModel {
    * The username of the user. This field is mapped to the "user_name" field in the MongoDB
    * document.
    */
-  private String userName;
+  private String username;
 
   /**
    * The password of the user. This field is stored as "user_password" in the MongoDB document and

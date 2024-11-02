@@ -259,7 +259,7 @@ public class LoginController {
                         .getLocationsForUser(localAccount);
 
                     UpdateUserDTO userDTO = new UpdateUserDTO();
-                    userDTO.setUserName(localAccount.getUsername());
+                    userDTO.setUsername(localAccount.getUsername());
                     userDTO.setUserPassword(localAccount.getPassword());
                     userDTO.setUserEmail(localAccount.getEmail());
                     userDTO.setUserTheme(localAccount.getCurrentTheme().toString());

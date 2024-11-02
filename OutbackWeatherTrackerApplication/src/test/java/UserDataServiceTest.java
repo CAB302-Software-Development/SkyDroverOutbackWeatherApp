@@ -73,7 +73,7 @@ public class UserDataServiceTest {
     public void testCreateUserSuccess() throws Exception {
         // Arrange
         CreateUserDTO newUser = new CreateUserDTO();
-        newUser.setUserName("newuser");
+        newUser.setUsername("newuser");
         newUser.setUserPassword("password123");
         newUser.setUserEmail("newuser@example.com");
         newUser.setUserTheme("default");
@@ -95,7 +95,7 @@ public class UserDataServiceTest {
     public void testCreateUserFailure() throws IOException, InterruptedException {
         // Arrange
         CreateUserDTO newUser = new CreateUserDTO();
-        newUser.setUserName("newuser");
+        newUser.setUsername("newuser");
         newUser.setUserPassword("password123");
         newUser.setUserEmail("newuser@example.com");
         newUser.setUserTheme("default");
@@ -134,7 +134,7 @@ public class UserDataServiceTest {
         UserModel result = userApiService.getUserById(userId);
 
         // Assert
-        assertEquals(expectedUser.getUsername(), result.getUserName());
+        assertEquals(expectedUser.getUsername(), result.getUsername());
         assertEquals(expectedUser.getUserEmail(), result.getUserEmail());
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once
     }

@@ -127,7 +127,7 @@ public class UserApiService {
         Account newAccount = accountBuilder.build();
         UserApiService userApiService = new UserApiService();
         CreateUserDTO userDTO = new CreateUserDTO();
-        userDTO.setUserName(username);
+        userDTO.setUsername(username);
         userDTO.setUserEmail(email);
         userDTO.setUserPassword(newAccount.getPassword());
         userDTO.setUserTheme(newAccount.getCurrentTheme().toString());
@@ -264,7 +264,7 @@ public class UserApiService {
     public Account getCurrentAccount(UserModel userModel, String jwtToken) throws Exception {
         Account createdAccount = Account.builder()
             .id(userModel.getId())
-            .username(userModel.getUserName())
+            .username(userModel.getUsername())
             .password(userModel.getUserPassword()) // Need to replace with a non-hashed password since the userModel is already hashed
             .email(userModel.getUserEmail())
             .currentTheme(Theme.valueOf(userModel.getUserTheme()))
