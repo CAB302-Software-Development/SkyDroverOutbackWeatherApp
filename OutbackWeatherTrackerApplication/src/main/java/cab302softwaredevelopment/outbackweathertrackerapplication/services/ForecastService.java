@@ -42,7 +42,7 @@ public class ForecastService {
             HourlyForecast latest = new HourlyForecastDAO.HourlyForecastQuery()
                     .addOrderDesc("timestamp")
                     .getSingleResult();
-            if (nowEpoch > latest.getTimestamp()) {
+            if (latest != null && nowEpoch > latest.getTimestamp()) {
                 return latest;
             }
         }

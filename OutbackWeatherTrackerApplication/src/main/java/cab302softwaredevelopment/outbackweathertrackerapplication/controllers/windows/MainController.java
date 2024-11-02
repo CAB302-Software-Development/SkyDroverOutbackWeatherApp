@@ -111,19 +111,6 @@ public class MainController {
         pageFactory.updateAllPages();
     }
 
-    public static void showAlert(String title, String message) {
-        if (controller.root == null) {
-            Logger.printLog(title, message);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(controller.root.getScene().getWindow());
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
-        }
-    }
-
     public static void shutdownScheduler() {
         if (controller == null) return;
         if (controller.scheduler != null && !controller.scheduler.isShutdown()) {

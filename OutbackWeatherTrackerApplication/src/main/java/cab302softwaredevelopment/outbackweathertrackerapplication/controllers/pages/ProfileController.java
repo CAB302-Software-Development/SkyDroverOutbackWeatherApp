@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.HashMap;
@@ -69,7 +70,7 @@ public class ProfileController extends BasePage {
     @FXML
     private void handleSave() {
         if (userService.isGuest()) {
-            MainController.showAlert("Guest Account", "Guest users cannot update profile details.");
+            InputService.showAlert("Guest Account", "Guest users cannot update profile details.");
             return;
         }
 
@@ -79,7 +80,7 @@ public class ProfileController extends BasePage {
         boolean preferCelsius = celsiusCheckBox.isSelected();
 
         if (!newPassword.equals(confirmPassword)) {
-            MainController.showAlert("Password Error", "Passwords do not match.");
+            InputService.showAlert("Password Error", "Passwords do not match.");
             return;
         }
 
@@ -92,9 +93,9 @@ public class ProfileController extends BasePage {
 
         boolean updateSuccess = userService.updateCurrentAccount(updateModel);
         if (updateSuccess) {
-            MainController.showAlert("Success", "Profile updated successfully.");
+            InputService.showAlert("Success", "Profile updated successfully.");
         } else {
-            MainController.showAlert("Error", "Failed to update profile.");
+            InputService.showAlert("Error", "Failed to update profile.");
         }
     }
 
@@ -105,7 +106,7 @@ public class ProfileController extends BasePage {
     @FXML
     private void handleClearStoredData() {
         if (userService.isGuest()) {
-            MainController.showAlert("Guest Account", "Guest users cannot clear stored data.");
+            InputService.showAlert("Guest Account", "Guest users cannot clear stored data.");
             return;
         }
 
@@ -131,9 +132,9 @@ public class ProfileController extends BasePage {
                 updateSuccess = locationService.deleteAllUserLocations() && updateSuccess;
 
                 if (updateSuccess) {
-                    MainController.showAlert("Success", "Stored data cleared successfully.");
+                    InputService.showAlert("Success", "Stored data cleared successfully.");
                 } else {
-                    MainController.showAlert("Error", "Failed to clear stored data.");
+                    InputService.showAlert("Error", "Failed to clear stored data.");
                 }
             }
         });

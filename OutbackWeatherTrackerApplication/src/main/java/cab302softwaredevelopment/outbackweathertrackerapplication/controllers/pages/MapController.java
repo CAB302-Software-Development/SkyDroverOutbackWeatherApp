@@ -308,17 +308,17 @@ public class MapController extends BasePage {
             }
         } else if (event.getSource() == btnAddMarker) {
             if (UserService.getInstance().isGuest()) {
-                MainController.showAlert("Error", "Guests are not allowed to add markers, please log in or create an account to continue.");
+                InputService.showAlert("Error", "Guests are not allowed to add markers, please log in or create an account to continue.");
                 return;
             }
             CrowdsourcedDTO data = InputService.getCrowdData();
             if (data == null) return;
             try {
                 CrowdsourcedModel temp = crowdsourcedDataService.createMarker(data);
-                if (temp == null) MainController.showAlert("Error", "Error de-serialising data from API.");
+                if (temp == null) InputService.showAlert("Error", "Error de-serialising data from API.");
 
             } catch (Exception e) {
-                MainController.showAlert("Error creating marker", "Could not reach API");
+                InputService.showAlert("Error creating marker", "Could not reach API");
             }
         } else if (event.getSource() == btnRefresh) {
             updateData();

@@ -90,7 +90,7 @@ public class SettingsController extends BasePage {
             Location selectedLocation = lstLocations.getSelectionModel().getSelectedItem();
             if (selectedLocation != null) {
                 if (lstLocations.getItems().size() == 1) {
-                    MainController.showAlert("Must have location", "Please add another location before deleting all locations");
+                    InputService.showAlert("Must have location", "Please add another location before deleting all locations");
                     return;
                 }
                 locationService.deleteLocation(selectedLocation);

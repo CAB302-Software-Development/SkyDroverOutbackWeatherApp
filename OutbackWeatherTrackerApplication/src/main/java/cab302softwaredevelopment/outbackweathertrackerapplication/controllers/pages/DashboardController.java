@@ -96,7 +96,7 @@ public class DashboardController extends BasePage {
         } else if (event.getSource() == btnDeleteLayout) {
             String selectedLayout = cboSelectedLayout.getValue();
             if (selectedLayout == null) {
-                MainController.showAlert("Error", "No layout selected.");
+                InputService.showAlert("Error", "No layout selected.");
                 return;
             }
 
@@ -112,7 +112,7 @@ public class DashboardController extends BasePage {
                 resetLayoutComboBox();
                 String newLayout = cboSelectedLayout.getItems().isEmpty() ? null : cboSelectedLayout.getItems().getFirst();
                 changeLayout(newLayout);
-                MainController.showAlert("Success", "Layout deleted successfully.");
+                InputService.showAlert("Success", "Layout deleted successfully.");
             }
         }
     }
@@ -372,9 +372,9 @@ public class DashboardController extends BasePage {
         unsavedChanges = !result;
         if (result) {
             UserService.getInstance().getCurrentAccount().setSelectedLayout(layoutName);
-            MainController.showAlert("Success", "Dashboard has been saved.");
+            InputService.showAlert("Success", "Dashboard has been saved.");
         } else {
-            MainController.showAlert("Error", "There was an error saving the dashboard.");
+            InputService.showAlert("Error", "There was an error saving the dashboard.");
         }
     }
 

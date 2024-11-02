@@ -8,6 +8,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.DateData;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -88,7 +89,7 @@ public class ForecastController extends BasePage {
                 locationComboBox.disableProperty().set(false);
             }
         } else {
-            MainController.showAlert("No Locations Found", "Please add a location to view forecasts.");
+            InputService.showAlert("No Locations Found", "Please add a location to view forecasts.");
         }
     }
 
@@ -109,7 +110,7 @@ public class ForecastController extends BasePage {
         hbForecasts.getChildren().clear();
         forecasts.forEach(f -> hbForecasts.getChildren().add(createForecastDayTile(f)));
 
-        loadHourlyForecastData(forecasts.stream().sorted(Comparator.comparingInt(DailyForecast::getTimestamp)).toList().getFirst());
+        forecasts.stream().min(Comparator.comparingInt(DailyForecast::getTimestamp)).ifPresent(this::loadHourlyForecastData);
     }
 
     /**
@@ -158,7 +159,7 @@ public class ForecastController extends BasePage {
     private void refreshForecastData(boolean update) {
         Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
         if (selectedLocation == null) {
-            MainController.showAlert("No Location Selected", "Please select a location to refresh data.");
+            InputService.showAlert("No Location Selected", "Please select a location to refresh data.");
             return;
         }
 
@@ -179,7 +180,7 @@ public class ForecastController extends BasePage {
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
                     if (result) {
-                        if (update) MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                        if (update) InputService.showAlert("Data Refreshed", "Forecast data has been updated.");
                         connectionService.setOpenMeteoDataOffline(false);
                     } else {
                         connectionService.setOpenMeteoDataOffline(true);
@@ -190,7 +191,7 @@ public class ForecastController extends BasePage {
                 Platform.runLater(() -> {
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
-                    if (update) MainController.showAlert("Error", "Failed to refresh forecast data.");
+                    if (update) InputService.showAlert("Error", "Failed to refresh forecast data.");
                 });
             }
         }).start();

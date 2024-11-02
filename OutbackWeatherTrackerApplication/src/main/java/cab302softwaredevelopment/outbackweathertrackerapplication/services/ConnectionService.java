@@ -105,10 +105,10 @@ public class ConnectionService {
             isOffline = value;
             if (isOffline()) {
                 //updateSchedulerDelay(10);
-                MainController.showAlert("Offline Mode", "You are currently offline. Data may be outdated.");
+                InputService.showAlert("Offline Mode", "You are currently offline. Data may be outdated.");
             } else {
                 //updateSchedulerDelay(600);
-                MainController.showAlert("Online Mode", "Connection established. Updating local data.");
+                InputService.showAlert("Online Mode", "Connection established. Updating local data.");
             }
         }
     }
