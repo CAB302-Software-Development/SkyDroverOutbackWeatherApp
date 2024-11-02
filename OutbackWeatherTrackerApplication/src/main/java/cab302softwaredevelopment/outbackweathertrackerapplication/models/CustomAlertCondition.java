@@ -4,109 +4,106 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.D
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.JSONObject;
+import java.time.*;
+import java.util.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-@Getter @Setter
-public class CustomAlertCondition implements IAlertCondition {
+public class CustomAlertCondition {
+    @Getter @Setter
     private String alertTitle = null;
+    @Getter @Setter
     private String message = null;
-    private DailyForecastDAO.DailyForecastQuery dailyForecastQuery = null;
-    private HourlyForecastDAO.HourlyForecastQuery hourlyForecastQuery = null;
-    private Long timestampGE = null;
-    private Long timestampLE = null;
-    private int threshold = 0;
-    private String threshParam = null;
-    private double value = 0;
+    @Getter @Setter
+    private boolean enabled = true;
+    private boolean isDaily; // True = DailyForecast; False = HourlyForecast;
+    private List<FilterValue> filters = new ArrayList<>();
 
-    public CustomAlertCondition(String name, String message, DailyForecastDAO.DailyForecastQuery dailyForecastQuery,
-                                Long timestampGE, Long timestampLE, int threshold, String threshParam, double value) {
-        this.alertTitle = name;
-        this.message = message;
-        this.dailyForecastQuery = dailyForecastQuery;
-        this.timestampGE = timestampGE;
-        this.timestampLE = timestampLE;
-        this.threshold = threshold;
-        this.threshParam = threshParam;
-        this.value = value;
+    public CustomAlertCondition(boolean isDaily) {
+        this.isDaily = isDaily;
     }
 
-    public CustomAlertCondition(String name, String message, HourlyForecastDAO.HourlyForecastQuery hourlyForecastQuery,
-                                Long timestampGE, Long timestampLE, int threshold, String threshParam, double value) {
-        this.alertTitle = name;
-        this.message = message;
-        this.hourlyForecastQuery = hourlyForecastQuery;
-        this.timestampGE = timestampGE;
-        this.timestampLE = timestampLE;
-        this.threshold = threshold;
-        this.threshParam = threshParam;
-        this.value = value;
+    public void addAlertCondition(String field, boolean isGreaterOrEqual, String value) throws IllegalStateException {
+        filters.stream()
+                .filter(f -> f.getField().equals(field) && f.getIsGreaterOrEqual().equals(isGreaterOrEqual))
+                .findAny().ifPresent(f -> {
+            throw new IllegalStateException("Filter already exists.");
+        });
+        filters.add(new FilterValue(field, isGreaterOrEqual, value));
     }
 
-    @Override
-    public List<WeatherAlert> getAlerts() {
-        boolean triggered = false;
+    public Optional<WeatherAlert> getAlert(Location location) {
+        if (!enabled) return Optional.empty();
+
+        // Set defaults
         DateData now = new DateData(LocalDateTime.now());
         long currentTimeEpoch = now.getCurrentEpoch();
-        if (dailyForecastQuery != null) {
-            if (timestampGE != null) dailyForecastQuery.whereTimestampGE((int)(currentTimeEpoch + timestampGE));
-            if (timestampLE != null) dailyForecastQuery.whereTimestampLE((int)(currentTimeEpoch + timestampLE));
+        long timestampGE = currentTimeEpoch;
+        long timestampLE = currentTimeEpoch + 86400; // 1 day
+        int countGE = 1;
+        int countLE = Integer.MAX_VALUE;
+
+        DailyForecastDAO.DailyForecastQuery dailyForecastQuery = new DailyForecastDAO.DailyForecastQuery();
+        HourlyForecastDAO.HourlyForecastQuery hourlyForecastQuery = new HourlyForecastDAO.HourlyForecastQuery();
+
+        for (FilterValue filter : filters) {
+            if (filter.getField().equals("timestamp")) {
+                if (filter.getIsGreaterOrEqual()) {
+                    timestampGE = Integer.parseInt(filter.getValue()) + currentTimeEpoch;
+                } else {
+                    timestampLE = Integer.parseInt(filter.getValue()) + currentTimeEpoch;
+                }
+            } else if (filter.getField().equals("count")) {
+                if (filter.getIsGreaterOrEqual()) {
+                    countGE = Integer.parseInt(filter.getValue());
+                } else {
+                    countLE = Integer.parseInt(filter.getValue());
+                }
+            } else {
+                if (isDaily) {
+                    if (filter.getIsGreaterOrEqual()) {
+                        dailyForecastQuery.whereFieldGE(filter.getField(), filter.getValue());
+                    } else {
+                        dailyForecastQuery.whereFieldLE(filter.getField(), filter.getValue());
+                    }
+                } else {
+                    if (filter.getIsGreaterOrEqual()) {
+                        hourlyForecastQuery.whereFieldGE(filter.getField(), filter.getValue());
+                    } else {
+                        hourlyForecastQuery.whereFieldLE(filter.getField(), filter.getValue());
+                    }
+                }
+            }
+        }
+
+        if (isDaily) {
+            dailyForecastQuery.whereTimestampGE((int) timestampGE);
+            dailyForecastQuery.whereTimestampLE((int) timestampLE);
+            dailyForecastQuery.whereLocationId(location.getId());
+
             List<DailyForecast> results = dailyForecastQuery.getResults();
-            switch (threshParam) {
-                case "temperature_2m_max": {
-                    if (results.get(this.threshold) != null &&
-                            results.get(this.threshold).getTemperature_2m_max() > value) {
-                        triggered = true;
-                    }
-                }
+            if (results != null && results.size() >= countGE && results.size() <= countLE) {
+                String[] data = results.stream().map(DailyForecast::toString).toArray(String[]::new);
+                return Optional.of(new WeatherAlert(alertTitle, message, data));
             }
-        } else if (hourlyForecastQuery != null) {
-            if (timestampGE != null) hourlyForecastQuery.whereTimestampGE((int)(currentTimeEpoch + timestampGE));
-            if (timestampLE != null) hourlyForecastQuery.whereTimestampLE((int)(currentTimeEpoch + timestampLE));
-            List<HourlyForecast> results = hourlyForecastQuery.getResults();
-            switch (threshParam) {
-                case "temperature_2m": {
-                    if (results.get(this.threshold) != null &&
-                            results.get(this.threshold).getTemperature_2m() > value) {
-                        triggered = true;
-                    }
-                }
-            }
-        }
-
-        if (triggered) {
-            WeatherAlert alert = new WeatherAlert(message, null, now.toString());
-            return List.of(alert);
         } else {
-            return List.of();
-        }
-    }
+            hourlyForecastQuery.whereTimestampGE((int) timestampGE);
+            hourlyForecastQuery.whereTimestampLE((int) timestampLE);
+            hourlyForecastQuery.whereLocationId(location.getId());
 
-    @Override
-    public JSONObject toJsonObject() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "CustomAlertCondition");
-        jsonObject.put("name", getAlertTitle());
-        jsonObject.put("message", getMessage());
-        jsonObject.put("value", getValue());
-        jsonObject.put("threshold", getThreshold());
-        jsonObject.put("threshParam", getThreshParam());
-        return jsonObject;
+            List<HourlyForecast> results = hourlyForecastQuery.getResults();
+            if (results != null && results.size() >= countGE && results.size() <= countLE) {
+                String[] data = results.stream().map(HourlyForecast::toString).toArray(String[]::new);
+                return Optional.of(new WeatherAlert(alertTitle, message, data));
+            }
+        }
+
+        return Optional.empty();
     }
 
     @Override
     public String toString() {
         return getAlertTitle();
-    }
-
-    @Override
-    public String getAlertTitle() {
-        return alertTitle;
     }
 }

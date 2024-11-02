@@ -26,6 +26,12 @@ public class WidgetInfo implements Serializable {
         this.config = config;
     }
 
+    /**
+     * Creates a deep copy of the current WidgetInfo object, including a new copy of the config map.
+     * Useful for creating independent instances of widgets with identical properties.
+     *
+     * @return A new WidgetInfo object with the same properties as the current instance.
+     */
     public WidgetInfo deepCopy() {
         Map<String, Object> newConfig = new HashMap<>(config);
         return new WidgetInfo(type, rowIndex, columnIndex, colSpan, rowSpan, newConfig);

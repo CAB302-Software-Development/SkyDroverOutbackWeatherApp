@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.p
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.SelectablePoint;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CrowdsourcedDTO;
@@ -33,23 +34,27 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for managing and displaying a map with user and crowdsourced data points.
+ * Provides functionalities for searching locations, displaying forecast data, and adding markers.
+ */
 public class MapController extends BasePage {
     @FXML
-    public MapView mapView;
+    private MapView mapView;
     @FXML
-    public AnchorPane apContent;
+    private AnchorPane apContent;
     @FXML
-    public TextField txtSearchBar;
+    private TextField txtSearchBar;
     @FXML
-    public VBox vbCrowdDataView;
+    private VBox vbCrowdDataView;
     @FXML
-    public Label lblTemperature, lblWind, lblPrecipitation, lblHumidity, lblClouds;
+    private Label lblTemperature, lblWind, lblPrecipitation, lblHumidity, lblClouds;
     @FXML
-    public HBox hbTemperature, hbWind, hbPrecipitation, hbHumidity, hbClouds;
+    private HBox hbTemperature, hbWind, hbPrecipitation, hbHumidity, hbClouds;
     @FXML
-    public StackPane spLocationForecastView;
+    private StackPane spLocationForecastView;
     @FXML
-    public ProgressIndicator progressIndicator;
+    private ProgressIndicator progressIndicator;
     @FXML
     private Button btnAddMarker, btnRefresh;
 
@@ -76,6 +81,10 @@ public class MapController extends BasePage {
         initMap();
     }
 
+    /**
+     * Initializes the map, setting the initial view and handling click events on the map.
+     * Updates the map data upon initialization.
+     */
     private void initMap() {
         MapPoint initialPoint = new MapPoint(-25.2744, 133.7751);
         mapView.setZoom(5.0);
@@ -88,13 +97,16 @@ public class MapController extends BasePage {
                 double latitude = clickedPos.getLatitude();
                 double longitude = clickedPos.getLongitude();
                 hideCrowdPanel();
-                setForecastVisible(false);
+                hideForecastPanel();
                 setSelectedLocation(new LocationCreateModel(null, latitude, longitude));
             }
         });
         updateData();
     }
 
+    /**
+     * Adds crowdsourced data points to the map as pins, creating interactive elements for each point.
+     */
     private void addCrowdDataToMap() {
         try {
             List<CrowdsourcedDTO> crowdDataList = crowdsourcedDataService.getLatestFilteredData();
@@ -114,6 +126,9 @@ public class MapController extends BasePage {
         }
     }
 
+    /**
+     * Adds user-saved locations to the map, creating selectable points for each location.
+     */
     private void addUserLocationsToMap() {
         try {
             List<Location> locations = locationService.getCurrentUserLocations();
@@ -133,6 +148,14 @@ public class MapController extends BasePage {
         }
     }
 
+    /**
+     * Creates a visual pin for a location point, showing location data on selection.
+     *
+     * @param location The MapPoint representing the location.
+     * @param locationData The location model data.
+     * @param selected Indicates if node is the selected or unselected design.
+     * @return A Node representing the pin on the map.
+     */
     private Node getLocationPin(MapPoint location, Location locationData, boolean selected) {
         Circle pinCircle = new Circle(10, Color.BLUE);
         if (selected) {
@@ -140,9 +163,11 @@ public class MapController extends BasePage {
         }
         pinCircle.setOnMouseClicked(event -> {
             pointMapLayer.setSelectedLocation(location);
+            hideCrowdPanel();
             setForecastLoading(true);
             Thread locationThread = new Thread(() -> {
-                HourlyForecast forecast = forecastService.updateForecastsForLocationGetHourly(locationData, 1, 1);
+                forecastService.updateForecastsForCurrentUser(2,1);
+                HourlyForecast forecast = forecastService.getLatestHourlyForecast(locationData);
                 Platform.runLater(() -> displayForecast(forecast));
             });
             event.consume();
@@ -152,6 +177,14 @@ public class MapController extends BasePage {
         return pinCircle;
     }
 
+    /**
+     * Creates a visual pin for a crowdsourced data point, showing data details on selection.
+     *
+     * @param location The MapPoint of the data point.
+     * @param crowdData The crowdsourced data.
+     * @param selected Indicates if node is the selected or unselected design.
+     * @return A Node representing the crowdsourced data pin.
+     */
     private Node getCrowdPin(MapPoint location, CrowdsourcedDTO crowdData, boolean selected) {
         Circle pinCircle = new Circle(10, Color.RED);
         if (selected) {
@@ -168,6 +201,7 @@ public class MapController extends BasePage {
 
         pin.setOnMouseClicked(event -> {
             pointMapLayer.setSelectedLocation(location);
+            hideForecastPanel();
             showCrowdDataDetails(crowdData);
             event.consume();
         });
@@ -175,46 +209,43 @@ public class MapController extends BasePage {
         return pin;
     }
 
+    /**
+     * Hides the panel displaying crowdsourced data details.
+     */
     private void hideCrowdPanel() {
         vbCrowdDataView.setVisible(false);
     }
 
+    /**
+     * Displays detailed information about a specific crowdsourced data point.
+     *
+     * @param crowdData The data point to display details for.
+     */
     private void showCrowdDataDetails(CrowdsourcedDTO crowdData) {
         vbCrowdDataView.getChildren().clear();
         List<Node> details = new ArrayList<>();
 
-        if (crowdData.getLocation() != null) {
-            details.add(new Label("Location: " + crowdData.getLocation()));
-        }
-        if (crowdData.getUsername() != null) {
-            details.add(new Label("User: " + crowdData.getUsername()));
-        }
-        // if (crowdData.getActualTemp() != null) {
-        //     details.add(new Label("Actual Temp: " + crowdData.getActualTemp() + "°C"));
-        // }
-        // if (crowdData.getFeelsLikeTemp() != null) {
-        //     details.add(new Label("Feels Like Temp: " + crowdData.getFeelsLikeTemp() + "°C"));
-        // }
+        details.add(new Label("Location: " + crowdData.getLocation()));
+        details.add(new Label("User: " + crowdData.getUsername()));
+        details.add(new Label("Feels like temp: " + crowdData.getFeelsLikeTemp()));
+        details.add(new Label("Actual temp: " + crowdData.getActualTemp()));
+
+        // TODO add more fields?
 
         vbCrowdDataView.getChildren().addAll(details);
         vbCrowdDataView.setVisible(true);
     }
 
+    /**
+     * Sets a new location as the selected location, updating the map and UI accordingly.
+     *
+     * @param newLocation The new location to set as selected.
+     */
     private void setSelectedLocation(LocationCreateModel newLocation) {
         if (newLocation == null) {
             pointMapLayer.clearSelectedLocation();
             selectedLocation = null;
         } else {
-            String name;
-            if (newLocation.getName() == null || newLocation.getName().isEmpty()) {
-                try {
-                    name = locationService.getAddressFromCoordinates(newLocation);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    name = "Unknown location";
-                }
-                newLocation.setName(name);
-            }
             selectedLocation = newLocation;
 
             MapPoint point = new MapPoint(selectedLocation.getLatitude(), selectedLocation.getLongitude());
@@ -225,21 +256,36 @@ public class MapController extends BasePage {
         }
     }
 
-    private void setForecastVisible(boolean value) {
-        hbTemperature.setVisible(value);
-        hbClouds.setVisible(value);
-        hbPrecipitation.setVisible(value);
-        hbHumidity.setVisible(value);
-        hbWind.setVisible(value);
+    /**
+     * Hides the panel displaying forecast data.
+     */
+    private void hideForecastPanel() {
+        spLocationForecastView.setVisible(false);
     }
 
+    /**
+     * Toggles the loading state for the forecast display, showing or hiding data and loading indicators.
+     *
+     * @param value True to show the loading indicator; false to display forecast data.
+     */
     private void setForecastLoading(boolean value) {
-        setForecastVisible(!value);
+        spLocationForecastView.setVisible(true);
+        hbTemperature.setVisible(!value);
+        hbClouds.setVisible(!value);
+        hbPrecipitation.setVisible(!value);
+        hbHumidity.setVisible(!value);
+        hbWind.setVisible(!value);
         progressIndicator.setVisible(value);
     }
 
+    /**
+     * Displays forecast data in the UI based on the given forecast details.
+     *
+     * @param forecast The forecast data to display.
+     */
     private void displayForecast(HourlyForecast forecast) {
         setForecastLoading(false);
+        spLocationForecastView.setVisible(true);
         lblTemperature.setText(forecast.getTemperature_2m() + "");
         lblClouds.setText(forecast.getCloud_cover() + "%");
         lblPrecipitation.setText(forecast.getPrecipitation() + "ml");
@@ -247,6 +293,11 @@ public class MapController extends BasePage {
         lblWind.setText(forecast.getWind_speed_10m() + "m/s");
     }
 
+    /**
+     * Handles button press events for searching locations, adding markers, and refreshing map data.
+     *
+     * @param event The ActionEvent triggered by button presses.
+     */
     @FXML
     private void handleButtonPress(ActionEvent event) {
         if (event.getSource() == txtSearchBar) {
@@ -263,15 +314,20 @@ public class MapController extends BasePage {
             CrowdsourcedDTO data = InputService.getCrowdData();
             if (data == null) return;
             try {
-                crowdsourcedDataService.createMarker(data);
+                CrowdsourcedModel temp = crowdsourcedDataService.createMarker(data);
+                if (temp == null) MainController.showAlert("Error", "Error de-serialising data from API.");
+
             } catch (Exception e) {
-                MainController.showAlert("Error creating marker", e.getMessage());
+                MainController.showAlert("Error creating marker", "Could not reach API");
             }
         } else if (event.getSource() == btnRefresh) {
             updateData();
         }
     }
 
+    /**
+     * Updates the data displayed on the map, reloading user and crowdsourced locations.
+     */
     @Override
     public void updateData() {
         hideCrowdPanel();

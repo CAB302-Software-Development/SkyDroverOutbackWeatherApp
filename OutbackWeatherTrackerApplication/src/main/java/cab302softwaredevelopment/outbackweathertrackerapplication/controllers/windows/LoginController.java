@@ -27,6 +27,7 @@ import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -51,7 +52,7 @@ public class LoginController {
 
     // Login elements
     @FXML
-    private AnchorPane loginPane;
+    private VBox loginPane;
     @FXML
     private TextField emailTextFieldLogin;
     @FXML
@@ -68,9 +69,9 @@ public class LoginController {
 
     // Sign up elements
     @FXML
-    private AnchorPane signupPane;
+    private VBox signupPane;
     @FXML
-    private TextField emailTextFieldSignup;
+    private TextField emailTextFieldSignup, usernameTextFieldSignup;
     @FXML
     private PasswordField passwordTextFieldSignup, passwordTextConfirm;
     @FXML

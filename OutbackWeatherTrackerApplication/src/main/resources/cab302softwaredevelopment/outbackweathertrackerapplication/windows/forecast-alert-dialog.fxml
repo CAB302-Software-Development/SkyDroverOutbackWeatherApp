@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane fx:id="dialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.ForecastAlertDialogController">
+    <buttonTypes>
+        <ButtonType fx:id="saveButtonType" text="Save" buttonData="APPLY"/>
+        <ButtonType fx:id="closeButtonType" text="Cancel" buttonData="CANCEL_CLOSE"/>
+    </buttonTypes>
+
+    <content>
+        <VBox spacing="10">
+            <TextField fx:id="txtTitle" promptText="Alert Title..."/>
+            <TextField fx:id="txtMessage" promptText="Alert Message..."/>
+            <VBox fx:id="configFieldsVBox" spacing="10"/>
+            <Button fx:id="btnAddFilter" text="Add Filter" maxWidth="100" alignment="CENTER" />
+        </VBox>
+    </content>
+</DialogPane>
+

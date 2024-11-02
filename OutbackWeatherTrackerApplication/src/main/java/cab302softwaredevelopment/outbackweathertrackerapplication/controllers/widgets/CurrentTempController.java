@@ -13,8 +13,6 @@ import java.time.Instant;
 public class CurrentTempController extends BaseWidgetController {
     @FXML
     public Label lblDateTime, lblTemp, lblLocation;
-    @FXML
-    public VBox root;
 
     @Override
     public void updateWidget() {

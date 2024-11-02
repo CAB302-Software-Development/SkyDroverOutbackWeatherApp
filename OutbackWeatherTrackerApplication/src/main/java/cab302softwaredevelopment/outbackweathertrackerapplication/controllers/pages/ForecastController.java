@@ -22,8 +22,14 @@ import javafx.util.StringConverter;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Controller class for managing and displaying weather forecasts.
+ * Provides functionalities for selecting locations, refreshing forecast data,
+ * and displaying daily and hourly temperature charts.
+ */
 public class ForecastController extends BasePage {
     @FXML
     private VBox vbRoot;
@@ -51,7 +57,17 @@ public class ForecastController extends BasePage {
         lineChart.getYAxis().setLabel("Temperature");
         lineChart.setTitle("Hourly Temperature");
 
-        loadUserLocations();
+        initLocationsComboBox();
+        refreshForecastData(false);
+    }
+
+    /**
+     * Loads the user's locations into the ComboBox for selecting a forecast location.
+     * Configures the ComboBox to display location names and select the first available location by default.
+     */
+    private void initLocationsComboBox() {
+        List<Location> locations = locationService.getCurrentUserLocations();
+        locationComboBox.getItems().setAll(locations);
 
         locationComboBox.setConverter(new StringConverter<>() {
             @Override
@@ -66,21 +82,20 @@ public class ForecastController extends BasePage {
 
         if (!locationComboBox.getItems().isEmpty()) {
             locationComboBox.getSelectionModel().selectFirst();
-            loadDailyForecastData();
-            loadHourlyForecastData();
+            if (locationComboBox.getItems().size() == 1) {
+                locationComboBox.disableProperty().set(true);
+            } else {
+                locationComboBox.disableProperty().set(false);
+            }
         } else {
             MainController.showAlert("No Locations Found", "Please add a location to view forecasts.");
         }
     }
 
     /**
-     * Loads the user's locations into the combo box.
+     * Loads daily forecast data for the selected location and populates the forecast display.
+     * Also loads the hourly forecast data for the first day in the forecast period.
      */
-    private void loadUserLocations() {
-        List<Location> locations = locationService.getCurrentUserLocations();
-        locationComboBox.getItems().setAll(locations);
-    }
-
     @FXML
     private void loadDailyForecastData() {
         Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
@@ -89,24 +104,28 @@ public class ForecastController extends BasePage {
         }
 
         DateData temp = new DateData(LocalDateTime.now(), 7);
-        List<DailyForecast> forecasts = (new DailyForecastDAO.DailyForecastQuery())
-                .whereLocationId(selectedLocation.getId())
-                .whereTimestampGE((int) temp.getDayStartEpoch())
-                .whereTimestampLE((int) temp.getDayEndEpoch())
-                .getResults();
+        List<DailyForecast> forecasts = forecastService.getDailyForecastByTimeRange(selectedLocation, temp);
 
         hbForecasts.getChildren().clear();
         forecasts.forEach(f -> hbForecasts.getChildren().add(createForecastDayTile(f)));
+
+        loadHourlyForecastData(forecasts.stream().sorted(Comparator.comparingInt(DailyForecast::getTimestamp)).toList().getFirst());
     }
 
-    private void loadHourlyForecastData() {
-        Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
+    /**
+     * Loads hourly forecast data for a specified day and populates the line chart with temperature data.
+     *
+     * @param dailyForecast The daily forecast data for which hourly data will be displayed.
+     */
+    private void loadHourlyForecastData(DailyForecast dailyForecast) {
+        Location selectedLocation = dailyForecast.getLocation();
         if (selectedLocation == null) {
             lineChart.getData().clear();
             return;
         }
 
-        DateData temp = new DateData(LocalDateTime.now());
+        LocalDateTime day = Instant.ofEpochSecond(dailyForecast.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+        DateData temp = new DateData(day);
         List<HourlyForecast> forecasts = (new HourlyForecastDAO.HourlyForecastQuery())
                 .whereLocation(selectedLocation)
                 .whereTimestampGE((int) temp.getDayStartEpoch())
@@ -122,8 +141,21 @@ public class ForecastController extends BasePage {
         lineChart.getData().add(tempSeries);
     }
 
+    /**
+     * Refreshes the forecast data for the selected location by reloading daily forecasts.
+     * This method is triggered by the refresh button.
+     */
     @FXML
     private void refreshForecastData() {
+        refreshForecastData(true);
+    }
+
+    /**
+     * Refreshes the forecast data with an option to update the forecast data from the API.
+     *
+     * @param update Indicates whether to update data in the forecast service.
+     */
+    private void refreshForecastData(boolean update) {
         Location selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
         if (selectedLocation == null) {
             MainController.showAlert("No Location Selected", "Please select a location to refresh data.");
@@ -135,16 +167,19 @@ public class ForecastController extends BasePage {
 
         new Thread(() -> {
             try {
-                boolean result = forecastService.updateForecastsForCurrentUser(7, 2);
+                boolean result;
+                if (update) result = forecastService.updateForecastsForCurrentUser(7, 1);
+                else {
+                    result = true;
+                }
 
                 Platform.runLater(() -> {
                     loadDailyForecastData();
-                    loadHourlyForecastData();
 
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
                     if (result) {
-                        MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                        if (update) MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
                         connectionService.setOpenMeteoDataOffline(false);
                     } else {
                         connectionService.setOpenMeteoDataOffline(true);
@@ -155,14 +190,22 @@ public class ForecastController extends BasePage {
                 Platform.runLater(() -> {
                     progressIndicator.setVisible(false);
                     refreshButton.setDisable(false);
-                    MainController.showAlert("Error", "Failed to refresh forecast data.");
+                    if (update) MainController.showAlert("Error", "Failed to refresh forecast data.");
                 });
             }
         }).start();
     }
 
+    /**
+     * Creates a UI tile to display daily forecast data, including date, temperatures,
+     * precipitation, and wind speed.
+     *
+     * @param forecast The daily forecast data to display on the tile.
+     * @return A VBox node representing a day’s forecast information.
+     */
     private Node createForecastDayTile(DailyForecast forecast) {
         VBox root = new VBox();
+        root.setOnMouseClicked(event -> loadHourlyForecastData(forecast));
         root.getStyleClass().add("forecast-day");
         root.setMinSize(100, 200);
         root.setPrefSize(150, 250);
@@ -174,14 +217,6 @@ public class ForecastController extends BasePage {
         LocalDate date = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
         Label lblDate = new Label(date.format(DateTimeFormatter.ofPattern("EEE, MMM d")));
         lblDate.getStyleClass().add("date-label");
-
-        // Weather Icon
-        // ImageView weatherIcon = new ImageView();
-        // int weatherCode = forecast.getWeather_code();
-        // Image iconImage = getWeatherIcon(weatherCode);
-        // weatherIcon.setImage(iconImage);
-        // weatherIcon.setFitWidth(50);
-        // weatherIcon.setFitHeight(50);
 
         Label lblMaxTemp = new Label("Max: " + forecast.getTemperature_2m_max() + "°C");
         lblMaxTemp.getStyleClass().add("max-temp-label");
@@ -200,6 +235,9 @@ public class ForecastController extends BasePage {
         return root;
     }
 
+    /**
+     * Updates the data for all forecast-related UI elements.
+     */
     @Override
     public void updateData() {
 

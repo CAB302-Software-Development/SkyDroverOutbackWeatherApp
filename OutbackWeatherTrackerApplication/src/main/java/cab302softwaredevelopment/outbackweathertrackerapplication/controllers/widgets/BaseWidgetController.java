@@ -4,12 +4,21 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.services.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public abstract class BaseWidgetController implements IConfigurableWidget {
     Location location;
     UserService userService;
     LocationService locationService;
     ForecastService forecastService;
+    @FXML
+    StackPane root;
+    Label lblError = new Label();
+    VBox errorOverlay = new VBox(lblError);
 
     /**
      * Method to apply widget configuration.
@@ -19,14 +28,29 @@ public abstract class BaseWidgetController implements IConfigurableWidget {
      */
     @Override
     public void applyConfig(WidgetConfig config) {
-         userService = UserService.getInstance();
-         locationService = LocationService.getInstance();
-         forecastService = ForecastService.getInstance();
+        userService = UserService.getInstance();
+        locationService = LocationService.getInstance();
+        forecastService = ForecastService.getInstance();
 
+        clearErrorOverlay();
         long locationId = config.getLocationId();
         location = new LocationDAO.LocationQuery()
                 .whereId(locationId)
                 .getSingleResult();
+        if (location == null) {
+            displayErrorOverlay("Location not found");
+        }
+    }
+
+    protected void clearErrorOverlay() {
+        root.getChildren().remove(errorOverlay);
+        errorOverlay.getStyleClass().clear();
+    }
+
+    protected void displayErrorOverlay(String message) {
+        errorOverlay.getStyleClass().add("error-overlay");
+        lblError.setText(message);
+        root.getChildren().add(errorOverlay);
     }
 
     // TODO implement automatic overlay when no location is set

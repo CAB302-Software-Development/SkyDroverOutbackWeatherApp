@@ -254,5 +254,16 @@
     -fx-opacity: 0.7;
 }
 .map-panel Label {
-    -fx-fill: white;
+    -fx-text-fill: #FFFFFF;
+}
+
+.error-overlay {
+    -fx-background-radius: 15;
+    -fx-background-color: #a4a4a4;
+    -fx-alignment: center;
+}
+.error-overlay Label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: xx-large;
+    -fx-font-weight: bold;
 }

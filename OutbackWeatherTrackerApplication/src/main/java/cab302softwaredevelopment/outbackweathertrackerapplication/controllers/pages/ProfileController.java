@@ -1,11 +1,16 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AccountUpdateModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.HashMap;
 
+/**
+ * Controller class for managing user profile settings, allowing users to update email, password, and preferences.
+ * Also provides functionality for clearing stored user data, with restricted access for guest users.
+ */
 public class ProfileController extends BasePage {
     @FXML
     private TextField emailField;
@@ -18,11 +23,19 @@ public class ProfileController extends BasePage {
     @FXML
     private Label guestUserLabel;
 
+    /**
+     * Updates the profile data displayed on the profile screen.
+     * This method is called to refresh profile information when necessary.
+     */
     @Override
     public void updateData() {
         updateProfileInfo();
     }
 
+    /**
+     * Loads and displays the current user's profile information.
+     * Disables editing for guest users and updates the UI accordingly.
+     */
     private void updateProfileInfo() {
         if (userService.isGuest()) {
             handleGuestUser();
@@ -32,6 +45,9 @@ public class ProfileController extends BasePage {
         }
     }
 
+    /**
+     * Handles profile settings for guest users, disabling fields and showing a message indicating limited access.
+     */
     private void handleGuestUser() {
         // Disable all fields and buttons
         emailField.setDisable(true);
@@ -46,10 +62,14 @@ public class ProfileController extends BasePage {
         guestUserLabel.setVisible(true);
     }
 
+    /**
+     * Saves the updated profile information, including email, password, and temperature preference.
+     * Validates input and displays feedback on success or failure.
+     */
     @FXML
     private void handleSave() {
         if (userService.isGuest()) {
-            showAlert("Guest Account", "Guest users cannot update profile details.");
+            MainController.showAlert("Guest Account", "Guest users cannot update profile details.");
             return;
         }
 
@@ -59,7 +79,7 @@ public class ProfileController extends BasePage {
         boolean preferCelsius = celsiusCheckBox.isSelected();
 
         if (!newPassword.equals(confirmPassword)) {
-            showAlert("Password Error", "Passwords do not match.");
+            MainController.showAlert("Password Error", "Passwords do not match.");
             return;
         }
 
@@ -72,16 +92,20 @@ public class ProfileController extends BasePage {
 
         boolean updateSuccess = userService.updateCurrentAccount(updateModel);
         if (updateSuccess) {
-            showAlert("Success", "Profile updated successfully.");
+            MainController.showAlert("Success", "Profile updated successfully.");
         } else {
-            showAlert("Error", "Failed to update profile.");
+            MainController.showAlert("Error", "Failed to update profile.");
         }
     }
 
+    /**
+     * Clears all stored data, including dashboard layouts and locations, for the current user.
+     * Displays a confirmation prompt before proceeding with the data reset.
+     */
     @FXML
     private void handleClearStoredData() {
         if (userService.isGuest()) {
-            showAlert("Guest Account", "Guest users cannot clear stored data.");
+            MainController.showAlert("Guest Account", "Guest users cannot clear stored data.");
             return;
         }
 
@@ -107,19 +131,11 @@ public class ProfileController extends BasePage {
                 updateSuccess = locationService.deleteAllUserLocations() && updateSuccess;
 
                 if (updateSuccess) {
-                    showAlert("Success", "Stored data cleared successfully.");
+                    MainController.showAlert("Success", "Stored data cleared successfully.");
                 } else {
-                    showAlert("Error", "Failed to clear stored data.");
+                    MainController.showAlert("Error", "Failed to clear stored data.");
                 }
             }
         });
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

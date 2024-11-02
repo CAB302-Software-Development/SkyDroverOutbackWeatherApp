@@ -1,13 +1,14 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -20,6 +21,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.json.JSONObject;
 
+/**
+ * Service class for managing user accounts and their associated data.
+ * Provides functionality for user login, logout, account creation, profile updates, and layout management.
+ */
 public class UserService {
     @Getter
     private static UserService instance = new UserService();
@@ -27,19 +32,41 @@ public class UserService {
     @Getter @Setter
     private Account currentAccount;
 
+    /**
+     * Logs in a user by setting the current account to the specified account.
+     *
+     * @param account The account to set as the currently logged-in user.
+     */
     public void login(Account account) {
         currentAccount = account;
     }
 
+    /**
+     * Checks if the current account is a guest account.
+     *
+     * @return True if the current account is a guest, false otherwise.
+     */
     public boolean isGuest() {
         return currentAccount.getIsGuest();
     }
 
+    /**
+     * Logs out the current user and switches to a guest account with a default location.
+     *
+     * @param defaultLocation The default location to assign to the guest account.
+     */
     public void logout(LocationCreateModel defaultLocation) {
         Account guestAccount = getGuestAccount(defaultLocation);
         currentAccount = guestAccount;
     }
 
+    /**
+     * Creates and returns a guest account, adding a default location and a basic dashboard layout.
+     * Deletes any previous guest account before creating a new one.
+     *
+     * @param defaultLocation The location to assign to the guest account.
+     * @return The newly created guest account, or null if an error occurs.
+     */
     public Account getGuestAccount(LocationCreateModel defaultLocation) {
         try {
             Account guestAccount = new AccountDAO.AccountQuery().whereEmail("guest@guest.com").getSingleResult();
@@ -71,23 +98,41 @@ public class UserService {
         }
     }
 
+    /**
+     * Generates a default dashboard layout with basic widgets for the specified account and location.
+     *
+     * @param account  The account for which to create the default dashboard.
+     * @param location The location to associate with the widgets.
+     */
     private void generateDefaultDashboard(Account account, Location location) {
         WidgetConfig widgetConfig = new WidgetConfig();
         widgetConfig.setLocationId(location.getId());
 
         WidgetInfo[] defaultDashboard = new WidgetInfo[]{
-                new WidgetInfo(WidgetType.Temperature, 0, 0, 2, 2, widgetConfig.getConfig()),
+                new WidgetInfo(WidgetType.Temperature, 0, 0, 2, 1, widgetConfig.getConfig()),
                 new WidgetInfo(WidgetType.Soil, 0, 2, 2, 2, widgetConfig.getConfig()),
-                new WidgetInfo(WidgetType.Precipitation, 2, 0, 2, 1, widgetConfig.getConfig())
+                new WidgetInfo(WidgetType.Precipitation, 1, 0, 2, 1, widgetConfig.getConfig())
         };
 
         UserService.getInstance().saveLayoutForUser(account, "default", defaultDashboard);
     }
 
+    /**
+     * Retrieves an account by its unique identifier.
+     *
+     * @param id The ID of the account to retrieve.
+     * @return The account with the specified ID, or null if not found.
+     */
     public Account getByID(String id) {
         return new AccountDAO.AccountQuery().whereId(id).getSingleResult();
     }
 
+    /**
+     * Updates the current account with new profile data and sets the updated account as the current account.
+     *
+     * @param newAccount An AccountUpdateModel containing the updated profile information.
+     * @return True if the update was successful; false otherwise.
+     */
     public boolean updateCurrentAccount(AccountUpdateModel newAccount) {
         newAccount.setId(getCurrentAccount().getId());
         boolean result = updateAccount(newAccount);
@@ -98,6 +143,12 @@ public class UserService {
         return result;
     }
 
+    /**
+     * Updates an account with new profile data based on the provided AccountUpdateModel.
+     *
+     * @param newAccount The AccountUpdateModel containing updated profile information.
+     * @return True if the update was successful; false otherwise.
+     */
     public boolean updateAccount(AccountUpdateModel newAccount) {
         Account existing = getByID(newAccount.getId());
 
@@ -138,18 +189,37 @@ public class UserService {
         }
     }
 
+    /**
+     * Updates the current account with a new theme preference.
+     *
+     * @param newTheme The theme to set for the current account.
+     * @return True if the update was successful; false otherwise.
+     */
     public boolean setCurrentTheme(Theme newTheme) {
         AccountUpdateModel updateModel = new AccountUpdateModel();
         updateModel.setCurrentTheme(newTheme);
         return updateCurrentAccount(updateModel);
     }
 
+    /**
+     * Retrieves the currently selected layout for the current account.
+     *
+     * @return A list of WidgetInfo objects representing the layout.
+     */
     public List<WidgetInfo> getCurrentLayout() {
         HashMap<String, WidgetInfo[]> dashboardLayouts = currentAccount.getDashboardLayouts();
         WidgetInfo[] layout = dashboardLayouts.get(currentAccount.getSelectedLayout());
         return Arrays.stream(layout).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Saves a specified layout for a user account.
+     *
+     * @param account    The account for which to save the layout.
+     * @param layoutName The name of the layout.
+     * @param value      An array of WidgetInfo objects representing the layout.
+     * @return True if the layout was saved successfully; false otherwise.
+     */
     public boolean saveLayoutForUser(Account account, String layoutName, WidgetInfo[] value) {
         HashMap<String, WidgetInfo[]> existingLayouts = account.getDashboardLayouts();
         existingLayouts.put(layoutName, value);
@@ -160,6 +230,13 @@ public class UserService {
         return updateAccount(updateModel);
     }
 
+    /**
+     * Saves a specified layout for the current account.
+     *
+     * @param layoutName The name of the layout.
+     * @param value      An array of WidgetInfo objects representing the layout.
+     * @return True if the layout was saved successfully; false otherwise.
+     */
     public boolean saveLayout(String layoutName, WidgetInfo[] value) {
         HashMap<String, WidgetInfo[]> existingLayouts = currentAccount.getDashboardLayouts();
         existingLayouts.put(layoutName, value);
@@ -169,6 +246,15 @@ public class UserService {
         return updateCurrentAccount(updateModel);
     }
 
+    /**
+     * Creates a new user account with the specified email, password, and default location.
+     * Initializes the account with a default dashboard layout.
+     *
+     * @param email    The email of the new account.
+     * @param password The password of the new account.
+     * @param location The default location to associate with the account.
+     * @return The newly created Account object.
+     */
     public Account createUser(String email, String password, LocationCreateModel location) {
         Account createdAccount = createUser(email, password);
         LocationService.getInstance().addLocationForUser(createdAccount, location);
@@ -198,6 +284,13 @@ public class UserService {
         return account;
     }
 
+    /**
+     * Creates a new user account with the specified email and password.
+     *
+     * @param email    The email of the new account.
+     * @param password The password of the new account.
+     * @return The newly created Account object.
+     */
     public Account createUser(String email, String password) {
         String username = "TEST USERNAME"; // TODO DEBUG
         UserApiService userApiService = new UserApiService();

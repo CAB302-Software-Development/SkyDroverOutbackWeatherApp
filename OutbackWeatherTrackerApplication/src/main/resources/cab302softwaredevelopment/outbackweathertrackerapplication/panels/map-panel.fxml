@@ -10,6 +10,7 @@
 <?import com.gluonhq.maps.MapView?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
 <VBox styleClass="background-primary" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.MapController">
   <AnchorPane fx:id="apContent" VBox.vgrow="ALWAYS">
 
@@ -19,11 +20,14 @@
     </StackPane>
 
     <VBox fx:id="vbCrowdDataView" prefWidth="150" prefHeight="150" styleClass="map-panel" visible="false" spacing="10"
-          AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" />
+          AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30">
+      <padding><Insets topRightBottomLeft="10"/></padding>
+    </VBox>
 
     <StackPane fx:id="spLocationForecastView" AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" visible="false">
       <ProgressIndicator fx:id="progressIndicator" visible="false"/>
       <VBox prefHeight="150" prefWidth="150" styleClass="map-panel" spacing="5" >
+        <padding><Insets topRightBottomLeft="10"/></padding>
         <HBox fx:id="hbTemperature">
           <Label text="Temperature: " VBox.vgrow="ALWAYS"/>
           <Label fx:id="lblTemperature"/>

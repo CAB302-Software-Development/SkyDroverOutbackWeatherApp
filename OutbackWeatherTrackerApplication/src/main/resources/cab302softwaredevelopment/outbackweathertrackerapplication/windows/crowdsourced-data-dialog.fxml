@@ -11,11 +11,14 @@
                 <Label text="Select Location:"/>
                 <ComboBox fx:id="locationComboBox"/>
             </HBox>
-            <VBox fx:id="configFieldsVBox" spacing="10"/>
+            <VBox fx:id="configFieldsVBox" spacing="10">
+                <TextField fx:id="actualTempField" promptText="Enter actual temperature"/>
+                <TextField fx:id="feelsLikeTempField" promptText="Enter feels-like temperature"/>
+            </VBox>
         </VBox>
     </content>
     <buttonTypes>
         <ButtonType fx:id="saveButtonType" text="Save" buttonData="OK_DONE"/>
-        <ButtonType text="Cancel" buttonData="CANCEL_CLOSE"/>
+        <ButtonType fx:id="cancelButtonType" text="Cancel" buttonData="CANCEL_CLOSE"/>
     </buttonTypes>
 </DialogPane>

@@ -8,26 +8,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.StackPane?>
 
-<VBox alignment="CENTER" spacing="10.0" styleClass="weather-widget-2"
-      stylesheets="@../themes/style.css,@../themes/theme-light.css"
-      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
-      fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget2Controller">
-   <VBox>
-      <padding><Insets left="20.0"/></padding>
-      <HBox>
-         <Text fx:id="txtLocation">
-            <font><Font size="30.0"/></font>
+<StackPane fx:id="root" stylesheets="@../themes/style.css,@../themes/theme-light.css"
+           xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
+           fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.WeatherWidget2Controller">
+   <VBox alignment="CENTER" spacing="10.0" styleClass="weather-widget-2">
+      <VBox>
+         <padding><Insets left="20.0"/></padding>
+         <HBox>
+            <Text fx:id="txtLocation" text="Location">
+               <font><Font size="30.0"/></font>
+            </Text>
+         </HBox>
+         <Text fx:id="txtMinMaxTemp" text="H: 27° L: 18°">
+            <font><Font size="12.0"/></font>
          </Text>
-      </HBox>
-      <Text fx:id="txtMinMaxTemp" text="H: 27° L: 18°">
-         <font><Font size="12.0"/></font>
-      </Text>
+      </VBox>
+      <LineChart fx:id="lgGraph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false"
+                 styleClass="line-chart" verticalGridLinesVisible="false"
+                 verticalZeroLineVisible="false">
+         <xAxis> <CategoryAxis side="BOTTOM" tickLabelsVisible="false"/> </xAxis>
+         <yAxis> <NumberAxis minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false"/> </yAxis>
+      </LineChart>
    </VBox>
-   <LineChart fx:id="lgGraph" alternativeRowFillVisible="false" horizontalGridLinesVisible="false" legendVisible="false"
-              styleClass="line-chart" verticalGridLinesVisible="false"
-              verticalZeroLineVisible="false">
-      <xAxis> <CategoryAxis side="BOTTOM" tickLabelsVisible="false"/> </xAxis>
-      <yAxis> <NumberAxis minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false"/> </yAxis>
-   </LineChart>
-</VBox>
+</StackPane>
+
+
