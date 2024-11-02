@@ -255,8 +255,8 @@ public class UserService {
      * @param location The default location to associate with the account.
      * @return The newly created Account object.
      */
-    public Account createUser(String email, String password, LocationCreateModel location) {
-        Account createdAccount = createUser(email, password);
+    public Account createUser(String email, String username, String password, LocationCreateModel location) {
+        Account createdAccount = createUser(email, username, password);
         LocationService.getInstance().addLocationForUser(createdAccount, location);
         List<Location> locations = LocationService.getInstance().getLocationsForUser(createdAccount);
         generateDefaultDashboard(createdAccount, locations.getFirst());
@@ -291,8 +291,7 @@ public class UserService {
      * @param password The password of the new account.
      * @return The newly created Account object.
      */
-    public Account createUser(String email, String password) {
-        String username = "TEST USERNAME"; // TODO DEBUG
+    public Account createUser(String email, String username, String password) {
         UserApiService userApiService = new UserApiService();
         CreateUserDTO result;
         try {

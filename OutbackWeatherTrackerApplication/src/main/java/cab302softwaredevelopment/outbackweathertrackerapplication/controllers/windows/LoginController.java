@@ -123,9 +123,10 @@ public class LoginController {
             }
         } else if (e.getSource() == signupButton) {
             String email = emailTextFieldSignup.getText().toLowerCase(Locale.ROOT);
+            String username = usernameTextFieldSignup.getText();
             String password = passwordTextFieldSignup.getText();
             String passwordConfirm = passwordTextConfirm.getText();
-            if (handleSignUp(email, password, passwordConfirm, selectedLocation)) {
+            if (handleSignUp(email, username, password, passwordConfirm, selectedLocation)) {
                 continueToApplication();
             }
         } else if (e.getSource() == guestLinkLogin || e.getSource() == guestLinkSignup) {
@@ -308,7 +309,7 @@ public class LoginController {
      * @param password
      * @return
      */
-    public boolean handleSignUp(String email, String password, String passwordConfirm, LocationCreateModel location) {
+    public boolean handleSignUp(String email, String username, String password, String passwordConfirm, LocationCreateModel location) {
         try {
             if (!Objects.equals(password, passwordConfirm)) {
                 showErrorMessage("Passwords do not match");
@@ -320,6 +321,11 @@ public class LoginController {
                 return false;
             }
 
+            if (username.isEmpty() || username.isBlank()) {
+                showErrorMessage("Username required");
+                return false;
+            }
+
             if (!validateCredentials(email, password)) return false;
 
             if ((new AccountDAO.AccountQuery()).whereEmail(email).getSingleResult() != null) {
@@ -327,7 +333,7 @@ public class LoginController {
                 return false;
             }
 
-            Account createdAccount = userService.createUser(email, password, location);
+            Account createdAccount = userService.createUser(email, username, password, location);
 
             if (createdAccount == null) {
                 showErrorMessage("Error creating account.");
@@ -373,9 +379,10 @@ public class LoginController {
             }
         } else {
             String email = emailTextFieldSignup.getText().toLowerCase(Locale.ROOT);
+            String username = usernameTextFieldSignup.getText();
             String password = passwordTextFieldSignup.getText();
             String passwordConfirm = passwordTextConfirm.getText();
-            if (handleSignUp(email, password, passwordConfirm, selectedLocation)) {
+            if (handleSignUp(email, username, password, passwordConfirm, selectedLocation)) {
                 continueToApplication();
             }
         }
