@@ -60,8 +60,12 @@ public class ForecastService {
     public boolean updateForecastsForUser(Account account, int futureDays, int pastDays) {
         try {
             Sdk sdk = new Sdk();
+            Account currentAccount = UserService.getInstance().getCurrentAccount();
+            if (currentAccount == null) {
+                return false;
+            }
             List<Location> locations = (new LocationDAO.LocationQuery())
-                    .whereAccount(UserService.getInstance().getCurrentAccount())
+                    .whereAccount(currentAccount)
                     .getResults();
             for (Location location : locations) {
                 sdk.updateDailyForecast(location, futureDays, pastDays);

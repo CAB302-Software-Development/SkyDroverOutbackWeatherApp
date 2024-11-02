@@ -142,7 +142,21 @@ public class Account {
    * @param password The password to set. (will be hashed)
    */
   public void setPassword(String password) {
-    this.password = BCrypt.hashpw(password, "$2a$10$iToUqSeCDLopg8IdvWsuiO");
+    setPassword(password, true);
+  }
+
+  /**
+   * Sets the password of the account.
+   *
+   * @param password The password to set. (will be hashed)
+   * @param hash Whether to hash the password or not.
+   */
+  public void setPassword(String password, boolean hash) {
+    if (hash) {
+      this.password = BCrypt.hashpw(password, "$2a$10$iToUqSeCDLopg8IdvWsuiO");
+    } else {
+      this.password = password;
+    }
   }
 
   /**

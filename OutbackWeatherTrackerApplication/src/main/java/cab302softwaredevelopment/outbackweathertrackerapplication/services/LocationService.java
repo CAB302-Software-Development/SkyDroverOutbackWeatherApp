@@ -36,7 +36,12 @@ public class LocationService {
     }
 
     public List<Location> getCurrentUserLocations() {
-        return getLocationsForUser(UserService.getInstance().getCurrentAccount());
+        Account currentAccount = UserService.getInstance().getCurrentAccount();
+        if (currentAccount == null) {
+            // No user logged in, return empty list
+            return List.of();
+        }
+        return getLocationsForUser(currentAccount);
     }
 
     public List<Location> getLocationsForUser(Account account) {

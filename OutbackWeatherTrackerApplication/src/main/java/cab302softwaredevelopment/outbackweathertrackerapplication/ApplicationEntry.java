@@ -81,6 +81,8 @@ public class ApplicationEntry extends Application {
    */
   public static void main(String[] args) {
     Session session = DatabaseConnection.getSession();
+    // start services
+    ConnectionService connectionService = ConnectionService.getInstance();
     Logger.printLog("Application started");
     launch();
   }
