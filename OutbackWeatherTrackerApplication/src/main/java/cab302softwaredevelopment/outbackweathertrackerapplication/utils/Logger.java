@@ -13,18 +13,14 @@ public class Logger {
   private static final String CYAN = "\033[0;36m";
   private static final String WHITE = "\033[0;37m";
 
-  public static LocalDateTime currentDateTime = LocalDateTime.now();
   public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-  public static String formattedDateTime = currentDateTime.format(formatter);
-
-  public static final String LOG_TIME = GREEN + "[" + formattedDateTime + "] ";
   public static final String LOG_INFO_LEVEL = "[INFO] ";
 
   @SafeVarargs
   public static <T> void printLog(T... args) {
+    String formattedDateTime = LocalDateTime.now().format(formatter);
     for(T arg : args) {
-      System.out.print(LOG_TIME +
+      System.out.print(GREEN + "[" + formattedDateTime + "] " +
           RESET +
           MAGENTA +
           LOG_INFO_LEVEL +
