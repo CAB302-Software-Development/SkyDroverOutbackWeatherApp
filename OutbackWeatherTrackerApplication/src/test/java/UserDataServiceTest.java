@@ -1,11 +1,11 @@
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AllUserDataModel;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserDataDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserDataService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserApiService;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,12 +27,12 @@ public class UserDataServiceTest {
     @Mock
     private HttpResponse<String> httpResponse;
 
-    private UserDataService userDataService;
+    private UserApiService userApiService;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        userDataService = new UserDataService(httpClient);
+        userApiService = new UserApiService();
     }
 
     @Test
@@ -42,7 +42,7 @@ public class UserDataServiceTest {
         loginRequest.setUserEmail("string");
         loginRequest.setPassword("string");
 
-        String result = userDataService.login(loginRequest);
+        String result = userApiService.login(loginRequest);
 
         System.out.println(result);
     }
@@ -62,7 +62,7 @@ public class UserDataServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userDataService.login(loginRequest);
+            userApiService.login(loginRequest);
         });
 
         assertEquals("Login failed: 401", exception.getMessage());
@@ -85,7 +85,7 @@ public class UserDataServiceTest {
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class))).thenReturn(httpResponse);
 
         // Act
-        userDataService.createUser(newUser);
+        userApiService.createUser(newUser);
 
         // Assert
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once
@@ -108,7 +108,7 @@ public class UserDataServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userDataService.createUser(newUser);
+            userApiService.createUser(newUser);
         });
 
         assertEquals("Failed to create user: 400", exception.getMessage());
@@ -131,7 +131,7 @@ public class UserDataServiceTest {
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class))).thenReturn(httpResponse);
 
         // Act
-        AllUserDataModel result = userDataService.getUserById(userId);
+        UserModel result = userApiService.getUserById(userId);
 
         // Assert
         assertEquals(expectedUser.getUsername(), result.getUserName());
@@ -152,7 +152,7 @@ public class UserDataServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userDataService.getUserById(userId);
+            userApiService.getUserById(userId);
         });
 
         assertEquals("User not found: 404", exception.getMessage());
@@ -164,7 +164,7 @@ public class UserDataServiceTest {
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class))).thenReturn(httpResponse);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userDataService.getAllUsers();
+            userApiService.getAllUsers();
         });
 
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once

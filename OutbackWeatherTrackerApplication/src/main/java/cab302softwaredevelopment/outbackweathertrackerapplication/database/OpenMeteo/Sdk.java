@@ -57,7 +57,6 @@ public class Sdk {
   public List<DailyForecastBuilder> getDailyForecastBuilders(Location location, int futureDays, int pastDays){
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
-    double elevation = location.getElevation();
 
     // Test that the server may exist before trying to connect
     try {
@@ -73,7 +72,6 @@ public class Sdk {
                 + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
-                + "&elevation=" + elevation
                 + "&daily=weather_code"
                 + ",temperature_2m_max"
                 + ",temperature_2m_min"
@@ -240,7 +238,6 @@ public class Sdk {
   public List<HourlyForecastBuilder> getHourlyForecastBuilders(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
-    double elevation = location.getElevation();
 
     // Test that the server may exist before trying to connect
     try {
@@ -256,7 +253,6 @@ public class Sdk {
                 + "v1/forecast?"
                 + "latitude=" + latitude
                 + "&longitude=" + longitude
-                + "&elevation=" + elevation
                 + "&hourly=temperature_2m"
                 + ",relative_humidity_2m"
                 + ",dew_point_2m"

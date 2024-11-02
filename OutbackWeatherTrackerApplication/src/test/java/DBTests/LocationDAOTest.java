@@ -84,7 +84,7 @@ public class LocationDAOTest extends DBTest {
     Account testAccount = accountsTemplate.get(1);
 
     // Add a relevant location
-    Location relevantLocation = new Location(testAccount, 0.0, 0.0, 9999.0, "Sky Island");
+    Location relevantLocation = new Location(testAccount, 0.0, 0.0, "Sky Island");
     locationDAO.insert(relevantLocation);
 
     // Retrieve the locations
@@ -110,7 +110,7 @@ public class LocationDAOTest extends DBTest {
     Account testAccount = accountsTemplate.get(1);
 
     // Add a relevant location
-    Location relevantLocation = new Location(testAccount, 0.0, 0.0, 9999.0, "Sky Island");
+    Location relevantLocation = new Location(testAccount, 0.0, 0.0, "Sky Island");
     locationDAO.insert(relevantLocation);
 
     // Retrieve the locations

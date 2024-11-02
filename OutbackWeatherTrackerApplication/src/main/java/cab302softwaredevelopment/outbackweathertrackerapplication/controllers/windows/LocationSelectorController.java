@@ -46,7 +46,7 @@ public class LocationSelectorController implements Initializable {
                 if (clickedPoint == null) return;
                 double latitude = clickedPoint.getLatitude();
                 double longitude = clickedPoint.getLongitude();
-                setSelectedLocation(new LocationCreateModel(null, latitude, longitude, 0));
+                setSelectedLocation(new LocationCreateModel(null, latitude, longitude));
             }
         });
 

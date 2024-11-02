@@ -247,39 +247,6 @@ public class LocationDAO {
     }
 
     /**
-     * Adds an elevation filter to the query.
-     *
-     * @param elevation The elevation to filter by
-     * @return This LocationQuery object
-     */
-    public LocationQuery whereElevation(Double elevation) {
-      predicates.add(builder.equal(root.get("elevation"), elevation));
-      return this;
-    }
-
-    /**
-     * Adds an elevation greater than or equal to filter to the query.
-     *
-     * @param elevation The minimum elevation to filter by
-     * @return This LocationQuery object
-     */
-    public LocationQuery whereElevationGE(Double elevation) {
-      predicates.add(builder.greaterThanOrEqualTo(root.get("elevation"), elevation));
-      return this;
-    }
-
-    /**
-     * Adds an elevation less than or equal to filter to the query.
-     *
-     * @param elevation The maximum elevation to filter by
-     * @return This LocationQuery object
-     */
-    public LocationQuery whereElevationLE(Double elevation) {
-      predicates.add(builder.lessThanOrEqualTo(root.get("elevation"), elevation));
-      return this;
-    }
-
-    /**
      * Executes the current filters and returns the results.
      *
      * @return A list of Location objects that match the provided filters

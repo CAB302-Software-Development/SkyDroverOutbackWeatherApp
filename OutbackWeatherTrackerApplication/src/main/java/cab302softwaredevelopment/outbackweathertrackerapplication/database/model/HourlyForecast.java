@@ -24,7 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Entity(name = "HourlyForecast")
 @Table(name = "hourlyForecast", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"location_account_id","location_latitude","location_longitude","location_elevation", "timestamp"})
+    @UniqueConstraint(columnNames = {"location_account_id","location_latitude","location_longitude", "timestamp"})
 })
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString

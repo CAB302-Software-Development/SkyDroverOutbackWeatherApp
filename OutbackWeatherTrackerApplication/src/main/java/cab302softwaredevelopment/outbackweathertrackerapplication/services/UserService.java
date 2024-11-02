@@ -260,21 +260,16 @@ public class UserService {
         LocationService.getInstance().addLocationForUser(createdAccount, location);
         List<Location> locations = LocationService.getInstance().getLocationsForUser(createdAccount);
         generateDefaultDashboard(createdAccount, locations.getFirst());
-
-
-        Account account = new AccountDAO.AccountQuery()
-                .whereEmail(email)
-                .getSingleResult();
-
+        
         UserApiService userApiService = new UserApiService();
         UpdateUserDTO userDTO = new UpdateUserDTO();
-        userDTO.setUserName(createdAccount.getUsername());
+        /*userDTO.setUserName(createdAccount.getUsername());
         userDTO.setUserPassword(createdAccount.getPassword());
         userDTO.setUserEmail(createdAccount.getEmail());
         userDTO.setUserTheme(createdAccount.getCurrentTheme().toString());
         userDTO.setPreferCelsius(createdAccount.getPreferCelsius());
         userDTO.setSelectedLayout(createdAccount.getSelectedLayout());
-        userDTO.setDashboardLayout(createdAccount.GetDashboardLayoutsString());
+        userDTO.setDashboardLayout(createdAccount.GetDashboardLayoutsString());*/
         userDTO.setLocations(new Gson().toJson(locations)); // Locations are stored as a JSON string
 
         CreateUserDTO result;
@@ -283,6 +278,9 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        Account account = new AccountDAO.AccountQuery()
+            .whereEmail(email)
+            .getSingleResult();
         return account;
     }
 
@@ -295,73 +293,31 @@ public class UserService {
      */
     public Account createUser(String email, String password) {
         String username = "TEST USERNAME"; // TODO DEBUG
-        Account.AccountBuilder accountBuilder = Account.builder()
-            .email(email)
-            .password(password)
-            .isGuest(false);
-
-        Account newAccount = accountBuilder.build();
         UserApiService userApiService = new UserApiService();
-        CreateUserDTO userDTO = new CreateUserDTO();
-        userDTO.setUserName(username); // TODO DEBUG
-        userDTO.setUserEmail(email);
-        userDTO.setUserPassword(newAccount.getPassword());
-        userDTO.setUserTheme(newAccount.getCurrentTheme().toString());
-        userDTO.setPreferCelsius(newAccount.getPreferCelsius());
-        userDTO.setSelectedLayout(newAccount.getSelectedLayout());
-        String dashboardLayout = newAccount.GetDashboardLayoutsString();
-        userDTO.setDashboardLayout(dashboardLayout);
-        userDTO.setLocations("{}"); // No locations for now
-
         CreateUserDTO result;
         try {
-            result = userApiService.createUser(userDTO);
+            result = userApiService.createUser(email, password, username);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        UserLoginRequestDTO loginRequest = new UserLoginRequestDTO();
-        loginRequest.setUserEmail(email);
-        loginRequest.setPassword(newAccount.getPassword());
 
         String token;
         try {
-            token = userApiService.login(loginRequest);
+            token = userApiService.login(email, password);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        // Get the account
-        UserModel userModel;
+        Account createdAccount;
         try {
-            userModel = userApiService.getCurrentUser(token);
+            createdAccount = userApiService.getCurrentAccount(token);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<HashMap<String, WidgetInfo[]>>() {}.getType();
-
-        Account createdAccount = Account.builder()
-            .id(userModel.getId())
-            .username(userModel.getUserName())
-            .password(password)
-            .email(userModel.getUserEmail())
-            .currentTheme(Theme.valueOf(userModel.getUserTheme()))
-            .isGuest(false)
-            .selectedLayout(userModel.getSelectedLayout())
-            // Convert the JSON string back to a Layouts object
-            .dashboardLayouts(gson.fromJson(userModel.getDashboardLayout(), type))
-            .preferCelsius(userModel.getPreferCelsius())
-            .JWTToken(token)
-            .build();
 
         AccountDAO accountDAO = new AccountDAO();
-
         accountDAO.insert(createdAccount);
 
-        boolean temp = newAccount.verifyPassword(password);
-        assert temp;
         return createdAccount;
     }
 }

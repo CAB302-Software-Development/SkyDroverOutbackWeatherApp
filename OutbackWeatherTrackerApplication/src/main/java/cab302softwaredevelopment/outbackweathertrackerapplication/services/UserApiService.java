@@ -1,6 +1,10 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.LocationListConverter;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.WidgetInfoListConverter;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
@@ -106,6 +110,37 @@ public class UserApiService {
     }
 
     /**
+     * Creates a default user with the given email, password, and username.
+     * @param email the user's email
+     * @param password the user's password
+     * @param username the user's username
+     * @return CreateUserDTO
+     * @throws Exception if the user cannot be created
+     */
+    public CreateUserDTO createUser(String email, String password, String username) throws Exception {
+        // To pull default values from the account class, we need to create a new account object
+        Account.AccountBuilder accountBuilder = Account.builder()
+            .email(email)
+            .password(password)
+            .isGuest(false);
+
+        Account newAccount = accountBuilder.build();
+        UserApiService userApiService = new UserApiService();
+        CreateUserDTO userDTO = new CreateUserDTO();
+        userDTO.setUserName(username);
+        userDTO.setUserEmail(email);
+        userDTO.setUserPassword(newAccount.getPassword());
+        userDTO.setUserTheme(newAccount.getCurrentTheme().toString());
+        userDTO.setPreferCelsius(newAccount.getPreferCelsius());
+        userDTO.setSelectedLayout(newAccount.getSelectedLayout());
+        String dashboardLayout = newAccount.GetDashboardLayoutsString();
+        userDTO.setDashboardLayout(dashboardLayout);
+        userDTO.setLocations("{}"); // No locations for now
+
+        return userApiService.createUser(userDTO);
+    }
+
+    /**
      * Log in a user and get a JWT token.
      *
      * @param loginRequest the login request containing username and password
@@ -128,6 +163,29 @@ public class UserApiService {
         } else {
             throw new Exception("Login failed: " + response.body());
         }
+    }
+
+    /**
+     * Log in a user using email and password.
+     *
+     * @param email the user's email
+     * @param password the user's password
+     * @return JWT token
+     * @throws Exception
+     */
+    public String login(String email, String password) throws Exception {
+        // To pull default values from the account class, we need to create a new account object
+        Account.AccountBuilder accountBuilder = Account.builder()
+            .email(email)
+            .password(password)
+            .isGuest(false);
+        Account newAccount = accountBuilder.build();
+
+        UserLoginRequestDTO loginRequest = new UserLoginRequestDTO();
+        loginRequest.setUserEmail(email);
+        loginRequest.setPassword(newAccount.getPassword());
+
+        return login(loginRequest);
     }
 
     /**
@@ -202,4 +260,28 @@ public class UserApiService {
             throw new Exception("Error fetching current user: " + response.body());
         }
     }
+
+    public Account getCurrentAccount(UserModel userModel, String jwtToken) throws Exception {
+        Account createdAccount = Account.builder()
+            .id(userModel.getId())
+            .username(userModel.getUserName())
+            .password(userModel.getUserPassword()) // Need to replace with a non-hashed password since the userModel is already hashed
+            .email(userModel.getUserEmail())
+            .currentTheme(Theme.valueOf(userModel.getUserTheme()))
+            .isGuest(false)
+            .selectedLayout(userModel.getSelectedLayout())
+            // Convert the JSON string back to a Layouts object
+            .dashboardLayouts(new WidgetInfoListConverter().convertToEntityAttribute(userModel.getDashboardLayout()))
+            .preferCelsius(userModel.getPreferCelsius())
+            .JWTToken(jwtToken)
+            .build();
+        createdAccount.setPassword(userModel.getUserPassword(), false);
+        return createdAccount;
+    }
+
+    public Account getCurrentAccount(String jwtToken) throws Exception {
+        UserModel userModel = getCurrentUser(jwtToken);
+        return getCurrentAccount(userModel, jwtToken);
+    }
+
 }

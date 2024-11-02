@@ -180,8 +180,9 @@ public class ForecastController extends BasePage {
                     refreshButton.setDisable(false);
                     if (result) {
                         if (update) MainController.showAlert("Data Refreshed", "Forecast data has been updated.");
+                        connectionService.setOpenMeteoDataOffline(false);
                     } else {
-                        connectionService.setOffline(true);
+                        connectionService.setOpenMeteoDataOffline(true);
                     }
                 });
             } catch (Exception e) {

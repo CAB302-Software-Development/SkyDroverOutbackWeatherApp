@@ -98,7 +98,8 @@ public class MapController extends BasePage {
                 double longitude = clickedPos.getLongitude();
                 hideCrowdPanel();
                 hideForecastPanel();
-                setSelectedLocation(new LocationCreateModel(null, latitude, longitude, 0));
+                setSelectedLocation(new LocationCreateModel(null, latitude, longitude));
+                setForecastVisible(false);
             }
         });
         updateData();

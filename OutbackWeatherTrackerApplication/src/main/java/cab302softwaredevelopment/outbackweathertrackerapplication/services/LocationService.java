@@ -69,7 +69,12 @@ public class LocationService {
      * @return A list of Location objects for the current user.
      */
     public List<Location> getCurrentUserLocations() {
-        return getLocationsForUser(UserService.getInstance().getCurrentAccount());
+        Account currentAccount = UserService.getInstance().getCurrentAccount();
+        if (currentAccount == null) {
+            // No user logged in, return empty list
+            return List.of();
+        }
+        return getLocationsForUser(currentAccount);
     }
 
     /**
@@ -218,7 +223,7 @@ public class LocationService {
                 double latitude = jsonObject.get("lat").getAsDouble();
                 double longitude = jsonObject.get("lon").getAsDouble();
 
-                return new LocationCreateModel(null, latitude, longitude, 0);
+                return new LocationCreateModel(null, latitude, longitude);
             } else {
                 throw new Exception("HTTP Request failed with code: " + responseCode);
             }
