@@ -263,7 +263,7 @@ public class UserService {
         
         UserApiService userApiService = new UserApiService();
         UpdateUserDTO userDTO = new UpdateUserDTO();
-        /*userDTO.setUserName(createdAccount.getUsername());
+        /*userDTO.setUsername(createdAccount.getUsername());
         userDTO.setUserPassword(createdAccount.getPassword());
         userDTO.setUserEmail(createdAccount.getEmail());
         userDTO.setUserTheme(createdAccount.getCurrentTheme().toString());

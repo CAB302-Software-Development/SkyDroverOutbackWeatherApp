@@ -73,7 +73,7 @@ function addMarker(coordinate, info) {
             location: "Test Location 1",
             latitude: -27.4698,
             longitude: 153.0251,
-            userName: "User1",
+            username: "User1",
             actualTemp: 30,
             feelsLikeTemp: 32
         },
@@ -81,7 +81,7 @@ function addMarker(coordinate, info) {
             location: "Test Location 2",
             latitude: -27.4750,
             longitude: 153.0255,
-            userName: "User2",
+            username: "User2",
             actualTemp: 25,
             feelsLikeTemp: 26
         },
@@ -89,7 +89,7 @@ function addMarker(coordinate, info) {
             location: "Test Location 3",
             latitude: -27.4700,
             longitude: 153.0200,
-            userName: "User3",
+            username: "User3",
             actualTemp: 28,
             feelsLikeTemp: 29
         }
@@ -106,11 +106,11 @@ function addMarker(coordinate, info) {
             console.log("Adding marker at coordinates:", lonLat);
             addMarker(ol.proj.fromLonLat(lonLat), {
                 location: item.location,
-                name: item.userName,
+                name: item.username,
                 temperature: item.actualTemp,
                 feelsLike: item.feelsLikeTemp
             });
-            console.log("Marker added for:", item.userName);
+            console.log("Marker added for:", item.username);
         } else {
             console.error("Invalid coordinates for marker:", item);
         }
@@ -144,11 +144,11 @@ document.addEventListener("kys", function() {
                 if (item.latitude && item.longitude) {
                     addMarker(ol.proj.fromLonLat([item.longitude, item.latitude]), {
                         location: item.location,
-                        name: item.userName,
+                        name: item.username,
                         temperature: item.actualTemp,
                         feelsLike: item.feelsLikeTemp
                     });
-                    console.log("Marker added for:", item.userName);
+                    console.log("Marker added for:", item.username);
                 } else {
                     console.error("Invalid coordinates for marker:", item);
                 }
