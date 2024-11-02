@@ -22,22 +22,23 @@ import java.util.Map;
 public class AlertsService {
     @Getter
     private static AlertsService instance = new AlertsService();
-    private static final String ALERTS_FILE = "alerts.dat";
 
     private Map<Long, List<WeatherAlert>> locationWarnings = new HashMap<>();
-    @Getter @Setter
-    private List<CustomAlertCondition> alertConfigs = new ArrayList<>();
+
+    public List<CustomAlertCondition> getAlertConfigs() {
+        return UserService.getInstance().getCurrentAccount().getCustomAlertConditions();
+    }
 
     public void addAlert(CustomAlertCondition alert) {
-        alertConfigs.add(alert);
+        UserService.getInstance().getCurrentAccount().getCustomAlertConditions().add(alert);
     }
 
     public void removeAlert(CustomAlertCondition selectedCondition) {
-        alertConfigs.remove(selectedCondition);
+        UserService.getInstance().getCurrentAccount().getCustomAlertConditions().remove(selectedCondition);
     }
 
     public void updateAlert(int index, CustomAlertCondition newCondition) {
-        alertConfigs.set(index, newCondition);
+        UserService.getInstance().getCurrentAccount().getCustomAlertConditions().set(index, newCondition);
     }
 
     public List<WeatherAlert> getBOMAlertsForLocation(Location location) {
