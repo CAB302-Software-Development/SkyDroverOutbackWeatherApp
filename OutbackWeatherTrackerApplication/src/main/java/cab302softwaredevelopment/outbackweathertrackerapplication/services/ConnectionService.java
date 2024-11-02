@@ -1,6 +1,5 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import lombok.Getter;
 import java.util.concurrent.Executors;

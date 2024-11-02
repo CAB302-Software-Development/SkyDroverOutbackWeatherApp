@@ -1,8 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
@@ -20,7 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;

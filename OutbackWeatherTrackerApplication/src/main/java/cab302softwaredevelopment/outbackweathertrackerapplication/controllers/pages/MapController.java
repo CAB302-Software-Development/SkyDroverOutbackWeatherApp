@@ -1,6 +1,5 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.MainController;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.CrowdsourcedModel;

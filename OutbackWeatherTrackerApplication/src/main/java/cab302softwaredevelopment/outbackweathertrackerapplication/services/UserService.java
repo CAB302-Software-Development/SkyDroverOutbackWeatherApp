@@ -6,20 +6,14 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.*;
 import java.util.stream.Collectors;
-import org.json.JSONObject;
 
 /**
  * Service class for managing user accounts and their associated data.

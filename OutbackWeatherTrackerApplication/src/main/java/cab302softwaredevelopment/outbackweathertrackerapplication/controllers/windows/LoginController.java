@@ -7,12 +7,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.model
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.LocationListConverter;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.LocationCreateModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
-import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.InputService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.LocationService;
@@ -20,13 +17,9 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserA
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -35,7 +28,6 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class LoginController {
 
