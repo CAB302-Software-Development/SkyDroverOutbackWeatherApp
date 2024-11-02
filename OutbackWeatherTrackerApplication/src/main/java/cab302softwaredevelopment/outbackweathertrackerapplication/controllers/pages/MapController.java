@@ -99,7 +99,6 @@ public class MapController extends BasePage {
                 hideCrowdPanel();
                 hideForecastPanel();
                 setSelectedLocation(new LocationCreateModel(null, latitude, longitude));
-                setForecastVisible(false);
             }
         });
         updateData();
@@ -227,7 +226,7 @@ public class MapController extends BasePage {
         List<Node> details = new ArrayList<>();
 
         details.add(new Label("Location: " + crowdData.getLocation()));
-        details.add(new Label("User: " + crowdData.getUserName()));
+        details.add(new Label("User: " + crowdData.getUsername()));
         details.add(new Label("Feels like temp: " + crowdData.getFeelsLikeTemp()));
         details.add(new Label("Actual temp: " + crowdData.getActualTemp()));
 
