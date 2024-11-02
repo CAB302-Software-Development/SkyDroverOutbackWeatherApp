@@ -3,12 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
-import cab302softwaredevelopment.outbackweathertrackerapplication.utils.LocalStorageServiceFactory;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
-import com.gluonhq.attach.storage.StorageService;
-import com.gluonhq.attach.util.Services;
-import com.gluonhq.attach.util.impl.ServiceFactory;
-import com.gluonhq.maps.MapView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -100,7 +95,9 @@ public class ApplicationEntry extends Application {
   public static void main(String[] args) {
     Session session = DatabaseConnection.getSession();
     // start services
-    Services.registerServiceFactory(new LocalStorageServiceFactory());
+
+    // This defines a static location for map caching, but requires custom VM arguments
+    // Services.registerServiceFactory(new LocalStorageServiceFactory());
     ConnectionService connectionService = ConnectionService.getInstance();
     Logger.printLog("Application started");
     launch();
