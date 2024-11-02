@@ -20,7 +20,7 @@ import java.util.Optional;
 public class CrowdsourcedApiService {
     @Getter
     private static CrowdsourcedApiService instance = new CrowdsourcedApiService();
-    private static final String BASE_URL = "http://localhost:8080/api/crowdsourced";
+    private static final String BASE_URL = "http://localhost:8090/api/crowdsourced";
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 
