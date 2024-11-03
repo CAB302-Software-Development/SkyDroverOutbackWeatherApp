@@ -5,9 +5,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.D
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO.HourlyForecastQuery;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast.DailyForecastBuilder;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast.HourlyForecastBuilder;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -31,7 +29,7 @@ import java.util.List;
 /**
  * A rough Software Development Kit for the OpenMeteo API.
  */
-public class Sdk {
+public class OpenMeteoSDK {
 
   static List<URI> apiURLs;
 
@@ -44,7 +42,7 @@ public class Sdk {
   }
 
   static URI apiURL = apiURLs.getFirst();
-  public Sdk() {
+  public OpenMeteoSDK() {
   }
 
   private static void rotateApiHost() {
@@ -54,7 +52,16 @@ public class Sdk {
     apiURL = apiURLs.getFirst();
   }
 
-  public List<DailyForecastBuilder> getDailyForecastBuilders(Location location, int futureDays, int pastDays){
+
+  /**
+   * Retrieves the daily forecasts for a location from the OpenMeteo API.
+   *
+   * @param location The location to retrieve the daily forecast for.
+   * @param futureDays The number of days in the future to retrieve the forecast for.
+   * @param pastDays The number of days in the past to retrieve the forecast for.
+   * @return A list of DailyForecast objects representing the forecast.
+   */
+  public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
 
@@ -107,11 +114,11 @@ public class Sdk {
     } catch (ConnectException e) {
       // Unable to connect to the server
       rotateApiHost();
-      return getDailyForecastBuilders(location, futureDays, pastDays);
+      return getDailyForecast(location, futureDays, pastDays);
     } catch(HttpConnectTimeoutException e){
       // Timeout
       rotateApiHost();
-      return getDailyForecastBuilders(location, futureDays, pastDays);
+      return getDailyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -121,7 +128,7 @@ public class Sdk {
     if (response.statusCode() != 200) {
       // Server returned an error
       rotateApiHost();
-      return getDailyForecastBuilders(location, futureDays, pastDays);
+      return getDailyForecast(location, futureDays, pastDays);
     }
 
     // parse as json
@@ -141,9 +148,9 @@ public class Sdk {
 
     // time represents the number of samples
     int totalEntries = daily.getAsJsonArray("time").size();
-    List<DailyForecast.DailyForecastBuilder> dailyForecasts = new ArrayList<>();
+    List<DailyForecast> dailyForecasts = new ArrayList<>();
     for (int i = 0; i < totalEntries; i++) {
-      DailyForecast.DailyForecastBuilder dailyForecast = DailyForecast.builder()
+      DailyForecast dailyForecast = DailyForecast.builder()
           .location(location)
           .timestamp(daily.getAsJsonArray("time").get(i).getAsInt())
           .weather_code(daily.getAsJsonArray("weather_code").get(i).getAsInt())
@@ -166,25 +173,9 @@ public class Sdk {
           .wind_gusts_10m_max(daily.getAsJsonArray("wind_gusts_10m_max").get(i).getAsDouble())
           .wind_direction_10m_dominant(daily.getAsJsonArray("wind_direction_10m_dominant").get(i).getAsDouble())
           .shortwave_radiation_sum(daily.getAsJsonArray("shortwave_radiation_sum").get(i).getAsDouble())
-          .et0_fao_evapotranspiration(daily.getAsJsonArray("et0_fao_evapotranspiration").get(i).getAsDouble());
+          .et0_fao_evapotranspiration(daily.getAsJsonArray("et0_fao_evapotranspiration").get(i).getAsDouble())
+          .build();
       dailyForecasts.add(dailyForecast);
-    }
-    return dailyForecasts;
-  }
-
-  /**
-   * Retrieves the daily forecasts for a location from the OpenMeteo API.
-   *
-   * @param location The location to retrieve the daily forecast for.
-   * @param futureDays The number of days in the future to retrieve the forecast for.
-   * @param pastDays The number of days in the past to retrieve the forecast for.
-   * @return A list of DailyForecast objects representing the forecast.
-   */
-  public List<DailyForecast> getDailyForecast(Location location, int futureDays, int pastDays) {
-    List<DailyForecast.DailyForecastBuilder> dailyForecastBuilders = getDailyForecastBuilders(location, futureDays, pastDays);
-    List<DailyForecast> dailyForecasts = new ArrayList<>();
-    for (DailyForecast.DailyForecastBuilder dailyForecastBuilder : dailyForecastBuilders) {
-      dailyForecasts.add(dailyForecastBuilder.build());
     }
     return dailyForecasts;
   }
@@ -233,9 +224,9 @@ public class Sdk {
    * @param location The location to retrieve the hourly forecast for.
    * @param futureDays The number of days in the future to retrieve the forecast for.
    * @param pastDays The number of days in the past to retrieve the forecast for.
-   * @return A list of HourlyForecastBuilders representing the forecasts.
+   * @return A list of HourlyForecast objects representing the forecast.
    */
-  public List<HourlyForecastBuilder> getHourlyForecastBuilders(Location location, int futureDays, int pastDays) {
+  public List<HourlyForecast> getHourlyForecast(Location location, int futureDays, int pastDays) {
     double longitude = location.getLongitude();
     double latitude = location.getLatitude();
 
@@ -318,11 +309,11 @@ public class Sdk {
       // Unable to connect to the server
       // Get the next host to try
       rotateApiHost();
-      return getHourlyForecastBuilders(location, futureDays, pastDays);
+      return getHourlyForecast(location, futureDays, pastDays);
     } catch(HttpConnectTimeoutException e){
       // Timeout
       rotateApiHost();
-      return getHourlyForecastBuilders(location, futureDays, pastDays);
+      return getHourlyForecast(location, futureDays, pastDays);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -332,7 +323,7 @@ public class Sdk {
     if (response.statusCode() != 200) {
       // Server returned an error
       rotateApiHost();
-      return getHourlyForecastBuilders(location, futureDays, pastDays);
+      return getHourlyForecast(location, futureDays, pastDays);
     }
 
     // parse as json
@@ -351,9 +342,9 @@ public class Sdk {
 
     // Time represents the number of samples
     int totalEntries = hourly.getAsJsonArray("time").size();
-    List<HourlyForecast.HourlyForecastBuilder> hourlyForecasts = new ArrayList<>();
+    List<HourlyForecast> hourlyForecasts = new ArrayList<>();
     for (int i = 0; i < totalEntries; i++) {
-      HourlyForecast.HourlyForecastBuilder hourlyForecast = HourlyForecast.builder()
+      HourlyForecast hourlyForecast = HourlyForecast.builder()
           .location(location)
           .timestamp(hourly.getAsJsonArray("time").get(i).getAsInt())
           .temperature_2m(hourly.getAsJsonArray("temperature_2m").get(i).getAsDouble())
@@ -406,26 +397,10 @@ public class Sdk {
           .diffuse_radiation_instant(hourly.getAsJsonArray("diffuse_radiation_instant").get(i).getAsDouble())
           .direct_normal_irradiance_instant(hourly.getAsJsonArray("direct_normal_irradiance_instant").get(i).getAsDouble())
           .global_tilted_irradiance_instant(hourly.getAsJsonArray("global_tilted_irradiance_instant").get(i).getAsDouble())
-          .terrestrial_radiation_instant(hourly.getAsJsonArray("terrestrial_radiation_instant").get(i).getAsDouble());
+          .terrestrial_radiation_instant(hourly.getAsJsonArray("terrestrial_radiation_instant").get(i).getAsDouble())
+          .build();
 
       hourlyForecasts.add(hourlyForecast);
-    }
-    return hourlyForecasts;
-  }
-
-  /**
-   * Retrieves the hourly forecasts for a location from the OpenMeteo API.
-   *
-   * @param location The location to retrieve the hourly forecast for.
-   * @param futureDays The number of days in the future to retrieve the forecast for.
-   * @param pastDays The number of days in the past to retrieve the forecast for.
-   * @return A list of HourlyForecast objects representing the forecast.
-   */
-  public List<HourlyForecast> getHourlyForecast(Location location, int futureDays, int pastDays) {
-    List<HourlyForecast.HourlyForecastBuilder> hourlyForecastBuilders = getHourlyForecastBuilders(location, futureDays, pastDays);
-    List<HourlyForecast> hourlyForecasts = new ArrayList<>();
-    for (HourlyForecast.HourlyForecastBuilder hourlyForecastBuilder : hourlyForecastBuilders) {
-      hourlyForecasts.add(hourlyForecastBuilder.build());
     }
     return hourlyForecasts;
   }

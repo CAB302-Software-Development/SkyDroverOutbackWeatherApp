@@ -86,6 +86,7 @@ public class ApplicationEntry extends Application {
       SyncService.getInstance().shutdownScheduler();
       Platform.exit();
     });
+    rootStage.setMaximized(true);
     rootStage.show();
   }
 

@@ -1,6 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.OpenMeteoSDK;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.HourlyForecast;
@@ -41,12 +41,12 @@ public class ForecastController extends BasePage {
     private LineChart<Number,Number> lineChart;
     @FXML
     private HBox hbForecasts;
-    private Sdk sdk;
+    private OpenMeteoSDK openMeteoSDK;
 
     @Override
     public void initialize() {
         super.initialize();
-        sdk = new Sdk();
+        openMeteoSDK = new OpenMeteoSDK();
 
         progressIndicator.setVisible(false);
 

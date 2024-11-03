@@ -3,7 +3,7 @@ package DBTests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.OpenMeteoSDK;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
@@ -58,10 +58,10 @@ public class OpenMeteoSDKTest extends DBTest {
       addLocations();
 
       // Use the sdk to get hourly forecasts for the locations
-      Sdk sdk = new Sdk();
+      OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
 
       locationsTemplate.forEach(location -> {
-        List<HourlyForecast> forecasts = sdk.getHourlyForecast(location,futureDays,pastDays);
+        List<HourlyForecast> forecasts = openMeteoSDK.getHourlyForecast(location,futureDays,pastDays);
         assertEquals((futureDays + pastDays) * 24, forecasts.size());
       });
     }
@@ -79,10 +79,10 @@ public class OpenMeteoSDKTest extends DBTest {
       addLocations();
 
       // Use the sdk to get daily forecasts for the locations
-      Sdk sdk = new Sdk();
+      OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
 
         locationsTemplate.forEach(location -> {
-          List<DailyForecast> forecasts = sdk.getDailyForecast(location,futureDays,pastDays);
+          List<DailyForecast> forecasts = openMeteoSDK.getDailyForecast(location,futureDays,pastDays);
           assertEquals((futureDays + pastDays), forecasts.size());
         });
     }
@@ -98,9 +98,9 @@ public class OpenMeteoSDKTest extends DBTest {
     assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
 
     // Use the sdk to update the hourly forecasts
-    Sdk sdk = new Sdk();
+    OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
     for (Location location : locationsTemplate) {
-      sdk.updateHourlyForecast(location, 10, 0);
+      openMeteoSDK.updateHourlyForecast(location, 10, 0);
     }
 
     // Verify the hourly forecasts
@@ -117,9 +117,9 @@ public class OpenMeteoSDKTest extends DBTest {
     assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
 
     // Use the sdk to update the daily forecasts
-    Sdk sdk = new Sdk();
+    OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
     for (Location location : locationsTemplate) {
-      sdk.updateDailyForecast(location, 10, 0);
+      openMeteoSDK.updateDailyForecast(location, 10, 0);
     }
 
     // Verify the daily forecasts
@@ -136,8 +136,8 @@ public class OpenMeteoSDKTest extends DBTest {
     assertEquals(0, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be empty");
 
     // Use the sdk to update the hourly forecasts
-    Sdk sdk = new Sdk();
-    locationsTemplate.parallelStream().forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
+    OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
+    locationsTemplate.parallelStream().forEach(location -> openMeteoSDK.updateHourlyForecast(location, 10, 0));
 
     // Verify the hourly forecasts
     assertEquals(locationsTemplate.size() * 10 * 24, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be full");
@@ -159,7 +159,7 @@ public class OpenMeteoSDKTest extends DBTest {
     });
 
     // Update the hourly forecasts from the sdk
-    locationsTemplate.stream().parallel().forEach(location -> sdk.updateHourlyForecast(location, 10, 0));
+    locationsTemplate.stream().parallel().forEach(location -> openMeteoSDK.updateHourlyForecast(location, 10, 0));
 
     // Verify that no forecasts have been added
     assertEquals(locationsTemplate.size() * 10 * 24, hourlyForecastDAO.getAll().size(), "Hourly Forecasts should be full");
@@ -180,9 +180,9 @@ public class OpenMeteoSDKTest extends DBTest {
     assertEquals(0, dailyForecastDAO.getAll().size(), "Daily Forecasts should be empty");
 
     // Use the sdk to update the daily forecasts
-    Sdk sdk = new Sdk();
+    OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
     for (Location location1 : locationsTemplate) {
-      sdk.updateDailyForecast(location1, 10, 0);
+      openMeteoSDK.updateDailyForecast(location1, 10, 0);
     }
 
     // Verify the daily forecasts
@@ -202,7 +202,7 @@ public class OpenMeteoSDKTest extends DBTest {
     });
 
     // Update the daily forecasts from the sdk
-    locationsTemplate.stream().parallel().forEach(location -> sdk.updateDailyForecast(location, 10, 0));
+    locationsTemplate.stream().parallel().forEach(location -> openMeteoSDK.updateDailyForecast(location, 10, 0));
 
     // Verify that no forecasts have been added
     assertEquals(locationsTemplate.size() * 10, dailyForecastDAO.getAll().size(), "Daily Forecasts should be full");

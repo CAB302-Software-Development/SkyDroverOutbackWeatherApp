@@ -1,6 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.Sdk;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.OpenMeteoSDK;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
@@ -86,10 +86,10 @@ public class ForecastService {
      */
     public boolean updateForecastsForUser(Account account, int futureDays, int pastDays) {
         try {
-            Sdk sdk = new Sdk();
+            OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
             for (Location location : LocationService.getInstance().getCurrentUserLocations()) {
-                sdk.updateDailyForecast(location, futureDays, pastDays);
-                sdk.updateHourlyForecast(location, futureDays, pastDays);
+                openMeteoSDK.updateDailyForecast(location, futureDays, pastDays);
+                openMeteoSDK.updateHourlyForecast(location, futureDays, pastDays);
             }
             return true;
         } catch (Exception e) {
@@ -119,9 +119,9 @@ public class ForecastService {
      */
     public boolean updateForecastsForLocation(Location location, int futureDays, int pastDays) {
         try {
-            Sdk sdk = new Sdk();
-            sdk.updateDailyForecast(location, futureDays, pastDays);
-            sdk.updateHourlyForecast(location, futureDays, pastDays);
+            OpenMeteoSDK openMeteoSDK = new OpenMeteoSDK();
+            openMeteoSDK.updateDailyForecast(location, futureDays, pastDays);
+            openMeteoSDK.updateHourlyForecast(location, futureDays, pastDays);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
