@@ -207,6 +207,11 @@ public class LoginController {
      */
     public boolean handleSignUp(String email, String username, String password, String passwordConfirm, LocationCreateModel location) {
         try {
+            if (username.isEmpty() || username.isBlank()) {
+                showErrorMessage("Username required");
+                return false;
+            }
+
             if (!Objects.equals(password, passwordConfirm)) {
                 showErrorMessage("Passwords do not match");
                 return false;
@@ -217,17 +222,7 @@ public class LoginController {
                 return false;
             }
 
-            if (username.isEmpty() || username.isBlank()) {
-                showErrorMessage("Username required");
-                return false;
-            }
-
             if (!validateCredentials(email, password)) return false;
-
-            if ((new AccountDAO.AccountQuery()).whereEmail(email).getSingleResult() != null) {
-                showErrorMessage("User already exists with this email.");
-                return false;
-            }
 
             Account createdAccount;
             try {
@@ -242,7 +237,7 @@ public class LoginController {
                 return false;
             }
 
-            userService.login(createdAccount);
+            userService.login(email, password);
 
             return true;
         }

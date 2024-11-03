@@ -4,14 +4,21 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 public class WidgetInfo implements Serializable {
     @SerializedName("widgetType")
     public WidgetType type;
+
     public int rowIndex;
+
     public int columnIndex;
+
     public int colSpan;
+
     public int rowSpan;
+
     public Map<String, Object> config;
 
     public WidgetInfo() {

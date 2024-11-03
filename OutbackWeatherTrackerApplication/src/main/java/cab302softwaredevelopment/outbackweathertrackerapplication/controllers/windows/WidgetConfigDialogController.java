@@ -1,6 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.pages.DashboardController;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetInfo;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
@@ -126,11 +127,9 @@ public class WidgetConfigDialogController implements Initializable {
             }
         });
         long locationId = widgetConfig.getLocationId();
-        if(locationId >= 0) {
-            locations.stream()
-                    .filter(location -> location.getId() == locationId)
-                    .findFirst()
-                    .ifPresent(location -> locationComboBox.getSelectionModel().select(location));
+        Location location = new LocationDAO.LocationQuery().whereId(locationId).getSingleResult();
+        if (location!=null) {
+            locationComboBox.getSelectionModel().select(location);
         }
         locationComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             widgetConfig.setLocationId(newValue.getId());

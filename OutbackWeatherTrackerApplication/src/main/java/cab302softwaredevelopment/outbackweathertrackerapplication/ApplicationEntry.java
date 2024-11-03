@@ -3,6 +3,7 @@ package cab302softwaredevelopment.outbackweathertrackerapplication;
 import cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.DatabaseConnection;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.ConnectionService;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.SyncService;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -82,6 +83,7 @@ public class ApplicationEntry extends Application {
     rootStage.setOnCloseRequest(event -> {
       ConnectionService.getInstance().shutdownScheduler();
       MainController.shutdownScheduler();
+      SyncService.getInstance().shutdownScheduler();
       Platform.exit();
     });
     rootStage.show();
@@ -98,7 +100,10 @@ public class ApplicationEntry extends Application {
 
     // This defines a static location for map caching, but requires custom VM arguments
     // Services.registerServiceFactory(new LocalStorageServiceFactory());
+    // Start the connection service
     ConnectionService connectionService = ConnectionService.getInstance();
+    // Start the sync service
+    SyncService syncService = SyncService.getInstance();
     Logger.printLog("Application started");
     launch();
   }

@@ -29,7 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 })
 @Builder
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true,doNotUseGetters = true)
 @ToString
 /**
  * A model class for the Account entity.
@@ -40,6 +40,7 @@ public class Account {
    * The ID of the account.
    */
   @Id
+  @EqualsAndHashCode.Include
   private String id;
 
   /**
@@ -47,6 +48,7 @@ public class Account {
    */
   @Setter
   @Column(nullable = false)
+  @EqualsAndHashCode.Include
   private String username;
 
   /**
@@ -54,11 +56,13 @@ public class Account {
    */
   @Setter
   @Column(nullable = false)
+  @EqualsAndHashCode.Include
   private String email;
 
   /**
    * The hashed password of the account.
    */
+  @EqualsAndHashCode.Include
   private String password;
 
   /**
@@ -66,6 +70,7 @@ public class Account {
    */
   @Setter
   @Default
+  @EqualsAndHashCode.Include
   private Boolean preferCelsius = true;
 
   /**
@@ -73,6 +78,7 @@ public class Account {
    */
   @Setter
   @Default
+  @EqualsAndHashCode.Include
   private Boolean isGuest = false;
 
   /**
@@ -80,6 +86,7 @@ public class Account {
    */
   @Setter
   @Default
+  @EqualsAndHashCode.Include
   private Theme currentTheme = Theme.Light;
 
   /**
@@ -87,12 +94,14 @@ public class Account {
    */
   @Setter
   @Default
+  @EqualsAndHashCode.Include
   private String selectedLayout = "default";
 
   /**
    * The JWT token of the account once logged in.
    */
   @Setter
+  @EqualsAndHashCode.Include
   private String JWTToken;
 
   /**
@@ -102,12 +111,17 @@ public class Account {
   @Column(length=LONG32)
   @Default
   @Setter
+  @EqualsAndHashCode.Include
   private HashMap<String, WidgetInfo[]> dashboardLayouts = new WidgetInfoListConverter().convertToEntityAttribute("{'default':[]}");
 
+  /**
+   * The users custom alert conditions.
+   */
   @Convert(converter = CustomAlertConditionListConverter.class)
   @Column(length=LONG32)
   @Default
   @Setter
+  @EqualsAndHashCode.Include
   private List<CustomAlertCondition> customAlertConditions = List.of();
 
   /**
@@ -184,5 +198,13 @@ public class Account {
 
   public void SetDashboardLayoutsString(String layouts) {
     dashboardLayouts = new WidgetInfoListConverter().convertToEntityAttribute(layouts);
+  }
+
+  public String GetCustomAlertConditionsString() {
+    return new CustomAlertConditionListConverter().convertToDatabaseColumn(customAlertConditions);
+  }
+
+  public void SetCustomAlertConditionsString(String conditions) {
+    customAlertConditions = new CustomAlertConditionListConverter().convertToEntityAttribute(conditions);
   }
 }

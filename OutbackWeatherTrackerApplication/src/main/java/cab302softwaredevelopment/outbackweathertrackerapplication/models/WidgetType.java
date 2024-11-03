@@ -1,6 +1,7 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.models;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.EqualsAndHashCode;
 
 public enum WidgetType {
     @SerializedName("CurrentTemp")

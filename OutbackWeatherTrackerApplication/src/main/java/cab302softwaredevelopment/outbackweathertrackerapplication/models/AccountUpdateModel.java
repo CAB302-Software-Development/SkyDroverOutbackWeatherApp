@@ -1,5 +1,6 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.models;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashMap;
@@ -15,4 +16,5 @@ public class AccountUpdateModel {
     private String selectedLayout = null;
     private String JWTToken = null;
     private HashMap<String, WidgetInfo[]> dashboardLayouts = null;
+    private List<CustomAlertCondition> customAlertConditions = null;
 }

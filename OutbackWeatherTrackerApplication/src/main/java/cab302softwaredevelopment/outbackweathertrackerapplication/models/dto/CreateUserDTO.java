@@ -49,6 +49,11 @@ public class CreateUserDTO {
   private String dashboardLayout;
 
   /**
+   * The custom alert conditions of the user.
+   */
+  private String customAlertConditions;
+
+  /**
    * The selected locations of the user.
    */
   private String locations;

@@ -33,5 +33,5 @@
     <CheckBox fx:id="celsiusCheckBox" text="Prefer Celsius"/>
 
     <Button fx:id="saveButton" text="Save Changes" onAction="#handleSave"/>
-    <Button fx:id="clearDataButton" text="Delete stored user data" onAction="#handleClearStoredData"/>
+    <!-- <Button fx:id="clearDataButton" text="Delete stored user data" onAction="#handleClearStoredData"/> -->
 </VBox>

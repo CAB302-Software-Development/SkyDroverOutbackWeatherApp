@@ -83,6 +83,7 @@ public class DashboardController extends BasePage {
             enterEditMode();
         } else if (event.getSource() == btnSave) {
             saveCurrentLayout();
+            exitEditMode();
         } else if (event.getSource() == btnCancel) {
             exitEditMode();
         } else if (event.getSource() == btnNewLayout) {

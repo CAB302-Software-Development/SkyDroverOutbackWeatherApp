@@ -1,7 +1,9 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.LocationListConverter;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.WidgetInfoListConverter;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
@@ -12,10 +14,12 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.Use
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.google.gson.Gson;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -136,8 +140,8 @@ public class UserApiService {
         userDTO.setUserTheme(newAccount.getCurrentTheme().toString());
         userDTO.setPreferCelsius(newAccount.getPreferCelsius());
         userDTO.setSelectedLayout(newAccount.getSelectedLayout());
-        String dashboardLayout = newAccount.GetDashboardLayoutsString();
-        userDTO.setDashboardLayout(dashboardLayout);
+        userDTO.setCustomAlertConditions(newAccount.GetCustomAlertConditionsString());
+        userDTO.setDashboardLayout(newAccount.GetDashboardLayoutsString());
         userDTO.setLocations("{}"); // No locations for now
 
         return userApiService.createUser(userDTO);
@@ -165,6 +169,8 @@ public class UserApiService {
             return tokenResponse.get("jwt_token");
         } else if (response.statusCode() == 401) {
             throw new Exception("Invalid email or password");
+        } else if (response.statusCode() == 404) {
+            throw new Exception("User not found");
         }
         else {
             throw new Exception("Login failed: " + response.body());
@@ -245,6 +251,31 @@ public class UserApiService {
         }
     }
 
+    public CreateUserDTO updateUser(Account account, String jwtToken) throws Exception {
+        List<Location> locations = LocationService.getInstance().getLocationsForUser(account);
+        UserApiService userApiService = new UserApiService();
+        UpdateUserDTO userDTO = new UpdateUserDTO();
+        userDTO.setUsername(account.getUsername());
+        userDTO.setUserEmail(account.getEmail());
+        userDTO.setUserPassword(account.getPassword());
+        userDTO.setPreferCelsius(account.getPreferCelsius());
+        userDTO.setUserTheme(account.getCurrentTheme().toString());
+        userDTO.setSelectedLayout(account.getSelectedLayout());
+        userDTO.setDashboardLayout(account.GetDashboardLayoutsString());
+        userDTO.setCustomAlertConditions(account.GetCustomAlertConditionsString());
+        userDTO.setLocations(new Gson().toJson(locations)); // Locations are stored as a JSON string
+
+        // Update the account modified date
+        AccountDAO accountDAO = new AccountDAO();
+        account.setLastModified(new Date(System.currentTimeMillis()));
+
+        // Update the user
+        CreateUserDTO result = userApiService.updateUser(account.getId(), userDTO, jwtToken);
+
+        accountDAO.update(account);
+        return result;
+    }
+
     /**
      * Get the current user data using a JWT token.
      *
@@ -282,6 +313,8 @@ public class UserApiService {
             .JWTToken(jwtToken)
             .build();
         createdAccount.setPassword(userModel.getUserPassword(), false);
+        // Since an account was created, we need to update the last modified date
+        createdAccount.setLastModified(userModel.getUserAccountUpdateDate());
         return createdAccount;
     }
 

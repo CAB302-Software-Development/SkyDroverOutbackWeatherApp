@@ -10,8 +10,10 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.Cre
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.WidgetType;
+import cab302softwaredevelopment.outbackweathertrackerapplication.utils.Logger;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import com.google.gson.Gson;
+import java.text.DateFormat;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.*;
@@ -51,9 +53,11 @@ public class UserService {
 
         if (!offlineMode) {
             // Login to account on server
+            Logger.printLog("Attempting to log in to account with email: " + email);
             UserApiService userApiService = new UserApiService();
             String token;
             token = userApiService.login(email, password);
+
 
             // Get the account
             UserModel userModel;
@@ -62,62 +66,47 @@ public class UserService {
             userModel = userApiService.getCurrentUser(token);
             remoteAccount = userApiService.getCurrentAccount(userModel, token);
 
+            Logger.printLog("Successfully logged in to account with email: " + email);
+
             // Check the last modified date
             localAccount = (new AccountDAO.AccountQuery())
                 .whereEmail(email)
                 .getSingleResult();
 
-            if (localAccount == null
-                || remoteAccount.getLastModified().getTime() > localAccount.getLastModified()
-                .getTime()) {
-                // Save the account
-                if (localAccount == null) {
-                    // Account doesnt exist locally, create it
-                    accountDAO.insert(remoteAccount);
-                } else {
-                    // Account exists locally, update it
-                    accountDAO.update(remoteAccount);
-                }
-
-                // The local locations are not up to date, update them
-                List<Location> localLocations = LocationService.getInstance()
-                    .getLocationsForUser(localAccount);
-                List<Location> remoteLocations = new LocationListConverter().convertToEntityAttribute(
-                    userModel.getLocations());
-
-                LocationDAO locationDAO = new LocationDAO();
-                // Delete all locations
-                for (Location location : localLocations) {
-                    locationDAO.delete(location);
-                }
-
-                for (Location location : remoteLocations) {
-                    locationDAO.insert(location);
-                }
-
-                assert localAccount != null;
-                localAccount.setLastModified(userModel.getUserAccountUpdateDate());
-                accountDAO.update(localAccount);
+            if (localAccount == null) {
+                Logger.printLog("Account does not exist locally, creating account");
+                // Account doesnt exist locally, create it
+                accountDAO.insert(remoteAccount);
             } else {
-                // Update the remote account
+                Logger.printLog("Account exists locally, checking for updates");
+                DateFormat DFormat = DateFormat.getDateTimeInstance();
+                Logger.printLog("Remote account updated at: " + DFormat.format(
+                    remoteAccount.getLastModified()));
+                Logger.printLog("Local account updated at: " + DFormat.format(
+                    localAccount.getLastModified()));
+                if (remoteAccount.getLastModified().after(localAccount.getLastModified())) {
+                    Logger.printLog("Remote account is newer");
+                    accountDAO.update(remoteAccount);
 
-                // Get the locations
-                List<Location> locations = LocationService.getInstance()
-                    .getLocationsForUser(localAccount);
+                    // The local locations are not up to date, update them
+                    List<Location> localLocations = LocationService.getInstance()
+                        .getLocationsForUser(localAccount);
+                    List<Location> remoteLocations = new LocationListConverter().convertToEntityAttribute(
+                        userModel.getLocations());
 
-                UpdateUserDTO userDTO = new UpdateUserDTO();
-                userDTO.setUsername(localAccount.getUsername());
-                userDTO.setUserPassword(localAccount.getPassword());
-                userDTO.setUserEmail(localAccount.getEmail());
-                userDTO.setUserTheme(localAccount.getCurrentTheme().toString());
-                userDTO.setPreferCelsius(localAccount.getPreferCelsius());
-                userDTO.setSelectedLayout(localAccount.getSelectedLayout());
-                userDTO.setDashboardLayout(localAccount.GetDashboardLayoutsString());
-                userDTO.setLocations(
-                    new Gson().toJson(locations)); // Locations are stored as a JSON string
+                    LocationDAO locationDAO = new LocationDAO();
+                    // Delete all locations
+                    for (Location location : localLocations) {
+                        locationDAO.delete(location);
+                    }
 
-                CreateUserDTO result;
-                result = userApiService.updateUser(localAccount.getId(), userDTO, localAccount.getJWTToken());
+                    for (Location location : remoteLocations) {
+                        locationDAO.insert(location);
+                    }
+                } else {
+                    Logger.printLog("Local account is newer");
+                    userApiService.updateUser(localAccount, localAccount.getJWTToken());
+                }
             }
         }
 
@@ -247,36 +236,53 @@ public class UserService {
     public boolean updateAccount(AccountUpdateModel newAccount) {
         Account existing = getByID(newAccount.getId());
 
+        if (newAccount.getUsername() != null) {
+            existing.setUsername(newAccount.getUsername());
+        }
         if (newAccount.getEmail() != null) {
             existing.setEmail(newAccount.getEmail());
         }
-
-        if (newAccount.getCurrentTheme() != null) {
-            existing.setCurrentTheme(newAccount.getCurrentTheme());
+        if (newAccount.getPassword() != null) {
+            existing.setPassword(newAccount.getPassword());
         }
 
         if (newAccount.getPreferCelsius() != null) {
             existing.setPreferCelsius(newAccount.getPreferCelsius());
         }
 
-        if (newAccount.getDashboardLayouts() != null) {
-            existing.setDashboardLayouts(newAccount.getDashboardLayouts());
+        if (newAccount.getCurrentTheme() != null) {
+            existing.setCurrentTheme(newAccount.getCurrentTheme());
         }
 
         if (newAccount.getSelectedLayout() != null) {
             existing.setSelectedLayout(newAccount.getSelectedLayout());
         }
 
-        if (newAccount.getPassword() != null) {
-            existing.setPassword(newAccount.getPassword());
+        if (newAccount.getJWTToken() != null) {
+            existing.setJWTToken(newAccount.getJWTToken());
+        }
+
+        if (newAccount.getDashboardLayouts() != null) {
+            existing.setDashboardLayouts(newAccount.getDashboardLayouts());
+        }
+
+        if (newAccount.getCustomAlertConditions() != null) {
+            existing.setCustomAlertConditions(newAccount.getCustomAlertConditions());
         }
 
         try {
             AccountDAO accountDAO = new AccountDAO();
+            existing.setLastModified(new Date(System.currentTimeMillis()));
             accountDAO.update(existing);
             existing = new AccountDAO.AccountQuery()
                     .whereId(existing.getId())
                     .getSingleResult();
+            boolean offlineMode = ConnectionService.getInstance().isOffline();
+            if (!offlineMode){
+                // Since the account has been updated, update the user on the server
+                UserApiService userApiService = new UserApiService();
+                userApiService.updateUser(existing, existing.getJWTToken());
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -362,12 +368,10 @@ public class UserService {
         LocationService.getInstance().addLocationForUser(createdAccount, location);
         List<Location> locations = LocationService.getInstance().getLocationsForUser(createdAccount);
         generateDefaultDashboard(createdAccount, locations.getFirst());
-        
-        UserApiService userApiService = new UserApiService();
-        UpdateUserDTO userDTO = new UpdateUserDTO();
-        userDTO.setLocations(new Gson().toJson(locations)); // Locations are stored as a JSON string
 
-        CreateUserDTO result = userApiService.updateUser(createdAccount.getId(), userDTO, createdAccount.getJWTToken());
+        UserApiService userApiService = new UserApiService();
+        userApiService.updateUser(createdAccount, createdAccount.getJWTToken());
+
         Account account = new AccountDAO.AccountQuery()
             .whereEmail(email)
             .getSingleResult();
@@ -396,6 +400,17 @@ public class UserService {
         Account createdAccount = userApiService.getCurrentAccount(token);
 
         AccountDAO accountDAO = new AccountDAO();
+        // Check if the account already exists
+        Account existingAccount = new AccountDAO.AccountQuery()
+            .whereEmail(email)
+            .getSingleResult();
+
+        if (existingAccount != null) {
+            Logger.printLog("Account already exists, replacing account");
+            // Delete the existing account
+            accountDAO.delete(existingAccount);
+        }
+
         accountDAO.insert(createdAccount);
 
         return createdAccount;
