@@ -160,7 +160,10 @@ public class UserApiService {
         if (response.statusCode() == 200) {
             Map<String, String> tokenResponse = objectMapper.readValue(response.body(), Map.class);
             return tokenResponse.get("jwt_token");
-        } else {
+        } else if (response.statusCode() == 401) {
+            throw new Exception("Invalid email or password");
+        }
+        else {
             throw new Exception("Login failed: " + response.body());
         }
     }

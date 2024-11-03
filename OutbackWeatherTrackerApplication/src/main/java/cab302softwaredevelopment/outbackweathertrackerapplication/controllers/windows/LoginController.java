@@ -194,7 +194,9 @@ public class LoginController {
                 try {
                     token = userApiService.login(email, password);
                 } catch (Exception e) {
-                    throw new RuntimeException(e); // TODO: Handle this better (show error message)
+                    // Display the error message (most likely incorrect credentials)
+                    showErrorMessage(e.getMessage());
+                    return false;
                 }
 
                 // Get the account
@@ -266,8 +268,7 @@ public class LoginController {
                         result = userApiService.updateUser(localAccount.getId(), userDTO,
                             localAccount.getJWTToken());
                     } catch (Exception e) {
-                        throw new RuntimeException(
-                            e); // TODO: Handle this better (show error message)
+                        throw new RuntimeException(e); // If something breaks then user backup isn't working
                     }
                 }
             }
