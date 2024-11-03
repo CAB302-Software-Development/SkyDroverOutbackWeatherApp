@@ -22,8 +22,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MainController {
-    public static final int WIDTH = 1080;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = 1400;
+    public static final int HEIGHT = 800;
     public static final String TITLE = "Outback Weather Tracker Application";
 
     @Getter
