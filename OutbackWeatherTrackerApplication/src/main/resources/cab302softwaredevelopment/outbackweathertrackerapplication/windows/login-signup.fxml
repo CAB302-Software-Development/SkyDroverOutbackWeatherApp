@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 <VBox fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.windows.LoginController"
-      xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" VBox.vgrow="ALWAYS">
+  xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" VBox.vgrow="ALWAYS">
    <BorderPane VBox.vgrow="ALWAYS">
       <left>
          <StackPane styleClass="background-primary" prefWidth="350">
@@ -36,14 +36,14 @@
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../images/account_circle_icon.png" />
                   </ImageView>
-                  <TextField fx:id="emailTextFieldLogin" promptText="Email Address" styleClass="textbox" prefHeight="28.0" prefWidth="180.0" onAction="#handleEnter" text="email@email.com"/>
+                  <TextField fx:id="emailTextFieldLogin" promptText="Email Address" styleClass="textbox" prefHeight="28.0" prefWidth="180.0" onAction="#handleEnter"/>
                </HBox>
 
                <HBox spacing="10" alignment="CENTER">
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../images/password_icon.png" />
                   </ImageView>
-                  <PasswordField fx:id="passwordTextFieldLogin" promptText="Password" styleClass="textbox" prefHeight="28.0" prefWidth="180.0" onAction="#handleEnter" text="Password123!"/>
+                  <PasswordField fx:id="passwordTextFieldLogin" promptText="Password" styleClass="textbox" prefHeight="28.0" prefWidth="180.0" onAction="#handleEnter"/>
                </HBox>
 
                <Button fx:id="loginButton" alignment="CENTER" prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Login" onAction="#handleButtonPress"/>
@@ -71,28 +71,28 @@
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../images/account_circle_icon.png" />
                   </ImageView>
-                  <TextField fx:id="emailTextFieldSignup" prefHeight="28.0" prefWidth="180.0" promptText="Email Address" styleClass="textbox" onAction="#handleEnter" text="email@email.com"/>
+                  <TextField fx:id="emailTextFieldSignup" prefHeight="28.0" prefWidth="180.0" promptText="Email Address" styleClass="textbox" onAction="#handleEnter"/>
                </HBox>
 
                <HBox spacing="10" alignment="CENTER">
                   <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="50.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../images/account_circle_icon.png" />
                   </ImageView>
-                  <TextField fx:id="usernameTextFieldSignup" prefHeight="28.0" prefWidth="180.0" promptText="User Name" styleClass="textbox" onAction="#handleEnter" text="joshua"/>
+                  <TextField fx:id="usernameTextFieldSignup" prefHeight="28.0" prefWidth="180.0" promptText="User Name" styleClass="textbox" onAction="#handleEnter"/>
                </HBox>
 
                <HBox spacing="10" alignment="CENTER">
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../images/password_icon.png" />
                   </ImageView>
-                  <PasswordField fx:id="passwordTextFieldSignup" prefHeight="28.0" prefWidth="180.0" promptText="Password" styleClass="textbox" onAction="#handleEnter" text="Password123!"/>
+                  <PasswordField fx:id="passwordTextFieldSignup" prefHeight="28.0" prefWidth="180.0" promptText="Password" styleClass="textbox" onAction="#handleEnter"/>
                </HBox>
 
                <HBox spacing="10" alignment="CENTER">
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../images/password_icon.png"/>
                   </ImageView>
-                  <PasswordField fx:id="passwordTextConfirm" prefHeight="28.0" prefWidth="180.0" promptText="Confirm Password" styleClass="textbox" onAction="#handleEnter" text="Password123!"/>
+                  <PasswordField fx:id="passwordTextConfirm" prefHeight="28.0" prefWidth="180.0" promptText="Confirm Password" styleClass="textbox" onAction="#handleEnter"/>
                </HBox>
 
                <HBox spacing="10" alignment="CENTER">
