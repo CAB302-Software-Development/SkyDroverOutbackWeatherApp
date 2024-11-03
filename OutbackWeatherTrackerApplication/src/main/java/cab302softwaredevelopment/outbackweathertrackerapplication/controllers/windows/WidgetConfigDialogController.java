@@ -10,6 +10,7 @@ import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserS
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.IntField;
 import cab302softwaredevelopment.outbackweathertrackerapplication.utils.WidgetConfig;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -70,10 +71,14 @@ public class WidgetConfigDialogController implements Initializable {
             updateConfigFields();
         });
 
-        Button saveButton = (Button) dialogPane.lookupButton(saveButtonType);
-        saveButton.setOnAction(event -> onSave());
+        final Button saveButton = (Button) dialogPane.lookupButton(saveButtonType);
+        saveButton.addEventFilter(ActionEvent.ACTION, event -> {
+            if (!onSave()) {
+                event.consume();
+            }
+        });
 
-        Button deleteButton = (Button) dialogPane.lookupButton(deleteButtonType);
+        final Button deleteButton = (Button) dialogPane.lookupButton(deleteButtonType);
         deleteButton.setOnAction(event -> onDelete());
     }
 
@@ -138,7 +143,7 @@ public class WidgetConfigDialogController implements Initializable {
         return locationComboBox;
     }
 
-    private void onSave() {
+    private boolean onSave() {
         if (widgetInfo == null) {
             widgetInfo = new WidgetInfo();
             widgetInfo.type = widgetTypeComboBox.getValue();
@@ -152,15 +157,14 @@ public class WidgetConfigDialogController implements Initializable {
 
         if(parent.checkOccupied(widgetInfo)) {
             showError("Current configuration overlaps existing widgets.");
-            return;
+            return false;
         }
 
-        dialogPane.getScene().getWindow().hide();
+        return true;
     }
 
     private void onDelete() {
         widgetInfo = null;
-        dialogPane.getScene().getWindow().hide();
     }
 
     private void showError(String message) {

@@ -308,23 +308,20 @@ public class DashboardController extends BasePage {
             WidgetConfigDialogController controller = loader.getController();
             controller.setWidgetInfo(currentLayout.get(index).deepCopy(), this);
 
+            setOccupied(currentLayout.get(index), false);
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.initOwner(dashboardGrid.getScene().getWindow());
             Optional<ButtonType> result = dialog.showAndWait();
             result.ifPresent(response -> {
-                if (response.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                if (response.getButtonData() == ButtonBar.ButtonData.OTHER) {
+                    currentLayout.remove(index);
+                    unsavedChanges = true;
+                } else if (response.getButtonData() != ButtonBar.ButtonData.CANCEL_CLOSE) {
                     if (currentLayout.get(index) != controller.getWidgetInfo() && controller.getWidgetInfo() != null) {
                         currentLayout.set(index, controller.getWidgetInfo());
                         unsavedChanges = true;
                     }
-                }
-                if (response.getButtonData() == ButtonBar.ButtonData.OTHER) {
-                    currentLayout.remove(index);
-                    unsavedChanges = true;
-                }
-                if (response.getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) {
-
                 }
             });
 
