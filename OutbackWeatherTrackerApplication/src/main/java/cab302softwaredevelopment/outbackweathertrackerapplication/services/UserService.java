@@ -1,8 +1,10 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.LocationDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
+import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.LocationListConverter;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.*;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UpdateUserDTO;
@@ -33,6 +35,105 @@ public class UserService {
      */
     public void login(Account account) {
         currentAccount = account;
+    }
+
+    /**
+     * Logs in a user by email and password.
+     * @param email The email of the account to log in to.
+     * @param password The password of the account to log in to.
+     * @throws Exception If the login fails. (will contain a message)
+     */
+    public void login(String email, String password) throws Exception {
+        boolean offlineMode = ConnectionService.getInstance().isOffline();
+        AccountDAO accountDAO = new AccountDAO();
+
+        Account localAccount;
+
+        if (!offlineMode) {
+            // Login to account on server
+            UserApiService userApiService = new UserApiService();
+            String token;
+            token = userApiService.login(email, password);
+
+            // Get the account
+            UserModel userModel;
+            Account remoteAccount;
+
+            userModel = userApiService.getCurrentUser(token);
+            remoteAccount = userApiService.getCurrentAccount(userModel, token);
+
+            // Check the last modified date
+            localAccount = (new AccountDAO.AccountQuery())
+                .whereEmail(email)
+                .getSingleResult();
+
+            if (localAccount == null
+                || remoteAccount.getLastModified().getTime() > localAccount.getLastModified()
+                .getTime()) {
+                // Save the account
+                if (localAccount == null) {
+                    // Account doesnt exist locally, create it
+                    accountDAO.insert(remoteAccount);
+                } else {
+                    // Account exists locally, update it
+                    accountDAO.update(remoteAccount);
+                }
+
+                // The local locations are not up to date, update them
+                List<Location> localLocations = LocationService.getInstance()
+                    .getLocationsForUser(localAccount);
+                List<Location> remoteLocations = new LocationListConverter().convertToEntityAttribute(
+                    userModel.getLocations());
+
+                LocationDAO locationDAO = new LocationDAO();
+                // Delete all locations
+                for (Location location : localLocations) {
+                    locationDAO.delete(location);
+                }
+
+                for (Location location : remoteLocations) {
+                    locationDAO.insert(location);
+                }
+
+                assert localAccount != null;
+                localAccount.setLastModified(userModel.getUserAccountUpdateDate());
+                accountDAO.update(localAccount);
+            } else {
+                // Update the remote account
+
+                // Get the locations
+                List<Location> locations = LocationService.getInstance()
+                    .getLocationsForUser(localAccount);
+
+                UpdateUserDTO userDTO = new UpdateUserDTO();
+                userDTO.setUsername(localAccount.getUsername());
+                userDTO.setUserPassword(localAccount.getPassword());
+                userDTO.setUserEmail(localAccount.getEmail());
+                userDTO.setUserTheme(localAccount.getCurrentTheme().toString());
+                userDTO.setPreferCelsius(localAccount.getPreferCelsius());
+                userDTO.setSelectedLayout(localAccount.getSelectedLayout());
+                userDTO.setDashboardLayout(localAccount.GetDashboardLayoutsString());
+                userDTO.setLocations(
+                    new Gson().toJson(locations)); // Locations are stored as a JSON string
+
+                CreateUserDTO result;
+                result = userApiService.updateUser(localAccount.getId(), userDTO, localAccount.getJWTToken());
+            }
+        }
+
+        // Get the account
+        localAccount = (new AccountDAO.AccountQuery())
+            .whereEmail(email)
+            .getSingleResult();
+
+        if (localAccount == null) {
+            throw new RuntimeException("No account exists with specified email.");
+        }
+
+        if (!localAccount.verifyPassword(password)) {
+            throw new RuntimeException("Incorrect password");
+        }
+        login(localAccount);
     }
 
     /**
@@ -247,9 +348,11 @@ public class UserService {
      * @param email    The email of the new account.
      * @param password The password of the new account.
      * @param location The default location to associate with the account.
+     * @throws Exception If an error occurs during account creation. (will contain a message)
      * @return The newly created Account object.
      */
-    public Account createUser(String email, String username, String password, LocationCreateModel location) {
+    public Account createUser(String email, String username, String password, LocationCreateModel location)
+        throws Exception {
         Account createdAccount = createUser(email, username, password);
         LocationService.getInstance().addLocationForUser(createdAccount, location);
         List<Location> locations = LocationService.getInstance().getLocationsForUser(createdAccount);
@@ -257,24 +360,13 @@ public class UserService {
         
         UserApiService userApiService = new UserApiService();
         UpdateUserDTO userDTO = new UpdateUserDTO();
-        /*userDTO.setUsername(createdAccount.getUsername());
-        userDTO.setUserPassword(createdAccount.getPassword());
-        userDTO.setUserEmail(createdAccount.getEmail());
-        userDTO.setUserTheme(createdAccount.getCurrentTheme().toString());
-        userDTO.setPreferCelsius(createdAccount.getPreferCelsius());
-        userDTO.setSelectedLayout(createdAccount.getSelectedLayout());
-        userDTO.setDashboardLayout(createdAccount.GetDashboardLayoutsString());*/
         userDTO.setLocations(new Gson().toJson(locations)); // Locations are stored as a JSON string
 
-        CreateUserDTO result;
-        try {
-            result = userApiService.updateUser(createdAccount.getId(), userDTO, createdAccount.getJWTToken());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        CreateUserDTO result = userApiService.updateUser(createdAccount.getId(), userDTO, createdAccount.getJWTToken());
         Account account = new AccountDAO.AccountQuery()
             .whereEmail(email)
             .getSingleResult();
+
         return account;
     }
 
@@ -283,30 +375,16 @@ public class UserService {
      *
      * @param email    The email of the new account.
      * @param password The password of the new account.
+     * @throws Exception If an error occurs during account creation. (will contain a message)
      * @return The newly created Account object.
      */
-    public Account createUser(String email, String username, String password) {
+    public Account createUser(String email, String username, String password) throws Exception {
         UserApiService userApiService = new UserApiService();
-        CreateUserDTO result;
-        try {
-            result = userApiService.createUser(email, password, username);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        CreateUserDTO result = userApiService.createUser(email, password, username);
 
-        String token;
-        try {
-            token = userApiService.login(email, password);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String token = userApiService.login(email, password);
 
-        Account createdAccount;
-        try {
-            createdAccount = userApiService.getCurrentAccount(token);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Account createdAccount = userApiService.getCurrentAccount(token);
 
         AccountDAO accountDAO = new AccountDAO();
         accountDAO.insert(createdAccount);

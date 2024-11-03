@@ -182,114 +182,17 @@ public class LoginController {
         try {
             if (!validateCredentials(email, password)) return false;
 
-            boolean offlineMode = ConnectionService.getInstance().isOffline();
-            AccountDAO accountDAO = new AccountDAO();
-
-            Account localAccount;
-
-            if (!offlineMode) {
-                // Login to account on server
-                UserApiService userApiService = new UserApiService();
-                String token;
-                try {
-                    token = userApiService.login(email, password);
-                } catch (Exception e) {
-                    // Display the error message (most likely incorrect credentials)
-                    showErrorMessage(e.getMessage());
-                    return false;
-                }
-
-                // Get the account
-                UserModel userModel;
-                Account remoteAccount;
-                try {
-                    userModel = userApiService.getCurrentUser(token);
-                    remoteAccount = userApiService.getCurrentAccount(userModel, token);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Check the last modified date
-                localAccount = (new AccountDAO.AccountQuery())
-                    .whereEmail(email)
-                    .getSingleResult();
-
-                if (localAccount == null
-                    || remoteAccount.getLastModified().getTime() > localAccount.getLastModified()
-                    .getTime()) {
-                    // Save the account
-                    if (localAccount == null) {
-                        // Account doesnt exist locally, create it
-                        accountDAO.insert(remoteAccount);
-                    } else {
-                        // Account exists locally, update it
-                        accountDAO.update(remoteAccount);
-                    }
-
-                    // The local locations are not up to date, update them
-                    List<Location> localLocations = LocationService.getInstance()
-                        .getLocationsForUser(localAccount);
-                    List<Location> remoteLocations = new LocationListConverter().convertToEntityAttribute(
-                        userModel.getLocations());
-
-                    LocationDAO locationDAO = new LocationDAO();
-                    // Delete all locations
-                    for (Location location : localLocations) {
-                        locationDAO.delete(location);
-                    }
-
-                    for (Location location : remoteLocations) {
-                        locationDAO.insert(location);
-                    }
-
-                    assert localAccount != null;
-                    localAccount.setLastModified(userModel.getUserAccountUpdateDate());
-                    accountDAO.update(localAccount);
-                } else {
-                    // Update the remote account
-
-                    // Get the locations
-                    List<Location> locations = LocationService.getInstance()
-                        .getLocationsForUser(localAccount);
-
-                    UpdateUserDTO userDTO = new UpdateUserDTO();
-                    userDTO.setUsername(localAccount.getUsername());
-                    userDTO.setUserPassword(localAccount.getPassword());
-                    userDTO.setUserEmail(localAccount.getEmail());
-                    userDTO.setUserTheme(localAccount.getCurrentTheme().toString());
-                    userDTO.setPreferCelsius(localAccount.getPreferCelsius());
-                    userDTO.setSelectedLayout(localAccount.getSelectedLayout());
-                    userDTO.setDashboardLayout(localAccount.GetDashboardLayoutsString());
-                    userDTO.setLocations(
-                        new Gson().toJson(locations)); // Locations are stored as a JSON string
-
-                    CreateUserDTO result;
-                    try {
-                        result = userApiService.updateUser(localAccount.getId(), userDTO,
-                            localAccount.getJWTToken());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e); // If something breaks then user backup isn't working
-                    }
-                }
-            }
-
-            // Get the account
-            localAccount = (new AccountDAO.AccountQuery())
-                .whereEmail(email)
-                .getSingleResult();
-
-            if (localAccount == null) {
-                showErrorMessage("No account exists with specified email.");
+            // Attempt to login with provided credentials
+            try {
+                userService.login(email, password);
+            } catch (Exception e) {
+                // login failed, show error message
+                showErrorMessage(e.getMessage());
                 return false;
             }
 
-            if (!localAccount.verifyPassword(password)) {
-                showErrorMessage("Incorrect password");
-                return false;
-            }
-
-            userService.login(localAccount);
-            return true;        }
+            return true;
+        }
         catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -326,7 +229,13 @@ public class LoginController {
                 return false;
             }
 
-            Account createdAccount = userService.createUser(email, username, password, location);
+            Account createdAccount;
+            try {
+                createdAccount = userService.createUser(email, username, password, location);
+            } catch (Exception e) {
+                showErrorMessage(e.getMessage());
+                return false;
+            }
 
             if (createdAccount == null) {
                 showErrorMessage("Error creating account.");

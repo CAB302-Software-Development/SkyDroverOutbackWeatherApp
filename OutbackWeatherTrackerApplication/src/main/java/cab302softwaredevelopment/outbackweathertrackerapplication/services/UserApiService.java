@@ -104,7 +104,10 @@ public class UserApiService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 201) {
             return objectMapper.readValue(response.body(), CreateUserDTO.class);
-        } else {
+        } else if (response.statusCode() == 400) {
+            throw new Exception(response.body());
+        }
+        else {
             throw new Exception("Error creating user: " + response.body());
         }
     }

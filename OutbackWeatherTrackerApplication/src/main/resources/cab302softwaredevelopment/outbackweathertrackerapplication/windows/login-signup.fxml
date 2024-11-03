@@ -57,7 +57,7 @@
                   </Hyperlink>
                </VBox>
 
-               <Label fx:id="loginMessageLabel" alignment="CENTER" textFill="RED" visible="false">
+               <Label fx:id="loginMessageLabel" alignment="CENTER" textFill="RED" visible="false" wrapText="true">
                   <font><Font name="System Bold" size="12.0"/></font>
                </Label>
             </VBox>
@@ -112,7 +112,7 @@
                   </Hyperlink>
                </VBox>
 
-               <Label fx:id="signupMessageLabel" alignment="CENTER" prefHeight="18.0" prefWidth="183.0" textFill="RED" visible="false">
+               <Label fx:id="signupMessageLabel" alignment="CENTER" textFill="RED" visible="false" wrapText="true">
                   <font><Font name="System Bold" size="12.0" /></font>
                </Label>
             </VBox>
