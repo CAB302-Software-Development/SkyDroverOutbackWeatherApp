@@ -353,6 +353,11 @@ public class UserService {
      */
     public Account createUser(String email, String username, String password, LocationCreateModel location)
         throws Exception {
+        boolean offlineMode = ConnectionService.getInstance().isOffline();
+        if (offlineMode){
+            throw new Exception("Cannot create account in offline mode.");
+        }
+
         Account createdAccount = createUser(email, username, password);
         LocationService.getInstance().addLocationForUser(createdAccount, location);
         List<Location> locations = LocationService.getInstance().getLocationsForUser(createdAccount);
@@ -380,6 +385,10 @@ public class UserService {
      */
     public Account createUser(String email, String username, String password) throws Exception {
         UserApiService userApiService = new UserApiService();
+        boolean offlineMode = ConnectionService.getInstance().isOffline();
+        if (offlineMode){
+            throw new Exception("Cannot create account in offline mode.");
+        }
         CreateUserDTO result = userApiService.createUser(email, password, username);
 
         String token = userApiService.login(email, password);
