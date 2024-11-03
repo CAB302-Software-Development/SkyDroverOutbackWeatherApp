@@ -37,7 +37,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 @ToString
 @NoArgsConstructor
 public class Account {
-
   /**
    * The ID of the account.
    */

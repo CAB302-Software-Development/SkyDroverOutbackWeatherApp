@@ -12,10 +12,11 @@ import org.hibernate.Session;
 
 /**
  * An abstract Data Access Object for forecast entities.
+ * The class of the model that this DAO is for
+ * This is needed to create the correct type of query object
  */
 public abstract class ForecastDAO<T> {
-  // The class of the model that this DAO is for
-  // This is needed to create the correct type of query object
+
   private final Class<T> forecastClass;
 
   /**

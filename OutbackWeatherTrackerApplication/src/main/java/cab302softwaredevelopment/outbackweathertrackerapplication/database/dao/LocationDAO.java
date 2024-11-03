@@ -9,14 +9,13 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 /**
  * A Data Access Object for the Location entity.
  */
+@NoArgsConstructor
 public class LocationDAO {
-
-  public LocationDAO() {
-  }
 
   /**
    * Inserts a new Location into the database.
