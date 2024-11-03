@@ -40,16 +40,16 @@ public class UserApiService {
      */
     public List<UserDTO> getAllUsers() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/getAllUsers"))
-                .GET()
-                .build();
+            .uri(URI.create(BASE_URL + "/getAllUsers"))
+            .GET()
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, UserDTO.class));
+                objectMapper.getTypeFactory().constructCollectionType(List.class, UserDTO.class));
         } else {
-            throw new Exception("Error fetching all users: " + response.body());
+            throw new RuntimeException("Error fetching all users: " + response.body());
         }
     }
 
@@ -62,29 +62,29 @@ public class UserApiService {
      */
     public UserModel getUserByUsername(String username) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/getUserByUsername/" + username))
-                .GET()
-                .build();
+            .uri(URI.create(BASE_URL + "/getUserByUsername/" + username))
+            .GET()
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(), UserModel.class);
         } else {
-            throw new Exception("Error fetching user: " + response.body());
+            throw new RuntimeException("Error fetching user: " + response.body());
         }
     }
 
     public UserModel getUserById(String id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/getUserById/" + id))
-                .GET()
-                .build();
+            .uri(URI.create(BASE_URL + "/getUserById/" + id))
+            .GET()
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(), UserModel.class);
         } else {
-            throw new Exception("Error fetching user: " + response.body());
+            throw new RuntimeException("Error fetching user: " + response.body());
         }
     }
 
@@ -99,19 +99,19 @@ public class UserApiService {
         String requestBody = objectMapper.writeValueAsString(userDTO);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/createUser"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
+            .uri(URI.create(BASE_URL + "/createUser"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 201) {
             return objectMapper.readValue(response.body(), CreateUserDTO.class);
         } else if (response.statusCode() == 400) {
-            throw new Exception(response.body());
+            throw new RuntimeException(response.body());
         }
         else {
-            throw new Exception("Error creating user: " + response.body());
+            throw new RuntimeException("Error creating user: " + response.body());
         }
     }
 
@@ -157,22 +157,22 @@ public class UserApiService {
         String requestBody = objectMapper.writeValueAsString(loginRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/login"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
+            .uri(URI.create(BASE_URL + "/login"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             Map<String, String> tokenResponse = objectMapper.readValue(response.body(), Map.class);
             return tokenResponse.get("jwt_token");
         } else if (response.statusCode() == 401) {
-            throw new Exception("Invalid email or password");
+            throw new RuntimeException("Invalid email or password");
         } else if (response.statusCode() == 404) {
-            throw new Exception("User not found");
+            throw new RuntimeException("User not found");
         }
         else {
-            throw new Exception("Login failed: " + response.body());
+            throw new RuntimeException("Login failed: " + response.body());
         }
     }
 
@@ -209,17 +209,17 @@ public class UserApiService {
      */
     public boolean deleteUser(String userId, String jwtToken) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/deleteUser"))
-                .header("Authorization", "Bearer " + jwtToken)
-                .header("Content-Type", "application/json")
-                .method("DELETE", HttpRequest.BodyPublishers.ofString(userId))
-                .build();
+            .uri(URI.create(BASE_URL + "/deleteUser"))
+            .header("Authorization", "Bearer " + jwtToken)
+            .header("Content-Type", "application/json")
+            .method("DELETE", HttpRequest.BodyPublishers.ofString(userId))
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return true;
         } else {
-            throw new Exception("Error deleting user: " + response.body());
+            throw new RuntimeException("Error deleting user: " + response.body());
         }
     }
 
@@ -236,17 +236,17 @@ public class UserApiService {
         String requestBody = objectMapper.writeValueAsString(userData);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/updateUser/" + userId))
-                .header("Authorization", "Bearer " + jwtToken)
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
+            .uri(URI.create(BASE_URL + "/updateUser/" + userId))
+            .header("Authorization", "Bearer " + jwtToken)
+            .header("Content-Type", "application/json")
+            .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(), CreateUserDTO.class);
         } else {
-            throw new Exception("Error updating user: " + response.body());
+            throw new RuntimeException("Error updating user: " + response.body());
         }
     }
 
@@ -284,16 +284,16 @@ public class UserApiService {
      */
     public UserModel getCurrentUser(String jwtToken) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/getUser"))
-                .header("Authorization", "Bearer " + jwtToken)
-                .GET()
-                .build();
+            .uri(URI.create(BASE_URL + "/getUser"))
+            .header("Authorization", "Bearer " + jwtToken)
+            .GET()
+            .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return objectMapper.readValue(response.body(), UserModel.class);
         } else {
-            throw new Exception("Error fetching current user: " + response.body());
+            throw new RuntimeException("Error fetching current user: " + response.body());
         }
     }
 

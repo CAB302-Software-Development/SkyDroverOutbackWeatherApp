@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-@Timeout(value = 1000000, unit = TimeUnit.MILLISECONDS) // No test should take longer than 10 seconds
+@Timeout(value = 100000, unit = TimeUnit.MILLISECONDS) // No test should take longer than 100 seconds
 public class AccountDAOTest extends DBTest {
 
   @Test

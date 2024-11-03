@@ -170,17 +170,6 @@ public class LocationDAO {
     }
 
     /**
-     * Adds a name contains filter to the query.
-     *
-     * @param name The string to filter by
-     * @return This LocationQuery object
-     */
-    public LocationQuery whereNameLike(String name) {
-      predicates.add(builder.like(root.get("name"), "%"+ name + "%"));
-      return this;
-    }
-
-    /**
      * Adds a longitude filter to the query.
      *
      * @param longitude The longitude to filter by

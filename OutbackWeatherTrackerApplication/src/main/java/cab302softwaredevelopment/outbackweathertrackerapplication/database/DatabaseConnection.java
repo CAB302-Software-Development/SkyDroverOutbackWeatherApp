@@ -26,7 +26,7 @@ public class DatabaseConnection {
   }
 
   /**
-   * Returns a new session for the database connection.
+   * Opens a new session for the database connection.
    * @return A new session for the database connection.
    */
   public static Session getSession() {

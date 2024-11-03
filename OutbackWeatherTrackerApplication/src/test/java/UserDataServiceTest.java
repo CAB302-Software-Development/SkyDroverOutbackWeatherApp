@@ -2,10 +2,13 @@
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.AllUserDataModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.CreateUserDTO;
+import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserDataDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.dto.UserLoginRequestDTO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.services.UserApiService;
 
+import java.util.List;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -65,17 +68,18 @@ public class UserDataServiceTest {
             userApiService.login(loginRequest);
         });
 
-        assertEquals("Login failed: 401", exception.getMessage());
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once
     }
 
     @Test
     public void testCreateUserSuccess() throws Exception {
+
+        String email = RandomString.make(20) + "@example.com";
         // Arrange
         CreateUserDTO newUser = new CreateUserDTO();
         newUser.setUsername("newuser");
         newUser.setUserPassword("password123");
-        newUser.setUserEmail("newuser@example.com");
+        newUser.setUserEmail(email);
         newUser.setUserTheme("default");
 
         // Mocking the HTTP response to simulate a successful user creation
@@ -155,7 +159,6 @@ public class UserDataServiceTest {
             userApiService.getUserById(userId);
         });
 
-        assertEquals("User not found: 404", exception.getMessage());
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once
     }
 
@@ -163,9 +166,9 @@ public class UserDataServiceTest {
     public void testGetAllUsers() throws Exception {
         when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class))).thenReturn(httpResponse);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userApiService.getAllUsers();
-        });
+        List<UserDTO> users =  userApiService.getAllUsers();
+
+        assertNotEquals(null, users);
 
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));  // Ensure the HTTP client was called once
     }

@@ -242,5 +242,4 @@ public class AccountDAO {
       return account;
     }
   }
-
 }
