@@ -10,7 +10,7 @@
 <StackPane fx:id="root" stylesheets="@../themes/style.css,@../themes/theme-light.css"
            xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.PrecipitationWidgetController">
-   <VBox alignment="CENTER" fillWidth="false" styleClass="precipitation-widget" >
+   <VBox alignment="CENTER" fillWidth="true" styleClass="precipitation-widget" >
       <VBox alignment="CENTER">
          <HBox alignment="CENTER_LEFT">
             <Text fx:id="txtLocation" fill="GREY" strokeType="OUTSIDE" strokeWidth="0.0" text="Location"/>

@@ -53,7 +53,7 @@ public class DashboardController extends BasePage {
         super.initialize();
         userService = UserService.getInstance();
         widgetFactory = new WidgetFactory();
-        txtWelcome.setText("Welcome " + userService.getCurrentAccount().getEmail().split("@")[0]);
+        txtWelcome.setText("Welcome " + userService.getCurrentAccount().getUsername());
         currentLayout = userService.getCurrentLayout();
         resetLayoutComboBox();
         loadWidgetsToGrid();

@@ -9,18 +9,18 @@
 <StackPane fx:id="root" stylesheets="@../themes/style.css,@../themes/theme-light.css"
            xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
            fx:controller="cab302softwaredevelopment.outbackweathertrackerapplication.controllers.widgets.SoilWidgetController">
-   <VBox alignment="CENTER" spacing="5.0" styleClass="soil-widget" >
+   <VBox alignment="CENTER" fillWidth="true" styleClass="soil-widget" >
       <HBox alignment="CENTER">
          <Text fx:id="txtLocation" fill="#655c5c" text="Location" styleClass="text-medium"/>
       </HBox>
       <VBox alignment="CENTER">
          <Label text="Soil Temp:" textFill="WHITE"/>
          <Text fx:id="txtTemperature" fill="WHITE" text="##" styleClass="text-large"/>
-         <HBox alignment="CENTER" spacing="15.0">
+         <HBox alignment="CENTER">
             <Label text="Soil Moisture: " textFill="WHITE"/>
             <Text fx:id="txtMoisture" fill="WHITE" text="##"/>
          </HBox>
-         <HBox alignment="CENTER" spacing="15.0">
+         <HBox alignment="CENTER">
             <Label text="Reference Evapotranspiration (ET₀): " textFill="WHITE" wrapText="true"/>
             <Text fx:id="txtET" fill="WHITE" text="##"/>
             <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="50" fitHeight="50">

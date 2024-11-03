@@ -60,7 +60,9 @@ public class LocationService {
      * @param location The location data to add.
      */
     public void addLocationForUser(Account account, LocationCreateModel location) {
-        locationDAO.insert(location.build(account));
+        Location newLocation = location.build(account);
+        locationDAO.insert(newLocation);
+        ForecastService.getInstance().updateForecastsForLocation(newLocation,7,2);
     }
 
     /**
@@ -292,6 +294,6 @@ public class LocationService {
      * @return A shortened location name, truncated to the default length of 30 characters if necessary.
      */
     public static String getShortName(Location location) {
-        return getShortName(location, 30);
+        return getShortName(location, 100);
     }
 }

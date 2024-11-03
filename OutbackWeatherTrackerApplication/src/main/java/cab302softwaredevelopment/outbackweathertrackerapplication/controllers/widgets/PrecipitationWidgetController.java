@@ -14,7 +14,7 @@ public class PrecipitationWidgetController extends BaseWidgetController {
         if (latestForecast != null) {
             txtLocation.setText(LocationService.getShortName(latestForecast.getLocation()));
             txtPercentage.setText(latestForecast.getCloud_cover().intValue() + "%");
-            txtWidgetDescription.setText("Description");
+            txtWidgetDescription.setText("Chance of Precipitation");
             txtTemperature.setText(latestForecast.getApparent_temperature().intValue() + "°");
         }
     }
