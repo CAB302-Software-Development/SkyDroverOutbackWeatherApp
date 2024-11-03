@@ -14,6 +14,9 @@ import org.hibernate.Session;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Main entry point for the application. Initializes the primary stage and scene for the application.
+ */
 public class ApplicationEntry extends Application {
   private static Stage rootStage;
 

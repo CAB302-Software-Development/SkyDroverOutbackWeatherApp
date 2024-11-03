@@ -8,16 +8,14 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 
 /**
  * A Data Access Object for the Account entity.
  */
+@NoArgsConstructor
 public class AccountDAO {
-
-  public AccountDAO() {
-  }
-
   /**
    * Inserts a new Account into the database.
    *
@@ -160,6 +158,9 @@ public class AccountDAO {
     CriteriaBuilder builder;
     Root<Account> root;
 
+    /**
+     * Creates a new AccountQuery object.
+     */
     public AccountQuery() {
       Session session = DatabaseConnection.getSession();
       builder = session.getCriteriaBuilder();

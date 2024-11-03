@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
 
+  /**
+   * Creates a new DailyForecastDAO.
+   */
   public DailyForecastDAO() {
     // The forecast DAO needs to know what type of forecast it is dealing with
     super(DailyForecast.class);
@@ -76,5 +79,4 @@ public class DailyForecastDAO extends ForecastDAO<DailyForecast> {
         .whereId(id)
         .getSingleResult();
   }
-
 }

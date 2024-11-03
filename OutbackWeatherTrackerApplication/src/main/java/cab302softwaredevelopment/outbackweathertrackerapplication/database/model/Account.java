@@ -19,28 +19,30 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * Represents an account in the database.
+ */
 @Entity(name = "account")
 @Table(name = "account", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
 @Builder
 @Getter
-@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true,doNotUseGetters = true)
+@EqualsAndHashCode
 @ToString
-/**
- * A model class for the Account entity.
- */
+@NoArgsConstructor
 public class Account {
 
   /**
    * The ID of the account.
    */
   @Id
-  @EqualsAndHashCode.Include
+
   private String id;
 
   /**
@@ -48,7 +50,6 @@ public class Account {
    */
   @Setter
   @Column(nullable = false)
-  @EqualsAndHashCode.Include
   private String username;
 
   /**
@@ -56,13 +57,11 @@ public class Account {
    */
   @Setter
   @Column(nullable = false)
-  @EqualsAndHashCode.Include
   private String email;
 
   /**
    * The hashed password of the account.
    */
-  @EqualsAndHashCode.Include
   private String password;
 
   /**
@@ -70,7 +69,6 @@ public class Account {
    */
   @Setter
   @Default
-  @EqualsAndHashCode.Include
   private Boolean preferCelsius = true;
 
   /**
@@ -78,7 +76,6 @@ public class Account {
    */
   @Setter
   @Default
-  @EqualsAndHashCode.Include
   private Boolean isGuest = false;
 
   /**
@@ -86,7 +83,6 @@ public class Account {
    */
   @Setter
   @Default
-  @EqualsAndHashCode.Include
   private Theme currentTheme = Theme.Light;
 
   /**
@@ -94,14 +90,12 @@ public class Account {
    */
   @Setter
   @Default
-  @EqualsAndHashCode.Include
   private String selectedLayout = "default";
 
   /**
    * The JWT token of the account once logged in.
    */
   @Setter
-  @EqualsAndHashCode.Include
   private String JWTToken;
 
   /**
@@ -111,7 +105,6 @@ public class Account {
   @Column(length=LONG32)
   @Default
   @Setter
-  @EqualsAndHashCode.Include
   private HashMap<String, WidgetInfo[]> dashboardLayouts = new WidgetInfoListConverter().convertToEntityAttribute("{'default':[]}");
 
   /**
@@ -121,28 +114,28 @@ public class Account {
   @Column(length=LONG32)
   @Default
   @Setter
-  @EqualsAndHashCode.Include
   private List<CustomAlertCondition> customAlertConditions = List.of();
 
   /**
    * The date that data was last modified. (for server sync)
    */
   @Setter
-  private Date lastModified; // TODO
-
-  public Account() {
-  }
+  private Date lastModified;
 
   /**
-   * TODO: Add Javadoc
-   * @param id
-   * @param email
-   * @param password
-   * @param preferCelsius
-   * @param isGuest
-   * @param currentTheme
-   * @param selectedLayout
-   * @param dashboardLayouts
+   * Creates a new account.
+   * @param id Database ID
+   * @param username Username of the account
+   * @param email Email of the account
+   * @param password Password of the account (will be hashed)
+   * @param preferCelsius Whether the account prefers Celsius or Fahrenheit
+   * @param isGuest Whether the account is a guest account
+   * @param currentTheme The accounts selected theme
+   * @param selectedLayout The accounts selected layout
+   * @param JWTToken The JWT token of the account once logged in
+   * @param dashboardLayouts The users layouts
+   * @param customAlertConditions The users custom alert conditions
+   * @param lastModified The date that data was last modified. (for server sync)
    */
   public Account(String id, String username, String email,String password,Boolean preferCelsius,Boolean isGuest,Theme currentTheme,String selectedLayout, String JWTToken, HashMap<String,WidgetInfo[]> dashboardLayouts, List<CustomAlertCondition> customAlertConditions, Date lastModified) {
     this.id = id;
@@ -192,18 +185,34 @@ public class Account {
     return BCrypt.checkpw(password, this.password);
   }
 
+  /**
+   * Serializes the dashboard layouts to a string.
+   * @return The serialized dashboard layouts in json format.
+   */
   public String GetDashboardLayoutsString() {
     return new WidgetInfoListConverter().convertToDatabaseColumn(dashboardLayouts);
   }
 
+  /**
+   * Deserializes the dashboard layouts from a string.
+   * @param layouts The serialized dashboard layouts in json format.
+   */
   public void SetDashboardLayoutsString(String layouts) {
     dashboardLayouts = new WidgetInfoListConverter().convertToEntityAttribute(layouts);
   }
 
+  /**
+   * Serializes the custom alert conditions to a string.
+   * @return The serialized custom alert conditions in json format.
+   */
   public String GetCustomAlertConditionsString() {
     return new CustomAlertConditionListConverter().convertToDatabaseColumn(customAlertConditions);
   }
 
+  /**
+   * Deserializes the custom alert conditions from a string.
+   * @param conditions The serialized custom alert conditions in json format.
+   */
   public void SetCustomAlertConditionsString(String conditions) {
     customAlertConditions = new CustomAlertConditionListConverter().convertToEntityAttribute(conditions);
   }

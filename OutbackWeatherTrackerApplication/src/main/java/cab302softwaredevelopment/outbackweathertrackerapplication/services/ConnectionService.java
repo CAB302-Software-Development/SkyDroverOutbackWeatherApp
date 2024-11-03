@@ -22,10 +22,16 @@ public class ConnectionService {
      */
     @Getter
     private boolean isOffline = true;
+
+    /**
+     * Flag indicating whether OpenMeteoData API is offline.
+     */
     @Getter
     private boolean openMeteoDataOffline = false;
-    @Getter
-    private boolean openWeatherMapOffline = false;
+
+    /**
+     * Flag indicating whether the REST API is offline.
+     */
     @Getter
     private boolean restAPIOffline = true;
 
@@ -34,6 +40,9 @@ public class ConnectionService {
      */
     private ScheduledExecutorService scheduler;
 
+    /**
+     * Creates a new ConnectionService instance.
+     */
    public ConnectionService() {
         init();
     }
@@ -65,26 +74,33 @@ public class ConnectionService {
         }
     }
 
+    /**
+     * Sets the offline status for OpenMeteoData API.
+     *
+     * @param value True to set OpenMeteoData offline; false for online.
+     */
     public void setOpenMeteoDataOffline(boolean value) {
         Logger.printLog("Setting OpenMeteo offline status to: " + value);
         openMeteoDataOffline = value;
         updateOfflineStatus();
     }
 
-    public void setOpenWeatherMapOffline(boolean value) {
-        Logger.printLog("Setting Open Weather Map offline status to: " + value);
-        openWeatherMapOffline = value;
-        updateOfflineStatus();
-    }
-
+    /**
+     * Sets the offline status for the REST API.
+     *
+     * @param value True to set the REST API offline; false for online.
+     */
     public void setRestAPIOffline(boolean value) {
         Logger.printLog("Setting rest API offline status to: " + value);
         restAPIOffline = value;
         updateOfflineStatus();
     }
 
+    /**
+     * Updates the application's offline status based on the current connection status.
+     */
     public void updateOfflineStatus() {
-        if (openMeteoDataOffline || openWeatherMapOffline || restAPIOffline) {
+        if (openMeteoDataOffline || restAPIOffline) {
             setOffline(true);
         } else {
             setOffline(false);

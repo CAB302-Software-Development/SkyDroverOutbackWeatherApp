@@ -6,6 +6,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import lombok.Getter;
 
+/**
+ * Service class responsible for testing the connection to servers.
+ */
 public class ConnectivityApiService {
 
   @Getter
@@ -14,6 +17,9 @@ public class ConnectivityApiService {
   private static final String BASE_URL = "http://localhost:8090/api";
   private final HttpClient client;
 
+  /**
+   * Creates a new ConnectivityApiService instance.
+   */
   public ConnectivityApiService() {
     this.client = HttpClient.newHttpClient();
   }
