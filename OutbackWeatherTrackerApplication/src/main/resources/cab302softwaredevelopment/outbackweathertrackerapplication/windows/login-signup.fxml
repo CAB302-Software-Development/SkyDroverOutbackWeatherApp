@@ -49,9 +49,6 @@
                <Button fx:id="loginButton" alignment="CENTER" prefHeight="29.0" prefWidth="100.0" styleClass="button-primary" text="Login" onAction="#handleButtonPress"/>
 
                <VBox alignment="CENTER">
-                  <Hyperlink styleClass="hyperlink" text="Forgot?" onAction="#handleButtonPress" alignment="CENTER">
-                     <font><Font size="8.0"/></font>
-                  </Hyperlink>
                   <Hyperlink styleClass="hyperlink" text="Don't Have an Account? Sign Up" onAction="#switchToSignup" alignment="CENTER">
                      <font><Font size="8.0"/></font>
                   </Hyperlink>
