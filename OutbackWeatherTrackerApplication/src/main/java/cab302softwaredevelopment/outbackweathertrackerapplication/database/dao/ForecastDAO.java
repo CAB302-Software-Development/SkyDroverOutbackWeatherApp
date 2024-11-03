@@ -166,35 +166,30 @@ abstract class ForecastQuery<T,K> {
    *
    * @param field The field to filter by
    * @param value The value to filter for
-   * @return This ForecastQuery object
    */
-  public K whereField(String field, Object value) {
+  public void whereField(String field, Object value) {
     predicates.add(builder.equal(root.get(field), value));
-    return self();
   }
 
   /**
    * Adds a field filter less than or equal to filter to the query.
+   *
+   * @param <Y>   The type of the field and value being compared.
    * @param field The field to filter by
    * @param value The largest value to filter for
-   * @return This ForecastQuery object
    */
-  public K whereFieldLE(String field, Object value) {
-    assert value instanceof Comparable;
-    predicates.add(builder.lessThanOrEqualTo(root.get(field), (Comparable) value));
-    return self();
+  public <Y extends Comparable<? super Y>> void whereFieldLE(String field, Y value) {
+    predicates.add(builder.lessThanOrEqualTo(root.get(field), value));
   }
 
   /**
    * Adds a field filter greater than or equal to filter to the query.
+   *
    * @param field The field to filter by
    * @param value The smallest value to filter for
-   * @return This ForecastQuery object
    */
-  public K whereFieldGE(String field, Object value) {
-    assert value instanceof Comparable;
-    predicates.add(builder.greaterThanOrEqualTo(root.get(field), (Comparable) value));
-    return self();
+  public <Y extends Comparable<? super Y>> void whereFieldGE(String field, Y value) {
+    predicates.add(builder.greaterThanOrEqualTo(root.get(field), value));
   }
 
   /**

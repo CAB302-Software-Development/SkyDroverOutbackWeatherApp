@@ -4,7 +4,6 @@ package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.AccountDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Location;
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.LocationListConverter;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.converters.WidgetInfoListConverter;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.Theme;
 import cab302softwaredevelopment.outbackweathertrackerapplication.models.UserModel;
@@ -37,7 +36,7 @@ public class UserApiService {
      * Retrieve all users' data.
      *
      * @return List of UserDataDTO
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public List<UserDTO> getAllUsers() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -59,7 +58,7 @@ public class UserApiService {
      *
      * @param username the username to fetch
      * @return AllUserDataModel
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public UserModel getUserByUsername(String username) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -94,7 +93,7 @@ public class UserApiService {
      *
      * @param userDTO the user data to create
      * @return CreateUserDTO
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public CreateUserDTO createUser(CreateUserDTO userDTO) throws Exception {
         String requestBody = objectMapper.writeValueAsString(userDTO);
@@ -152,7 +151,7 @@ public class UserApiService {
      *
      * @param loginRequest the login request containing username and password
      * @return JWT token
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public String login(UserLoginRequestDTO loginRequest) throws Exception {
         String requestBody = objectMapper.writeValueAsString(loginRequest);
@@ -183,7 +182,7 @@ public class UserApiService {
      * @param email the user's email
      * @param password the user's password
      * @return JWT token
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public String login(String email, String password) throws Exception {
         // To pull default values from the account class, we need to create a new account object
@@ -206,7 +205,7 @@ public class UserApiService {
      * @param userId the user ID to delete
      * @param jwtToken the JWT token for authorization
      * @return true if successful, false otherwise
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public boolean deleteUser(String userId, String jwtToken) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -231,7 +230,7 @@ public class UserApiService {
      * @param userData the updated user data
      * @param jwtToken the JWT token for authorization
      * @return CreateUserDTO
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public CreateUserDTO updateUser(String userId, UpdateUserDTO userData, String jwtToken) throws Exception {
         String requestBody = objectMapper.writeValueAsString(userData);
@@ -281,7 +280,7 @@ public class UserApiService {
      *
      * @param jwtToken the JWT token
      * @return AllUserDataModel
-     * @throws Exception
+     * @throws Exception If an error occurs (will contain the error message)
      */
     public UserModel getCurrentUser(String jwtToken) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
