@@ -1,6 +1,5 @@
 package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.OpenMeteoSDK;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.Account;

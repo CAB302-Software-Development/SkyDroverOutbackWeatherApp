@@ -1,4 +1,4 @@
-package cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo;
+package cab302softwaredevelopment.outbackweathertrackerapplication.services;
 
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO.DailyForecastQuery;
@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * A rough Software Development Kit for the OpenMeteo API.
+ * Provides simple methods for retrieving weather forecasts from the OpenMeteo API.
  */
 public class OpenMeteoSDK {
 

@@ -3,7 +3,7 @@ package DBTests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import cab302softwaredevelopment.outbackweathertrackerapplication.database.OpenMeteo.OpenMeteoSDK;
+import cab302softwaredevelopment.outbackweathertrackerapplication.services.OpenMeteoSDK;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.DailyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.dao.HourlyForecastDAO;
 import cab302softwaredevelopment.outbackweathertrackerapplication.database.model.DailyForecast;
