@@ -68,6 +68,12 @@ public class UserModel {
     private String locations;
 
     /**
+     * The selected custom alert conditions of the user.
+     * This field is mapped to the "custom_alert_conditions" field in the MongoDB document.
+     */
+    private String customAlertConditions;
+
+    /**
      * The date when the user's account was created.
      * This field is initialized with the current date and mapped to "user_account_creation_date".
      */
